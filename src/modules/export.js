@@ -84,7 +84,7 @@ export function exportFretboardToSVG(_nbStrings, _fretMin, _fretMax, _tuning, _s
 	const fbH          = (13/3)*_nbStrings;
 	const fretW        = fbW/nbFrets;
 	const fretH        = fbH/(_nbStrings - 1);
-	const inlaySize    = 1.15;
+	const inlaySize    = 1.10;
 	const fbInlayFrets = [3, 5, 7, 9, 15, 17, 19, 21];
 
 	const marginTop    = 2;

@@ -116,7 +116,7 @@ export default {
 	position: relative;
 
 	flex: 1 1 auto;
-	max-width: 250px;
+	max-width: 200px;
 }
 
 .VSelect__bar,

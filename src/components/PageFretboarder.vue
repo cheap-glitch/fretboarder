@@ -8,58 +8,45 @@
 
 div.PageFretboarder
 
-	//----------------------------------------------------------------------
-	//- Tools & options
-	//----------------------------------------------------------------------
-	div.toolbar
-		div.toolbar__settings
-			//- Instrument
-			VSelect(
-				id="instrument"
-				:options="instrumentOptions"
-				v-model="instrumentModel"
+	section.above-fretboard
+		//- Current tuning
+		p.tuning {{ tuningNotesList }}
+
+		//- Infos on the hovered fret
+		div.fret-infos(
+			v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
+			)
+			div.fret-infos__item(
+				v-for="(info, index) in hoveredFretInfos"
+				:key="`fret-info--${index}`"
 				)
-			VSelect(
-				id="tuning"
-				:options="tuningsOptions"
-				v-model="tuningModel"
-				)
-			//- Fret range
-			div.frets-slider
-				vue-slider(
-					:min="0"
-					:max="24"
-					:interval="1"
-
-					:min-range="4"
-					:enable-cross="false"
-
-					:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
-					adsorb lazy
-
-					tooltip="always"
-					:tooltip-formatter="tooltipFormatter"
-
-					v-model="fretRangeModel"
+				div.fret-infos__item__color-dot(
+					v-for="color in info.colors"
+					:key="`fret-info--${index}-color--${color}`"
+					:style="{ 'background-color': color }"
 					)
+				p {{ info.interval }}
 
-		div.toolbar__tools
+		//----------------------------------------------------------------------
+		//- Tools & display options
+		//----------------------------------------------------------------------
+		div.toolbar
 			//- Toggle note names
 			VButton(
 				icon="info-circle"
-				tooltip="Toggle note names"
+				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
-				@click="toggleIsDisplayingNotesName"
+				@click="$store.commit('toggleIsDisplayingNotesName')"
 				)
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
-				tooltip="Switch fretting hand"
+				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
 				:is-flipped="!isFretboardFlipped"
-				@click="toggleIsFretboardFlipped"
+				@click="$store.commit('toggleIsFretboardFlipped')"
 				)
 
-			div.toolbar__tools__separator
+			div.toolbar__separator
 
 			//- Clear the fretboard
 			VButton(
@@ -85,35 +72,65 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer(
-		:nb-strings="nbStrings"
-		:fret-range="fretRange"
-		:tuning="tunings[instrument][tuning]"
-		:scales="activeScales"
-		:displayed-info="isDisplayingNotesName ? 'name' : 'none'"
-		:is-fretboard-flipped="isFretboardFlipped"
-		)
+	FretboardViewer.fretboard(:scales="activeScales")
 
 	//----------------------------------------------------------------------
-	//- Scales & arpeggios
+	//- Fretboard settings & scales
 	//----------------------------------------------------------------------
-	div.scales
-		FretboardScale.scales__item(
-			v-for="scale in scales"
-			:key="`scale--${scale.id}`"
+	section.below-fretboard
 
-			v-bind.sync="scale"
-			:nbScales="scales.length"
+		//- Instrument & tuning
+		div.toolbar
+			VSelect(
+				id="instrument"
+				:options="instrumentOptions"
+				v-model="instrumentModel"
+				)
+			VSelect(
+				id="tuning"
+				:options="tuningsOptions"
+				v-model="tuningModel"
+				)
 
-			@toggle-focus-scale="toggleFocusScale"
-			@duplicate-scale="duplicateScale"
-			@remove-scale="removeScale"
-			)
-		VButton.scales__button-add(
-			icon="plus-circle"
-			tooltip="Add a new scale or arpeggio"
-			@click="addScale"
-			)
+		//- Frets range
+		div.toolbar
+			div.frets-slider
+				vue-slider(
+					:min="0"
+					:max="24"
+					:interval="1"
+
+					:min-range="4"
+					:enable-cross="false"
+
+					:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
+					adsorb lazy
+
+					tooltip="focus"
+					tooltip-placement="bottom"
+					:tooltip-formatter="tooltipFormatter"
+
+					v-model="fretRangeModel"
+					)
+
+		//- Scales & arpeggios
+		div.scales
+			FretboardScale.scales__item(
+				v-for="scale in scales"
+				:key="`scale--${scale.id}`"
+
+				v-bind.sync="scale"
+				:nbScales="scales.length"
+
+				@toggle-focus-scale="toggleFocusScale"
+				@duplicate-scale="duplicateScale"
+				@remove-scale="removeScale"
+				)
+			VButton.scales__button-add(
+				icon="plus-circle"
+				tooltip="Add a new scale or arpeggio"
+				@click="addScale"
+				)
 
 </template>
 <!--}}}-->
@@ -122,13 +139,13 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { saveAs }             from 'file-saver'
+import { mapState }    from 'vuex';
+import { saveAs }      from 'file-saver'
 
-import data                   from '@/modules/data'
-import storage                from '@/modules/storage'
-import { mapObject }          from '@/modules/object'
-import FretboardScale         from '@/components/FretboardScale'
-import FretboardViewer        from '@/components/FretboardViewer'
+import data            from '@/modules/data'
+import { mapObject }   from '@/modules/object'
+import FretboardScale  from '@/components/FretboardScale'
+import FretboardViewer from '@/components/FretboardViewer'
 import {
 	exportSVGToPDF,
 	exportSVGToImage,
@@ -145,79 +162,64 @@ export default {
 
 	static() {
 		return {
-			tunings: data.tunings,
-			colors:  [
-				'#0194ef',
-				'#1bb934',
-				'#e54124',
-				'#ffb610',
-			],
+			instrumentOptions: mapObject(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
 		}
 	},
 
 	data() {
 		return {
-			instrument:             storage.get('instrument',             'guitar'),
-			tuning:                 storage.get('tuning',                 'standard'),
-			fretRange:              storage.get('fretRange',              [0, 22]),
-			isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false),
-			isFretboardFlipped:     storage.get('isFretboardFlipped',     false),
-
 			scales:       [],
 			nextScaleID:  0,
 		}
 	},
 
 	computed: {
-		instrumentModel:
-		{
-			set(_v)
-			{
-				// Reset the tuning to default when switching between different instruments
-				this.tuning     = 'standard';
-				this.instrument = _v;
-
-				storage.set('tuning',    'standard');
-				storage.set('instrument', _v);
-			},
-			get() { return this.instrument; }
-		},
-		tuningModel:
-		{
-			set(_v)
-			{
-				this.tuning = _v;
-				storage.set('tuning', _v);
-			},
-			get() { return this.tuning; }
-		},
-		fretRangeModel:
-		{
-			set(_v)
-			{
-				this.fretRange = _v;
-				storage.set('fretRange', _v);
-			},
-			get() { return this.fretRange; }
-		},
-		instrumentOptions()
-		{
-			return mapObject(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key }));
-		},
-		tuningsOptions()
-		{
-			return mapObject(this.tunings[this.instrument], _key => ({ name: data.tuningsNames[_key], value: _key }));
-		},
-		nbStrings()
-		{
-			return data.instruments[this.instrument].nbStrings;
-		},
 		activeScales()
 		{
 			return this.scales.filter(this.scales.some(_scale => _scale.isFocused)
 				? _scale => _scale.isFocused
 				: _scale => _scale.isVisible);
 		},
+		tuningsOptions()
+		{
+			return mapObject(data.tunings[this.instrument], _key => ({ name: data.tuningsNames[_key], value: _key }));
+		},
+		tuningNotesList()
+		{
+			return data.tuningsNames[this.tuning]
+			     + ` (${data.tunings[this.instrument][this.tuning].map(_note => data.tonalities[_note]).join(', ')})`;
+		},
+		instrumentModel:
+		{
+			set(_v)
+			{
+				// Reset the tuning to default when switching between different instruments
+				this.$store.commit('setTuning',      'standard');
+				this.$store.commit('setInstrument',  _v);
+			},
+			get()   { return this.$store.state.instrument;    },
+		},
+		tuningModel:
+		{
+			set(_v) { this.$store.commit('setTuning', _v);    },
+			get()   { return this.$store.state.tuning;        },
+		},
+		fretRangeModel:
+		{
+			set(_v) { this.$store.commit('setFretRange', _v); },
+			get()   { return this.$store.state.fretRange;     },
+		},
+
+		...mapState([
+			'instrument',
+			'tuning',
+			'fretRange',
+
+			'isFretboardFlipped',
+			'isDisplayingNotesName',
+
+			'hoveredFretInfos',
+		])
 	},
 
 	mounted() {
@@ -225,14 +227,6 @@ export default {
 	},
 
 	methods: {
-		toggleIsDisplayingNotesName()
-		{
-			storage.set('isDisplayingNotesName', this.isDisplayingNotesName = !this.isDisplayingNotesName);
-		},
-		toggleIsFretboardFlipped()
-		{
-			storage.set('isFretboardFlipped', this.isFretboardFlipped = !this.isFretboardFlipped);
-		},
 		clearFretboard()
 		{
 			this.scales = [];
@@ -273,7 +267,7 @@ export default {
 				type:                'scale',
 				model:               'maj',
 				tonality:            'A',
-				color:               this.colors[this.scales.length % this.colors.length],
+				color:               colors[this.scales.length % colors.length],
 				isVisible:           true,
 				isFocused:           false,
 				isShowingRootNotes:  false,
@@ -284,7 +278,7 @@ export default {
 			const newScale = {...this.scales.filter(__scale => __scale.id == _id)[0]};
 
 			newScale.id        = ++this.nextScaleID;
-			newScale.color     = this.colors[this.scales.length % this.colors.length];
+			newScale.color     = colors[this.scales.length % colors.length];
 			newScale.isFocused = false;
 
 			this.scales.push(newScale);
@@ -316,6 +310,13 @@ export default {
 	}
 }
 
+const colors = [
+	'#0194ef',
+	'#1bb934',
+	'#e54124',
+	'#ffb610',
+];
+
 </script>
 <!--}}}-->
 
@@ -324,48 +325,54 @@ export default {
 <style lang='scss' scoped>
 
 .PageFretboarder {
-	padding: 40px;
-	@include space-children-v(80px);
+}
+
+.above-fretboard {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+
+	position: relative;
+}
+
+.tuning {
+	color: gray;
+}
+
+.fret-infos {
+	display: flex;
+	@include space-children-h(10px);
+
+	opacity: 0;
+	@include center-position;
+
+	transition: opacity 0.2s;
+
+	&.is-visible {
+		opacity: 1;
+	}
+}
+
+.fret-infos__item {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+}
+
+.fret-infos__item__color-dot {
+	@include circle(10px);
 }
 
 .toolbar {
 	display: flex;
-}
-
-.toolbar__tools,
-.toolbar__settings {
-	display: flex;
 	align-items: center;
+	justify-content: flex-end;
 	@include space-children-h(10px);
 }
 
-.toolbar__settings {
-	flex: 1 1 100%;
-}
-
-.toolbar__tools__separator {
+.toolbar__separator {
 	@include circle(6px);
 	background-color: lightgray;
-}
-
-.frets-slider {
-	min-width: 350px;
-
-	margin: 0 20px;
-}
-
-.scales {
-	@include space-children-v(20px);
-}
-
-.scales__item {
-	max-width: 660px;
-
-	margin: auto;
-}
-
-.scales__button-add {
-	margin: auto;
 }
 
 #canvas-export,
@@ -392,6 +399,38 @@ export default {
 	&:hover {
 		color: $color-azure;
 	}
+}
+
+.fretboard {
+	margin: 40px 0 80px 0;
+}
+
+.below-fretboard {
+	position: relative;
+}
+
+
+.frets-slider {
+	width: 300px;
+
+	margin-top: 20px;
+}
+
+.scales {
+	@include space-children-v(20px);
+
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.scales__item {
+	width: 600px;
+}
+
+.scales__button-add {
+	margin: auto;
 }
 
 </style>

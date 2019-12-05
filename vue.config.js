@@ -63,6 +63,13 @@ module.exports = {
 						'trash-alt',
 					]
 				},
+				{
+					set: 'free-brands',
+					icons: [
+						'github',
+						'twitter',
+					]
+				},
 			]
 		},
 	},

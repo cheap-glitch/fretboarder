@@ -8,6 +8,9 @@
 
 div.FretboardViewerFret(
 	v-mods="{ isFlipped: isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }"
+
+	@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
+	@mouseout=" $store.commit('setHoveredFretInfos', [])"
 	)
 
 	//- Inlay
@@ -20,13 +23,10 @@ div.FretboardViewerFret(
 	div.FretboardViewerFret__note(
 		v-mods="{ isActive, isRootNote, isOpenString }"
 		:style="noteColors"
-
-		@mouseover="emitEvent('mouseover')"
-		@mouseout="emitEvent('mouseout')"
 		)
 		p.FretboardViewerFret__note__info(
-			v-show="displayedInfo != 'none'"
-			) {{ noteInfo }}
+			v-show="isDisplayingNotesName"
+			) {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -35,7 +35,10 @@ div.FretboardViewerFret(
 <!--{{{ JavaScript -->
 <script>
 
-import data from '@/modules/data'
+import { mapState }  from 'vuex';
+
+import data          from '@/modules/data'
+import { mapObject } from '@/modules/object';
 
 export default {
 	name: 'FretboardViewerFret',
@@ -51,39 +54,22 @@ export default {
 		},
 		note: {
 			type: String,
-			default: 'A',
+			required: true,
 			validator: _v => data.notes.includes(_v)
-		},
-		interval: {
-			type: Number,
-			default: 0,
 		},
 		scales: {
 			type: Array,
 			required: true,
 		},
-		displayedInfo: {
-			type: String,
-			default: 'none',
-			validator: _v => ['none', 'name', 'degree'].includes(_v)
-		},
-		nbStrings: {
-			type: Number,
+		intervals: {
+			type: Array,
 			required: true,
-		},
-		fretMin: {
-			type: Number,
-			default: 0,
 		},
 		isRootNote: {
 			type: Boolean,
 			default: false,
 		},
 		isDisplayingInlay: {
-			type: Boolean,
-			default: false,
-		},
-		isFretboardFlipped: {
 			type: Boolean,
 			default: false,
 		},
@@ -96,15 +82,43 @@ export default {
 	},
 
 	computed: {
-		noteInfo()
+		fretInfos()
 		{
-			switch (this.displayedInfo)
-			{
-				case 'name':   return data.tonalities[this.note];
-				case 'degree': return this.interval;
+			const intervalsList = this.intervals.reduce(
+				function(_list, _interval)
+				{
+					// If the interval is not in the list, initialize its color list
+					if (_interval.value in _list === false)
+						_list[_interval.value] = [];
 
-				default:       return '';
-			}
+					// Add it to the list of colors
+					_list[_interval.value].push({ id: _interval.id, color: _interval.color });
+
+					return _list;
+				},
+				{}
+			);
+
+			const fretInfos = mapObject(intervalsList, (_key, _value) => ({
+				ids:       _value.map(__v => __v.id).sort((__a, __b) => __a - __b),
+				colors:    _value.sort((__a, __b) => __a.id - __b.id).map(__v => __v.color),
+				interval:  data.intervalsNames[_key],
+			}));
+
+			// Sort the intervals to always have the same scale order
+			return fretInfos.sort((_a, _b) => {
+				for (let i=0; i<_a.ids.length && i<_b.ids.length; i++)
+				{
+					if (_a.ids[i] < _b.ids[i]) return -1;
+					if (_a.ids[i] > _b.ids[i]) return  1;
+				}
+
+				return 0;
+			});
+		},
+		noteName()
+		{
+			return data.tonalities[this.note];
 		},
 		isActive()
 		{
@@ -124,8 +138,16 @@ export default {
 		},
 		isFirstFret()
 		{
-			return this.fretMin == 0 ? (this.fret == 1) : (this.fret == this.fretMin);
+			return this.fretRange[0] == 0 ? (this.fret == 1) : (this.fret == this.fretRange[0]);
 		},
+
+		...mapState([
+			'instrument',
+			'fretRange',
+
+			'isFretboardFlipped',
+			'isDisplayingNotesName',
+		])
 	},
 
 	mounted() {
@@ -145,10 +167,6 @@ export default {
 			const fillingSize   = Math.ceil(100 / this.scales.length);
 			const getColorStops = (_scale, _index) => `${_scale.color} ${_index * fillingSize}% ${(_index + 1)*fillingSize}%`;
 			this.noteColors     = { background: `linear-gradient(to right, ${this.scales.map(getColorStops)})`};
-		},
-		emitEvent(_event)
-		{
-			if (this.isActive) this.$emit(_event);
 		},
 	},
 }
@@ -236,14 +254,11 @@ export default {
 	font-weight: bold;
 
 	color: white;
-
-	cursor: default;
-	user-select: none;
 }
 
 .FretboardViewerFret__inlay {
 	@include center-position;
-	@include circle(20px);
+	@include circle(15px);
 
 	background-color: lightgray;
 }

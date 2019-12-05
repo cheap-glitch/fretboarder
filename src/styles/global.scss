@@ -18,8 +18,13 @@ body {
  */
 
 p,
-a {
+a,
+h1,
+h2 {
 	font-family: 'IBM Plex', helvetica, arial, sans-serif;
+
+	cursor: default;
+	user-select: none;
 }
 
 /**
