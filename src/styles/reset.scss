@@ -1,0 +1,139 @@
+
+/**
+ * styles/reset.scss
+ */
+
+/**
+ * Document
+ * -----------------------------------------------------------------------------
+ */
+
+html {
+	line-height: 1.15;
+
+	font-size: 10px;
+
+	// Prevent adjustments of font size after orientation changes in iOS
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	font-size: 1.6rem;
+	background-color: white;
+}
+
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
+html, body,
+div, span,
+header, footer, nav, section, article,
+h1, h2, h3, h4, h5, h6,
+p, a,
+blockquote, q, cite,
+form, fieldset, input, select, textarea, button,
+img, svg,
+table, thead, tbody, tr, th, td,
+ul, ol, li {
+	box-sizing: border-box;
+
+	margin: 0;
+	padding: 0;
+
+	outline: none;
+}
+
+/**
+ * Text
+ * -----------------------------------------------------------------------------
+ */
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+strong {
+	font-weight: bolder;
+}
+
+ul, ol {
+	list-style-type: none;
+}
+
+/**
+ * Forms
+ * -----------------------------------------------------------------------------
+ */
+
+button,
+button > *,
+input[type="button"],
+input[type="radio"],
+input[type="submit"],
+label,
+select {
+	cursor: pointer;
+}
+
+button,
+input,
+select,
+textarea {
+	line-height: 1.15;
+
+	font-size: 100%;
+	font-family: inherit;
+}
+
+textarea {
+	overflow: auto;
+}
+
+// Correct the inability to style clickable types in iOS and Safari
+button,
+input[type="button"],
+input[type="submit"] {
+	-webkit-appearance: button;
+}
+
+// Remove inner border and padding on focused buttons in Firefox
+button,
+select,
+input[type="button"],
+input[type="submit"] {
+	&::-moz-focus-inner {
+		padding: 0;
+		border-style: none;
+	}
+}
+
+// Remove the inner padding and styling on search inputs in Chrome and Safari on macOS
+input[type="search"] {
+	outline-offset: -2px;
+	-webkit-appearance: textfield;
+
+	&::-webkit-search-decoration {
+		-webkit-appearance: none;
+	}
+}
+
+/**
+ * Images
+ * -----------------------------------------------------------------------------
+ */
+
+img, svg {
+	display: block;
+	vertical-align: middle;
+
+	user-select: none;
+}
+
+img {
+	min-width: 0;
+	min-height: 0;
+	max-width: 100%;
+}

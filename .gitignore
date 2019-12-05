@@ -1,0 +1,25 @@
+
+#
+# .gitignore
+#
+
+# NPM
+/node_modules/
+/.npmrc
+npm-debug.log*
+
+# Composer
+/vendor/
+
+# Build
+/build/
+
+# Private files
+.htaccess
+
+# Test coverage
+/.nyc_output/
+
+# Editor files
+.vscode
+*.swp

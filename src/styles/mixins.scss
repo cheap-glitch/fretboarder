@@ -1,0 +1,89 @@
+
+/**
+ * styles/mixins.scss
+ */
+
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
+@mixin space-children-h($margin, $elems: '*')
+{
+	@each $elem in $elems { & > #{$elem}:not(:last-child) { margin-right:  $margin; } }
+}
+
+@mixin space-children-v($margin, $elems: '*')
+{
+	@each $elem in $elems { & > #{$elem}:not(:last-child) { margin-bottom: $margin; } }
+}
+
+@mixin center-content
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@mixin center-column
+{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+@mixin center-position
+{
+	position: absolute;
+	top: 50%;
+	right: 50%;
+
+	transform: translate(50%, -50%);
+}
+
+/**
+ * Shapes
+ * -----------------------------------------------------------------------------
+ */
+
+@mixin square($size)
+{
+	width: $size;
+	height: $size;
+}
+
+@mixin circle($size)
+{
+	@include square($size);
+
+	border-radius: 50%;
+}
+
+@mixin pill()
+{
+	border-radius: 1e3px;
+}
+
+/**
+ * Fonts
+ * -----------------------------------------------------------------------------
+ */
+
+@mixin font-face($name, $path)
+{
+	$src: null;
+
+	@each $ext in woff2 woff ttf
+	{
+		$src: append(
+			$src,
+			url(quote($path + '.' + $ext)) format(quote(if($ext == 'ttf', 'truetype', $ext))),
+			comma
+		);
+	}
+
+	@font-face {
+		font-family: quote($name);
+		src: $src;
+	}
+}
