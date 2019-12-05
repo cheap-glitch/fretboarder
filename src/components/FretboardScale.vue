@@ -75,6 +75,8 @@ div.FretboardScale
 			size="small"
 			tooltip="Duplicate"
 			@click="$emit('duplicate-scale', id)"
+
+			:is-disabled="nbScales == 5"
 			)
 		//- Remove
 		VButton(

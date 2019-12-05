@@ -6,15 +6,22 @@
 <!--{{{ Pug -->
 <template lang='pug'>
 
-div.FretboardViewer(
-	:style="[grid, inlays]"
-	)
+div.FretboardViewer(:style="[grid, inlays]")
+
+	//- Frets
 	FretboardViewerFret(
 		v-for="fret in frets"
 		:key="`fret--${fret.fret}-${fret.string+1}`"
 
 		v-bind="fret"
 		)
+
+	//- Fret numbers
+	div.fret-number(
+		v-for="fret in fretNumbers"
+		:key="`fret-number--${fret}`"
+		)
+		p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -167,6 +174,12 @@ export default {
 		{
 			return this.fretMax - this.fretMin + 1;
 		},
+		fretNumbers()
+		{
+			return [...Array(this.nbFrets).keys()]
+				.map(_index => this.isFretboardFlipped ? this.fretMax - _index : this.fretMin + _index)
+				.map(_fret  => _fret == 0 ? '' : _fret);
+		},
 		tuningNotes()
 		{
 			return data.tunings[this.instrument][this.tuning];
@@ -191,6 +204,18 @@ export default {
 
 .FretboardViewer {
 	display: grid;
+}
+
+.fret-number {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+
+	height: 50px;
+}
+
+.fret-number__text {
+	color: gray;
 }
 
 </style>

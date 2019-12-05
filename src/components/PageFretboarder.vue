@@ -127,6 +127,8 @@ div.PageFretboarder
 				@remove-scale="removeScale"
 				)
 			VButton.scales__button-add(
+				v-show="scales.length < 5"
+
 				icon="plus-circle"
 				tooltip="Add a new scale or arpeggio"
 				@click="addScale"
@@ -188,6 +190,17 @@ export default {
 		{
 			return data.tuningsNames[this.tuning]
 			     + ` (${data.tunings[this.instrument][this.tuning].map(_note => data.tonalities[_note]).join(', ')})`;
+		},
+		nextColor()
+		{
+			return [
+				'#0194ef',
+				'#1bb934',
+				'#e54124',
+				'#ffb610',
+				'#e54124',
+				'#ab7ef6',
+			].filter(_color => !this.scales.some(__scale => __scale.color == _color))[0];
 		},
 		instrumentModel:
 		{
@@ -262,12 +275,15 @@ export default {
 		},
 		addScale()
 		{
+			// Limit the number of simultaneous scales to 5
+			if (this.scales.length == 5) return;
+
 			this.scales.push({
 				id:                  ++this.nextScaleID,
 				type:                'scale',
 				model:               'maj',
 				tonality:            'A',
-				color:               colors[this.scales.length % colors.length],
+				color:               this.nextColor,
 				isVisible:           true,
 				isFocused:           false,
 				isShowingRootNotes:  false,
@@ -275,10 +291,13 @@ export default {
 		},
 		duplicateScale(_id)
 		{
+			// Limit the number of simultaneous scales to 5
+			if (this.scales.length == 5) return;
+
 			const newScale = {...this.scales.filter(__scale => __scale.id == _id)[0]};
 
 			newScale.id        = ++this.nextScaleID;
-			newScale.color     = colors[this.scales.length % colors.length];
+			newScale.color     = this.nextColor;
 			newScale.isFocused = false;
 
 			this.scales.push(newScale);
@@ -309,13 +328,6 @@ export default {
 		},
 	}
 }
-
-const colors = [
-	'#0194ef',
-	'#1bb934',
-	'#e54124',
-	'#ffb610',
-];
 
 </script>
 <!--}}}-->
