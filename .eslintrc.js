@@ -6,12 +6,17 @@ module.exports = {
 	'extends': [
 		'eslint:recommended',
 		'plugin:vue/essential',
+		'plugin:vue/recommended',
+	],
+	'plugins': [
+		'smarter-tabs',
 	],
 	rules: {
 		'no-console':  process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
-		'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
+		'no-mixed-spaces-and-tabs':   ['warn', 'smart-tabs'],
+		'smarter-tabs/smarter-tabs':  'warn',
 	},
 	parserOptions: {
 		parser: 'babel-eslint'

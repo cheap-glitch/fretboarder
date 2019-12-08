@@ -3,10 +3,10 @@
  * src/store.js
  */
 
-import Vue           from 'vue';
-import Vuex          from 'vuex';
+import Vue     from 'vue'
+import Vuex    from 'vuex'
 
-import storage       from '@/modules/storage';
+import storage from '@/modules/storage'
 
 Vue.use(Vuex);
 export default new Vuex.Store(
@@ -16,10 +16,35 @@ export default new Vuex.Store(
 		tuning:                       storage.get('tuning',                 'standard'),
 		fretRange:                    storage.get('fretRange',              [0, 22]),
 
-		isFretboardFlipped:           storage.get('isFretboardFlipped',     false),
+		isDarkModeOn:                 storage.get('isDarkModeOn',           false),
 		isDisplayingNotesName:        storage.get('isDisplayingNotesName',  false),
+		isFretboardFlipped:           storage.get('isFretboardFlipped',     false),
 
 		hoveredFretInfos:             [],
+	},
+
+	getters: {
+		darkMode: _s => ({ 'dark-mode': _s.isDarkModeOn }),
+
+		/*
+		// Return a styling object with the colors of the current theme
+		getColors: _state => _elems =>
+		{
+			const elemsNames = {
+				bg:     'background-color',
+				border: 'border-color',
+			};
+
+			return (Array.isArray(_elems) ? _elems : [_elems]).reduce(
+				function(__style, __elem)
+				{
+					__style[elemsNames[__elem]] = _state.isDarkModeOn ? darkColors[__elem] : lightColors[__elem];
+					return __style;
+				},
+				{}
+			);
+		}
+		*/
 	},
 
 	mutations: {
@@ -27,8 +52,9 @@ export default new Vuex.Store(
 		setTuning:                    (_s, _v) => storage.set('tuning',     _s.tuning     = _v),
 		setFretRange:                 (_s, _v) => storage.set('fretRange',  _s.fretRange  = _v),
 
-		toggleIsFretboardFlipped:     _s => storage.set('isFretboardFlipped',    _s.isFretboardFlipped    = !_s.isFretboardFlipped),
+		toggleIsDarkModeOn:           _s => storage.set('isDarkModeOn',          _s.isDarkModeOn          = !_s.isDarkModeOn),
 		toggleIsDisplayingNotesName:  _s => storage.set('isDisplayingNotesName', _s.isDisplayingNotesName = !_s.isDisplayingNotesName),
+		toggleIsFretboardFlipped:     _s => storage.set('isFretboardFlipped',    _s.isFretboardFlipped    = !_s.isFretboardFlipped),
 
 		setHoveredFretInfos:          (_s, _v) => _s.hoveredFretInfos = _v,
 	},

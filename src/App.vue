@@ -6,16 +6,33 @@
 <!--{{{ Pug -->
 <template lang='pug'>
 
-div.App
+div.App(v-mods="darkMode")
+
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
 	header.page-header
 		h1.page-header__title
-			fa-icon(:icon="['far', 'guitar']")
-			|
-			| Fretboarder
-		//- nav.page-header__nav
+			fa-icon.page-header__title__logo(
+				:icon="['far', instrumentIcon]"
+				v-mods="{ isUkulele: instrument == 'ukulele' }"
+				)
+			h1.page-header__title__text Fretboarder
+		nav.page-header__nav
+			a.page-header__nav__link(
+				href="https://github.com/cheap-glitch/fretboarder/issues"
+				target="_blank"
+				rel="external nofollow noopener noreferrer"
+				)
+				fa-icon(:icon="['far', 'bug']")
+				p Report a bug
+			a.page-header__nav__link.support-link(
+				href="https://www.patreon.com/cheap_glitch"
+				target="_blank"
+				rel="external nofollow noopener noreferrer"
+				)
+				fa-icon(:icon="['far', 'heart']")
+				p Support
 			a.page-header__nav__link(
 				href="https://www.theguitarlickdatabase.com"
 				target="_blank"
@@ -54,8 +71,38 @@ div.App
 <!--{{{ JavaScript -->
 <script>
 
+import { mapState, mapGetters } from 'vuex'
+
 export default {
 	name: 'App',
+
+	computed: {
+		instrumentIcon()
+		{
+			switch (this.instrument)
+			{
+				case 'bass':
+					return 'guitar-electric';
+
+				case 'banjo-4':
+				case 'banjo-5':
+					return 'banjo';
+
+				case 'mandolin':
+					return 'mandolin';
+
+				default:
+					return 'guitar';
+			}
+		},
+
+		...mapState([
+			'instrument',
+		]),
+		...mapGetters([
+			'darkMode',
+		])
+	}
 }
 
 </script>
@@ -69,35 +116,89 @@ export default {
 	display: flex;
 	align-items: stretch;
 	flex-direction: column;
-	@include space-children-v(40px);
+	overflow-y: hidden;
 
 	padding: 20px 40px;
 
 	min-height: 100%;
+
+	background-color: snow;
+
+	transition: background-color 0.2s;
+
+	&.dark-mode {
+		background-color: $color-mirage;
+	}
 }
 
 .page-header {
 	display: flex;
-	@include space-children-h(20px);
+	justify-content: space-between;
+
+	margin-bottom: 60px;
 }
 
 .page-header__title {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+}
+
+.page-header__title__logo {
+	font-size: 25px;
+
+	&.is-ukulele {
+		font-size: 20px;
+	}
+}
+
+.page-header__title__text {
 	font-size: 30px;
 	font-weight: bold;
 }
 
 .page-header__nav {
 	display: flex;
+	align-items: center;
+	@include space-children-h(10px);
 }
 
 .page-header__nav__link {
 	display: flex;
 	@include space-children-h(5px);
 
+	padding: 6px;
+
+	border: 2px solid transparent;
+	border-radius: 6px;
+
+	text-decoration: none;
+
+	color: gray;
+
 	cursor: pointer;
+
+	transition: border-color 0.2s;
 
 	& > * {
 		cursor: pointer;
+	}
+
+	&:hover {
+		border-color: gray;
+	}
+}
+
+.support-link {
+	color: $color-crimson;
+	border-color: $color-crimson;
+
+	transition: all 0.2s;
+
+	&:hover {
+		color: white;
+		border-color: $color-crimson;
+		background-color: $color-crimson;
 	}
 }
 
@@ -142,12 +243,6 @@ export default {
 
 // Load the global styles
 @import '@/styles/global';
-
-// Enable full-page layout
-html,
-body {
-	height: 100%;
-}
 
 </style>
 <!--}}}-->

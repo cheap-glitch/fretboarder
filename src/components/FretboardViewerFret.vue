@@ -7,7 +7,7 @@
 <template lang='pug'>
 
 div.FretboardViewerFret(
-	v-mods="{ isFlipped: isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }"
+	v-mods="{ isFlipped: isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
 
 	@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
 	@mouseout=" $store.commit('setHoveredFretInfos', [])"
@@ -35,10 +35,10 @@ div.FretboardViewerFret(
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState }  from 'vuex';
+import { mapState, mapGetters } from 'vuex'
 
-import data          from '@/modules/data'
-import { mapObject } from '@/modules/object';
+import data                     from '@/modules/data'
+import { mapObject }            from '@/modules/object'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -147,15 +147,18 @@ export default {
 
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
-		])
-	},
-
-	mounted() {
-		this.updateNoteColors();
+		]),
+		...mapGetters([
+			'darkMode',
+		]),
 	},
 
 	watch: {
 		scales: 'updateNoteColors',
+	},
+
+	mounted() {
+		this.updateNoteColors();
 	},
 
 	methods: {
@@ -184,33 +187,45 @@ export default {
 
 	position: relative;
 
+	border: 0 solid gray;
+
+	&.dark-mode {
+		border-color: $color-ebony-clay;
+	}
+
 	&:not(.is-on-last-string) {
 		height: 40px;
 	}
 
 	// String
 	&:not(.is-open-string) {
-		border-top: 2px solid black;
+		border-top-width: 2px;
+		border-top-color: black;
+
+		&.dark-mode {
+			border-top-color: $color-oxford-blue;
+		}
 	}
 
 	// Fret
 	&:not(.is-open-string):not(.is-on-last-string) {
-		&.is-flipped       { border-left:  2px solid gray;  }
-		&:not(.is-flipped) { border-right: 2px solid gray;  }
+		&.is-flipped        { border-left-width:  2px;     }
+		&:not(.is-flipped)  { border-right-width: 2px;     }
 	}
 
 	// Nut
 	&.is-first-fret {
-		&.is-flipped       { border-right: 2px solid gray;  }
-		&:not(.is-flipped) { border-left:  2px solid gray;  }
-	}
-	&.is-fret-one {
-		&.is-flipped       { border-right: 5px solid black; }
-		&:not(.is-flipped) { border-left:  5px solid black; }
+		&.is-flipped        { border-right-width: 2px;     }
+		&:not(.is-flipped)  { border-left-width:  2px;     }
 	}
 
-	&.is-open-string            { justify-content: flex-start;  }
-	&.is-open-string.is-flipped { justify-content: flex-end;    }
+	&.is-fret-one {
+		&.is-flipped        { border-right-width: 5px;     }
+		&:not(.is-flipped)  { border-left-width:  5px;     }
+	}
+
+	&.is-open-string            { justify-content: flex-start; }
+	&.is-open-string.is-flipped { justify-content: flex-end;   }
 }
 
 .FretboardViewerFret__note {

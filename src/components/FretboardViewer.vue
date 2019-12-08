@@ -30,15 +30,12 @@ div.FretboardViewer(:style="[grid, inlays]")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState }        from 'vuex';
+import { mapState }                                  from 'vuex'
 
-import data                from '@/modules/data'
-import FretboardViewerFret from '@/components/FretboardViewerFret'
-import {
-	generateModelNotes,
-	getNotesInterval,
-	getStringNotes,
-} from '@/modules/music'
+import data                                          from '@/modules/data'
+import { generateModelNotes, generateModelPosition } from '@/modules/music'
+import FretboardViewerFret                           from '@/components/FretboardViewerFret'
+import { getNotesInterval, getStringNotes }          from '@/modules/music'
 
 export default {
 	name: 'FretboardViewer',
@@ -48,7 +45,7 @@ export default {
 	},
 
 	props: {
-		scales: {
+		scalesInfos: {
 			type: Array,
 			default: () => [],
 		},
@@ -72,7 +69,13 @@ export default {
 					const note = stringNotes[fret];
 
 					// Get the list of scales the note of the fret belongs to
-					const scales = this.scalesNotes.filter(_sc => _sc.notes.includes(note));
+					let scales = this.scales.filter(
+					               _scale => _scale.notes.includes(note)
+					            && _scale.position.filter(_pos => _pos.string == string && _pos.fret == fret).length > 0
+					);
+
+					// Remove the scales displaying intersections only if they are alone
+					if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
 
 					frets.push({
 						string,
@@ -149,15 +152,6 @@ export default {
 
 			return { 'grid-template-columns': (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ') };
 		},
-		scalesNotes()
-		{
-			return this.scales.map(_scale => ({
-				id:                  _scale.id,
-				color:               _scale.color,
-				notes:               generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality),
-				isShowingRootNotes:  _scale.isShowingRootNotes,
-			}));
-		},
 		nbStrings()
 		{
 			return data.instruments[this.instrument].nbStrings;
@@ -183,6 +177,17 @@ export default {
 		tuningNotes()
 		{
 			return data.tunings[this.instrument][this.tuning];
+		},
+		scales()
+		{
+			return this.scalesInfos.map(_scale =>
+			{
+				const nbNotesPerString = data.scales[_scale.model].nbNotesPerString;
+				const notes            = generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
+				const position         = generateModelPosition(this.nbStrings, this.nbFrets, this.tuningNotes, notes, nbNotesPerString);
+
+				return { notes, position, ..._scale };
+			});
 		},
 
 		...mapState([

@@ -44,23 +44,35 @@ module.exports = {
 
 						// Header
 						'adjust',
+						'banjo',
+						'bug',
 						'cog',
+						'guitar-electric',
 						'guitar',
 						'heart',
 						'mandolin',
 
-						// Fretboarder
-						'bullseye',
-						'copy',
+						// Fretboard tools
 						'eraser',
-						'eye',
-						'eye-slash',
 						'file-download',
 						'hand-paper',
 						'info-circle',
+
+						// Scales
+						'bullseye',
+						'copy',
+						'eye',
+						'eye-slash',
 						'plus-circle',
 						'registered',
 						'trash-alt',
+					]
+				},
+				{
+					set: 'pro-solid',
+					icons: [
+						// Scales
+						'intersection',
 					]
 				},
 				{

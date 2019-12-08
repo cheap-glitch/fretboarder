@@ -112,6 +112,7 @@ export default
 		'hdim':   { model:  [1, 2, 1, 2, 1, 2, 1, 2],             name:  'Diminished (half/whole)', nbNotesPerString:  4 },
 		'wdim':   { model:  [2, 1, 2, 1, 2, 1, 2, 1],             name:  'Diminished (whole/half)', nbNotesPerString:  4 },
 		'alt':    { model:  [1, 2, 1, 2, 2, 2, 2],                name:  'Altered',                 nbNotesPerString:  4 },
+		'eni':    { model:  [1, 3, 2, 2, 2, 1, 1],                name:  'Enigmatic',               nbNotesPerString:  4 },
 		'chro':   { model:  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], name:  'Chromatic',               nbNotesPerString:  5 },
 	},
 

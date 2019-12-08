@@ -8,7 +8,7 @@
 
 button.VButton(
 	:title="tooltip"
-	v-mods="{ isActive, isDisabled }"
+	v-mods="{ isActive, isDisabled, ...darkMode }"
 	@click.left="click"
 	)
 	fa-icon.VButton__icon(
@@ -23,6 +23,8 @@ button.VButton(
 
 <!--{{{ JavaScript -->
 <script>
+
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'VButton',
@@ -55,6 +57,10 @@ export default {
 		},
 	},
 
+	computed: mapGetters([
+		'darkMode',
+	]),
+
 	methods: {
 		click()
 		{
@@ -73,10 +79,11 @@ export default {
 .VButton {
 	display: block;
 
-	border: none;
-
 	appearance: none;
+	border: none;
 	background-color: transparent;
+
+	color: gray;
 
 	cursor: pointer;
 
@@ -86,10 +93,21 @@ export default {
 		color: steelblue;
 	}
 
+	&.dark-mode {
+		color: $color-oxford-blue;
+
+		&:hover {
+			color: $color-azure;
+		}
+	}
+
 	&.is-disabled {
 		color: darkgray;
-
 		cursor: not-allowed;
+
+		&.dark-mode {
+			color: $color-ebony-clay;
+		}
 	}
 
 	/**

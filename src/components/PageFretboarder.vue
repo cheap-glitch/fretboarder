@@ -31,6 +31,12 @@ div.PageFretboarder
 		//- Tools & display options
 		//----------------------------------------------------------------------
 		div.toolbar
+			//- Switch between themes
+			VButton(
+				icon="adjust"
+				:tooltip="isDarkModeOn ? 'Switch to light mode' : 'Switch to dark mode'"
+				@click="$store.commit('toggleIsDarkModeOn')"
+				)
 			//- Toggle note names
 			VButton(
 				icon="info-circle"
@@ -52,7 +58,7 @@ div.PageFretboarder
 			VButton(
 				icon="eraser"
 				tooltip="Clear the freatboard"
-				@click="clearFretboard"
+				@click="clear"
 				)
 
 			//- Export the fretboard
@@ -72,7 +78,7 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer.fretboard(:scales="activeScales")
+	FretboardViewer.fretboard(:scalesInfos="activeScales")
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
@@ -122,12 +128,14 @@ div.PageFretboarder
 				v-bind.sync="scale"
 				:nbScales="scales.length"
 
+				v-mods="{ isAlone: scales.length == 1 }"
+
 				@toggle-focus-scale="toggleFocusScale"
 				@duplicate-scale="duplicateScale"
 				@remove-scale="removeScale"
 				)
 			VButton.scales__button-add(
-				v-show="scales.length < 5"
+				v-show="scales.length < maxNbScales"
 
 				icon="plus-circle"
 				tooltip="Add a new scale or arpeggio"
@@ -141,7 +149,7 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState }    from 'vuex';
+import { mapState }    from 'vuex'
 import { saveAs }      from 'file-saver'
 
 import data            from '@/modules/data'
@@ -164,6 +172,7 @@ export default {
 
 	static() {
 		return {
+			maxNbScales:       4,
 			instrumentOptions: mapObject(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
 		}
 	},
@@ -194,12 +203,10 @@ export default {
 		nextColor()
 		{
 			return [
-				'#0194ef',
+				'#0093ee',
 				'#1bb934',
 				'#e54124',
 				'#ffb610',
-				'#e54124',
-				'#ab7ef6',
 			].filter(_color => !this.scales.some(__scale => __scale.color == _color))[0];
 		},
 		instrumentModel:
@@ -228,8 +235,9 @@ export default {
 			'tuning',
 			'fretRange',
 
-			'isFretboardFlipped',
+			'isDarkModeOn',
 			'isDisplayingNotesName',
+			'isFretboardFlipped',
 
 			'hoveredFretInfos',
 		])
@@ -240,7 +248,7 @@ export default {
 	},
 
 	methods: {
-		clearFretboard()
+		clear()
 		{
 			this.scales = [];
 		},
@@ -275,24 +283,25 @@ export default {
 		},
 		addScale()
 		{
-			// Limit the number of simultaneous scales to 5
-			if (this.scales.length == 5) return;
+			// Limit the number of simultaneous scales
+			if (this.scales.length == this.maxNbScales) return;
 
 			this.scales.push({
-				id:                  ++this.nextScaleID,
-				type:                'scale',
-				model:               'maj',
-				tonality:            'A',
-				color:               this.nextColor,
-				isVisible:           true,
-				isFocused:           false,
-				isShowingRootNotes:  false,
+				id:                      ++this.nextScaleID,
+				type:                    'scale',
+				model:                   'maj',
+				tonality:                'A',
+				color:                   this.nextColor,
+				isVisible:               true,
+				isFocused:               false,
+				isShowingRootNotes:      false,
+				isShowingIntersections:  false,
 			});
 		},
 		duplicateScale(_id)
 		{
-			// Limit the number of simultaneous scales to 5
-			if (this.scales.length == 5) return;
+			// Limit the number of simultaneous scales
+			if (this.scales.length == this.maxNbScales) return;
 
 			const newScale = {...this.scales.filter(__scale => __scale.id == _id)[0]};
 
@@ -438,7 +447,11 @@ export default {
 }
 
 .scales__item {
-	width: 600px;
+	width: 660px;
+
+	&.is-alone {
+		width: 600px;
+	}
 }
 
 .scales__button-add {

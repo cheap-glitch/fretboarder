@@ -30,7 +30,7 @@ div.FretboardScale
 			@change="_value => $emit('update:tonality', _value)"
 			)
 		//- Model
-		VSelect(
+		VSelect.select-model(
 			id="scale-model"
 			:value="model"
 			:options="modelsNames"
@@ -66,6 +66,15 @@ div.FretboardScale
 			:is-active="isShowingRootNotes"
 			@click="$emit('update:isShowingRootNotes', !isShowingRootNotes)"
 			)
+		//- Show intersections only
+		VButton(
+			v-show="nbScales > 1"
+			:icon="['fas', 'intersection']"
+			size="small"
+			tooltip="Show only intersections with other scales"
+			:is-active="isShowingIntersections"
+			@click="$emit('update:isShowingIntersections', !isShowingIntersections)"
+			)
 
 		div.scale-tools__separator
 
@@ -80,7 +89,7 @@ div.FretboardScale
 			)
 		//- Remove
 		VButton(
-			:icon="['far', 'trash-alt']"
+			icon="trash-alt"
 			size="small"
 			tooltip="Remove"
 			@click="$emit('remove-scale', id)"
@@ -134,6 +143,10 @@ export default {
 			default: false,
 		},
 		isShowingRootNotes: {
+			type: Boolean,
+			default: false,
+		},
+		isShowingIntersections: {
 			type: Boolean,
 			default: false,
 		},
@@ -206,6 +219,7 @@ export default {
 
 .select-type     { max-width: 120px; }
 .select-tonality { max-width: 60px;  }
+.select-model    { max-width: 220px; }
 
 </style>
 <!--}}}-->

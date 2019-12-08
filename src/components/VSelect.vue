@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang='pug'>
 
-div.VSelect
+div.VSelect(ref="vselectbar")
 
 	//- Select bar
 	div.VSelect__bar(
@@ -25,7 +25,10 @@ div.VSelect
 
 	//- Options
 	transition(name="fade")
-		div.VSelect__options(v-show="isOpened")
+		div.VSelect__options(
+			v-show="isOpened"
+			v-mods="{ isOpeningDirectionUp: openingDirection == 'up' }"
+			)
 			p.VSelect__options__item(
 				v-for="option in optionsList"
 				:key="`key--v-select-${id}--${option.value}`"
@@ -40,7 +43,7 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
-import { mapObject } from '@/modules/object.js';
+import { mapObject } from '@/modules/object.js'
 
 export default {
 	name: 'VSelect',
@@ -71,7 +74,8 @@ export default {
 
 	data() {
 		return {
-			isOpened: false,
+			isOpened:          false,
+			openingDirection:  'down',
 		}
 	},
 
@@ -87,6 +91,10 @@ export default {
 		},
 	},
 
+	watch: {
+		isOpened: 'updateOpeningDirection',
+	},
+
 	methods: {
 		select(_option)
 		{
@@ -99,6 +107,17 @@ export default {
 		close()
 		{
 			this.isOpened = false;
+		},
+		updateOpeningDirection()
+		{
+			if (!this.isOpened) return;
+
+			const windowHeight  = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+			const elemYPosition = this.$refs.vselectbar.getBoundingClientRect().top;
+
+			// If the element is positioned low in the viewport,
+			// open the options menu upward instead of downward to avoid vertical overflow
+			this.openingDirection = (windowHeight - elemYPosition < 380) ? 'up' : 'down';
 		},
 	},
 }
@@ -170,13 +189,20 @@ export default {
 
 	position: absolute;
 	z-index: 1000;
-	top: 100%;
 	left: 0;
 	right: 0;
 
 	max-height: 300px;
 
-	border-top: none;
+	&.is-opening-direction-up {
+		bottom: 100%;
+		border-bottom: none;
+	}
+
+	&:not(.is-opening-direction-up) {
+		top: 100%;
+		border-top: none;
+	}
 }
 
 .VSelect__options__item {
