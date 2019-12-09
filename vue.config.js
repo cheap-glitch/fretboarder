@@ -4,11 +4,6 @@
  */
 
 module.exports = {
-
-	// Build the app into the 'build' folder
-	outputDir: 'build',
-
-	// Disable source maps in production
 	productionSourceMap: false,
 
 	/**
@@ -33,6 +28,9 @@ module.exports = {
 		},
 	},
 
+	/**
+	 * Import Font Awesome icons
+	 */
 	pluginOptions: {
 		fontawesome: {
 			component: 'fa-icon',
