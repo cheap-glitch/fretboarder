@@ -7,26 +7,33 @@
 <template lang='pug'>
 
 div.FretboardViewerFret(
-	v-mods="{ isFlipped: isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
-
-	@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
-	@mouseout=" $store.commit('setHoveredFretInfos', [])"
+	v-mods="{ isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
 	)
 
 	//- Inlay
-	div.FretboardViewerFret__inlay(v-show="isDisplayingInlay")
+	div.FretboardViewerFret__inlay(
+		v-if="isDisplayingInlay"
+		v-mods="darkMode"
+		)
 
 	//- Open string note placeholder
-	div.FretboardViewerFret__open-string-note-placeholder(v-show="fret == 0 && !isActive")
+	div.FretboardViewerFret__open-string-note-placeholder(
+		v-show="fret == 0 && !isActive"
+		v-mods="{ isOpenString, isFretboardFlipped }"
+		)
 
 	//- Note
 	div.FretboardViewerFret__note(
-		v-mods="{ isActive, isRootNote, isOpenString }"
+		v-mods="{ isActive, isRootNote, isOpenString, isFretboardFlipped }"
 		:style="noteColors"
+
+		@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
+		@mouseout=" $store.commit('setHoveredFretInfos', [])"
 		)
-		p.FretboardViewerFret__note__info(
-			v-show="isDisplayingNotesName"
-			) {{ noteName }}
+		transition(name="fade")
+			p.FretboardViewerFret__note__info(
+				v-show="isDisplayingNotesName"
+				) {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -181,6 +188,8 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
+@use '@/styles/transitions' as *;
+
 .FretboardViewerFret {
 	display: flex;
 	justify-content: center;
@@ -197,6 +206,10 @@ export default {
 		height: 40px;
 	}
 
+	&.is-open-string {
+		display: block;
+	}
+
 	// String
 	&:not(.is-open-string) {
 		border-top-width: 2px;
@@ -209,23 +222,20 @@ export default {
 
 	// Fret
 	&:not(.is-open-string):not(.is-on-last-string) {
-		&.is-flipped        { border-left-width:  2px;     }
-		&:not(.is-flipped)  { border-right-width: 2px;     }
+		&.is-fretboard-flipped        { border-left-width:  2px; }
+		&:not(.is-fretboard-flipped)  { border-right-width: 2px; }
 	}
 
 	// Nut
 	&.is-first-fret {
-		&.is-flipped        { border-right-width: 2px;     }
-		&:not(.is-flipped)  { border-left-width:  2px;     }
+		&.is-fretboard-flipped        { border-right-width: 2px; }
+		&:not(.is-fretboard-flipped)  { border-left-width:  2px; }
 	}
 
 	&.is-fret-one {
-		&.is-flipped        { border-right-width: 5px;     }
-		&:not(.is-flipped)  { border-left-width:  5px;     }
+		&.is-fretboard-flipped        { border-right-width: 5px; }
+		&:not(.is-fretboard-flipped)  { border-left-width:  5px; }
 	}
-
-	&.is-open-string            { justify-content: flex-start; }
-	&.is-open-string.is-flipped { justify-content: flex-end;   }
 }
 
 .FretboardViewerFret__note {
@@ -244,23 +254,42 @@ export default {
 		opacity: 0;
 	}
 
+	&.is-active:hover {
+		border-width: 4px;
+	}
+
 	&:not(.is-root-note) {
 		border-radius: 50%;
 	}
 
-	&.is-active:hover {
-		border-width: 4px;
+	&.is-open-string {
+		right: 100%;
+		transform: translate(50%, -50%);
+	}
+
+	&.is-open-string.is-fretboard-flipped {
+		left: 100%;
+		transform: translate(-50%, -50%);
 	}
 }
 
 // Display a dotted border around unactive open string notes
 .FretboardViewerFret__open-string-note-placeholder {
 	position: absolute;
-	transform: translateY(-50%);
 
 	@include circle(30px);
 
 	border: 2px dashed lightgray;
+
+	&.is-open-string {
+		right: 100%;
+		transform: translate(50%, -50%);
+	}
+
+	&.is-open-string.is-fretboard-flipped {
+		left: 100%;
+		transform: translate(-50%, -50%);
+	}
 }
 
 .FretboardViewerFret__note__info {
@@ -276,6 +305,12 @@ export default {
 	@include circle(15px);
 
 	background-color: lightgray;
+
+	transition: background-color 0.2s;
+
+	&.dark-mode {
+		background-color: $color-mirage-2;
+	}
 }
 
 </style>

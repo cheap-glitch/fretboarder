@@ -52,7 +52,7 @@ div.PageFretboarder
 				@click="$store.commit('toggleIsFretboardFlipped')"
 				)
 
-			div.toolbar__separator
+			div.toolbar__separator(v-mods="darkMode")
 
 			//- Clear the fretboard
 			VButton(
@@ -78,47 +78,45 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer.fretboard(:scalesInfos="activeScales")
+	FretboardViewer(:scalesInfos="activeScales")
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
 	//----------------------------------------------------------------------
 	section.below-fretboard
-
-		//- Instrument & tuning
-		div.toolbar
-			VSelect(
-				id="instrument"
-				:options="instrumentOptions"
-				v-model="instrumentModel"
-				)
-			VSelect(
-				id="tuning"
-				:options="tuningsOptions"
-				v-model="tuningModel"
-				)
-
-		//- Frets range
-		div.toolbar
-			div.frets-slider
-				vue-slider(
-					:min="0"
-					:max="24"
-					:interval="1"
-
-					:min-range="4"
-					:enable-cross="false"
-
-					:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
-					adsorb lazy
-
-					tooltip="focus"
-					tooltip-placement="bottom"
-					:tooltip-formatter="tooltipFormatter"
-
-					v-model="fretRangeModel"
+		div.settings
+			//- Instrument & tuning
+			div.toolbar
+				VSelect.select-instrument(
+					id="instrument"
+					:options="instrumentOptions"
+					v-model="instrumentModel"
+					)
+				VSelect.select-tuning(
+					id="tuning"
+					:options="tuningsOptions"
+					v-model="tuningModel"
 					)
 
+			//- Frets range
+			div.toolbar
+				div.frets-slider
+					vue-slider(
+						:min="0"
+						:max="24"
+						:interval="1"
+
+						:min-range="4"
+						:enable-cross="false"
+
+						:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
+						adsorb lazy
+
+						tooltip="active"
+						:tooltip-formatter="tooltipFormatter"
+
+						v-model="fretRangeModel"
+						)
 		//- Scales & arpeggios
 		div.scales
 			FretboardScale.scales__item(
@@ -127,8 +125,6 @@ div.PageFretboarder
 
 				v-bind.sync="scale"
 				:nbScales="scales.length"
-
-				v-mods="{ isAlone: scales.length == 1 }"
 
 				@toggle-focus-scale="toggleFocusScale"
 				@duplicate-scale="duplicateScale"
@@ -149,13 +145,13 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState }    from 'vuex'
-import { saveAs }      from 'file-saver'
+import { mapState, mapGetters } from 'vuex'
+import { saveAs }               from 'file-saver'
 
-import data            from '@/modules/data'
-import { mapObject }   from '@/modules/object'
-import FretboardScale  from '@/components/FretboardScale'
-import FretboardViewer from '@/components/FretboardViewer'
+import data                     from '@/modules/data'
+import { mapObject }            from '@/modules/object'
+import FretboardScale           from '@/components/FretboardScale'
+import FretboardViewer          from '@/components/FretboardViewer'
 import {
 	exportSVGToPDF,
 	exportSVGToImage,
@@ -240,6 +236,9 @@ export default {
 			'isFretboardFlipped',
 
 			'hoveredFretInfos',
+		]),
+		...mapGetters([
+			'darkMode',
 		])
 	},
 
@@ -288,10 +287,11 @@ export default {
 
 			this.scales.push({
 				id:                      ++this.nextScaleID,
+				color:                   this.nextColor,
 				type:                    'scale',
 				model:                   'maj',
 				tonality:                'A',
-				color:                   this.nextColor,
+				position:                0,
 				isVisible:               true,
 				isFocused:               false,
 				isShowingRootNotes:      false,
@@ -345,8 +345,10 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
-.PageFretboarder {
-}
+/**
+ * Above the fretboard
+ * -----------------------------------------------------------------------------
+ */
 
 .above-fretboard {
 	display: flex;
@@ -354,6 +356,8 @@ export default {
 	justify-content: space-between;
 
 	position: relative;
+
+	margin-bottom: 40px;
 }
 
 .tuning {
@@ -394,6 +398,10 @@ export default {
 .toolbar__separator {
 	@include circle(6px);
 	background-color: lightgray;
+
+	&.dark-mode {
+		background-color: $color-ebony-clay;
+	}
 }
 
 #canvas-export,
@@ -422,52 +430,33 @@ export default {
 	}
 }
 
-.fretboard {
-	margin: 40px 0 80px 0;
-}
-
+/**
+ * Below the fretboard
+ * -----------------------------------------------------------------------------
+ */
 .below-fretboard {
-	position: relative;
+	margin-top: 40px;
+	@include space-children-v(40px);
 }
 
+.settings {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	@include space-children-h(20px);
+}
+
+.select-instrument { min-width: 180px; }
+.select-tuning     { min-width: 230px; }
 
 .frets-slider {
 	width: 300px;
-
-	margin-top: 20px;
 }
 
 .scales {
+	@include center-column;
 	@include space-children-v(20px);
-
-	position: absolute;
-	top: 0;
-	left: 50%;
-	transform: translateX(-50%);
 }
-
-.scales__item {
-	width: 660px;
-
-	&.is-alone {
-		width: 600px;
-	}
-}
-
-.scales__button-add {
-	margin: auto;
-}
-
-</style>
-<!--}}}-->
-
-
-<!--{{{ Styling for components -->
-<style lang='scss'>
-
-// Load the styles for the slider & set the theme color
-$themeColor: steelblue;
-@import '~vue-slider-component/lib/theme/default';
 
 </style>
 <!--}}}-->

@@ -70,8 +70,12 @@ export default {
 
 					// Get the list of scales the note of the fret belongs to
 					let scales = this.scales.filter(
-					               _scale => _scale.notes.includes(note)
-					            && _scale.position.filter(_pos => _pos.string == string && _pos.fret == fret).length > 0
+						_scale => _scale.notes.includes(note)
+						&& (
+						       _scale.type     == 'arpeggio'
+						    || _scale.position == 0
+						    || _scale.posCoordinates.filter(_c => _c.string == string && _c.fret == fret).length > 0
+						)
 					);
 
 					// Remove the scales displaying intersections only if they are alone
@@ -97,9 +101,28 @@ export default {
 
 			return frets;
 		},
+		scales()
+		{
+			return this.scalesInfos.map(_scale =>
+			{
+				const notes          = generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
+				const posCoordinates = _scale.type == 'arpeggio'
+					? []
+					: generateModelPosition(
+						this.nbStrings,
+						this.nbFrets,
+						this.tuningNotes,
+						notes,
+						data.scales[_scale.model].nbNotesPerString,
+						_scale.position
+					);
+
+				return { notes, posCoordinates, ..._scale };
+			});
+		},
 		inlays()
 		{
-			// List the frets which bear an inlay (only the 12th is omitted)
+			// List the frets which can have an inlay (only the 12th is omitted)
 			let frets = ['3', '5', '7', '9', '15', '17', '19', '21'];
 
 			switch (this.nbStrings)
@@ -132,7 +155,7 @@ export default {
 		},
 		grid()
 		{
-			let openStringFretsSize = '45px';
+			let openStringFretsSize = '30px';
 
 			/**
 			 * Compute the size of each fret so that:
@@ -177,17 +200,6 @@ export default {
 		tuningNotes()
 		{
 			return data.tunings[this.instrument][this.tuning];
-		},
-		scales()
-		{
-			return this.scalesInfos.map(_scale =>
-			{
-				const nbNotesPerString = data.scales[_scale.model].nbNotesPerString;
-				const notes            = generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
-				const position         = generateModelPosition(this.nbStrings, this.nbFrets, this.tuningNotes, notes, nbNotesPerString);
-
-				return { notes, position, ..._scale };
-			});
 		},
 
 		...mapState([

@@ -22,10 +22,12 @@ module.exports = {
 		loaderOptions: {
 			sass: {
 				prependData: [
+					'sass-mq/_mq.scss',
+
 					'@/styles/mixins',
 					'@/styles/colorscheme',
 				]
-				.map(_file => `@import "${_file}";`)
+				.map(_file => `@use "${_file}" as *;`)
 				.join('\n')
 			}
 		},

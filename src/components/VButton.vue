@@ -90,7 +90,7 @@ export default {
 	transition: color 0.2s;
 
 	&:hover {
-		color: steelblue;
+		color: $color-azure;
 	}
 
 	&.dark-mode {
@@ -115,7 +115,11 @@ export default {
 	 * 'isDisabled' are true, the active color is combined with the disabled cursor
 	 */
 	&.is-active {
-		color: orange;
+		color: $color-sun;
+
+		&:hover {
+			color: $color-sun;
+		}
 	}
 }
 

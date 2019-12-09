@@ -10,28 +10,30 @@ div.VSelect(ref="vselectbar")
 
 	//- Select bar
 	div.VSelect__bar(
-		v-mods="{ isDisabled }"
+		v-mods="{ isDisabled, ...darkMode }"
 		v-click-outside="close"
 		@click.left="toggleOpen"
 		)
 		p.VSelect__bar__text(
-			v-mods="{ isDisabled }"
+			v-mods="{ isDisabled, ...darkMode }"
 			) {{ selected.name }}
 
 		fa-icon.VSelect__bar__chevron(
 			:icon="['far', 'chevron-down']"
-			v-mods="{ isOpened, isDisabled }"
+			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped, ...darkMode }"
 			)
 
 	//- Options
 	transition(name="fade")
 		div.VSelect__options(
 			v-show="isOpened"
-			v-mods="{ isOpeningDirectionUp: openingDirection == 'up' }"
+			v-mods="{ isOpeningDirectionUp: openingDirection == 'up', ...darkMode }"
 			)
 			p.VSelect__options__item(
 				v-for="option in optionsList"
 				:key="`key--v-select-${id}--${option.value}`"
+
+				v-mods="darkMode"
 
 				@click.left="select(option)"
 				) {{ option.name }}
@@ -43,7 +45,9 @@ div.VSelect(ref="vselectbar")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapObject } from '@/modules/object.js'
+import { mapState, mapGetters } from 'vuex'
+
+import { mapObject }            from '@/modules/object.js'
 
 export default {
 	name: 'VSelect',
@@ -70,12 +74,17 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isValueNumber: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
 		return {
-			isOpened:          false,
+			unwatch:           null,
 			openingDirection:  'down',
+			isOpened:          false,
 		}
 	},
 
@@ -89,16 +98,31 @@ export default {
 		{
 			return this?.optionsList?.find(_option => _option.value == this.value) ?? { value: 'loading', name: 'Loading…' };
 		},
+		isChevronFlipped()
+		{
+			return (this.openingDirection == 'down' &&  this.isOpened)
+			    || (this.openingDirection == 'up'   && !this.isOpened)
+		},
+		...mapState([
+			'instrument',
+		]),
+		...mapGetters([
+			'darkMode',
+		])
 	},
 
 	watch: {
-		isOpened: 'updateOpeningDirection',
+		instrument: 'updateOpeningDirection',
+	},
+
+	mounted() {
+		this.updateOpeningDirection();
 	},
 
 	methods: {
 		select(_option)
 		{
-			this.$emit('change', _option.value);
+			this.$emit('change', this.isValueNumber ? Number.parseInt(_option.value, 10) : _option.value);
 		},
 		toggleOpen()
 		{
@@ -110,14 +134,14 @@ export default {
 		},
 		updateOpeningDirection()
 		{
-			if (!this.isOpened) return;
-
 			const windowHeight  = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 			const elemYPosition = this.$refs.vselectbar.getBoundingClientRect().top;
 
 			// If the element is positioned low in the viewport,
 			// open the options menu upward instead of downward to avoid vertical overflow
-			this.openingDirection = (windowHeight - elemYPosition < 380) ? 'up' : 'down';
+			this.openingDirection = windowHeight - elemYPosition < 380
+				? 'up'
+				: 'down';
 		},
 	},
 }
@@ -129,7 +153,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
-@import '@/styles/transitions';
+@use '@/styles/transitions' as *;
 
 .VSelect {
 	position: relative;
@@ -142,7 +166,13 @@ export default {
 .VSelect__options {
 	border: 1px solid $color-azure;
 
-	background-color: $color-mirage;
+	background-color: snow;
+
+	transition: background-color 0.2s;
+
+	&.dark-mode {
+		background-color: $color-mirage-2;
+	}
 }
 
 .VSelect__bar {
@@ -166,10 +196,14 @@ export default {
 .VSelect__bar__text,
 .VSelect__bar__chevron,
 .VSelect__options__item {
-	color: $color-nepal;
-
 	cursor: pointer;
 	user-select: none;
+
+	transition: color 0.2s;
+
+	&.dark-mode {
+		color: $color-nepal;
+	}
 
 	&.is-disabled {
 		color: gray;
@@ -182,6 +216,10 @@ export default {
 	font-size: 0.8em;
 
 	@include flip;
+
+	&.is-flipped {
+		transform: rotate(180deg);
+	}
 }
 
 .VSelect__options {
@@ -209,11 +247,19 @@ export default {
 	padding: 8px;
 
 	&:hover {
-		background-color: $color-oxford-blue;
+		background-color: lightgray;
+
+		&.dark-mode {
+			background-color: $color-oxford-blue;
+		}
 	}
 
 	&:not(:last-child) {
-		border-bottom: 1px solid $color-ebony-clay;
+		border-bottom: 1px solid lightgray;
+
+		&.dark-mode {
+			border-bottom-color: $color-ebony-clay;
+		}
 	}
 }
 

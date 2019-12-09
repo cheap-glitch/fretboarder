@@ -235,14 +235,19 @@ export default {
 <!--{{{ Global styles -->
 <style lang='scss'>
 
-// Load the fonts
-@include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
-
 // Apply the reset stylesheet
-@import '@/styles/reset';
+@use '@/styles/reset' as *;
 
 // Load the global styles
-@import '@/styles/global';
+@use '@/styles/global' as *;
+
+// Load the styles for the slider component
+@use '~vue-slider-component/lib/theme/default' with (
+	$themeColor: $color-azure,
+);
+
+// Load the fonts
+@include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
 
 </style>
 <!--}}}-->

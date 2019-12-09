@@ -8,7 +8,7 @@ import data from '@/modules/data'
 /**
  * Generate the "coordinates" of the notes in a single position of a given model
  */
-export function generateModelPosition(_nbStrings, _nbFrets, _tuningNotes, _scaleNotes, _nbNotesPerString)
+export function generateModelPosition(_nbStrings, _nbFrets, _tuningNotes, _scaleNotes, _nbNotesPerString, _position)
 {
 	// Find the fret of the root note on the lowest string
 	const root         = _scaleNotes[0];
@@ -16,19 +16,17 @@ export function generateModelPosition(_nbStrings, _nbFrets, _tuningNotes, _scale
 
 	// Find the fret of the root note in the specified position
 	let rootFret = null;
-	for (let fret=baseRootFret; fret<MAX_NB_FRETS; fret++)
+	for (let fret=baseRootFret, pos=0; pos<_position; fret++)
 	{
 		for (let string=_nbStrings-1; string>=0; string--)
 		{
 			if (getStringNotes(_tuningNotes[string])[fret % _nbFrets] == root)
 			{
 				rootFret = fret;
+				pos++;
 				break;
 			}
 		}
-
-		if (rootFret != null)
-			break;
 	}
 
 	// Compute the coordinates of the notes of the scale on each string
