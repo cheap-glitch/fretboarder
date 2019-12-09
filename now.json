@@ -1,7 +1,7 @@
 {
   "build": {
     "env": {
-      "NPMRC": "@npmrc"
+      "NPM_RC": "@npmrc"
     }
   }
 }
