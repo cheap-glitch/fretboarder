@@ -93,8 +93,8 @@ export default {
 							value:  getNotesInterval(_scale.notes[0], note),
 						})),
 
-						isRootNote:        scales.some(_scale => _scale.isShowingRootNotes && note == _scale.notes[0]),
-						isDisplayingInlay: this.inlays.includes(`${fret}-${string}`)
+						isHighlightedNote: scales.some(_s => _s.highlightedNote === getNotesInterval(_s.notes[0], note)),
+						isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
 					});
 				}
 			}

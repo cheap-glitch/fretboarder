@@ -16,7 +16,8 @@ div.VSelect(ref="vselectbar")
 		)
 		p.VSelect__bar__text(
 			v-mods="{ isDisabled, ...darkMode }"
-			) {{ selected.name }}
+			v-html="selected.name"
+			)
 
 		fa-icon.VSelect__bar__chevron(
 			:icon="['far', 'chevron-down']"
@@ -33,10 +34,11 @@ div.VSelect(ref="vselectbar")
 				v-for="option in optionsList"
 				:key="`key--v-select-${id}--${option.value}`"
 
+				v-html="option.name"
 				v-mods="darkMode"
 
 				@click.left="select(option)"
-				) {{ option.name }}
+				)
 
 </template>
 <!--}}}-->

@@ -24,7 +24,7 @@ div.FretboardViewerFret(
 
 	//- Note
 	div.FretboardViewerFret__note(
-		v-mods="{ isActive, isRootNote, isOpenString, isFretboardFlipped }"
+		v-mods="{ isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
 		:style="noteColors"
 
 		@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
@@ -72,7 +72,7 @@ export default {
 			type: Array,
 			required: true,
 		},
-		isRootNote: {
+		isHighlightedNote: {
 			type: Boolean,
 			default: false,
 		},
@@ -258,7 +258,7 @@ export default {
 		border-width: 4px;
 	}
 
-	&:not(.is-root-note) {
+	&:not(.is-highlighted-note) {
 		border-radius: 50%;
 	}
 

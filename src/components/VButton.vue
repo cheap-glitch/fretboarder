@@ -8,14 +8,19 @@
 
 button.VButton(
 	:title="tooltip"
-	v-mods="{ isActive, isDisabled, ...darkMode }"
+	v-mods="{ isDisabled, ...darkMode }"
 	@click.left="click"
 	)
 	fa-icon.VButton__icon(
+		v-if="icon"
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:class="`size-${size}`"
-		v-mods="{ isDisabled, isFlipped }"
+		v-mods="{ isActive, isDisabled, isFlipped }"
 		)
+	p.VButton__text(
+		v-if="text"
+		v-mods="{ isActive, isDisabled, isFlipped }"
+		) {{ text }}
 
 </template>
 <!--}}}-->
@@ -32,7 +37,11 @@ export default {
 	props: {
 		icon: {
 			type: [Array, String],
-			required: true,
+			default: null,
+		},
+		text: {
+			type: String,
+			default: null,
 		},
 		size: {
 			type: String,
@@ -79,13 +88,15 @@ export default {
 .VButton {
 	display: block;
 
-	appearance: none;
 	border: none;
+	appearance: none;
 	background-color: transparent;
 
-	color: gray;
-
 	cursor: pointer;
+}
+
+.VButton__icon {
+	color: gray;
 
 	transition: color 0.2s;
 
@@ -95,10 +106,6 @@ export default {
 
 	&.dark-mode {
 		color: $color-oxford-blue;
-
-		&:hover {
-			color: $color-azure;
-		}
 	}
 
 	&.is-disabled {
@@ -110,10 +117,6 @@ export default {
 		}
 	}
 
-	/**
-	 * This modifier is  placed below on purpose, so that  when both 'isActive' and
-	 * 'isDisabled' are true, the active color is combined with the disabled cursor
-	 */
 	&.is-active {
 		color: $color-sun;
 
@@ -121,19 +124,46 @@ export default {
 			color: $color-sun;
 		}
 	}
-}
 
-.VButton__icon {
-	&.size-big    { @include square(40px); }
-	&.size-normal { @include square(30px); }
-	&.size-small  { @include square(22px); }
+	&.is-flipped {
+		transform: scaleX(-1);
+	}
 
 	&.is-disabled {
 		cursor: not-allowed;
 	}
 
-	&.is-flipped {
-		transform: scaleX(-1);
+	&.size-big    { @include square(40px); }
+	&.size-normal { @include square(30px); }
+	&.size-small  { @include square(22px); }
+}
+
+.VButton__text {
+	color: gray;
+
+	cursor: pointer;
+
+	text-decoration: underline solid transparent 2px;
+
+	transition: color 0.2s, text-decoration-color 0.2s;
+
+	&.is-disabled {
+		cursor: not-allowed;
+	}
+
+	&:not(.is-disabled):hover {
+		color: $color-azure;
+		text-decoration-color: $color-azure;
+	}
+
+	&.is-active {
+		color: $color-sun;
+		text-decoration-color: $color-sun;
+
+		&:hover {
+			color: $color-sun;
+			text-decoration-color: $color-sun;
+		}
 	}
 }
 

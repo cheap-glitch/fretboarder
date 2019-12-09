@@ -70,10 +70,10 @@ div.PageFretboarder
 					)
 				template(slot="popover")
 					div.export-menu
-						div.export-menu__button: p(v-close-popover @click.left="exportToFile('png')") PNG
-						div.export-menu__button: p(v-close-popover @click.left="exportToFile('jpg')") JPG
-						div.export-menu__button: p(v-close-popover @click.left="exportToFile('svg')") SVG
-						div.export-menu__button: p(v-close-popover @click.left="exportToFile('pdf')") PDF
+						p.export-menu__button(v-close-popover @click.left="exportToFile('png')") PNG
+						p.export-menu__button(v-close-popover @click.left="exportToFile('jpg')") JPG
+						p.export-menu__button(v-close-popover @click.left="exportToFile('svg')") SVG
+						p.export-menu__button(v-close-popover @click.left="exportToFile('pdf')") PDF
 
 	//----------------------------------------------------------------------
 	//- Fretboard
@@ -119,18 +119,21 @@ div.PageFretboarder
 						)
 		//- Scales & arpeggios
 		div.scales
-			FretboardScale.scales__item(
-				v-for="scale in scales"
-				:key="`scale--${scale.id}`"
+			div.scales-list
+				FretboardScale(
+					v-for="scale in scales"
+					:key="`scale--${scale.id}`"
 
-				v-bind.sync="scale"
-				:nbScales="scales.length"
+					v-bind.sync="scale"
+					:nbScales="scales.length"
 
-				@toggle-focus-scale="toggleFocusScale"
-				@duplicate-scale="duplicateScale"
-				@remove-scale="removeScale"
-				)
-			VButton.scales__button-add(
+					@toggle-focus-scale="toggleFocusScale"
+					@duplicate-scale="duplicateScale"
+					@remove-scale="removeScale"
+					)
+			p(v-show="scales.length == 0").
+				Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
+			VButton(
 				v-show="scales.length < maxNbScales"
 
 				icon="plus-circle"
@@ -168,7 +171,7 @@ export default {
 
 	static() {
 		return {
-			maxNbScales:       4,
+			maxNbScales:       6,
 			instrumentOptions: mapObject(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
 		}
 	},
@@ -203,6 +206,8 @@ export default {
 				'#1bb934',
 				'#e54124',
 				'#ffb610',
+				'#e1112c',
+				'#ab7ef6',
 			].filter(_color => !this.scales.some(__scale => __scale.color == _color))[0];
 		},
 		instrumentModel:
@@ -257,7 +262,7 @@ export default {
 				this.nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
-				this.tunings[this.instrument][this.tuning],
+				data.tunings[this.instrument][this.tuning],
 				this.activeScales,
 				this.isFretboardFlipped,
 				true,
@@ -292,9 +297,9 @@ export default {
 				model:                   'maj',
 				tonality:                'A',
 				position:                0,
+				highlightedNote:         null,
 				isVisible:               true,
 				isFocused:               false,
-				isShowingRootNotes:      false,
 				isShowingIntersections:  false,
 			});
 		},
@@ -455,6 +460,10 @@ export default {
 
 .scales {
 	@include center-column;
+	@include space-children-v(20px);
+}
+
+.scales-list {
 	@include space-children-v(20px);
 }
 

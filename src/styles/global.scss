@@ -29,6 +29,10 @@ h2 {
 	user-select: none;
 }
 
+sup {
+	vertical-align: 0.25rem;
+}
+
 /**
  * Tooltip
  * -----------------------------------------------------------------------------
@@ -43,9 +47,6 @@ h2 {
 		padding: 5px 10px 4px;
 
 		border-radius: 16px;
-
-		color: white;
-		background-color: black;
 	}
 
 	.tooltip-arrow {
@@ -58,6 +59,20 @@ h2 {
 
 		border-style: solid;
 		border-color: black;
+	}
+
+	&.popover {
+		.popover-inner {
+			border: 2px solid gray;
+			border-radius: 6px;
+
+			color: #333;
+			background-color: snow;
+		}
+
+		.popover-arrow {
+			border-color: gray;
+		}
 	}
 
 	&[x-placement^="top"] {
@@ -125,22 +140,6 @@ h2 {
 			border-top-color: transparent !important;
 			border-right-color: transparent !important;
 			border-bottom-color: transparent !important;
-		}
-	}
-
-	&.popover {
-		.popover-inner {
-			border: 2px solid black;
-			border-radius: 5px;
-
-			box-shadow: 0 5px 30px rgba(black, .1);
-
-			color: #222;
-			background-color: white;
-		}
-
-		.popover-arrow {
-			border-color: black;
 		}
 	}
 

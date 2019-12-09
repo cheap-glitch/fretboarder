@@ -6,9 +6,7 @@
 <!--{{{ Pug -->
 <template lang='pug'>
 
-div.FretboardScale(
-	v-mods="{ isAlone: nbScales == 1 }"
-	)
+div.FretboardScale
 
 	div.color-dot(:style="{ 'background-color': color }")
 
@@ -36,7 +34,7 @@ div.FretboardScale(
 			id="scale-model"
 			:value="model"
 			:options="modelsNames"
-			@change="_v => $emit('update:model', _v)"
+			@change="updateModel"
 			)
 		//- Position
 		VSelect.select-position(
@@ -53,6 +51,20 @@ div.FretboardScale(
 	//----------------------------------------------------------------------
 	div.scale-tools
 
+		//- Intervals
+		div.intervals
+			VButton(
+				v-for="interval in intervals"
+				:key="`scale--${id}-interval--${interval.value}`"
+
+				:text="interval.name"
+				:is-active="highlightedNote === interval.value"
+
+				@click="$emit('update:highlightedNote', highlightedNote == interval.value ? null : interval.value)"
+				)
+
+		div.scale-tools__separator(v-mods="darkMode")
+
 		//- Show/hide
 		VButton(
 			:icon="isVisible ? 'eye' : 'eye-slash'"
@@ -68,14 +80,6 @@ div.FretboardScale(
 			tooltip="Focus"
 			:is-active="isFocused"
 			@click="$emit('toggle-focus-scale', id)"
-			)
-		//- Show root
-		VButton(
-			icon="registered"
-			size="small"
-			tooltip="Show root notes"
-			:is-active="isShowingRootNotes"
-			@click="$emit('update:isShowingRootNotes', !isShowingRootNotes)"
 			)
 		//- Show intersections only
 		VButton(
@@ -151,15 +155,15 @@ export default {
 			type: Number,
 			required: true,
 		},
+		highlightedNote: {
+			type: Number,
+			default: null,
+		},
 		isVisible: {
 			type: Boolean,
 			default: true,
 		},
 		isFocused: {
-			type: Boolean,
-			default: false,
-		},
-		isShowingRootNotes: {
 			type: Boolean,
 			default: false,
 		},
@@ -174,11 +178,11 @@ export default {
 			tonalities: data.tonalities,
 			positions:  {
 				0: 'Whole',
-				1: '1st pos',
-				2: '2nd pos',
-				3: '3nd pos',
-				4: '4nd pos',
-				5: '5nd pos',
+				1: '1<sup>st</sup> pos',
+				2: '2<sup>nd</sup> pos',
+				3: '3<sup>rd</sup> pos',
+				4: '4<sup>th</sup> pos',
+				5: '5<sup>th</sup> pos',
 			}
 		}
 	},
@@ -192,6 +196,30 @@ export default {
 		{
 			return mapObject(this.models, (_key, _model) => ({ name: _model.name, value: _key }));
 		},
+		intervals()
+		{
+			let rootInterval = 0;
+
+			return [{ value: 0, name: 'R'}, ...this.models[this.model].model.slice(0, -1).map(function(_interval)
+			{
+				rootInterval += _interval;
+
+				switch(rootInterval)
+				{
+					case 1:  return { value: rootInterval, name: '2m' };
+					case 2:  return { value: rootInterval, name: '2M' };
+					case 3:  return { value: rootInterval, name: '3m' };
+					case 4:  return { value: rootInterval, name: '3M' };
+					case 5:  return { value: rootInterval, name: '4'  };
+					case 6:  return { value: rootInterval, name: '5♭' };
+					case 7:  return { value: rootInterval, name: '5'  };
+					case 8:  return { value: rootInterval, name: '6m' };
+					case 9:  return { value: rootInterval, name: '6M' };
+					case 10: return { value: rootInterval, name: '7m' };
+					case 11: return { value: rootInterval, name: '7M' };
+				}
+			})];
+		},
 		...mapGetters([
 			'darkMode',
 		])
@@ -200,11 +228,18 @@ export default {
 	methods: {
 		updateType(_v)
 		{
-			// Reset the model when the type of scale is changed
-			this.$emit('update:model', 'maj');
+			// Reset the model and the highlighted note when the type of scale is changed
+			this.$emit('update:model',           'maj');
+			this.$emit('update:highlightedNote',  null);
 
-			// Update the type
 			this.$emit('update:type', _v);
+		},
+		updateModel(_v)
+		{
+			// Reset the highlighted note when the mode of the scale is changed
+			this.$emit('update:highlightedNote',  null);
+
+			this.$emit('update:model', _v);
 		},
 	}
 }
@@ -219,18 +254,14 @@ export default {
 .FretboardScale {
 	display: flex;
 	align-items: center;
-	@include space-children-h(10px);
-
-	width: 780px;
-
-	&.is-alone {
-		width: 720px;
-	}
+	justify-content: space-between;
 }
 
 .color-dot {
 	@include circle(10px);
 	flex: 0 0 auto;
+
+	margin-right: 10px;
 }
 
 .scale-props,
@@ -242,6 +273,13 @@ export default {
 
 .scale-props {
 	flex: 1 1 100%;
+
+	margin-right: 30px;
+}
+
+.intervals {
+	display: flex;
+	@include space-children-h(10px);
 }
 
 .scale-tools__separator {
@@ -255,10 +293,10 @@ export default {
 	}
 }
 
-.select-type     { max-width: 120px; }
-.select-tonality { max-width: 60px;  }
-.select-model    { max-width: 220px; }
-.select-position { max-width: 100px; }
+.select-type     { max-width: 120px; min-width: 120px; }
+.select-tonality { max-width: 60px;  min-width: 60px;  }
+.select-model    { max-width: 220px; min-width: 220px; }
+.select-position { max-width: 100px; min-width: 100px; }
 
 </style>
 <!--}}}-->

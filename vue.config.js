@@ -66,7 +66,6 @@ module.exports = {
 						'eye',
 						'eye-slash',
 						'plus-circle',
-						'registered',
 						'trash-alt',
 					]
 				},

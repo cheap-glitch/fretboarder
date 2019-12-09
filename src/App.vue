@@ -224,7 +224,7 @@ export default {
 	transition: color 0.2s;
 
 	&:hover {
-		color: orange;
+		color: $color-sun;
 	}
 }
 
