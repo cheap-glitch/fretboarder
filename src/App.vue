@@ -19,19 +19,24 @@ div.App(v-mods="darkMode")
 				)
 			h1.page-header__title__text Fretboarder
 		nav.page-header__nav
+			div.page-header__nav__link#help-tour-step--0(
+				@click.left="$tours['help'].start()"
+				)
+				fa-icon.page-header__nav__link__icon(:icon="['far', 'question-circle']")
+				p Quick help
 			a.page-header__nav__link(
 				href="https://github.com/cheap-glitch/fretboarder/issues"
 				target="_blank"
 				rel="external nofollow noopener noreferrer"
 				)
-				fa-icon(:icon="['far', 'bug']")
-				p Report a bug
+				fa-icon.page-header__nav__link__icon(:icon="['far', 'bug']")
+				p Bug report / Feature request
 			a.page-header__nav__link.support-link(
 				href="https://www.patreon.com/cheap_glitch"
 				target="_blank"
 				rel="external nofollow noopener noreferrer"
 				)
-				fa-icon(:icon="['far', 'heart']")
+				fa-icon.page-header__nav__link__icon(:icon="['far', 'heart']")
 				p Support
 			a.page-header__nav__link(
 				href="https://www.theguitarlickdatabase.com"
@@ -39,12 +44,13 @@ div.App(v-mods="darkMode")
 				rel="external nofollow noopener noreferrer"
 				)
 				p The Guitar Lick Database
-				fa-icon(:icon="['far', 'external-link-square-alt']")
+				fa-icon.page-header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
 
 	//----------------------------------------------------------------------
 	//- Body
 	//----------------------------------------------------------------------
 	router-view
+	PageFretboarderHelpTour
 
 	//----------------------------------------------------------------------
 	//- Footer
@@ -73,8 +79,14 @@ div.App(v-mods="darkMode")
 
 import { mapState, mapGetters } from 'vuex'
 
+import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
+
 export default {
 	name: 'App',
+
+	components: {
+		PageFretboarderHelpTour,
+	},
 
 	computed: {
 		instrumentIcon()
@@ -102,7 +114,7 @@ export default {
 		...mapGetters([
 			'darkMode',
 		])
-	}
+	},
 }
 
 </script>
@@ -131,6 +143,10 @@ export default {
 	}
 }
 
+/**
+ * Header
+ * -----------------------------------------------------------------------------
+ */
 .page-header {
 	display: flex;
 	justify-content: space-between;
@@ -189,6 +205,10 @@ export default {
 	}
 }
 
+.page-header__nav__link__icon {
+	transform: translateY(1px);
+}
+
 .support-link {
 	color: $color-crimson;
 	border-color: $color-crimson;
@@ -202,6 +222,10 @@ export default {
 	}
 }
 
+/**
+ * Footer
+ * -----------------------------------------------------------------------------
+ */
 .page-footer {
 	display: flex;
 	align-items: flex-end;

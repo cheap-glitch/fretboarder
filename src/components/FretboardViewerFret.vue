@@ -188,8 +188,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
-@use '@/styles/transitions' as *;
-
 .FretboardViewerFret {
 	display: flex;
 	justify-content: center;
@@ -243,6 +241,7 @@ export default {
 
 	position: absolute;
 	transform: translateY(-50%);
+	z-index: 10;
 
 	@include square(30px);
 

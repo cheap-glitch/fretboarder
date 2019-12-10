@@ -21,6 +21,7 @@ module.exports = {
 
 					'@/styles/mixins',
 					'@/styles/colorscheme',
+					'@/styles/transitions',
 				]
 				.map(_file => `@use "${_file}" as *;`)
 				.join('\n')
@@ -47,10 +48,11 @@ module.exports = {
 						'banjo',
 						'bug',
 						'cog',
-						'guitar-electric',
 						'guitar',
+						'guitar-electric',
 						'heart',
 						'mandolin',
+						'question-circle',
 
 						// Fretboard tools
 						'eraser',

@@ -86,7 +86,7 @@ div.PageFretboarder
 	section.below-fretboard
 		div.settings
 			//- Instrument & tuning
-			div.toolbar
+			div.toolbar#help-tour-step--1
 				VSelect.select-instrument(
 					id="instrument"
 					:options="instrumentOptions"

@@ -155,8 +155,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
-@use '@/styles/transitions' as *;
-
 .VSelect {
 	position: relative;
 
