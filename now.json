@@ -1,4 +1,7 @@
 {
+  "github": {
+    "silent": true
+  },
   "build": {
     "env": {
       "NPM_RC": "@npmrc"
