@@ -38,7 +38,7 @@ div.PageFretboarder
 				@click="$store.commit('toggleIsDarkModeOn')"
 				)
 			//- Toggle note names
-			VButton(
+			VButton#help-tour-step--3(
 				icon="info-circle"
 				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
@@ -63,17 +63,15 @@ div.PageFretboarder
 
 			//- Export the fretboard
 			div#canvas-wrapper
-			v-popover
-				VButton(
-					icon="file-download"
-					tooltip="Export the fretboard image"
-					)
-				template(slot="popover")
-					div.export-menu
-						p.export-menu__button(v-close-popover @click.left="exportToFile('png')") PNG
-						p.export-menu__button(v-close-popover @click.left="exportToFile('jpg')") JPG
-						p.export-menu__button(v-close-popover @click.left="exportToFile('svg')") SVG
-						p.export-menu__button(v-close-popover @click.left="exportToFile('pdf')") PDF
+			VButton#help-tour-step--4(
+				icon="file-download"
+				tooltip="Export the fretboard image"
+				)
+			//- div.export-menu
+				p.export-menu__button(v-close-popover @click.left="exportToFile('png')") PNG
+				p.export-menu__button(v-close-popover @click.left="exportToFile('jpg')") JPG
+				p.export-menu__button(v-close-popover @click.left="exportToFile('svg')") SVG
+				p.export-menu__button(v-close-popover @click.left="exportToFile('pdf')") PDF
 
 	//----------------------------------------------------------------------
 	//- Fretboard
@@ -99,8 +97,8 @@ div.PageFretboarder
 					)
 
 			//- Frets range
-			div.toolbar
-				div.frets-slider
+			div.toolbar#help-tour-step--2
+				div.fret-range-slider
 					vue-slider(
 						:min="0"
 						:max="24"
@@ -116,6 +114,7 @@ div.PageFretboarder
 						:tooltip-formatter="tooltipFormatter"
 
 						v-model="fretRangeModel"
+						@mousedown.left.native="$store.commit('setFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
 		div.scales
@@ -178,8 +177,8 @@ export default {
 
 	data() {
 		return {
-			scales:       [],
-			nextScaleID:  0,
+			scales:      [],
+			nextScaleID: 0,
 		}
 	},
 
@@ -375,9 +374,12 @@ export default {
 	display: flex;
 	@include space-children-h(10px);
 
-	opacity: 0;
-	@include center-position;
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	transform: translateX(-50%);
 
+	opacity: 0;
 	transition: opacity 0.2s;
 
 	&.is-visible {
@@ -454,10 +456,11 @@ export default {
 }
 
 .select-instrument { min-width: 180px; }
-.select-tuning     { min-width: 230px; }
+.select-tuning     { min-width: 260px; }
 
-.frets-slider {
+.fret-range-slider {
 	width: 300px;
+	margin: 0 10px;
 }
 
 .scales {

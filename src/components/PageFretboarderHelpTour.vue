@@ -24,7 +24,7 @@ v-tour(name="help" :steps="steps")
 				:is-first="tour.isFirst"
 				:is-last="tour.isLast"
 
-				v-click-outside="tour.stop"
+				v-click-outside="_event => stopTour(_event, tour.stop)"
 				)
 
 				//- Footer
@@ -34,14 +34,20 @@ v-tour(name="help" :steps="steps")
 						//- Pagination
 						p.help-tour__step__footer__page {{ index + 1 }} / {{ tour.steps.length }}
 
-						//- Finish button
-						div(v-if="tour.isLast").help-tour__actions
-							button.help-tour__actions__button.button-filled(@click.left="tour.stop") Finish
-
-						//- Prev/next buttons
-						div(v-else).help-tour__actions
-							button.help-tour__actions__button(@click.left="tour.previousStep") Prev
-							button.help-tour__actions__button.button-filled(@click.left="tour.nextStep") Next
+						//- Prev/next/finish buttons
+						div.help-tour__actions
+							button.help-tour__actions__button(
+								v-show="!tour.isFirst"
+								@click.left="tour.previousStep"
+								) Previous
+							button.help-tour__actions__button.button-filled(
+								v-show="!tour.isLast"
+								@click.left="tour.nextStep"
+								) Next
+							button.help-tour__actions__button.button-filled(
+								v-show="tour.isLast"
+								@click.left="tour.stop"
+								) Finish
 
 </template>
 <!--}}}-->
@@ -54,8 +60,25 @@ const helpTourMessages = [
 	`Welcome to Fretboarder!<br>
 	 This guide will take you on a quick tour of the main features.`,
 
-	`Here you can change the instrument and tuning.<br>
-	 Each instrument has a different number of strings and a specific set of tunings you can pick from.`,
+	`You can change the instrument and tuning here.<br>
+	 Each instrument has a different number of strings and a specific set of tunings you can choose from. Try picking one!`,
+
+	`This slider control the number of frets displayed. Try moving both handles to see the effect on the fretboard.`,
+
+	`These are the visual settings. From left to right:
+	 <ul>
+	     <li>Toggle dark mode</li>
+	     <li>Toggle note names</li>
+	     <li>Switch between left- and right-handed fretting and flip the fretboard accordingly</li>
+	 </ul>
+	`,
+
+	`Other tools:
+	 <ul>
+	     <li>Remove all scales and arpeggios</li>
+	     <li>Export the fretboard image in various formats (PNG, JPG, PDF, …)</li>
+	 </ul>
+	 `,
 ];
 
 export default {
@@ -63,11 +86,43 @@ export default {
 
 	static() {
 		return {
-			steps: [...Array(2).keys()].map(_index => ({
+			steps: helpTourMessages.map((_message, _index) => ({
 				target:  `#help-tour-step--${_index}`,
-				content: `<p>${helpTourMessages[_index].replace('<br>', '</p><p>')}</p>`,
+				content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
 			})),
 		}
+	},
+
+	methods: {
+		stopTour(_event, _stopTour)
+		{
+			const el      = _event.target;
+			const classes = el.classList;
+
+			const ignoredClasses = [
+				'VButton',
+
+				'VSelect',
+				'VSelect__bar',
+				'VSelect__options',
+			];
+
+			/**
+			 * Stop the tour when clicking outside the tooltips, unless
+			 * it's on an interactive element
+			 *
+			 * This allows to try the functionalities during the tour without
+			 * accidentally closing it
+			 */
+			if (this.$store.state.isFretRangeSliderClicked
+			|| ignoredClasses.some(_class => classes.contains(_class) || (el.parentElement && el.parentElement.classList.contains(_class))))
+			{
+				this.$store.commit('setFretRangeSliderClicked', false);
+				return;
+			}
+
+			_stopTour();
+		},
 	},
 }
 
@@ -79,7 +134,7 @@ export default {
 <style lang='scss' scoped>
 
 .help-tour__step {
-	z-index: 1000;
+	z-index: 100;
 }
 
 .help-tour__step__footer {
@@ -110,7 +165,7 @@ export default {
 	border: 2px solid transparent;
 	border-radius: 6px;
 
-	font-family: 'IBM Plex', helvetica, arial, sans-serif;
+	font-family: $fonts-text;
 
 	color: white;
 	background: none;
@@ -140,13 +195,26 @@ export default {
 <!--{{{ Global SCSS -->
 <style lang='scss'>
 
+.v-step {
+	border-radius: 6px;
+}
+
 .v-step__content > div {
 	@include space-children-v(10px);
 
 	text-align: left;
 	line-height: 1.4;
 
-	font-family: 'IBM Plex', helvetica, arial, sans-serif;
+	font-family: $fonts-text;
+
+	ul {
+		padding-left: 40px;
+
+		list-style: circle outside;
+
+		cursor: default;
+		user-select: none;
+	}
 }
 
 </style>

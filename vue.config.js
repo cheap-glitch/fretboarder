@@ -21,6 +21,7 @@ module.exports = {
 
 					'@/styles/mixins',
 					'@/styles/colorscheme',
+					'@/styles/fonts',
 					'@/styles/transitions',
 				]
 				.map(_file => `@use "${_file}" as *;`)

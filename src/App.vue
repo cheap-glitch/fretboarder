@@ -20,7 +20,7 @@ div.App(v-mods="darkMode")
 			h1.page-header__title__text Fretboarder
 		nav.page-header__nav
 			div.page-header__nav__link#help-tour-step--0(
-				@click.left="$tours['help'].start()"
+				@click.left="startHelpTour"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'question-circle']")
 				p Quick help
@@ -114,6 +114,16 @@ export default {
 		...mapGetters([
 			'darkMode',
 		])
+	},
+
+	methods: {
+		startHelpTour()
+		{
+			const helpTour = this.$tours['help'];
+
+			if (helpTour.currentStep == -1)
+				helpTour.start();
+		},
 	},
 }
 
@@ -272,6 +282,19 @@ export default {
 
 // Load the fonts
 @include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
+
+// Improved styles for the slider component
+.vue-slider                  { cursor: pointer;  }
+.vue-slider-dot-handle       { cursor: grab;     }
+.vue-slider-dot-handle-focus { cursor: grabbing; }
+
+.vue-slider-dot-tooltip-inner {
+	padding: 6px;
+}
+
+.vue-slider-dot-tooltip-inner {
+	font-family: $fonts-text;
+}
 
 </style>
 <!--}}}-->

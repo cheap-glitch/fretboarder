@@ -21,30 +21,14 @@ export default new Vuex.Store(
 		isFretboardFlipped:           storage.get('isFretboardFlipped',     false),
 
 		hoveredFretInfos:             [],
+
+		// Allows v-click-outside to ignore
+		// mouseup events on the fret slider during the help tour
+		isFretRangeSliderClicked:     false,
 	},
 
 	getters: {
-		darkMode: _s => ({ 'dark-mode': _s.isDarkModeOn }),
-
-		/*
-		// Return a styling object with the colors of the current theme
-		getColors: _state => _elems =>
-		{
-			const elemsNames = {
-				bg:     'background-color',
-				border: 'border-color',
-			};
-
-			return (Array.isArray(_elems) ? _elems : [_elems]).reduce(
-				function(__style, __elem)
-				{
-					__style[elemsNames[__elem]] = _state.isDarkModeOn ? darkColors[__elem] : lightColors[__elem];
-					return __style;
-				},
-				{}
-			);
-		}
-		*/
+		darkMode:                     _s => ({ 'dark-mode': _s.isDarkModeOn }),
 	},
 
 	mutations: {
@@ -56,7 +40,8 @@ export default new Vuex.Store(
 		toggleIsDisplayingNotesName:  _s => storage.set('isDisplayingNotesName', _s.isDisplayingNotesName = !_s.isDisplayingNotesName),
 		toggleIsFretboardFlipped:     _s => storage.set('isFretboardFlipped',    _s.isFretboardFlipped    = !_s.isFretboardFlipped),
 
-		setHoveredFretInfos:          (_s, _v) => _s.hoveredFretInfos = _v,
+		setHoveredFretInfos:          (_s, _v) => _s.hoveredFretInfos         = _v,
+		setFretRangeSliderClicked:    (_s, _v) => _s.isFretRangeSliderClicked = _v,
 	},
 
 	// Activate strict mode during development only
