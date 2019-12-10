@@ -74,7 +74,7 @@ export function createCanvasFromSVG(_SVGBlob, _canvasW, _canvasH, _callback)
 /**
  * Return a SVG drawing the current state of the fretboard
  */
-export function exportFretboardToSVG(_nbStrings, _fretMin, _fretMax, _tuning, _scales, _isFlipped, _isNotesNameDisplayed, _isSizeFixed)
+export function exportFretboardToSVG(_nbStrings, _fretMin, _fretMax, _tuning, _scales, _isFlipped, _isDisplayingNotesName, _isSizeFixed)
 {
 	let svg            = [];
 	let gradients      = [];
@@ -289,7 +289,7 @@ export function exportFretboardToSVG(_nbStrings, _fretMin, _fretMax, _tuning, _s
 				});
 
 				// Draw the note name
-				if (_isNotesNameDisplayed)
+				if (_isDisplayingNotesName)
 				{
 					// If the fretboard is flipped, flip the text again to render it properly
 					if (_isFlipped) xml.open(svg, 'g', { transform: `translate(${svgW}, 0) scale(-1, 1)` });

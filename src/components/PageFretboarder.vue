@@ -259,16 +259,17 @@ export default {
 		exportToFile(_format)
 		{
 			const svg = exportFretboardToSVG(
-				this.nbStrings,
+				data.instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
 				data.tunings[this.instrument][this.tuning],
 				this.activeScales,
 				this.isFretboardFlipped,
-				true,
+				this.isDisplayingNotesName,
 				_format != 'svg',
 			);
 
+			/* eslint-disable */
 			switch (_format)
 			{
 				case 'png':
@@ -284,6 +285,7 @@ export default {
 					exportSVGToPDF(svg);
 					break;
 			}
+			/* eslint-enable */
 		},
 		addScale()
 		{
