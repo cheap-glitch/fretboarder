@@ -57,6 +57,28 @@ div.App(v-mods="darkMode")
 	//----------------------------------------------------------------------
 	router-view
 	PageFretboarderHelpTour
+	v-tour(name="export-menu" :steps="exportMenuTooltip")
+		template(v-slot="tour")
+			transition(name="fade")
+				v-step.export-menu(
+					v-if="tour.currentStep == 0"
+
+					:step="tour.steps[0]"
+					:labels="tour.labels"
+					:stop="tour.stop"
+
+					v-click-outside="tour.stop"
+					)
+					template(v-slot:actions)
+						div.export-menu__actions
+							VButtonText.export-menu__actions__button(
+								v-for="format in ['png', 'jpg', 'svg', 'pdf']"
+								:key="`export-button--${format}`"
+
+								is-filled
+								@click.native.left="exportFretboardToFile(format)"
+								)
+								p {{ format.toUpperCase() }}
 
 	//----------------------------------------------------------------------
 	//- Footer
@@ -84,14 +106,34 @@ div.App(v-mods="darkMode")
 <script>
 
 import { mapState, mapGetters } from 'vuex'
+import { saveAs }               from 'file-saver'
 
+import data                     from '@/modules/data'
 import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
+
+import {
+	exportSVGToPDF,
+	exportSVGToImage,
+	exportFretboardToSVG,
+} from '@/modules/export'
 
 export default {
 	name: 'App',
 
 	components: {
 		PageFretboarderHelpTour,
+	},
+
+	static() {
+		return {
+			exportMenuTooltip: [{
+				target:  '#button-export-menu',
+				content: `<strong>Choose a format to export in</strong><br>
+				          <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
+				              for embedding in web pages as it will scale perfectly when resized.</em>
+				`
+			}],
+		}
 	},
 
 	computed: {
@@ -116,6 +158,13 @@ export default {
 
 		...mapState([
 			'instrument',
+			'tuning',
+			'fretRange',
+
+			'activeScales',
+
+			'isFretboardFlipped',
+			'isDisplayingNotesName',
 		]),
 		...mapGetters([
 			'darkMode',
@@ -130,6 +179,38 @@ export default {
 			if (helpTour.currentStep == -1)
 				helpTour.start();
 		},
+		exportFretboardToFile(_format)
+		{
+			// Close the export menu tootlip
+			this.$tours['export-menu'].stop();
+
+			const svg = exportFretboardToSVG(
+				data.instruments[this.instrument].nbStrings,
+				this.fretRange[0],
+				this.fretRange[1],
+				data.tunings[this.instrument][this.tuning],
+				this.activeScales,
+				this.isFretboardFlipped,
+				this.isDisplayingNotesName,
+				_format != 'svg',
+			);
+
+			switch (_format)
+			{
+				case 'png':
+				case 'jpg':
+					exportSVGToImage(svg, _format);
+					break;
+
+				case 'svg':
+					saveAs(svg.blob, 'fretboard.svg');
+					break;
+
+				case 'pdf':
+					exportSVGToPDF(svg);
+					break;
+			}
+		},
 	},
 }
 
@@ -137,7 +218,7 @@ export default {
 <!--}}}-->
 
 
-<!--{{{ Global styles -->
+<!--{{{ SCSS -->
 <style lang='scss' scoped>
 
 .App {
@@ -156,6 +237,28 @@ export default {
 
 	&.dark-mode {
 		background-color: $color-mirage;
+	}
+}
+
+.export-menu {
+	z-index: 100;
+}
+
+.export-menu__actions {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
+
+	margin-top: 40px;
+}
+
+.export-menu__actions__button {
+	color: white;
+	border-color: white;
+	background-color: white;
+
+	&:hover {
+		color: $color-vue-tour-bg;
 	}
 }
 

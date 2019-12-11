@@ -25,22 +25,20 @@
 import Vue           from 'vue'
 import VCSSModifiers from 'vue-css-modifiers'
 import VClickOutside from 'v-click-outside'
-import VTooltip      from 'v-tooltip'
 import VueSlider     from 'vue-slider-component'
 import VueStatic     from 'vue-static'
 import VueTour       from 'vue-tour'
+require('vue-tour/dist/vue-tour.css');
 
 import App           from '@/App'
 import router        from '@/router'
-import store         from '@/store'
+import store         from '@/stores/main'
 
 /**
  * Register plugins, directives & external components
  */
-Vue.use(VTooltip);
 Vue.use(VueStatic);
 Vue.use(VueTour);
-require('vue-tour/dist/vue-tour.css');
 Vue.directive('mods',          VCSSModifiers);
 Vue.directive('click-outside', VClickOutside.directive);
 Vue.component('vue-slider',    VueSlider);

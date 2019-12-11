@@ -12,15 +12,10 @@ button.VButtonIcon(
 	@click.left="click"
 	)
 	fa-icon.VButtonIcon__icon(
-		v-if="icon"
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:class="`size-${size}`"
 		v-mods="{ isActive, isDisabled, isFlipped }"
 		)
-	p.VButtonIcon__text(
-		v-if="text"
-		v-mods="{ isActive, isDisabled, isFlipped }"
-		) {{ text }}
 
 </template>
 <!--}}}-->
@@ -37,11 +32,7 @@ export default {
 	props: {
 		icon: {
 			type: [Array, String],
-			default: null,
-		},
-		text: {
-			type: String,
-			default: null,
+			required: true,
 		},
 		size: {
 			type: String,
@@ -136,35 +127,6 @@ export default {
 	&.size-big    { @include square(40px); }
 	&.size-normal { @include square(30px); }
 	&.size-small  { @include square(22px); }
-}
-
-.VButtonIcon__text {
-	color: gray;
-
-	cursor: pointer;
-
-	text-decoration: underline solid transparent 2px;
-
-	transition: color 0.2s, text-decoration-color 0.2s;
-
-	&.is-disabled {
-		cursor: not-allowed;
-	}
-
-	&:not(.is-disabled):hover {
-		color: $color-azure;
-		text-decoration-color: $color-azure;
-	}
-
-	&.is-active {
-		color: $color-sun;
-		text-decoration-color: $color-sun;
-
-		&:hover {
-			color: $color-sun;
-			text-decoration-color: $color-sun;
-		}
-	}
 }
 
 </style>

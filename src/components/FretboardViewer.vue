@@ -30,25 +30,23 @@ div.FretboardViewer(:style="[grid, inlays]")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState }                                  from 'vuex'
+import { mapState }        from 'vuex'
 
-import data                                          from '@/modules/data'
-import { generateModelNotes, generateModelPosition } from '@/modules/music'
-import FretboardViewerFret                           from '@/components/FretboardViewerFret'
-import { getNotesInterval, getStringNotes }          from '@/modules/music'
+import data                from '@/modules/data'
+import FretboardViewerFret from '@/components/FretboardViewerFret'
+
+import {
+	getNotesInterval,
+	getStringNotes,
+	generateModelNotes,
+	generateModelPosition
+} from '@/modules/music'
 
 export default {
 	name: 'FretboardViewer',
 
 	components: {
 		FretboardViewerFret,
-	},
-
-	props: {
-		scalesInfos: {
-			type: Array,
-			default: () => [],
-		},
 	},
 
 	computed: {
@@ -103,7 +101,7 @@ export default {
 		},
 		scales()
 		{
-			return this.scalesInfos.map(_scale =>
+			return this.activeScales.map(_scale =>
 			{
 				const notes          = generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
 				const posCoordinates = _scale.type == 'arpeggio'
@@ -206,8 +204,9 @@ export default {
 			'instrument',
 			'tuning',
 			'fretRange',
-
 			'isFretboardFlipped',
+
+			'activeScales',
 		])
 	},
 }

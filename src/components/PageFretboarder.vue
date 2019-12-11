@@ -27,9 +27,9 @@ div.PageFretboarder
 					)
 				p {{ info.interval }}
 
-		//----------------------------------------------------------------------
+		//--------------------------------------------------------------
 		//- Tools & display options
-		//----------------------------------------------------------------------
+		//--------------------------------------------------------------
 		div.toolbar
 			//- Switch between themes
 			VButtonIcon(
@@ -55,7 +55,7 @@ div.PageFretboarder
 			div.toolbar__separator(v-mods="darkMode")
 
 			//- Clear the fretboard
-			VButtonIcon(
+			VButtonIcon#help-tour-step--4(
 				icon="eraser"
 				tooltip="Clear the freatboard"
 				@click="clear"
@@ -63,20 +63,16 @@ div.PageFretboarder
 
 			//- Export the fretboard
 			div#canvas-wrapper
-			VButtonIcon#help-tour-step--4(
+			VButtonIcon#button-export-menu(
 				icon="file-download"
 				tooltip="Export the fretboard image"
+				@click="openExportMenu"
 				)
-			//- div.export-menu
-				p.export-menu__button(v-close-popover @click.left="exportToFile('png')") PNG
-				p.export-menu__button(v-close-popover @click.left="exportToFile('jpg')") JPG
-				p.export-menu__button(v-close-popover @click.left="exportToFile('svg')") SVG
-				p.export-menu__button(v-close-popover @click.left="exportToFile('pdf')") PDF
 
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer(:scalesInfos="activeScales")
+	FretboardViewer
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
@@ -88,12 +84,12 @@ div.PageFretboarder
 				VSelect.select-instrument(
 					id="instrument"
 					:options="instrumentOptions"
-					v-model="instrumentModel"
+					v-model="instrument"
 					)
 				VSelect.select-tuning(
 					id="tuning"
 					:options="tuningsOptions"
-					v-model="tuningModel"
+					v-model="tuning"
 					)
 
 			//- Frets range
@@ -113,7 +109,7 @@ div.PageFretboarder
 						tooltip="active"
 						:tooltip-formatter="tooltipFormatter"
 
-						v-model="fretRangeModel"
+						v-model="fretRange"
 						@mousedown.left.native="$store.commit('setFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
@@ -123,12 +119,7 @@ div.PageFretboarder
 					v-for="scale in scales"
 					:key="`scale--${scale.id}`"
 
-					v-bind.sync="scale"
-					:nbScales="scales.length"
-
-					@toggle-focus-scale="toggleFocusScale"
-					@duplicate-scale="duplicateScale"
-					@remove-scale="removeScale"
+					v-bind="scale"
 					)
 			p(v-show="scales.length == 0").
 				Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
@@ -147,18 +138,16 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState, mapGetters } from 'vuex'
-import { saveAs }               from 'file-saver'
-
-import data                     from '@/modules/data'
-import { mapObject }            from '@/modules/object'
-import FretboardScale           from '@/components/FretboardScale'
-import FretboardViewer          from '@/components/FretboardViewer'
 import {
-	exportSVGToPDF,
-	exportSVGToImage,
-	exportFretboardToSVG,
-} from '@/modules/export'
+	mapState,
+	mapGetters,
+	mapMutations
+} from 'vuex'
+
+import data            from '@/modules/data'
+import { mapObject }   from '@/modules/object'
+import FretboardScale  from '@/components/FretboardScale'
+import FretboardViewer from '@/components/FretboardViewer'
 
 export default {
 	name: 'PageFretboarder',
@@ -170,25 +159,11 @@ export default {
 
 	static() {
 		return {
-			maxNbScales:       6,
 			instrumentOptions: mapObject(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
 		}
 	},
 
-	data() {
-		return {
-			scales:      [],
-			nextScaleID: 0,
-		}
-	},
-
 	computed: {
-		activeScales()
-		{
-			return this.scales.filter(this.scales.some(_scale => _scale.isFocused)
-				? _scale => _scale.isFocused
-				: _scale => _scale.isVisible);
-		},
 		tuningsOptions()
 		{
 			return mapObject(data.tunings[this.instrument], _key => ({ name: data.tuningsNames[_key], value: _key }));
@@ -198,18 +173,7 @@ export default {
 			return data.tuningsNames[this.tuning]
 			     + ` (${data.tunings[this.instrument][this.tuning].map(_note => data.tonalities[_note]).join(', ')})`;
 		},
-		nextColor()
-		{
-			return [
-				'#0093ee',
-				'#1bb934',
-				'#e54124',
-				'#ffb610',
-				'#e1112c',
-				'#ab7ef6',
-			].filter(_color => !this.scales.some(__scale => __scale.color == _color))[0];
-		},
-		instrumentModel:
+		instrument:
 		{
 			set(_v)
 			{
@@ -219,30 +183,31 @@ export default {
 			},
 			get()   { return this.$store.state.instrument;    },
 		},
-		tuningModel:
+		tuning:
 		{
 			set(_v) { this.$store.commit('setTuning', _v);    },
 			get()   { return this.$store.state.tuning;        },
 		},
-		fretRangeModel:
+		fretRange:
 		{
 			set(_v) { this.$store.commit('setFretRange', _v); },
 			get()   { return this.$store.state.fretRange;     },
 		},
 
 		...mapState([
-			'instrument',
-			'tuning',
-			'fretRange',
-
 			'isDarkModeOn',
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
 
 			'hoveredFretInfos',
+
+			'scales/scales',
 		]),
 		...mapGetters([
 			'darkMode',
+		]),
+		...mapMutations('scales', [
+			'addScale',
 		])
 	},
 
@@ -255,75 +220,10 @@ export default {
 		{
 			this.scales = [];
 		},
-		exportToFile(_format)
+		openExportMenu()
 		{
-			const svg = exportFretboardToSVG(
-				data.instruments[this.instrument].nbStrings,
-				this.fretRange[0],
-				this.fretRange[1],
-				data.tunings[this.instrument][this.tuning],
-				this.activeScales,
-				this.isFretboardFlipped,
-				this.isDisplayingNotesName,
-				_format != 'svg',
-			);
-
-			/* eslint-disable */
-			switch (_format)
-			{
-				case 'png':
-				case 'jpg':
-					exportSVGToImage(svg, _format);
-					break;
-
-				case 'svg':
-					saveAs(svg.blob, 'fretboard.svg');
-					break;
-
-				case 'pdf':
-					exportSVGToPDF(svg);
-					break;
-			}
-			/* eslint-enable */
-		},
-		addScale()
-		{
-			// Limit the number of simultaneous scales
-			if (this.scales.length == this.maxNbScales) return;
-
-			this.scales.push({
-				id:                      ++this.nextScaleID,
-				color:                   this.nextColor,
-				type:                    'scale',
-				model:                   'maj',
-				tonality:                'A',
-				position:                0,
-				highlightedNote:         null,
-				isVisible:               true,
-				isFocused:               false,
-				isShowingIntersections:  false,
-			});
-		},
-		duplicateScale(_id)
-		{
-			// Limit the number of simultaneous scales
-			if (this.scales.length == this.maxNbScales) return;
-
-			const newScale = {...this.scales.filter(__scale => __scale.id == _id)[0]};
-
-			newScale.id        = ++this.nextScaleID;
-			newScale.color     = this.nextColor;
-			newScale.isFocused = false;
-
-			this.scales.push(newScale);
-		},
-		removeScale(_id)
-		{
-			this.scales = this.scales.filter(__scale => __scale.id != _id);
-		},
-		toggleFocusScale(_id)
-		{
-			this.scales.forEach(__scale => __scale.isFocused = (__scale.id == _id && !__scale.isFocused));
+			if (this.$tours['export-menu'].currentStep == -1)
+				this.$tours['export-menu'].start();
 		},
 		tooltipFormatter(_number)
 		{
@@ -416,27 +316,6 @@ export default {
 #canvas-export,
 #canvas-wrapper {
 	display: none;
-}
-
-.export-menu {
-	display: grid;
-	grid-template-rows: 1fr 1fr;
-	grid-template-columns: 1fr 1fr;
-	grid-gap: 10px;
-
-	padding: 5px;
-}
-
-.export-menu__button {
-	font-weight: bold;
-
-	cursor: pointer;
-
-	transition: color 0.2s;
-
-	&:hover {
-		color: $color-azure;
-	}
 }
 
 /**

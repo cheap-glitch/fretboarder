@@ -13,7 +13,7 @@ v-tour(name="help" :steps="steps")
 		transition(name="fade")
 			v-step.help-tour__step(
 				v-for="(step, index) of tour.steps"
-				:key="`v-tour-step--${index}`"
+				:key="`help-tour-step--${index}`"
 
 				v-if="tour.currentStep === index"
 				:step="step"
@@ -168,7 +168,7 @@ export default {
 	background-color: white;
 
 	&.is-filled:hover {
-		color: #50596c;
+		color: $color-vue-tour-bg;
 	}
 }
 

@@ -1,16 +1,21 @@
 
 /**
- * src/store.js
+ * src/stores/main.js
  */
 
 import Vue     from 'vue'
 import Vuex    from 'vuex'
 
 import storage from '@/modules/storage'
+import scales  from '@/stores/scales'
 
 Vue.use(Vuex);
 export default new Vuex.Store(
 {
+	modules: {
+		scales,
+	},
+
 	state: {
 		instrument:                   storage.get('instrument',             'guitar'),
 		tuning:                       storage.get('tuning',                 'standard'),
@@ -22,8 +27,10 @@ export default new Vuex.Store(
 
 		hoveredFretInfos:             [],
 
-		// Allows v-click-outside to ignore
-		// mouseup events on the fret slider during the help tour
+		/**
+		 * Allows v-click-outside to ignore mouseup
+		 * events on the fret slider during the help tour
+		 */
 		isFretRangeSliderClicked:     false,
 	},
 
