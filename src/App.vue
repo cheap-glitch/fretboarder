@@ -18,30 +18,36 @@ div.App(v-mods="darkMode")
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
 				)
 			h1.page-header__title__text Fretboarder
+
 		nav.page-header__nav
-			div.page-header__nav__link#help-tour-step--0(
-				@click.left="startHelpTour"
+			//- Quick help
+			VButtonText.page-header__nav__link#help-tour-step--0(
+				@click.native.left="startHelpTour"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'question-circle']")
 				p Quick help
-			a.page-header__nav__link(
+
+			//- Github link
+			VButtonText.page-header__nav__link(
+				mode="link-external"
 				href="https://github.com/cheap-glitch/fretboarder/issues"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'bug']")
 				p Bug report / Feature request
-			a.page-header__nav__link.support-link(
+
+			//- Patreon link
+			VButtonText.page-header__nav__link.support-link(
+				mode="link-external"
+				is-filled
 				href="https://www.patreon.com/cheap_glitch"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'heart']")
 				p Support
-			a.page-header__nav__link(
+
+			//- TGLD link
+			VButtonText.page-header__nav__link(
+				mode="link-external"
 				href="https://www.theguitarlickdatabase.com"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
 				)
 				p The Guitar Lick Database
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
@@ -190,29 +196,8 @@ export default {
 }
 
 .page-header__nav__link {
-	display: flex;
-	@include space-children-h(5px);
-
-	padding: 6px;
-
-	border: 2px solid transparent;
-	border-radius: 6px;
-
-	text-decoration: none;
-
 	color: gray;
-
-	cursor: pointer;
-
-	transition: border-color 0.2s;
-
-	& > * {
-		cursor: pointer;
-	}
-
-	&:hover {
-		border-color: gray;
-	}
+	border-color: lightgray;
 }
 
 .page-header__nav__link__icon {
@@ -222,13 +207,10 @@ export default {
 .support-link {
 	color: $color-crimson;
 	border-color: $color-crimson;
-
-	transition: all 0.2s;
+	background-color: $color-crimson;
 
 	&:hover {
 		color: white;
-		border-color: $color-crimson;
-		background-color: $color-crimson;
 	}
 }
 

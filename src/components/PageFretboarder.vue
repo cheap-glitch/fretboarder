@@ -32,20 +32,20 @@ div.PageFretboarder
 		//----------------------------------------------------------------------
 		div.toolbar
 			//- Switch between themes
-			VButton(
+			VButtonIcon(
 				icon="adjust"
 				:tooltip="isDarkModeOn ? 'Switch to light mode' : 'Switch to dark mode'"
 				@click="$store.commit('toggleIsDarkModeOn')"
 				)
 			//- Toggle note names
-			VButton#help-tour-step--3(
+			VButtonIcon#help-tour-step--3(
 				icon="info-circle"
 				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
 				@click="$store.commit('toggleIsDisplayingNotesName')"
 				)
 			//- Switch fretting hand
-			VButton(
+			VButtonIcon(
 				icon="hand-paper"
 				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
 				:is-flipped="!isFretboardFlipped"
@@ -55,7 +55,7 @@ div.PageFretboarder
 			div.toolbar__separator(v-mods="darkMode")
 
 			//- Clear the fretboard
-			VButton(
+			VButtonIcon(
 				icon="eraser"
 				tooltip="Clear the freatboard"
 				@click="clear"
@@ -63,7 +63,7 @@ div.PageFretboarder
 
 			//- Export the fretboard
 			div#canvas-wrapper
-			VButton#help-tour-step--4(
+			VButtonIcon#help-tour-step--4(
 				icon="file-download"
 				tooltip="Export the fretboard image"
 				)
@@ -132,7 +132,7 @@ div.PageFretboarder
 					)
 			p(v-show="scales.length == 0").
 				Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
-			VButton(
+			VButtonIcon(
 				v-show="scales.length < maxNbScales"
 
 				icon="plus-circle"

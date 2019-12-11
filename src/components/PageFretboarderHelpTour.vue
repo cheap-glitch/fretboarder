@@ -7,7 +7,7 @@
 <template lang='pug'>
 
 v-tour(name="help" :steps="steps")
-	template(slot-scope="tour")
+	template(v-slot="tour")
 
 		//- Tour step
 		transition(name="fade")
@@ -28,7 +28,7 @@ v-tour(name="help" :steps="steps")
 				)
 
 				//- Footer
-				template(slot="actions")
+				template(v-slot:actions)
 					div.help-tour__step__footer
 
 						//- Pagination
@@ -36,18 +36,23 @@ v-tour(name="help" :steps="steps")
 
 						//- Prev/next/finish buttons
 						div.help-tour__actions
-							button.help-tour__actions__button(
+							VButtonText.help-tour__actions__button(
 								v-show="!tour.isFirst"
-								@click.left="tour.previousStep"
-								) Previous
-							button.help-tour__actions__button.button-filled(
+								@click.native.left="tour.previousStep"
+								)
+								p Previous
+							VButtonText.help-tour__actions__button(
 								v-show="!tour.isLast"
-								@click.left="tour.nextStep"
-								) Next
-							button.help-tour__actions__button.button-filled(
+								is-filled
+								@click.native.left="tour.nextStep"
+								)
+								p Next
+							VButtonText.help-tour__actions__button(
 								v-show="tour.isLast"
-								@click.left="tour.stop"
-								) Finish
+								is-filled
+								@click.native.left="tour.stop"
+								)
+								p Finish
 
 </template>
 <!--}}}-->
@@ -100,7 +105,7 @@ export default {
 			const classes = el.classList;
 
 			const ignoredClasses = [
-				'VButton',
+				'VButtonIcon',
 
 				'VSelect',
 				'VSelect__bar',
@@ -158,33 +163,12 @@ export default {
 }
 
 .help-tour__actions__button {
-	appearance: none;
-
-	padding: 6px;
-
-	border: 2px solid transparent;
-	border-radius: 6px;
-
-	font-family: $fonts-text;
-
 	color: white;
-	background: none;
-
-	transition: border-color 0.2s;
-
-	&:hover {
-		border-color: white;
-	}
-}
-
-.button-filled {
 	border-color: white;
+	background-color: white;
 
-	transition: color 0.2s, background-color 0.2s;
-
-	&:hover {
+	&.is-filled:hover {
 		color: #50596c;
-		background-color: white;
 	}
 }
 

@@ -53,7 +53,7 @@ div.FretboardScale
 
 		//- Intervals
 		div.intervals
-			VButton(
+			VButtonIcon(
 				v-for="interval in intervals"
 				:key="`scale--${id}-interval--${interval.value}`"
 
@@ -66,14 +66,14 @@ div.FretboardScale
 		div.scale-tools__separator(v-mods="darkMode")
 
 		//- Show/hide
-		VButton(
+		VButtonIcon(
 			:icon="isVisible ? 'eye' : 'eye-slash'"
 			size="small"
 			:tooltip="isVisible ? 'Hide' : 'Show'"
 			@click="$emit('update:isVisible', !isVisible)"
 			)
 		//- Focus
-		VButton(
+		VButtonIcon(
 			v-show="nbScales > 1"
 			icon="bullseye"
 			size="small"
@@ -82,7 +82,7 @@ div.FretboardScale
 			@click="$emit('toggle-focus-scale', id)"
 			)
 		//- Show intersections only
-		VButton(
+		VButtonIcon(
 			v-show="nbScales > 1"
 			:icon="['fas', 'intersection']"
 			size="small"
@@ -94,7 +94,7 @@ div.FretboardScale
 		div.scale-tools__separator(v-mods="darkMode")
 
 		//- Duplicate
-		VButton(
+		VButtonIcon(
 			icon="copy"
 			size="small"
 			tooltip="Duplicate"
@@ -103,7 +103,7 @@ div.FretboardScale
 			:is-disabled="nbScales == 5"
 			)
 		//- Remove
-		VButton(
+		VButtonIcon(
 			icon="trash-alt"
 			size="small"
 			tooltip="Remove"

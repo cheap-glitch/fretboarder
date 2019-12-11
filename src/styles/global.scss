@@ -10,9 +10,9 @@
  * -----------------------------------------------------------------------------
  */
 
-// Enable full-page layout
 html,
 body {
+	// Enable full-page layout
 	height: 100%;
 }
 
@@ -31,131 +31,10 @@ h2 {
 	user-select: none;
 }
 
-sup {
-	vertical-align: 0.25rem;
+a {
+	text-decoration: none;
 }
 
-/**
- * Tooltip
- * -----------------------------------------------------------------------------
- */
-
-.tooltip {
-	display: block !important;
-
-	z-index: 1000;
-
-	.tooltip-inner {
-		padding: 5px 10px 4px;
-
-		border-radius: 16px;
-	}
-
-	.tooltip-arrow {
-		position: absolute;
-
-		width: 0;
-		height: 0;
-
-		margin: 5px;
-
-		border-style: solid;
-		border-color: black;
-	}
-
-	&.popover {
-		.popover-inner {
-			border: 2px solid gray;
-			border-radius: 6px;
-
-			color: #333;
-			background-color: snow;
-		}
-
-		.popover-arrow {
-			border-color: gray;
-		}
-	}
-
-	&[x-placement^="top"] {
-		margin-bottom: 5px;
-
-		.tooltip-arrow {
-			bottom: -5px;
-			left: calc(50% - 5px);
-
-			margin-top: 0;
-			margin-bottom: 0;
-
-			border-width: 5px 5px 0 5px;
-			border-left-color: transparent !important;
-			border-right-color: transparent !important;
-			border-bottom-color: transparent !important;
-		}
-	}
-
-	&[x-placement^="bottom"] {
-		margin-top: 5px;
-
-		.tooltip-arrow {
-			top: -5px;
-			left: calc(50% - 5px);
-
-			margin-top: 0;
-			margin-bottom: 0;
-
-			border-width: 0 5px 5px 5px;
-			border-left-color: transparent !important;
-			border-right-color: transparent !important;
-			border-top-color: transparent !important;
-		}
-	}
-
-	&[x-placement^="right"] {
-		margin-left: 5px;
-
-		.tooltip-arrow {
-			left: -5px;
-			top: calc(50% - 5px);
-
-			margin-left: 0;
-			margin-right: 0;
-
-			border-width: 5px 5px 5px 0;
-			border-left-color: transparent !important;
-			border-top-color: transparent !important;
-			border-bottom-color: transparent !important;
-		}
-	}
-
-	&[x-placement^="left"] {
-		margin-right: 5px;
-
-		.tooltip-arrow {
-			right: -5px;
-			top: calc(50% - 5px);
-
-			margin-left: 0;
-			margin-right: 0;
-
-			border-width: 5px 0 5px 5px;
-			border-top-color: transparent !important;
-			border-right-color: transparent !important;
-			border-bottom-color: transparent !important;
-		}
-	}
-
-	&[aria-hidden="true"] {
-		opacity: 0;
-		visibility: hidden;
-
-		transition: opacity .15s, visibility .15s;
-	}
-
-	&[aria-hidden="false"] {
-		opacity: 1;
-		visibility: visible;
-
-		transition: opacity .15s;
-	}
+sup {
+	vertical-align: 0.25rem;
 }

@@ -1,23 +1,23 @@
 
 
-<!-- VButton.vue -->
+<!-- VButtonIcon.vue -->
 
 
 <!--{{{ Pug -->
 <template lang='pug'>
 
-button.VButton(
+button.VButtonIcon(
 	:title="tooltip"
 	v-mods="{ isDisabled, ...darkMode }"
 	@click.left="click"
 	)
-	fa-icon.VButton__icon(
+	fa-icon.VButtonIcon__icon(
 		v-if="icon"
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:class="`size-${size}`"
 		v-mods="{ isActive, isDisabled, isFlipped }"
 		)
-	p.VButton__text(
+	p.VButtonIcon__text(
 		v-if="text"
 		v-mods="{ isActive, isDisabled, isFlipped }"
 		) {{ text }}
@@ -32,7 +32,7 @@ button.VButton(
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'VButton',
+	name: 'VButtonIcon',
 
 	props: {
 		icon: {
@@ -85,7 +85,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
-.VButton {
+.VButtonIcon {
 	display: block;
 
 	border: none;
@@ -95,7 +95,7 @@ export default {
 	cursor: pointer;
 }
 
-.VButton__icon {
+.VButtonIcon__icon {
 	color: gray;
 
 	transition: color 0.2s;
@@ -138,7 +138,7 @@ export default {
 	&.size-small  { @include square(22px); }
 }
 
-.VButton__text {
+.VButtonIcon__text {
 	color: gray;
 
 	cursor: pointer;
