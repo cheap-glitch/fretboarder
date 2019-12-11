@@ -99,7 +99,7 @@ div.FretboardScale
 			icon="copy"
 			size="small"
 			tooltip="Duplicate"
-			@click="duplicateScale(id)"
+			@click="addScale(id)"
 
 			:is-disabled="nbScales == 5"
 			)
@@ -236,12 +236,6 @@ export default {
 		...mapGetters([
 			'darkMode',
 		]),
-		...mapMutations('scales', [
-			'updateScaleProp',
-			'toggleFocusScale',
-			'duplicateScale',
-			'removeScale',
-		])
 	},
 
 	methods: {
@@ -262,8 +256,15 @@ export default {
 		},
 		update(_prop, _value)
 		{
-			this.updateScaleProp({ id: this.id, prop: _prop, value: _value });
+			this.updateScale({ id: this.id, prop: _prop, value: _value });
 		},
+
+		...mapMutations('scales', [
+			'addScale',
+			'updateScale',
+			'toggleFocusScale',
+			'removeScale',
+		])
 	}
 }
 

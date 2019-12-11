@@ -9,8 +9,10 @@
 button.VButtonText(
 	:is="elemType"
 
-	v-bind:[linkRel]="'external nofollow noopener noreferrer'"
-	v-bind:[linkTarget]="'_blank'"
+	v-bind:[linkTo]="to"
+
+	v-bind:[extLinkRel]="'external nofollow noopener noreferrer'"
+	v-bind:[extLinkTarget]="'_blank'"
 
 	v-mods="{ isFilled }"
 	)
@@ -32,6 +34,10 @@ export default {
 			default: 'button',
 			validator: _v => ['button', 'link', 'link-external'].includes(_v)
 		},
+		to: {
+			type: String,
+			default: '',
+		},
 		isFilled: {
 			type: Boolean,
 			default: false,
@@ -43,19 +49,15 @@ export default {
 		{
 			switch (this.mode)
 			{
-				case 'link':
-				case 'link-external':
-					return 'a';
-
-				case 'button':
-					return 'button';
-
-				default:
-					return 'button';
+				case 'link':           return 'router-link';
+				case 'link-external':  return 'a';
+				case 'button':         return 'button';
+				default:               return 'button';
 			}
 		},
-		linkRel()    { return this.mode == 'link-external' ? 'rel'    : null; },
-		linkTarget() { return this.mode == 'link-external' ? 'target' : null; },
+		linkTo()        { return this.mode == 'link'          ? 'to'     : null; },
+		extLinkRel()    { return this.mode == 'link-external' ? 'rel'    : null; },
+		extLinkTarget() { return this.mode == 'link-external' ? 'target' : null; },
 	},
 }
 

@@ -16,6 +16,15 @@ export default new Vuex.Store(
 		scales,
 	},
 
+	plugins: [
+		// Save the scales configuration after every modification
+		_store => _store.subscribe(function(_mutation, _state)
+		{
+			if (['addScale', 'updateScale', 'toggleFocusScale', 'removeScale'].map(_v => `scales/${_v}`).includes(_mutation.type))
+				storage.set('scales', _state.scales.scales);
+		}),
+	],
+
 	state: {
 		instrument:                   storage.get('instrument',             'guitar'),
 		tuning:                       storage.get('tuning',                 'standard'),

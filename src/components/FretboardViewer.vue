@@ -30,10 +30,10 @@ div.FretboardViewer(:style="[grid, inlays]")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState }        from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
-import data                from '@/modules/data'
-import FretboardViewerFret from '@/components/FretboardViewerFret'
+import data                     from '@/modules/data'
+import FretboardViewerFret      from '@/components/FretboardViewerFret'
 
 import {
 	getNotesInterval,
@@ -205,7 +205,8 @@ export default {
 			'tuning',
 			'fretRange',
 			'isFretboardFlipped',
-
+		]),
+		...mapGetters('scales', [
 			'activeScales',
 		])
 	},

@@ -22,6 +22,7 @@ div.App(v-mods="darkMode")
 		nav.page-header__nav
 			//- Quick help
 			VButtonText.page-header__nav__link#help-tour-step--0(
+				v-show="$route.name == 'fretboarder'"
 				@click.native.left="startHelpTour"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'question-circle']")
@@ -161,14 +162,15 @@ export default {
 			'tuning',
 			'fretRange',
 
-			'activeScales',
-
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
 		]),
 		...mapGetters([
 			'darkMode',
-		])
+		]),
+		...mapGetters('scales', [
+			'activeScales',
+		]),
 	},
 
 	methods: {

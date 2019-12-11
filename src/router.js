@@ -13,7 +13,7 @@ import Router from 'vue-router'
 let routes = [
 	{
 		path: '/',
-		name: 'home',
+		name: 'fretboarder',
 		component: loadAsyncComponent('PageFretboarder')
 	},
 	{

@@ -27,8 +27,7 @@
     "vue-slider-component": "^3.1.0",
     "vue-static": "0.0.5",
     "vue-tour": "^1.1.0",
-    "vuex": "^3.1.2",
-    "vuex-pathify": "^1.4.0"
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",

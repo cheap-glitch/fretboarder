@@ -200,19 +200,19 @@ export default {
 			'isFretboardFlipped',
 
 			'hoveredFretInfos',
-
-			'scales/scales',
 		]),
+		...mapState('scales', {
+			scales:      _s => _s.scales,
+			maxNbScales: _s => _s.maxNbScales,
+		}),
 		...mapGetters([
 			'darkMode',
 		]),
-		...mapMutations('scales', [
-			'addScale',
-		])
 	},
 
 	mounted() {
-		this.addScale();
+		if (this.scales.length == 0)
+			this.addScale();
 	},
 
 	methods: {
@@ -241,6 +241,10 @@ export default {
 				default:  return `${_number}th fret`;
 			}
 		},
+
+		...mapMutations('scales', [
+			'addScale',
+		])
 	}
 }
 
