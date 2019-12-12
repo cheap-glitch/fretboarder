@@ -58,7 +58,7 @@ div.PageFretboarder
 			VButtonIcon#help-tour-step--4(
 				icon="eraser"
 				tooltip="Clear the freatboard"
-				@click="clear"
+				@click="$store.commit('scales/clearScales')"
 				)
 
 			//- Export the fretboard
@@ -123,7 +123,7 @@ div.PageFretboarder
 					)
 			p(v-show="scales.length == 0").
 				Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
-			VButtonIcon(
+			VButtonIcon#help-tour-step--5(
 				v-show="scales.length < maxNbScales"
 
 				icon="plus-circle"
@@ -216,10 +216,6 @@ export default {
 	},
 
 	methods: {
-		clear()
-		{
-			this.scales = [];
-		},
 		openExportMenu()
 		{
 			if (this.$tours['export-menu'].currentStep == -1)

@@ -6,10 +6,14 @@
 <!--{{{ Pug -->
 <template lang='pug'>
 
-v-tour(name="help" :steps="steps")
-	template(v-slot="tour")
+v-tour(
+	name="help"
+	:steps="steps"
+	:callbacks="{ onNextStep }"
+	)
 
-		//- Tour step
+	//- Tour step
+	template(v-slot="tour")
 		transition(name="fade")
 			v-step.help-tour__step(
 				v-for="(step, index) of tour.steps"
@@ -40,19 +44,19 @@ v-tour(name="help" :steps="steps")
 								v-show="!tour.isFirst"
 								@click.native.left="tour.previousStep"
 								)
-								p Previous
+								p ← Previous
 							VButtonText.help-tour__actions__button(
 								v-show="!tour.isLast"
 								is-filled
 								@click.native.left="tour.nextStep"
 								)
-								p Next
+								p Next →
 							VButtonText.help-tour__actions__button(
 								v-show="tour.isLast"
 								is-filled
 								@click.native.left="tour.stop"
 								)
-								p Finish
+								p Got it!
 
 </template>
 <!--}}}-->
@@ -61,15 +65,23 @@ v-tour(name="help" :steps="steps")
 <!--{{{ JavaScript -->
 <script>
 
+import { mapState, mapMutations } from 'vuex'
+
+import { MAX_NB_SCALES }          from '@/stores/scales'
+
 const helpTourMessages = [
+	// 1
 	`Welcome to Fretboarder!<br>
 	 This guide will take you on a quick tour of the main features.`,
 
+	// 2
 	`You can change the instrument and tuning here.<br>
 	 Each instrument has a different number of strings and a specific set of tunings you can choose from. Try picking one!`,
 
+	// 3
 	`This slider control the number of frets displayed. Try moving both handles to see the effect on the fretboard.`,
 
+	// 4
 	`These are the visual settings. From left to right:
 	 <ul>
 	     <li>Toggle dark mode</li>
@@ -78,12 +90,45 @@ const helpTourMessages = [
 	 </ul>
 	`,
 
+	// 5
 	`Other tools:
 	 <ul>
 	     <li>Remove all scales and arpeggios</li>
 	     <li>Export the fretboard image in various formats (PNG, JPG, PDF, …)</li>
 	 </ul>
 	 `,
+
+	// 6
+	`Click here to add new scales and arpeggios.<br>
+	 You can display up to ${MAX_NB_SCALES} simultaneously.`,
+
+	// 7
+	`Each scale and arpeggio can be configured independently.`,
+
+	// 8
+	`You can choose to display scales in their entirety, or only a single position at a time.<br>
+	 <em>Conventionally, the first position is always the one where the root is on the first string.</em>`,
+
+	// 9
+	`You can use this selector to emphasize a particular interval of the scale.<br>
+	 Try clicking on the <strong>R</strong> to highlight the root notes.`,
+
+	// 10
+	`These settings provide more control over how each is displayed:
+	 <ul>
+	     <li>Toggle the visibility of the scale</li>
+	     <li>Display only this scale (focus it)</li>
+	     <li>Display only the intersections, <em>i.e.</em> the notes this scales has in common
+	         with the other visible scales and/or arpeggios</li>
+	 </ul>`,
+];
+
+const helpTourTargets = [
+	...[...Array(6).keys()].map(_n => `#help-tour-step--${_n}`),
+	'.FretboardScale .scale-props',
+	'.FretboardScale .select-position',
+	'.FretboardScale .scale-tools__intervals',
+	'.FretboardScale .scale-tools .VButtonIcon:nth-of-type(2)',
 ];
 
 export default {
@@ -92,13 +137,37 @@ export default {
 	static() {
 		return {
 			steps: helpTourMessages.map((_message, _index) => ({
-				target:  `#help-tour-step--${_index}`,
+				target:  helpTourTargets[_index],
 				content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
 			})),
+			onNextStep: this.onNextStep,
 		}
 	},
 
+	computed: mapState('scales', {
+		scales: _s => _s.scales,
+	}),
+
 	methods: {
+		onNextStep(_step)
+		{
+			/**
+			 * Make sure there is at least one scale before
+			 * reaching the step where the scales settings are presented
+			 */
+			if ((_step + 1) == 6 && this.scales.length == 0)
+				this.addScale();
+
+			/**
+			 * Make sure there is at least two scales before
+			 * reaching the step where the scales tools are presented
+			 */
+			if ((_step + 1) == 9)
+			{
+				while (this.scales.length <= 1)
+					this.addScale(this.scales.length == 1 ? { tonality: 'C#', model: 'majb'} : {});
+			}
+		},
 		stopTour(_event, _stopTour)
 		{
 			const el      = _event.target;
@@ -106,10 +175,14 @@ export default {
 
 			const ignoredClasses = [
 				'VButtonIcon',
+				'VButtonIcon__icon',
 
 				'VSelect',
 				'VSelect__bar',
 				'VSelect__options',
+
+				'scale-tools__intervals',
+				'scale-tools__intervals__item',
 			];
 
 			/**
@@ -128,6 +201,10 @@ export default {
 
 			_stopTour();
 		},
+
+		...mapMutations('scales', [
+			'addScale',
+		])
 	},
 }
 
@@ -159,6 +236,7 @@ export default {
 }
 
 .help-tour__actions {
+	display: flex;
 	@include space-children-h(10px);
 }
 

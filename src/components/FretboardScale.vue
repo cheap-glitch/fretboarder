@@ -52,8 +52,8 @@ div.FretboardScale
 	div.scale-tools
 
 		//- Intervals
-		div.intervals
-			div.intervals__item(
+		div.scale-tools__intervals
+			div.scale-tools__intervals__item(
 				v-for="(interval, index) in intervals"
 				:key="`scale-${id}-interval--${index}`"
 
@@ -317,11 +317,11 @@ export default {
 .select-model    { max-width: 220px; min-width: 220px; }
 .select-position { max-width: 100px; min-width: 100px; }
 
-.intervals {
+.scale-tools__intervals {
 	display: flex;
 }
 
-.intervals__item {
+.scale-tools__intervals__item {
 	padding: 2px 8px;
 
 	border: 1px solid lightgray;

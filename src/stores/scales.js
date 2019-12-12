@@ -7,13 +7,15 @@ import Vue     from 'vue'
 
 import storage from '@/modules/storage'
 
+export const MAX_NB_SCALES = 6;
+
 export default
 {
 	namespaced: true,
 
 	state: {
 		scales:       storage.get('scales', []),
-		maxNbScales:  6,
+		maxNbScales:  MAX_NB_SCALES,
 
 		colors: [
 			'#0093ee',
@@ -32,32 +34,26 @@ export default
 	},
 
 	mutations: {
-		addScale: (_s, _id = null) =>
+		addScale: (_s, _params = {}) =>
 		{
 			// Limit the number of simultaneous scales
-			if (_s.scales.length == _s.maxNbScales) return;
+			if (_s.scales.length == MAX_NB_SCALES) return;
 
 			_s.scales.push({
-				...(
-					_id != null
+				// Default params
+				type:                    'scale',
+				model:                   'maj',
+				tonality:                'A',
+				position:                0,
+				highlightedNote:         null,
+				isVisible:               true,
+				isShowingIntersections:  false,
 
-					// If an ID is provided, duplicate the scale
-					? _s.scales.find(__scale => __scale.id == _id)
-
-					// Default params
-					: {
-						type:                    'scale',
-						model:                   'maj',
-						tonality:                'A',
-						position:                0,
-						highlightedNote:         null,
-						isVisible:               true,
-						isShowingIntersections:  false,
-					}
-				),
+				// If an ID is provided, duplicate the scale
+				...(typeof _params == 'number' ? _s.scales.find(__scale => __scale.id == _params) : _params),
 
 				// Find the first ID & color available
-				id:         [...Array(_s.maxNbScales + 1).keys()].find(__id => _s.scales.every(__scale => __scale.id != __id)),
+				id:         [...Array(MAX_NB_SCALES + 1).keys()].find(__id => _s.scales.every(__scale => __scale.id != __id)),
 				color:      _s.colors.filter(_color => !_s.scales.some(__scale => __scale.color == _color))[0],
 
 				// Always disable focusing to avoid issues
@@ -74,5 +70,6 @@ export default
 		},
 		updateScale:      (_s,  _p) => Vue.set(_s.scales.find(__scale => __scale.id == _p.id), _p.prop, _p.value),
 		toggleFocusScale: (_s, _id) => _s.scales.forEach(__scale => __scale.isFocused = (__scale.id == _id && !__scale.isFocused)),
+		clearScales:      _s        => _s.scales = [],
 	}
 }
