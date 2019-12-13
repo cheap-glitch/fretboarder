@@ -1,6 +1,10 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/logo.png" alt="logo">
+	<a href="https://fretboarder.app" target="_blank" rel="external nofollow noopener noreferrer">
+		<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/logo.png" alt="logo">
+	</a>
 </p>
+
+--------------------------------------------------------------------------------
 
 **[Fretboarder](https://fretboarder.app)** is  a webapp to visualize  the layout
 of scales and arpeggios across a variety of fretboards. Features:
