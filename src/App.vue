@@ -229,6 +229,8 @@ export default {
 <!--{{{ SCSS -->
 <style lang='scss' scoped>
 
+@use 'sass:color';
+
 .App {
 	display: flex;
 	align-items: stretch;
@@ -292,7 +294,7 @@ export default {
 
 	color: snow;
 
-	background-color: #bfbfbf;
+	background-color: lightgray;
 
 	&.dark-mode {
 		color: $color-mirage;
