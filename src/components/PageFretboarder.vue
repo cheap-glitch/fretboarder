@@ -271,7 +271,7 @@ export default {
 	color: gray;
 
 	&.dark-mode {
-		color: $color-nepal;
+		color: $color-oxford-blue-2;
 	}
 }
 

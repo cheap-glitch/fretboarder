@@ -92,7 +92,7 @@ export default {
 	transition: color 0.2s;
 
 	&.dark-mode {
-		color: $color-oxford-blue;
+		color: $color-oxford-blue-2;
 	}
 
 	&:hover {

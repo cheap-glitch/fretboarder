@@ -286,8 +286,17 @@ export default {
 	align-items: center;
 	@include space-children-h(5px);
 
+	padding: 2px 6px;
+
+	border-radius: 6px;
+
+	color: snow;
+
+	background-color: #bfbfbf;
+
 	&.dark-mode {
-		color: $color-nepal;
+		color: $color-mirage;
+		background-color: $color-oxford-blue;
 	}
 }
 
@@ -315,8 +324,14 @@ export default {
 	border-color: lightgray;
 
 	&.dark-mode {
-		color: $color-nepal;
+		color: $color-oxford-blue-2;
 		border-color: $color-oxford-blue;
+
+		transition: color 0.4s, border-color 0.2s;
+
+		&:hover {
+			color: $color-nepal;
+		}
 	}
 }
 
@@ -329,6 +344,10 @@ export default {
 	color: $color-crimson;
 	border-color: $color-crimson;
 	background-color: $color-crimson;
+}
+
+.support-link.dark-mode {
+	filter: brightness(0.8);
 }
 
 .support-link:hover {
