@@ -14,7 +14,7 @@ button.VButtonIcon(
 	fa-icon.VButtonIcon__icon(
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:class="`size-${size}`"
-		v-mods="{ isActive, isDisabled, isFlipped }"
+		v-mods="{ isActive, isDisabled, isFlipped, ...darkMode }"
 		)
 
 </template>
@@ -91,12 +91,12 @@ export default {
 
 	transition: color 0.2s;
 
-	&:hover {
-		color: $color-azure;
-	}
-
 	&.dark-mode {
 		color: $color-oxford-blue;
+	}
+
+	&:hover {
+		color: $color-azure;
 	}
 
 	&.is-disabled {

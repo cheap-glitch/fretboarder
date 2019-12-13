@@ -57,7 +57,7 @@ div.FretboardScale
 				v-for="(interval, index) in intervals"
 				:key="`scale-${id}-interval--${index}`"
 
-				v-mods="{ isSelected: highlightedNote == interval.value }"
+				v-mods="{ isSelected: highlightedNote == interval.value, ...darkMode }"
 				:title="`Highlight ${intervalsNames[interval.value].toLowerCase()} notes`"
 
 				@click.left="update('highlightedNote', highlightedNote == interval.value ? null : interval.value)"
@@ -346,13 +346,19 @@ export default {
 		border-radius: 0 1e3px 1e3px 0;
 	}
 
-	&:hover {
+	&:hover,
+	&.is-selected {
 		background-color: #f0f0f0;
 	}
 
-	&.is-selected {
-		color: white;
-		background-color: $color-sun;
+	&.dark-mode {
+		color: $color-nepal;
+		border-color: $color-oxford-blue;
+
+		&:hover,
+		&.is-selected {
+			background-color: $color-ebony-clay-2;
+		}
 	}
 }
 

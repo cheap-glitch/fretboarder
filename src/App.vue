@@ -12,7 +12,7 @@ div.App(v-mods="darkMode")
 	//- Header
 	//----------------------------------------------------------------------
 	header.page-header
-		h1.page-header__title
+		h1.page-header__title(v-mods="darkMode")
 			fa-icon.page-header__title__logo(
 				:icon="['far', instrumentIcon]"
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
@@ -23,32 +23,36 @@ div.App(v-mods="darkMode")
 			//- Quick help
 			VButtonText.page-header__nav__link#help-tour-step--0(
 				v-show="$route.name == 'fretboarder'"
+				v-mods="darkMode"
 				@click.native.left="startHelpTour"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'question-circle']")
 				p Quick help
 
 			//- Github link
-			VButtonText.page-header__nav__link(
+			VButtonText.page-header__nav__link#help-tour-step--13(
 				mode="link-external"
 				href="https://github.com/cheap-glitch/fretboarder/issues"
+				v-mods="darkMode"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'bug']")
 				p Bug report / Feature request
 
 			//- Patreon link
-			VButtonText.page-header__nav__link.support-link(
+			VButtonText.page-header__nav__link.support-link#help-tour-step--14(
 				mode="link-external"
 				is-filled
 				href="https://www.patreon.com/cheap_glitch"
+				v-mods="darkMode"
 				)
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'heart']")
 				p Support
 
 			//- TGLD link
-			VButtonText.page-header__nav__link(
+			VButtonText.page-header__nav__link#help-tour-step--15(
 				mode="link-external"
 				href="https://www.theguitarlickdatabase.com"
+				v-mods="darkMode"
 				)
 				p The Guitar Lick Database
 				fa-icon.page-header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
@@ -85,17 +89,19 @@ div.App(v-mods="darkMode")
 	//- Footer
 	//----------------------------------------------------------------------
 	footer.page-footer
-		p.page-footer__text Fretboarder v2.0 by cheap glitch
+		p.page-footer__text(v-mods="darkMode") Fretboarder v2.0 by cheap glitch
 		a.page-footer__link(
 			href="https://twitter.com/cheap_glitch"
 			target="_blank"
 			rel="external nofollow noopener noreferrer"
+			v-mods="darkMode"
 			)
 			fa-icon(:icon="['fab', 'twitter']")
 		a.page-footer__link(
 			href="https://github.com/cheap-glitch/fretboarder"
 			target="_blank"
 			rel="external nofollow noopener noreferrer"
+			v-mods="darkMode"
 			)
 			fa-icon(:icon="['fab', 'github']")
 
@@ -279,6 +285,10 @@ export default {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
+
+	&.dark-mode {
+		color: $color-nepal;
+	}
 }
 
 .page-header__title__logo {
@@ -303,19 +313,29 @@ export default {
 .page-header__nav__link {
 	color: gray;
 	border-color: lightgray;
+
+	&.dark-mode {
+		color: $color-nepal;
+		border-color: $color-oxford-blue;
+	}
 }
 
 .page-header__nav__link__icon {
 	transform: translateY(1px);
 }
 
-.support-link {
+.support-link,
+.support-link.dark-mode {
 	color: $color-crimson;
 	border-color: $color-crimson;
 	background-color: $color-crimson;
+}
 
-	&:hover {
-		color: white;
+.support-link:hover {
+	color: white;
+
+	&.dark-mode {
+		color: $color-mirage;
 	}
 }
 
@@ -337,6 +357,10 @@ export default {
 	font-size: 1.3rem;
 
 	color: gray;
+
+	&.dark-mode {
+		color: $color-nepal;
+	}
 }
 
 .page-footer__link {

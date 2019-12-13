@@ -10,7 +10,7 @@ div.PageFretboarder
 
 	section.above-fretboard
 		//- Current tuning
-		p.tuning {{ tuningNotesList }}
+		p.tuning-infos(v-mods="darkMode") {{ tuningNotesList }}
 
 		//- Infos on the hovered fret
 		div.fret-infos(
@@ -19,6 +19,7 @@ div.PageFretboarder
 			div.fret-infos__item(
 				v-for="(info, index) in hoveredFretInfos"
 				:key="`fret-info--${index}`"
+				v-mods="darkMode"
 				)
 				div.fret-infos__item__color-dot(
 					v-for="color in info.colors"
@@ -72,7 +73,7 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer
+	FretboardViewer#help-tour-step--12
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
@@ -266,8 +267,12 @@ export default {
 	margin-bottom: 40px;
 }
 
-.tuning {
+.tuning-infos {
 	color: gray;
+
+	&.dark-mode {
+		color: $color-nepal;
+	}
 }
 
 .fret-infos {
@@ -291,6 +296,10 @@ export default {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
+
+	&.dark-mode {
+		color: $color-nepal;
+	}
 }
 
 .fret-infos__item__color-dot {

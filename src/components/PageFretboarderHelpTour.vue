@@ -114,13 +114,32 @@ const helpTourMessages = [
 	 Try clicking on the <strong>R</strong> to highlight the root notes.`,
 
 	// 10
-	`These settings provide more control over how each is displayed:
+	`These settings provide more control over how each scale is displayed:
 	 <ul>
 	     <li>Toggle the visibility of the scale</li>
 	     <li>Display only this scale (focus it)</li>
-	     <li>Display only the intersections, <em>i.e.</em> the notes this scales has in common
-	         with the other visible scales and/or arpeggios</li>
+	     <li>Display only the intersections, <em>i.e.</em> the notes this scales has in common with other scales and/or arpeggios</li>
 	 </ul>`,
+
+	// 11
+	`Other tools:
+	 <ul>
+	     <li>Duplicate the scale</li>
+	     <li>Remove the scale</li>
+	 </ul>`,
+
+	// 12
+	`Hover on the notes to see which interval they correspond with.`,
+
+	// 13
+	`That’s it for now!<br>
+	 If you notice a nasty bug or if you’d really like to see a particular feature implemented, don’t hesitate to send a quick feedback.`,
+
+	// 13
+	`If Fretboarder is useful to you, consider donating to keep it alive and improving!`,
+
+	// 14
+	`Also, if you’re interested in lead guitar playing, check out <strong>The Guitar Lick Database</strong> to expand your lick vocabulary.`,
 ];
 
 const helpTourTargets = [
@@ -129,6 +148,8 @@ const helpTourTargets = [
 	'.FretboardScale .select-position',
 	'.FretboardScale .scale-tools__intervals',
 	'.FretboardScale .scale-tools .VButtonIcon:nth-of-type(2)',
+	'.FretboardScale .scale-tools .VButtonIcon:nth-last-of-type(2)',
+	...[...Array(4).keys()].map(_n => `#help-tour-step--${_n + 12}`),
 ];
 
 export default {
@@ -270,7 +291,7 @@ export default {
 	font-family: $fonts-text;
 
 	ul {
-		padding-left: 40px;
+		padding-left: 30px;
 
 		list-style: circle outside;
 

@@ -21,7 +21,7 @@ div.FretboardViewer(:style="[grid, inlays]")
 		v-for="fret in fretNumbers"
 		:key="`fret-number--${fret}`"
 		)
-		p.fret-number__text {{ fret }}
+		p.fret-number__text(v-mods="darkMode") {{ fret }}
 
 </template>
 <!--}}}-->
@@ -206,9 +206,12 @@ export default {
 			'fretRange',
 			'isFretboardFlipped',
 		]),
+		...mapGetters([
+			'darkMode',
+		]),
 		...mapGetters('scales', [
 			'activeScales',
-		])
+		]),
 	},
 }
 
@@ -233,6 +236,10 @@ export default {
 
 .fret-number__text {
 	color: gray;
+
+	&.dark-mode {
+		color: $color-nepal;
+	}
 }
 
 </style>

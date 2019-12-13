@@ -19,12 +19,12 @@ div.FretboardViewerFret(
 	//- Open string note placeholder
 	div.FretboardViewerFret__open-string-note-placeholder(
 		v-show="fret == 0 && !isActive"
-		v-mods="{ isOpenString, isFretboardFlipped }"
+		v-mods="{ isOpenString, isFretboardFlipped, ...darkMode }"
 		)
 
 	//- Note
 	div.FretboardViewerFret__note(
-		v-mods="{ isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
+		v-mods="{ isActive, isHighlightedNote, isOpenString, isFretboardFlipped, ...darkMode }"
 		:style="noteColors"
 
 		@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
@@ -270,6 +270,11 @@ export default {
 		left: 100%;
 		transform: translate(-50%, -50%);
 	}
+
+	// Slightly darken the notes in dark mode
+	&.dark-mode {
+		filter: brightness(0.9);
+	}
 }
 
 // Display a dotted border around unactive open string notes
@@ -288,6 +293,10 @@ export default {
 	&.is-open-string.is-fretboard-flipped {
 		left: 100%;
 		transform: translate(-50%, -50%);
+	}
+
+	&.dark-mode {
+		border-color: $color-oxford-blue;
 	}
 }
 

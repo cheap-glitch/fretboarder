@@ -171,6 +171,7 @@ export default {
 	transition: background-color 0.2s;
 
 	&.dark-mode {
+		border-color: $color-oxford-blue;
 		background-color: $color-mirage-2;
 	}
 }
