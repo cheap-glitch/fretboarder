@@ -139,16 +139,13 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import {
-	mapState,
-	mapGetters,
-	mapMutations
-} from 'vuex'
+import { mapMutations } from 'vuex'
+import { get, sync }    from 'vuex-pathify'
 
-import data            from '@/modules/data'
-import { mapObject }   from '@/modules/object'
-import FretboardScale  from '@/components/FretboardScale'
-import FretboardViewer from '@/components/FretboardViewer'
+import data             from '@/modules/data'
+import { objectMap }    from '@/modules/object'
+import FretboardScale   from '@/components/FretboardScale'
+import FretboardViewer  from '@/components/FretboardViewer'
 
 export default {
 	name: 'PageFretboarder',
@@ -160,54 +157,35 @@ export default {
 
 	static() {
 		return {
-			instrumentOptions: mapObject(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
+			instrumentOptions: objectMap(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
 		}
 	},
 
 	computed: {
 		tuningsOptions()
 		{
-			return mapObject(data.tunings[this.instrument], _key => ({ name: data.tuningsNames[_key], value: _key }));
+			return objectMap(data.tunings[this.instrument], _key => ({ name: data.tuningsNames[_key], value: _key }));
 		},
 		tuningNotesList()
 		{
 			return data.tuningsNames[this.tuning]
 			     + ` (${data.tunings[this.instrument][this.tuning].map(_note => data.tonalities[_note]).join(', ')})`;
 		},
-		instrument:
-		{
-			set(_v)
-			{
-				// Reset the tuning to default when switching between different instruments
-				this.$store.commit('setTuning',      'standard');
-				this.$store.commit('setInstrument',  _v);
-			},
-			get()   { return this.$store.state.instrument;    },
-		},
-		tuning:
-		{
-			set(_v) { this.$store.commit('setTuning', _v);    },
-			get()   { return this.$store.state.tuning;        },
-		},
-		fretRange:
-		{
-			set(_v) { this.$store.commit('setFretRange', _v); },
-			get()   { return this.$store.state.fretRange;     },
-		},
-
-		...mapState([
+		...sync([
+			'instrument',
+			'tuning',
+			'fretRange',
+			'scales/scales',
+			'scales/maxNbScales',
+		]),
+		...get([
 			'isDarkModeOn',
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
 
-			'hoveredFretInfos',
-		]),
-		...mapState('scales', {
-			scales:      _s => _s.scales,
-			maxNbScales: _s => _s.maxNbScales,
-		}),
-		...mapGetters([
 			'darkMode',
+
+			'hoveredFretInfos',
 		]),
 	},
 
@@ -238,10 +216,9 @@ export default {
 				default:  return `${_number}th fret`;
 			}
 		},
-
-		...mapMutations('scales', [
-			'addScale',
-		])
+		...mapMutations([
+			'scales/addScale',
+		]),
 	}
 }
 

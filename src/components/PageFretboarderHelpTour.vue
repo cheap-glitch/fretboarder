@@ -65,9 +65,10 @@ v-tour(
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations }  from 'vuex'
+import { get }           from 'vuex-pathify'
 
-import { MAX_NB_SCALES }          from '@/stores/scales'
+import { MAX_NB_SCALES } from '@/stores/scales'
 
 const helpTourMessages = [
 	// 1
@@ -165,9 +166,7 @@ export default {
 		}
 	},
 
-	computed: mapState('scales', {
-		scales: _s => _s.scales,
-	}),
+	computed: get('scales/scales'),
 
 	methods: {
 		onNextStep(_step)
@@ -222,10 +221,9 @@ export default {
 
 			_stopTour();
 		},
-
-		...mapMutations('scales', [
-			'addScale',
-		])
+		...mapMutations([
+			'scales/addScale'
+		]),
 	},
 }
 

@@ -7,6 +7,10 @@ import Vue     from 'vue'
 
 import storage from '@/modules/storage'
 
+/**
+ * Define the maximum number of scales outside the store
+ * to be able to use it anywhere in the code
+ */
 export const MAX_NB_SCALES = 6;
 
 export default
@@ -28,18 +32,18 @@ export default
 	},
 
 	getters: {
-		activeScales: _s => _s.scales.filter(_s.scales.some(_scale => _scale.isFocused)
-		                                     ? _sc => _sc.isFocused
-		                                     : _scale => _scale.isVisible)
+		activeScales: _state => _state.scales.filter(_state.scales.some(_scale => _scale.isFocused)
+		                                             ? _sc => _sc.isFocused
+		                                             : _scale => _scale.isVisible)
 	},
 
 	mutations: {
-		addScale: (_s, _params = {}) =>
+		addScale(_state, _params = {})
 		{
 			// Limit the number of simultaneous scales
-			if (_s.scales.length == MAX_NB_SCALES) return;
+			if (_state.scales.length == MAX_NB_SCALES) return;
 
-			_s.scales.push({
+			_state.scales.push({
 				// Default params
 				type:                    'scale',
 				model:                   'maj',
@@ -50,26 +54,26 @@ export default
 				isShowingIntersections:  false,
 
 				// If an ID is provided, duplicate the scale
-				...(typeof _params == 'number' ? _s.scales.find(__scale => __scale.id == _params) : _params),
+				...(typeof _params == 'number' ? _state.scales.find(__scale => __scale.id == _params) : _params),
 
 				// Find the first ID & color available
-				id:         [...Array(MAX_NB_SCALES + 1).keys()].find(__id => _s.scales.every(__scale => __scale.id != __id)),
-				color:      _s.colors.filter(_color => !_s.scales.some(__scale => __scale.color == _color))[0],
+				id:         [...Array(MAX_NB_SCALES + 1).keys()].find(__id => _state.scales.every(__scale => __scale.id != __id)),
+				color:      _state.colors.filter(_color => !_state.scales.some(__scale => __scale.color == _color))[0],
 
 				// Always disable focusing to avoid issues
 				isFocused:  false,
 			});
 		},
-		removeScale: (_s, _id) =>
+		removeScale(_state, _id)
 		{
-			_s.scales = _s.scales.filter(__scale => __scale.id != _id);
+			_state.scales = _state.scales.filter(__scale => __scale.id != _id);
 
 			// If there is only one scale left, make sure it doesn't display its intersections
-			if (_s.scales.length == 1)
-				Vue.set(_s.scales[0], 'isShowingIntersections', false);
+			if (_state.scales.length == 1)
+				Vue.set(_state.scales[0], 'isShowingIntersections', false);
 		},
-		updateScale:      (_s,  _p) => Vue.set(_s.scales.find(__scale => __scale.id == _p.id), _p.prop, _p.value),
-		toggleFocusScale: (_s, _id) => _s.scales.forEach(__scale => __scale.isFocused = (__scale.id == _id && !__scale.isFocused)),
-		clearScales:      _s        => _s.scales = [],
+		updateScale:      (_state,  _p) => Vue.set(_state.scales.find(__scale => __scale.id == _p.id), _p.prop, _p.value),
+		toggleFocusScale: (_state, _id) => _state.scales.forEach(__scale => __scale.isFocused = (__scale.id == _id && !__scale.isFocused)),
+		clearScales:      _state        => _state.scales = [],
 	}
 }

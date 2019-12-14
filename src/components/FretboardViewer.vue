@@ -30,17 +30,11 @@ div.FretboardViewer(:style="[grid, inlays]")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { get }             from 'vuex-pathify'
 
-import data                     from '@/modules/data'
-import FretboardViewerFret      from '@/components/FretboardViewerFret'
-
-import {
-	getNotesInterval,
-	getStringNotes,
-	generateModelNotes,
-	generateModelPosition
-} from '@/modules/music'
+import data                from '@/modules/data'
+import * as music          from '@/modules/music'
+import FretboardViewerFret from '@/components/FretboardViewerFret'
 
 export default {
 	name: 'FretboardViewer',
@@ -58,7 +52,7 @@ export default {
 			for (let string=this.nbStrings - 1; string>=0; string--)
 			{
 				// Get all the notes of the string according to the current tuning
-				const stringNotes = getStringNotes(this.tuningNotes[string]);
+				const stringNotes = music.getStringNotes(this.tuningNotes[string]);
 
 				for (let j=this.fretMin; j<=this.fretMax; j++)
 				{
@@ -88,10 +82,10 @@ export default {
 						{
 							id:     _scale.id,
 							color:  _scale.color,
-							value:  getNotesInterval(_scale.notes[0], note),
+							value:  music.getNotesInterval(_scale.notes[0], note),
 						})),
 
-						isHighlightedNote: scales.some(_s => _s.highlightedNote === getNotesInterval(_s.notes[0], note)),
+						isHighlightedNote: scales.some(_s => _s.highlightedNote === music.getNotesInterval(_s.notes[0], note)),
 						isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
 					});
 				}
@@ -103,10 +97,10 @@ export default {
 		{
 			return this.activeScales.map(_scale =>
 			{
-				const notes          = generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
+				const notes          = music.generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
 				const posCoordinates = _scale.type == 'arpeggio'
 					? []
-					: generateModelPosition(
+					: music.generateModelPosition(
 						this.nbStrings,
 						this.nbFrets,
 						this.tuningNotes,
@@ -199,18 +193,13 @@ export default {
 		{
 			return data.tunings[this.instrument][this.tuning];
 		},
-
-		...mapState([
+		...get([
 			'instrument',
 			'tuning',
 			'fretRange',
+			'scales/activeScales',
 			'isFretboardFlipped',
-		]),
-		...mapGetters([
 			'darkMode',
-		]),
-		...mapGetters('scales', [
-			'activeScales',
 		]),
 	},
 }

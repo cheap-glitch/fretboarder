@@ -21,7 +21,7 @@ TODO
 
 ## Credits & acknowledgements
 
-Dark mode colorscheme inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).
+The dark mode colorscheme is heavily inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).
 
 ## License
 

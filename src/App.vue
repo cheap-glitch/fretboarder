@@ -112,17 +112,12 @@ div.App(v-mods="darkMode")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { get }                  from 'vuex-pathify'
 import { saveAs }               from 'file-saver'
 
 import data                     from '@/modules/data'
+import * as exportFretboard     from '@/modules/export'
 import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
-
-import {
-	exportSVGToPDF,
-	exportSVGToImage,
-	exportFretboardToSVG,
-} from '@/modules/export'
 
 export default {
 	name: 'App',
@@ -162,20 +157,16 @@ export default {
 					return 'guitar';
 			}
 		},
-
-		...mapState([
+		...get([
 			'instrument',
 			'tuning',
 			'fretRange',
+			'scales/activeScales',
 
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
-		]),
-		...mapGetters([
+
 			'darkMode',
-		]),
-		...mapGetters('scales', [
-			'activeScales',
 		]),
 	},
 
@@ -192,7 +183,7 @@ export default {
 			// Close the export menu tootlip
 			this.$tours['export-menu'].stop();
 
-			const svg = exportFretboardToSVG(
+			const svg = exportFretboard.exportFretboardToSVG(
 				data.instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
@@ -207,7 +198,7 @@ export default {
 			{
 				case 'png':
 				case 'jpg':
-					exportSVGToImage(svg, _format);
+					exportFretboard.exportSVGToImage(svg, _format);
 					break;
 
 				case 'svg':
@@ -215,7 +206,7 @@ export default {
 					break;
 
 				case 'pdf':
-					exportSVGToPDF(svg);
+					exportFretboard.exportSVGToPDF(svg);
 					break;
 			}
 		},

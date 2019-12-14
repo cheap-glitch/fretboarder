@@ -47,9 +47,9 @@ div.VSelect(ref="vselectbar")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { get }       from 'vuex-pathify'
 
-import { mapObject }            from '@/modules/object.js'
+import { objectMap } from '@/modules/object.js'
 
 export default {
 	name: 'VSelect',
@@ -84,9 +84,10 @@ export default {
 
 	data() {
 		return {
-			unwatch:           null,
-			openingDirection:  'down',
-			isOpened:          false,
+			openingDirection: 'down',
+			isOpened: false,
+
+			unwatch: null,
 		}
 	},
 
@@ -94,7 +95,7 @@ export default {
 		optionsList()
 		{
 			// If the options are passed as an object, build an option array from the keys and values
-			return Array.isArray(this.options) ? this.options : mapObject(this.options, (_key, _value) => ({ name: _value, value: _key }));
+			return Array.isArray(this.options) ? this.options : objectMap(this.options, (_key, _value) => ({ name: _value, value: _key }));
 		},
 		selected()
 		{
@@ -105,12 +106,10 @@ export default {
 			return (this.openingDirection == 'down' &&  this.isOpened)
 			    || (this.openingDirection == 'up'   && !this.isOpened)
 		},
-		...mapState([
+		...get([
 			'instrument',
-		]),
-		...mapGetters([
 			'darkMode',
-		])
+		]),
 	},
 
 	watch: {

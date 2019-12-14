@@ -118,14 +118,11 @@ div.FretboardScale
 <!--{{{ JavaScript -->
 <script>
 
-import {
-	mapState,
-	mapGetters,
-	mapMutations
-} from 'vuex'
+import { mapMutations } from 'vuex'
+import { get }          from 'vuex-pathify'
 
-import data                     from '@/modules/data'
-import { mapObject }            from '@/modules/object'
+import data             from '@/modules/data'
+import { objectMap }    from '@/modules/object'
 
 export default {
 	name: 'FretboardScale',
@@ -201,7 +198,7 @@ export default {
 		},
 		modelsNames()
 		{
-			return mapObject(this.models, (_key, _model) => ({ name: _model.name, value: _key }));
+			return objectMap(this.models, (_key, _model) => ({ name: _model.name, value: _key }));
 		},
 		intervals()
 		{
@@ -230,10 +227,8 @@ export default {
 				})
 			];
 		},
-		...mapState('scales', [
-			'scales',
-		]),
-		...mapGetters([
+		...get([
+			'scales/scales',
 			'darkMode',
 		]),
 	},
@@ -258,13 +253,12 @@ export default {
 		{
 			this.updateScale({ id: this.id, prop: _prop, value: _value });
 		},
-
 		...mapMutations('scales', [
 			'addScale',
 			'updateScale',
 			'toggleFocusScale',
 			'removeScale',
-		])
+		]),
 	}
 }
 
@@ -359,6 +353,10 @@ export default {
 		&.is-selected {
 			background-color: $color-ebony-clay-2;
 		}
+	}
+
+	&.is-selected {
+		color: $color-sun;
 	}
 }
 

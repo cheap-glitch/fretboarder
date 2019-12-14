@@ -3,17 +3,7 @@
  * modules/object.js
  */
 
-export function mapObject(_object, _callback)
-{
-	return Object.keys(_object).map(__key => _callback(__key, _object[__key]));
-}
-
-export function isEmptyObject(_object)
-{
-	return (Object.keys(_object).length == 0);
-}
-
-export function isObject(_value)
-{
-	return (_value && Object.prototype.toString.call(_value) === '[object Object]');
-}
+export const objectMap     = (_object, _callback) => Object.keys(_object).map(    __key => _callback(__key, _object[__key]));
+export const objectForEach = (_object, _callback) => Object.keys(_object).forEach(__key => _callback(__key, _object[__key]));
+export const isObject      = _value               => _value && Object.prototype.toString.call(_value) === '[object Object]';
+export const isEmptyObject = _object              => Object.keys(_object).length == 0;

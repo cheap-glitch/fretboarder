@@ -5,6 +5,10 @@
 
 export default
 {
+	/**
+	 * Try to get the value associated with a key in the local storage
+	 * If the key isn't present or its value is invalid, return a default value
+	 */
 	get(_key, _defaultValue)
 	{
 		let value       = localStorage.getItem(_key);
@@ -23,6 +27,10 @@ export default
 		return parsedValue;
 	},
 
+	/**
+	 * Set a value associated with a key
+	 * Overwrite the previous value if the key was already present in the storage
+	 */
 	set(_key, _value)
 	{
 		localStorage.setItem(_key, JSON.stringify(_value));
@@ -30,21 +38,22 @@ export default
 
 	/**
 	 * Check if an array contains a value
+	 * Return 'false' if the array doesn't exist
 	 */
-	includes(_key, _value)
+	arrayIncludes(_key, _value)
 	{
 		return this.get(_key, []).includes(_value);
 	},
 
 	/**
-	 * Insert a value into an array and return the new array
+	 * Insert a value into an existing array and return the new array
+	 * Create a new array if the key isn't present in the storage
 	 */
-	insert(_key, _value)
+	arrayInsert(_key, _value, _noDuplicates = true)
 	{
 		let array = this.get(_key, []);
 
-		// Avoid duplicates
-		if (array.indexOf(_value) === -1)
+		if (!_noDuplicates || !array.includes(_value))
 		{
 			array.push(_value);
 			this.set(_key, array);
@@ -55,14 +64,13 @@ export default
 
 	/**
 	 * Remove a value from an array and return the new array
+	 * If the array doesn't exist, a new empty array is created
 	 */
-	remove(_key, _value)
+	arrayRemove(_key, _value)
 	{
-		let array = this.get(_key, []);
+		let array = this.get(_key, []).filter(__v => __v !== _value);
+		this.set(_key, array);
 
-		let newArray = array.filter(_v => _v !== _value);
-		this.set(_key, newArray);
-
-		return newArray;
+		return array;
 	},
 }

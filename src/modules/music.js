@@ -5,6 +5,10 @@
 
 import data from '@/modules/data'
 
+// Define the maximum length of the fretboard
+const MAX_NB_FRETS  = 24;
+const HALF_NB_FRETS = Math.floor(MAX_NB_FRETS/2);
+
 /**
  * Generate the "coordinates" of the notes in a single position of a given model
  */
@@ -17,15 +21,13 @@ export function generateModelPosition(_nbStrings, _nbFrets, _tuningNotes, _scale
 	// Find the fret of the root note in the specified position
 	let rootFret = null;
 	for (let fret=baseRootFret, pos=0; pos<_position; fret++)
+	for (let string=_nbStrings-1; string>=0; string--)
 	{
-		for (let string=_nbStrings-1; string>=0; string--)
+		if (getStringNotes(_tuningNotes[string])[fret % _nbFrets] == root)
 		{
-			if (getStringNotes(_tuningNotes[string])[fret % _nbFrets] == root)
-			{
-				rootFret = fret;
-				pos++;
-				break;
-			}
+			rootFret = fret;
+			pos++;
+			break;
 		}
 	}
 
@@ -61,8 +63,6 @@ export function generateModelPosition(_nbStrings, _nbFrets, _tuningNotes, _scale
 	const octavedCoordinates = [];
 	coordinates.forEach(_c =>
 	{
-		const HALF_NB_FRETS = Math.floor(MAX_NB_FRETS/2);
-
 		octavedCoordinates.push({
 			string:  _c.string,
 			fret:    _c.fret + HALF_NB_FRETS > _nbFrets ? _c.fret - HALF_NB_FRETS : _c.fret + HALF_NB_FRETS,
@@ -101,6 +101,14 @@ export function generateModelNotes(_model, _tonality)
 }
 
 /**
+ * Return an array containing all the notes of a string
+ */
+export function getStringNotes(_openStringNote)
+{
+	return [...Array(MAX_NB_FRETS+1).keys()].map(_i => getIntervalSecondNote(_openStringNote, _i));
+}
+
+/**
  * Return the second note of an interval expressed in half-steps
  */
 export function getIntervalSecondNote(_root, _interval)
@@ -108,7 +116,7 @@ export function getIntervalSecondNote(_root, _interval)
 	let index   = data.notes.indexOf(_root) + _interval;
 	let nbNotes = data.notes.length;
 
-	return data.notes[(index < 0) ? (index + nbNotes*Math.ceil(Math.abs(index)/nbNotes)) : (index % nbNotes)];
+	return data.notes[(index < 0) ? (index + nbNotes*Math.ceil(Math.abs(index) / nbNotes)) : (index % nbNotes)];
 }
 
 /**
@@ -117,18 +125,4 @@ export function getIntervalSecondNote(_root, _interval)
 export function getNotesInterval(_note1, _note2)
 {
 	return Math.abs(data.notes.indexOf(_note1) - data.notes.indexOf(_note2));
-}
-
-/**
- * Return an array containing all the notes of a string
- */
-const MAX_NB_FRETS = 24;
-export function getStringNotes(_openStringNote)
-{
-	let notes = [];
-
-	for (let i=0; i<=MAX_NB_FRETS; i++)
-		notes.push(getIntervalSecondNote(_openStringNote, i));
-
-	return notes;
 }

@@ -24,7 +24,7 @@ button.VButtonIcon(
 <!--{{{ JavaScript -->
 <script>
 
-import { mapGetters } from 'vuex'
+import { get } from 'vuex-pathify'
 
 export default {
 	name: 'VButtonIcon',
@@ -57,9 +57,7 @@ export default {
 		},
 	},
 
-	computed: mapGetters([
-		'darkMode',
-	]),
+	computed: get('darkMode'),
 
 	methods: {
 		click()

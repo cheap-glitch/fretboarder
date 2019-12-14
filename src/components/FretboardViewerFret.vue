@@ -42,10 +42,10 @@ div.FretboardViewerFret(
 <!--{{{ JavaScript -->
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { get }       from 'vuex-pathify'
 
-import data                     from '@/modules/data'
-import { mapObject }            from '@/modules/object'
+import data          from '@/modules/data'
+import { objectMap } from '@/modules/object'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -106,7 +106,7 @@ export default {
 				{}
 			);
 
-			const fretInfos = mapObject(intervalsList, (_key, _value) => ({
+			const fretInfos = objectMap(intervalsList, (_key, _value) => ({
 				ids:       _value.map(__v => __v.id).sort((__a, __b) => __a - __b),
 				colors:    _value.sort((__a, __b) => __a.id - __b.id).map(__v => __v.color),
 				interval:  data.intervalsNames[_key],
@@ -147,15 +147,12 @@ export default {
 		{
 			return this.fretRange[0] == 0 ? (this.fret == 1) : (this.fret == this.fretRange[0]);
 		},
-
-		...mapState([
-			'instrument',
+		...get([
 			'fretRange',
 
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
-		]),
-		...mapGetters([
+
 			'darkMode',
 		]),
 	},
