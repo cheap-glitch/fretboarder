@@ -166,7 +166,9 @@ export default {
 		}
 	},
 
-	computed: get('scales/scales'),
+	computed: {
+		...get('scales/scales')
+	},
 
 	methods: {
 		onNextStep(_step)

@@ -6,10 +6,8 @@
 # NPM
 /node_modules/
 /.npmrc
-npm-debug.log*
 
 # Build
-/build/
 /dist/
 
 # Test coverage

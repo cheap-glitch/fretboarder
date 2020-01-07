@@ -37,7 +37,7 @@ export function makeTogglers(_state)
 	objectForEach(_state, function(__key)
 	{
 		if (/^is[A-Z]/.test(__key))
-			togglers[`toggle`] = state => state[__key] = !state[__key];
+			togglers[`toggleI${__key.slice(1)}`] = state => state[__key] = !state[__key];
 	});
 
 	return togglers;

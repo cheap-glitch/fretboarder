@@ -57,7 +57,9 @@ export default {
 		},
 	},
 
-	computed: get('darkMode'),
+	computed: {
+		darkMode: get('darkMode')
+	},
 
 	methods: {
 		click()

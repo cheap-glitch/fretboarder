@@ -1,16 +1,29 @@
 {
   "name": "fretboarder",
+  "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
   "version": "2.0.0",
   "private": true,
-  "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
+  "license": "GPL-3.0-only",
+  "repository": "github:cheap-glitch/fretboarder",
   "scripts": {
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
+    "serve-vue-cli": "vue-cli-service serve --https",
     "build": "vue-cli-service build --modern",
     "test:unit": "vue-cli-service test:unit",
+    "coverage": "nyc npm run test:unit",
     "lint": "vue-cli-service lint --no-fix",
-    "serve-vue-cli": "vue-cli-service serve --https",
     "sitemap": "vue-cli-service sitemap"
+  },
+  "browserslist": [
+    "last 1 version",
+    "not dead",
+    "> 0.2%"
+  ],
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
@@ -48,6 +61,7 @@
     "eslint-plugin-smarter-tabs": "^1.1.0",
     "eslint-plugin-vue": "^6.1.2",
     "fibers": "^4.0.2",
+    "nyc": "^15.0.0",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.24.2",
@@ -55,17 +69,5 @@
     "sass-mq": "^5.0.1",
     "vue-cli-plugin-sitemap": "^1.0.0",
     "vue-template-compiler": "^2.6.11"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "last 1 version",
-    "not dead",
-    "> 0.2%"
-  ],
-  "license": "GPL-3.0-only",
-  "repository": "github:cheap-glitch/fretboarder"
+  }
 }

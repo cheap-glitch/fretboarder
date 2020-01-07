@@ -216,9 +216,9 @@ export default {
 				default:  return `${_number}th fret`;
 			}
 		},
-		...mapMutations([
-			'scales/addScale',
-		]),
+		...mapMutations({
+			addScale: 'scales/addScale',
+		}),
 	}
 }
 
