@@ -9,19 +9,31 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-		<meta name="viewport"     content="width=device-width,initial-scale=1.0">
-		<meta name="author"       content="cheap glitch">
-		<meta name="color-scheme" content="dark light">
-		<meta name="theme-color"  content="#0093ee">
-
 		<link rel="icon" href="<%= BASE_URL %>favicon.ico">
+
+		<meta name="author"              content="cheap glitch">
+		<meta name="color-scheme"        content="dark light">
+		<meta name="theme-color"         content="#0093ee">
+		<meta name="viewport"            content="width=device-width,initial-scale=1.0">
+
+		<!-- OpenGraph properties -->
+		<meta name="og:type"             content="website">
+		<meta name="og:url"              content="https://fretboarder.app">
+		<meta name="og:image"            content="https://fretboarder.app/logo.png">
+		<meta name="og:title"            content="Fretboarder">
+		<meta name="og:description"      content="A web app to visualize scales, chords and arpeggios on all kinds of fretboards.">
+
+		<!-- Twitter card -->
+		<meta name="twitter:card"        content="summary">
+		<meta name="twitter:site"        content="@cheap_glitch">
+		<meta name="twitter:image"       content="https://fretboarder.app/logo.png">
+		<meta name="twitter:title"       content="Fretboarder">
+		<meta name="twitter:description" content="A web app to visualize scales, chords and arpeggios on all kinds of fretboards.">
 
 		<title>Fretboarder — Ride your fretboard</title>
 	</head>
 	<body>
-		<noscript>
-			<strong>We're sorry but Fretboarder doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-		</noscript>
 		<div id="app"></div>
+		<noscript><strong>We're sorry but Fretboarder doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
 	</body>
 </html>

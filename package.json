@@ -6,10 +6,11 @@
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
   "scripts": {
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
-    "serve-vue-cli": "vue-cli-service serve --https",
     "build": "vue-cli-service build --modern",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint --no-fix"
+    "lint": "vue-cli-service lint --no-fix",
+    "serve-vue-cli": "vue-cli-service serve --https",
+    "sitemap": "vue-cli-service sitemap"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
@@ -52,6 +53,7 @@
     "sass": "^1.24.2",
     "sass-loader": "^8.0.0",
     "sass-mq": "^5.0.1",
+    "vue-cli-plugin-sitemap": "^1.0.0",
     "vue-template-compiler": "^2.6.11"
   },
   "postcss": {

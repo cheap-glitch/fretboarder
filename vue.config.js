@@ -30,10 +30,11 @@ module.exports = {
 		},
 	},
 
-	/**
-	 * Import Font Awesome icons
-	 */
 	pluginOptions: {
+
+		/**
+		 * Font Awesome icons
+		 */
 		fontawesome: {
 			component: 'fa-icon',
 			imports: [
@@ -86,6 +87,22 @@ module.exports = {
 						'github',
 						'twitter',
 					]
+				},
+			]
+		},
+
+		/**
+		 * Sitemap
+		 */
+		sitemap: {
+			baseURL:         'https://fretboarder.app',
+			trailingSlash:   false,
+			productionOnly:  true,
+
+			urls: [
+				{
+					loc:         '/',
+					changefreq:  'always',
 				},
 			]
 		},
