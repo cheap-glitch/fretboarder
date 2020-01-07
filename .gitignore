@@ -14,10 +14,3 @@ npm-debug.log*
 
 # Test coverage
 /.nyc_output/
-
-# Editor files
-.vscode
-*.swp
-
-# Others
-.htaccess
