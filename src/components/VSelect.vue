@@ -197,6 +197,14 @@ export default {
 
 		cursor: not-allowed;
 	}
+
+	&:not(.is-disabled):hover {
+		background-color: #eee;
+
+		&.dark-mode {
+			background-color: $color-ebony-clay;
+		}
+	}
 }
 
 .VSelect__bar__text,
@@ -253,7 +261,7 @@ export default {
 	padding: 8px;
 
 	&:hover {
-		background-color: lightgray;
+		background-color: #eee;
 
 		&.dark-mode {
 			background-color: $color-oxford-blue;

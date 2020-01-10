@@ -270,7 +270,7 @@ export default {
 
 	// Slightly darken the notes in dark mode
 	&.dark-mode {
-		filter: brightness(0.9);
+		filter: brightness(0.8);
 	}
 }
 

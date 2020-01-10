@@ -19,9 +19,10 @@ module.exports = {
 				prependData: [
 					'sass-mq/_mq.scss',
 
-					'@/styles/mixins',
 					'@/styles/colorscheme',
 					'@/styles/fonts',
+					'@/styles/layout',
+					'@/styles/mixins',
 					'@/styles/transitions',
 				]
 				.map(_file => `@use "${_file}" as *;`)
