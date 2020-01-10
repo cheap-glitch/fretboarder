@@ -127,7 +127,13 @@ export default {
 		},
 		toggleOpen()
 		{
-			if (!this.isDisabled) this.isOpened = !this.isOpened;
+			if (!this.isDisabled)
+			{
+				if (!this.isOpened)
+					this.updateOpeningDirection();
+
+				this.isOpened = !this.isOpened;
+			}
 		},
 		close()
 		{

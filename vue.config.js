@@ -46,7 +46,6 @@ module.exports = {
 						'external-link-square-alt',
 
 						// Header
-						'adjust',
 						'banjo',
 						'bug',
 						'cog',
@@ -57,6 +56,7 @@ module.exports = {
 						'question-circle',
 
 						// Fretboard tools
+						'adjust',
 						'eraser',
 						'file-download',
 						'hand-paper',
