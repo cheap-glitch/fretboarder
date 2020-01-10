@@ -4,7 +4,7 @@
 
 
 <!--{{{ Pug -->
-<template lang='pug'>
+<template lang="pug">
 
 div.FretboardViewerFret(
 	v-mods="{ isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
@@ -183,7 +183,7 @@ export default {
 
 
 <!--{{{ SCSS -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 .FretboardViewerFret {
 	display: flex;

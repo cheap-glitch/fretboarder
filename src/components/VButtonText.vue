@@ -4,7 +4,7 @@
 
 
 <!--{{{ Pug -->
-<template lang='pug'>
+<template lang="pug">
 
 button.VButtonText(
 	:is="elemType"
@@ -66,7 +66,7 @@ export default {
 
 
 <!--{{{ SCSS -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 .VButtonText {
 	display: flex;
@@ -109,7 +109,7 @@ export default {
 
 
 <!--{{{ Global SCSS -->
-<style lang='scss'>
+<style lang="scss">
 
 .VButtonText > * {
 	cursor: pointer;

@@ -31,7 +31,6 @@ import VueTour       from 'vue-tour'
 require('vue-tour/dist/vue-tour.css');
 
 import App           from '@/App'
-import router        from '@/router'
 import store         from '@/stores/main'
 
 /**
@@ -58,4 +57,4 @@ requireBaseComponents.keys().forEach(function(_fileName)
 /**
  * Create the Vue instance
  */
-new Vue({ router, store, render: _h => _h(App) }).$mount('#app');
+new Vue({ store, render: _h => _h(App) }).$mount('#app');

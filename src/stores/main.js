@@ -76,15 +76,12 @@ const storeOnMutation = _store => _store.subscribe(function(_mutation, _state)
 		'scales\\/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: _state.scales.scales }),
 	};
 
-	console.log(_mutation.type);
 	objectForEach(saveUponMutations, function(__key, __prop)
 	{
 
 		// Check that the name of the mutation matches the key
 		const rx = new RegExp(`^${__key}$`);
 		if (!rx.test(_mutation.type)) return;
-
-		console.log('Saving stuff on mutation:', _mutation.type);
 
 		// Execute the callback to get the prop name or object
 		const prop = typeof __prop == 'function' ? __prop(_mutation.type) : __prop;

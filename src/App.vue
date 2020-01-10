@@ -4,7 +4,7 @@
 
 
 <!--{{{ Pug -->
-<template lang='pug'>
+<template lang="pug">
 
 div.App(v-mods="darkMode")
 
@@ -22,7 +22,6 @@ div.App(v-mods="darkMode")
 		nav.page-header__nav
 			//- Quick help
 			VButtonText.page-header__nav__link#help-tour-step--0(
-				v-show="$route.name == 'fretboarder'"
 				v-mods="darkMode"
 				@click.native.left="startHelpTour"
 				)
@@ -60,7 +59,7 @@ div.App(v-mods="darkMode")
 	//----------------------------------------------------------------------
 	//- Body
 	//----------------------------------------------------------------------
-	router-view
+	PageFretboarder
 	PageFretboarderHelpTour
 	v-tour(name="export-menu" :steps="exportMenuTooltip")
 		template(v-slot="tour")
@@ -117,12 +116,14 @@ import { saveAs }               from 'file-saver'
 
 import data                     from '@/modules/data'
 import * as exportFretboard     from '@/modules/export'
+import PageFretboarder          from '@/components/PageFretboarder'
 import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
 
 export default {
 	name: 'App',
 
 	components: {
+		PageFretboarder,
 		PageFretboarderHelpTour,
 	},
 
@@ -218,7 +219,7 @@ export default {
 
 
 <!--{{{ SCSS -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 @use 'sass:color';
 
@@ -390,7 +391,7 @@ export default {
 
 
 <!--{{{ Global styles -->
-<style lang='scss'>
+<style lang="scss">
 
 // Apply the reset stylesheet
 @use '@/styles/reset' as *;

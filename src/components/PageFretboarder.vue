@@ -4,7 +4,7 @@
 
 
 <!--{{{ Pug -->
-<template lang='pug'>
+<template lang="pug">
 
 div.PageFretboarder
 
@@ -227,7 +227,7 @@ export default {
 
 
 <!--{{{ SCSS -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 /**
  * Above the fretboard

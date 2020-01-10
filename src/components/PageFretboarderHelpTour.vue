@@ -4,7 +4,7 @@
 
 
 <!--{{{ Pug -->
-<template lang='pug'>
+<template lang="pug">
 
 v-tour(
 	name="help"
@@ -234,7 +234,7 @@ export default {
 
 
 <!--{{{ SCSS -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 .help-tour__step {
 	z-index: 100;
@@ -276,7 +276,7 @@ export default {
 
 
 <!--{{{ Global SCSS -->
-<style lang='scss'>
+<style lang="scss">
 
 .v-step {
 	border-radius: 6px;

@@ -4,7 +4,7 @@
 
 
 <!--{{{ Pug -->
-<template lang='pug'>
+<template lang="pug">
 
 div.FretboardViewer(:style="[grid, inlays]")
 
@@ -209,7 +209,7 @@ export default {
 
 
 <!--{{{ SCSS -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 .FretboardViewer {
 	display: grid;
