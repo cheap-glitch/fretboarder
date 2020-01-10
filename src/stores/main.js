@@ -70,20 +70,24 @@ const storeOnMutation = _store => _store.subscribe(function(_mutation, _state)
 		'setFretRange':  'fretRange',
 
 		// Various settings
-		'toggleIs.+': _mutation => `is${_mutation.slice(8)}`,
+		'toggleIs.+': __mutation => `is${__mutation.slice(8)}`,
 
 		// Scales
-		'(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: _state.scales.scales }),
+		'scales\\/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: _state.scales.scales }),
 	};
 
-	objectForEach(saveUponMutations, function(__key, __getProp)
+	console.log(_mutation.type);
+	objectForEach(saveUponMutations, function(__key, __prop)
 	{
+
 		// Check that the name of the mutation matches the key
 		const rx = new RegExp(`^${__key}$`);
-		if (!rx.test(_mutation)) return;
+		if (!rx.test(_mutation.type)) return;
+
+		console.log('Saving stuff on mutation:', _mutation.type);
 
 		// Execute the callback to get the prop name or object
-		const prop = __getProp();
+		const prop = typeof __prop == 'function' ? __prop(_mutation.type) : __prop;
 
 		storage.set(
 			isObject(prop) ? prop.name  : prop,
