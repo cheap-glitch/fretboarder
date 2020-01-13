@@ -84,10 +84,8 @@ export default {
 
 	data() {
 		return {
-			openingDirection: 'down',
-			isOpened: false,
-
-			unwatch: null,
+			isOpened:          false,
+			openingDirection:  'down',
 		}
 	},
 

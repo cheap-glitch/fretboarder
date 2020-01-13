@@ -73,7 +73,7 @@ const storeOnMutation = _store => _store.subscribe(function(_mutation, _state)
 		'toggleIs.+': __mutation => `is${__mutation.slice(8)}`,
 
 		// Scales
-		'scales\\/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: _state.scales.scales }),
+		'scales/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: _state.scales.scales }),
 	};
 
 	objectForEach(saveUponMutations, function(__key, __prop)
