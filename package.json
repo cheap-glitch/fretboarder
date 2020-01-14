@@ -1,30 +1,18 @@
 {
   "name": "fretboarder",
-  "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
   "version": "2.0.0",
   "private": true,
+  "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
-  "license": "GPL-3.0-only",
-  "repository": "github:cheap-glitch/fretboarder",
   "scripts": {
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
-    "serve-vue-cli": "vue-cli-service serve --https",
     "build": "vue-cli-service build --modern",
-    "test": "npm run test:unit",
     "test:unit": "vue-cli-service test:unit",
-    "coverage": "nyc npm run test:unit",
     "lint": "vue-cli-service lint --no-fix 'src/**.vue' '*.js' 'src/**.js'",
-    "sitemap": "vue-cli-service sitemap"
-  },
-  "browserslist": [
-    "last 1 version",
-    "not dead",
-    "> 0.2%"
-  ],
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "coverage": "nyc npm run test:unit",
+    "serve-vue-cli": "vue-cli-service serve --https",
+    "sitemap": "vue-cli-service sitemap",
+    "test": "npm run test:unit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
@@ -32,7 +20,7 @@
     "@fortawesome/pro-regular-svg-icons": "^5.12.0",
     "@fortawesome/pro-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
-    "core-js": "^3.6.2",
+    "core-js": "^3.6.4",
     "file-saver": "^2.0.2",
     "jspdf": "^1.5.3",
     "v-click-outside": "^3.0.0",
@@ -45,8 +33,8 @@
     "vuex-pathify": "^1.4.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@cheap-glitch/vue-cli-plugin-fontawesome": "^1.0.5",
     "@vue/cli-plugin-babel": "^4.1.2",
     "@vue/cli-plugin-eslint": "^4.1.2",
@@ -61,13 +49,26 @@
     "eslint-plugin-smarter-tabs": "^1.1.0",
     "eslint-plugin-vue": "^6.1.2",
     "fibers": "^4.0.2",
+    "jsdom": "^16.0.0",
     "nyc": "^15.0.0",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.24.4",
-    "sass-loader": "^8.0.0",
+    "sass-loader": "^8.0.2",
     "sass-mq": "^5.0.1",
-    "vue-cli-plugin-sitemap": "^1.0.3",
+    "vue-cli-plugin-sitemap": "^1.0.4",
     "vue-template-compiler": "^2.6.11"
-  }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "last 1 version",
+    "not dead",
+    "> 0.2%"
+  ],
+  "license": "GPL-3.0-only",
+  "repository": "github:cheap-glitch/fretboarder"
 }
