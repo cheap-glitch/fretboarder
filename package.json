@@ -10,9 +10,10 @@
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
     "serve-vue-cli": "vue-cli-service serve --https",
     "build": "vue-cli-service build --modern",
+    "test": "npm run test:unit",
     "test:unit": "vue-cli-service test:unit",
     "coverage": "nyc npm run test:unit",
-    "lint": "vue-cli-service lint --no-fix",
+    "lint": "vue-cli-service lint --no-fix 'src/**.vue' '*.js' 'src/**.js'",
     "sitemap": "vue-cli-service sitemap"
   },
   "browserslist": [

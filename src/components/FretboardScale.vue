@@ -306,10 +306,12 @@ export default {
 	}
 }
 
-.select-type     { max-width: 120px; min-width: 120px; }
-.select-tonality { max-width: 60px;  min-width: 60px;  }
-.select-model    { max-width: 220px; min-width: 220px; }
-.select-position { max-width: 100px; min-width: 100px; }
+.scale-props {
+	.select-type     { max-width: 120px; min-width: 120px; }
+	.select-tonality { max-width: 60px;  min-width: 60px;  }
+	.select-model    { max-width: 220px; min-width: 220px; }
+	.select-position { max-width: 100px; min-width: 100px; }
+}
 
 .scale-tools__intervals {
 	display: flex;

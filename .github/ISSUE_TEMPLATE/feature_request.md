@@ -1,7 +1,7 @@
 ---
-name: (ﾉ^ヮ^)ﾉ Feature request
-about: Request a new feature
-labels: bug
+name: Feature request
+about: (ﾉ^ヮ^)ﾉ
+labels: enhancement
 ---
 
 <!--
@@ -22,4 +22,5 @@ Please fill the template below:
 
 #### Examples
 <!-- If you know other products who implement this feature, you can reference them here (optional) -->
+
 

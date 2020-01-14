@@ -122,8 +122,10 @@ div.PageFretboarder
 
 					v-bind="scale"
 					)
-			p(v-show="scales.length == 0").
-				Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
+			p.no-scales-text(
+				v-show="scales.length == 0"
+				v-mods="darkMode"
+				) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 			VButtonIcon#help-tour-step--5(
 				v-show="scales.length < maxNbScales"
 
@@ -335,6 +337,10 @@ export default {
 
 .scales-list {
 	@include space-children-v(20px);
+}
+
+.no-scales-text.dark-mode {
+	color: $color-nepal;
 }
 
 </style>

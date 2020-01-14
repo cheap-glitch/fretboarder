@@ -6,37 +6,6 @@
 export default
 {
 	/**
-	 * Try to get the value associated with a key in the local storage
-	 * If the key isn't present or its value is invalid, return a default value
-	 */
-	get(_key, _defaultValue)
-	{
-		let value       = localStorage.getItem(_key);
-		let parsedValue = null;
-
-		if (value === null) return _defaultValue;
-
-		try {
-			parsedValue = JSON.parse(value);
-		}
-		catch (e) {
-			// Return the default value if the data is not valid JSON
-			return _defaultValue;
-		}
-
-		return parsedValue;
-	},
-
-	/**
-	 * Set a value associated with a key
-	 * Overwrite the previous value if the key was already present in the storage
-	 */
-	set(_key, _value)
-	{
-		localStorage.setItem(_key, JSON.stringify(_value));
-	},
-
-	/**
 	 * Check if an array contains a value
 	 * Return 'false' if the array doesn't exist
 	 */
@@ -72,5 +41,36 @@ export default
 		this.set(_key, array);
 
 		return array;
+	},
+
+	/**
+	 * Try to get the value associated with a key in the local storage
+	 * If the key isn't present or its value is invalid, return a default value
+	 */
+	get(_key, _defaultValue)
+	{
+		let value       = localStorage.getItem(`fretboarder/${_key}`);
+		let parsedValue = null;
+
+		if (value === null) return _defaultValue;
+
+		try {
+			parsedValue = JSON.parse(value);
+		}
+		catch (e) {
+			// Return the default value if the data is not valid JSON
+			return _defaultValue;
+		}
+
+		return parsedValue;
+	},
+
+	/**
+	 * Set a value associated with a key
+	 * Overwrite the previous value if the key was already present in the storage
+	 */
+	set(_key, _value)
+	{
+		localStorage.setItem(`fretboarder/${_key}`, JSON.stringify(_value));
 	},
 }
