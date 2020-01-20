@@ -38,8 +38,6 @@ const state = {
  * Getters
  */
 const getters = {
-	...make.getters(state),
-
 	darkMode: _state => ({ 'dark-mode': _state.isDarkModeOn }),
 };
 
@@ -78,7 +76,6 @@ const storeOnMutation = _store => _store.subscribe(function(_mutation, _state)
 
 	objectForEach(saveUponMutations, function(__key, __prop)
 	{
-
 		// Check that the name of the mutation matches the key
 		const rx = new RegExp(`^${__key}$`);
 		if (!rx.test(_mutation.type)) return;

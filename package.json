@@ -15,6 +15,7 @@
     "test": "npm run test:unit"
   },
   "dependencies": {
+    "@cheap-glitch/local-storage-wrapper": "^1.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-brands-svg-icons": "^5.12.0",
     "@fortawesome/pro-regular-svg-icons": "^5.12.0",
@@ -50,6 +51,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "fibers": "^4.0.2",
     "jsdom": "^16.0.0",
+    "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",

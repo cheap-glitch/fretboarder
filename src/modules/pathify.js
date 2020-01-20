@@ -14,7 +14,6 @@ import { objectForEach } from '@/modules/object'
  * mutations  setFoo
  * actions    setFooAsync
  */
-export default pathify
 pathify.options.mapping = function(_type, _name, _format)
 {
 	switch(_type)
@@ -26,6 +25,7 @@ pathify.options.mapping = function(_type, _name, _format)
 
 	return _name;
 }
+export default pathify;
 
 /**
  * Generate mutations to toggle every property beginning with 'is'
