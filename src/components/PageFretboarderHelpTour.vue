@@ -156,18 +156,16 @@ const helpTourTargets = [
 export default {
 	name: 'PageFretboarderHelpTour',
 
-	static() {
-		return {
-			steps: helpTourMessages.map((_message, _index) => ({
-				target:  helpTourTargets[_index],
-				content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
-			})),
-			onNextStep: this.onNextStep,
-		}
+	computed: {
+		...get('scales', ['scales'])
 	},
 
-	computed: {
-		...get('scales/scales')
+	created()
+	{
+		this.steps = helpTourMessages.map((_message, _index) => ({
+			target:  helpTourTargets[_index],
+			content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
+		}));
 	},
 
 	methods: {
@@ -223,8 +221,8 @@ export default {
 
 			_stopTour();
 		},
-		...mapMutations([
-			'scales/addScale'
+		...mapMutations('scales', [
+			'addScale'
 		]),
 	},
 }

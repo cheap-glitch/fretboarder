@@ -127,18 +127,6 @@ export default {
 		PageFretboarderHelpTour,
 	},
 
-	static() {
-		return {
-			exportMenuTooltip: [{
-				target:  '#button-export-menu',
-				content: `<strong>Choose a format to export in</strong><br>
-				          <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
-				              for embedding in web pages as it will scale perfectly when resized.</em>
-				`
-			}],
-		}
-	},
-
 	computed: {
 		instrumentIcon()
 		{
@@ -169,6 +157,16 @@ export default {
 
 			'darkMode',
 		]),
+	},
+
+	created()
+	{
+		this.exportMenuTooltip = [{
+			target:  '#button-export-menu',
+			content: `<strong>Choose a format to export in</strong><br>
+				  <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
+				      for embedding in web pages as it will scale perfectly when resized.</em>`
+		}];
 	},
 
 	methods: {

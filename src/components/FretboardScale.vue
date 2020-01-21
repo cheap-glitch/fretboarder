@@ -171,22 +171,6 @@ export default {
 		},
 	},
 
-	static() {
-		return {
-			tonalities:      data.tonalities,
-			intervalsNames:  data.intervalsNames,
-
-			positions: {
-				0: 'Whole',
-				1: '1<sup>st</sup> pos',
-				2: '2<sup>nd</sup> pos',
-				3: '3<sup>rd</sup> pos',
-				4: '4<sup>th</sup> pos',
-				5: '5<sup>th</sup> pos',
-			}
-		}
-	},
-
 	computed: {
 		nbScales()
 		{
@@ -231,6 +215,21 @@ export default {
 			'scales/scales',
 			'darkMode',
 		]),
+	},
+
+	created()
+	{
+		this.tonalities     = data.tonalities,
+		this.intervalsNames = data.intervalsNames,
+
+		this.positions = {
+			0: 'Whole',
+			1: '1<sup>st</sup> pos',
+			2: '2<sup>nd</sup> pos',
+			3: '3<sup>rd</sup> pos',
+			4: '4<sup>th</sup> pos',
+			5: '5<sup>th</sup> pos',
+		}
 	},
 
 	methods: {

@@ -23,11 +23,10 @@
  */
 
 import Vue           from 'vue'
-import VCSSModifiers from 'vue-css-modifiers'
-import VClickOutside from 'v-click-outside'
-import VueSlider     from 'vue-slider-component'
-import VueStatic     from 'vue-static'
 import VueTour       from 'vue-tour'
+import VueSlider     from 'vue-slider-component'
+import VClickOutside from 'v-click-outside'
+import VCSSModifiers from 'vue-css-modifiers'
 require('vue-tour/dist/vue-tour.css');
 
 import App           from '@/App'
@@ -36,11 +35,10 @@ import store         from '@/stores/main'
 /**
  * Register plugins, directives & external components
  */
-Vue.use(VueStatic);
 Vue.use(VueTour);
+Vue.component('vue-slider',    VueSlider);
 Vue.directive('mods',          VCSSModifiers);
 Vue.directive('click-outside', VClickOutside.directive);
-Vue.component('vue-slider',    VueSlider);
 
 /**
  * Register globally the base components
