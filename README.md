@@ -20,7 +20,8 @@ of scales and arpeggios across a variety of fretboards. Features:
 
 ## Screenshots
 
-TODO
+![screenshot (light mode)](/docs/screenshot-01.png)
+![screenshot  (dark mode)](/docs/screenshot-02.png)
 
 ## Credits & acknowledgements
 
