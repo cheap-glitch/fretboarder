@@ -20,8 +20,11 @@ of scales and arpeggios across a variety of fretboards. Features:
 
 ## Screenshots
 
-![screenshot (light mode)](/docs/screenshot-01.png)
-![screenshot  (dark mode)](/docs/screenshot-02.png)
+![screenshot (light mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-01.png)
+_light mode_
+
+![screenshot (dark  mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-02.png)
+_dark mode_
 
 ## Credits & acknowledgements
 
