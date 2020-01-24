@@ -19,7 +19,7 @@ v-tour(
 				v-for="(step, index) of tour.steps"
 				:key="`help-tour-step--${index}`"
 
-				v-if="tour.currentStep === index"
+				v-if="tour.currentStep == index"
 				:step="step"
 				:labels="tour.labels"
 				:previous-step="tour.previousStep"

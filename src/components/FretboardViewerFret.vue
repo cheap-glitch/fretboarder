@@ -95,7 +95,7 @@ export default {
 				function(_list, _interval)
 				{
 					// If the interval is not in the list, initialize its color list
-					if (_interval.value in _list === false)
+					if (!(_interval.value in _list))
 						_list[_interval.value] = [];
 
 					// Add it to the list of colors
