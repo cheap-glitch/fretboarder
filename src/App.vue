@@ -392,10 +392,10 @@ export default {
 <style lang="scss">
 
 // Apply the reset stylesheet
-@use '@/styles/reset' as *;
+@use '@cheap-glitch/scss-reset/_reset';
 
 // Load the global styles
-@use '@/styles/global' as *;
+@use '@/styles/global';
 
 // Load the styles for the slider component
 @use '~vue-slider-component/lib/theme/default' with (
