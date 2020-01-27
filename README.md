@@ -20,11 +20,17 @@ of scales and arpeggios across a variety of fretboards. Features:
 
 ## Screenshots
 
-TODO
+![screenshot (light mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-01.png)
+<p align="center"><em>Light mode</em></p>
+
+<p>&nbsp;</p>
+
+![screenshot (dark  mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-02.png)
+<p align="center"><em>Dark mode</em></p>
 
 ## Credits & acknowledgements
 
-The dark mode colorscheme is heavily inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).
+Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).
 
 ## License
 

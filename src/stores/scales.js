@@ -3,9 +3,10 @@
  * stores/scales.js
  */
 
-import Vue     from 'vue'
+import Vue          from 'vue'
 
-import storage from '@/modules/storage'
+import storage      from '@/modules/storage'
+import { isObject } from '@/modules/object'
 
 /**
  * Define the maximum number of scales outside the store
@@ -18,7 +19,7 @@ export default
 	namespaced: true,
 
 	state: {
-		scales:       storage.get('scales', []),
+		scales:       storage.get('scales', [], _v => Array.isArray(_v) && _v.every(__item => isObject(__item))),
 		maxNbScales:  MAX_NB_SCALES,
 
 		colors: [

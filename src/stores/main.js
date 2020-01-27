@@ -6,9 +6,10 @@
 import Vue                         from 'vue'
 import Vuex                        from 'vuex'
 import { make }                    from 'vuex-pathify'
-
-import storage                     from '@/modules/storage'
 import pathify, { makeTogglers }   from '@/modules/pathify'
+
+import data                        from '@/modules/storage'
+import storage                     from '@/modules/storage'
 import { isObject, objectForEach } from '@/modules/object'
 
 import scales                      from '@/stores/scales'
@@ -17,13 +18,13 @@ import scales                      from '@/stores/scales'
  * State
  */
 const state = {
-	instrument:             storage.get('instrument',             'guitar'),
-	tuning:                 storage.get('tuning',                 'standard'),
-	fretRange:              storage.get('fretRange',              [0, 22]),
+	instrument:             storage.get('instrument',             'guitar',   _v => (_v in data.instruments)),
+	tuning:                 storage.get('tuning',                 'standard', _v => (_v in data.tuningsNames)),
+	fretRange:              storage.get('fretRange',              [0, 22],    _v => Array.isArray(_v) && _v.length == 2),
 
-	isDarkModeOn:           storage.get('isDarkModeOn',           false),
-	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false),
-	isFretboardFlipped:     storage.get('isFretboardFlipped',     false),
+	isDarkModeOn:           storage.get('isDarkModeOn',           false,      _v => typeof _v == 'boolean'),
+	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false,      _v => typeof _v == 'boolean'),
+	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      _v => typeof _v == 'boolean'),
 
 	hoveredFretInfos:       [],
 

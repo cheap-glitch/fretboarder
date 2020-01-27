@@ -19,7 +19,7 @@ v-tour(
 				v-for="(step, index) of tour.steps"
 				:key="`help-tour-step--${index}`"
 
-				v-if="tour.currentStep === index"
+				v-if="tour.currentStep == index"
 				:step="step"
 				:labels="tour.labels"
 				:previous-step="tour.previousStep"
@@ -156,18 +156,16 @@ const helpTourTargets = [
 export default {
 	name: 'PageFretboarderHelpTour',
 
-	static() {
-		return {
-			steps: helpTourMessages.map((_message, _index) => ({
-				target:  helpTourTargets[_index],
-				content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
-			})),
-			onNextStep: this.onNextStep,
-		}
+	computed: {
+		...get('scales', ['scales'])
 	},
 
-	computed: {
-		...get('scales/scales')
+	created()
+	{
+		this.steps = helpTourMessages.map((_message, _index) => ({
+			target:  helpTourTargets[_index],
+			content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
+		}));
 	},
 
 	methods: {
@@ -223,8 +221,8 @@ export default {
 
 			_stopTour();
 		},
-		...mapMutations([
-			'scales/addScale'
+		...mapMutations('scales', [
+			'addScale'
 		]),
 	},
 }

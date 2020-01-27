@@ -17,12 +17,12 @@ module.exports = {
 		loaderOptions: {
 			sass: {
 				prependData: [
-					'sass-mq/_mq.scss',
+					'sass-mq/_mq',
+					'@cheap-glitch/scss-mixins/_mixins',
 
 					'@/styles/colorscheme',
 					'@/styles/fonts',
 					'@/styles/layout',
-					'@/styles/mixins',
 					'@/styles/transitions',
 				]
 				.map(_file => `@use "${_file}" as *;`)

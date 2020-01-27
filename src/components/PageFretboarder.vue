@@ -157,12 +157,6 @@ export default {
 		FretboardViewer,
 	},
 
-	static() {
-		return {
-			instrumentOptions: objectMap(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key })),
-		}
-	},
-
 	computed: {
 		tuningsOptions()
 		{
@@ -191,7 +185,13 @@ export default {
 		]),
 	},
 
-	mounted() {
+	created()
+	{
+		this.instrumentOptions = objectMap(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key }));
+	},
+
+	mounted()
+	{
 		if (this.scales.length == 0)
 			this.addScale();
 	},
