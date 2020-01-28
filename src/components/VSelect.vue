@@ -93,11 +93,11 @@ export default {
 		optionsList()
 		{
 			// If the options are passed as an object, build an option array from the keys and values
-			return Array.isArray(this.options) ? this.options : objectMap(this.options, (_key, _value) => ({ name: _value, value: _key }));
+			return Array.isArray(this.options) ? this.options : objectMap(this.options, (key, value) => ({ name: value, value: key }));
 		},
 		selected()
 		{
-			return this?.optionsList?.find(_option => _option.value == this.value) ?? { value: 'loading', name: 'Loading…' };
+			return this?.optionsList?.find(option => option.value == this.value) ?? { value: 'loading', name: 'Loading…' };
 		},
 		isChevronFlipped()
 		{
@@ -119,9 +119,9 @@ export default {
 	},
 
 	methods: {
-		select(_option)
+		select(option)
 		{
-			this.$emit('change', this.isValueNumber ? Number.parseInt(_option.value, 10) : _option.value);
+			this.$emit('change', this.isValueNumber ? Number.parseInt(option.value, 10) : option.value);
 		},
 		toggleOpen()
 		{

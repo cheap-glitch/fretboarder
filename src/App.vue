@@ -177,7 +177,7 @@ export default {
 			if (helpTour.currentStep == -1)
 				helpTour.start();
 		},
-		exportFretboardToFile(_format)
+		exportFretboardToFile(format)
 		{
 			// Close the export menu tootlip
 			this.$tours['export-menu'].stop();
@@ -190,14 +190,14 @@ export default {
 				this.activeScales,
 				this.isFretboardFlipped,
 				this.isDisplayingNotesName,
-				_format != 'svg',
+				format != 'svg',
 			);
 
-			switch (_format)
+			switch (format)
 			{
 				case 'png':
 				case 'jpg':
-					exportFretboard.exportSVGToImage(svg, _format);
+					exportFretboard.exportSVGToImage(svg, format);
 					break;
 
 				case 'svg':

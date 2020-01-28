@@ -1,14 +1,17 @@
 {
-  "name": "fretboarder",
-  "version": "2.0.0",
   "private": true,
+  "name": "fretboarder",
   "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
+  "version": "2.0.0",
+  "license": "GPL-3.0-only",
+  "repository": "github:cheap-glitch/fretboarder",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
+  "main": "src/main.js",
   "scripts": {
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
     "build": "vue-cli-service build --modern",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint --no-fix 'src/**.vue' '*.js' 'src/**.js'",
+    "lint": "vue-cli-service lint --no-fix '**/*.{js,vue}'",
     "coverage": "nyc npm run test:unit",
     "serve-vue-cli": "vue-cli-service serve --https",
     "sitemap": "vue-cli-service sitemap",
@@ -71,7 +74,5 @@
     "last 1 version",
     "not dead",
     "> 0.2%"
-  ],
-  "license": "GPL-3.0-only",
-  "repository": "github:cheap-glitch/fretboarder"
+  ]
 }

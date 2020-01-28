@@ -14,30 +14,30 @@ import { objectForEach } from '@/modules/object'
  * mutations  setFoo
  * actions    setFooAsync
  */
-pathify.options.mapping = function(_type, _name, _format)
+pathify.options.mapping = function(type, name, format)
 {
-	switch(_type)
+	switch(type)
 	{
-		case 'getters':   return _name;
-		case 'mutations': return _format.camel('set', _name);
-		case 'actions':   return _format.camel('set', _name, 'async');
+		case 'getters':   return name;
+		case 'mutations': return format.camel('set', name);
+		case 'actions':   return format.camel('set', name, 'async');
 	}
 
-	return _name;
+	return name;
 }
 export default pathify;
 
 /**
  * Generate mutations to toggle every property beginning with 'is'
  */
-export function makeTogglers(_state)
+export function makeTogglers(state)
 {
 	const togglers = {};
 
-	objectForEach(_state, function(__key)
+	objectForEach(state, function(key)
 	{
-		if (/^is[A-Z]/.test(__key))
-			togglers[`toggleI${__key.slice(1)}`] = state => state[__key] = !state[__key];
+		if (/^is[A-Z]/.test(key))
+			togglers[`toggleI${key.slice(1)}`] = storeState => storeState[key] = !storeState[key];
 	});
 
 	return togglers;

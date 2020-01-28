@@ -62,7 +62,7 @@ export default {
 		note: {
 			type: String,
 			required: true,
-			validator: _v => data.notes.includes(_v)
+			validator: v => data.notes.includes(v)
 		},
 		scales: {
 			type: Array,
@@ -92,32 +92,32 @@ export default {
 		fretInfos()
 		{
 			const intervalsList = this.intervals.reduce(
-				function(_list, _interval)
+				function(list, interval)
 				{
 					// If the interval is not in the list, initialize its color list
-					if (!(_interval.value in _list))
-						_list[_interval.value] = [];
+					if (!(interval.value in list))
+						list[interval.value] = [];
 
 					// Add it to the list of colors
-					_list[_interval.value].push({ id: _interval.id, color: _interval.color });
+					list[interval.value].push({ id: interval.id, color: interval.color });
 
-					return _list;
+					return list;
 				},
 				{}
 			);
 
-			const fretInfos = objectMap(intervalsList, (_key, _value) => ({
-				ids:       _value.map(__v => __v.id).sort((__a, __b) => __a - __b),
-				colors:    _value.sort((__a, __b) => __a.id - __b.id).map(__v => __v.color),
-				interval:  data.intervalsNames[_key],
+			const fretInfos = objectMap(intervalsList, (key, value) => ({
+				ids:       value.map(v => v.id).sort((a, b) => a - b),
+				colors:    value.sort((a, b) => a.id - b.id).map(v => v.color),
+				interval:  data.intervalsNames[key],
 			}));
 
 			// Sort the intervals to always have the same scale order
-			return fretInfos.sort((_a, _b) => {
-				for (let i=0; i<_a.ids.length && i<_b.ids.length; i++)
+			return fretInfos.sort((a, b) => {
+				for (let i=0; i<a.ids.length && i<b.ids.length; i++)
 				{
-					if (_a.ids[i] < _b.ids[i]) return -1;
-					if (_a.ids[i] > _b.ids[i]) return  1;
+					if (a.ids[i] < b.ids[i]) return -1;
+					if (a.ids[i] > b.ids[i]) return  1;
 				}
 
 				return 0;
@@ -172,7 +172,7 @@ export default {
 
 			// Build a solid gradient with the colors of every active scale the note belongs to
 			const fillingSize   = Math.ceil(100 / this.scales.length);
-			const getColorStops = (_scale, _index) => `${_scale.color} ${_index * fillingSize}% ${(_index + 1)*fillingSize}%`;
+			const getColorStops = (scale, index) => `${scale.color} ${index * fillingSize}% ${(index + 1)*fillingSize}%`;
 			this.noteColors     = { background: `linear-gradient(to right, ${this.scales.map(getColorStops)})`};
 		},
 	},

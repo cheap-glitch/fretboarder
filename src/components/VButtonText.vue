@@ -32,7 +32,7 @@ export default {
 		mode: {
 			type: String,
 			default: 'button',
-			validator: _v => ['button', 'link', 'link-external'].includes(_v)
+			validator: v => ['button', 'link', 'link-external'].includes(v)
 		},
 		to: {
 			type: String,

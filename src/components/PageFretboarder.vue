@@ -160,12 +160,12 @@ export default {
 	computed: {
 		tuningsOptions()
 		{
-			return objectMap(data.tunings[this.instrument], _key => ({ name: data.tuningsNames[_key], value: _key }));
+			return objectMap(data.tunings[this.instrument], key => ({ name: data.tuningsNames[key], value: key }));
 		},
 		tuningNotesList()
 		{
 			return data.tuningsNames[this.tuning]
-			     + ` (${data.tunings[this.instrument][this.tuning].map(_note => data.tonalities[_note]).join(', ')})`;
+			     + ` (${data.tunings[this.instrument][this.tuning].map(note => data.tonalities[note]).join(', ')})`;
 		},
 		...sync([
 			'instrument',
@@ -187,7 +187,7 @@ export default {
 
 	created()
 	{
-		this.instrumentOptions = objectMap(data.instruments, (_key, _instrument) => ({ name: _instrument.name, value: _key }));
+		this.instrumentOptions = objectMap(data.instruments, (key, instrument) => ({ name: instrument.name, value: key }));
 	},
 
 	mounted()
@@ -202,20 +202,20 @@ export default {
 			if (this.$tours['export-menu'].currentStep == -1)
 				this.$tours['export-menu'].start();
 		},
-		tooltipFormatter(_number)
+		tooltipFormatter(number)
 		{
-			if (_number == 0)
+			if (number == 0)
 				return 'Open strings';
 
-			if (11 <= _number && _number <= 13)
-				return `${_number}th fret`;
+			if (11 <= number && number <= 13)
+				return `${number}th fret`;
 
-			switch (`${_number}`.slice(-1))
+			switch (`${number}`.slice(-1))
 			{
-				case '1': return `${_number}st fret`;
-				case '2': return `${_number}nd fret`;
-				case '3': return `${_number}rd fret`;
-				default:  return `${_number}th fret`;
+				case '1': return `${number}st fret`;
+				case '2': return `${number}nd fret`;
+				case '3': return `${number}rd fret`;
+				default:  return `${number}th fret`;
 			}
 		},
 		...mapMutations({

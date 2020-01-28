@@ -37,7 +37,7 @@ export default {
 		size: {
 			type: String,
 			default: 'normal',
-			validator: _v => ['big', 'normal', 'small'].includes(_v)
+			validator: v => ['big', 'normal', 'small'].includes(v)
 		},
 		tooltip: {
 			type: String,

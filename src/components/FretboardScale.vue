@@ -27,7 +27,7 @@ div.FretboardScale
 			id="scale-tonality"
 			:value="tonality"
 			:options="tonalities"
-			@change="_v => update('tonality', _v)"
+			@change="v => update('tonality', v)"
 			)
 		//- Model
 		VSelect.select-model(
@@ -43,7 +43,7 @@ div.FretboardScale
 			:value="position"
 			:options="positions"
 			is-value-number
-			@change="_v => update('position', _v)"
+			@change="v => update('position', v)"
 			)
 
 	//----------------------------------------------------------------------
@@ -139,7 +139,7 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validator: _v => ['arpeggio', 'scale'].includes(_v)
+			validator: v => ['arpeggio', 'scale'].includes(v)
 		},
 		tonality: {
 			type: String,
@@ -182,7 +182,7 @@ export default {
 		},
 		modelsNames()
 		{
-			return objectMap(this.models, (_key, _model) => ({ name: _model.name, value: _key }));
+			return objectMap(this.models, (key, model) => ({ name: model.name, value: key }));
 		},
 		intervals()
 		{
@@ -190,9 +190,9 @@ export default {
 
 			return [
 				{ value: 0, name: 'R' },
-				...this.models[this.model].model.slice(0, -1).map(function(_interval)
+				...this.models[this.model].model.slice(0, -1).map(function(interval)
 				{
-					rootInterval += _interval;
+					rootInterval += interval;
 
 					switch(rootInterval)
 					{
@@ -233,24 +233,24 @@ export default {
 	},
 
 	methods: {
-		updateType(_v)
+		updateType(v)
 		{
 			// Reset the model and the highlighted note when the type of scale is changed
 			this.update('model',           'maj');
 			this.update('highlightedNote',  null);
 
-			this.update('type', _v);
+			this.update('type', v);
 		},
-		updateModel(_v)
+		updateModel(v)
 		{
 			// Reset the highlighted note when the mode of the scale is changed
 			this.update('highlightedNote',  null);
 
-			this.update('model', _v);
+			this.update('model', v);
 		},
-		update(_prop, _value)
+		update(prop, value)
 		{
-			this.updateScale({ id: this.id, prop: _prop, value: _value });
+			this.updateScale({ id: this.id, prop: prop, value: value });
 		},
 		...mapMutations('scales', [
 			'addScale',

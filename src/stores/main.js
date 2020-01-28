@@ -18,13 +18,13 @@ import scales                      from '@/stores/scales'
  * State
  */
 const state = {
-	instrument:             storage.get('instrument',             'guitar',   _v => (_v in data.instruments)),
-	tuning:                 storage.get('tuning',                 'standard', _v => (_v in data.tuningsNames)),
-	fretRange:              storage.get('fretRange',              [0, 22],    _v => Array.isArray(_v) && _v.length == 2),
+	instrument:             storage.get('instrument',             'guitar',   v => (v in data.instruments)),
+	tuning:                 storage.get('tuning',                 'standard', v => (v in data.tuningsNames)),
+	fretRange:              storage.get('fretRange',              [0, 22],    v => Array.isArray(v) && v.length == 2),
 
-	isDarkModeOn:           storage.get('isDarkModeOn',           false,      _v => typeof _v == 'boolean'),
-	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false,      _v => typeof _v == 'boolean'),
-	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      _v => typeof _v == 'boolean'),
+	isDarkModeOn:           storage.get('isDarkModeOn',           false,      v => typeof v == 'boolean'),
+	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false,      v => typeof v == 'boolean'),
+	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      v => typeof v == 'boolean'),
 
 	hoveredFretInfos:       [],
 
@@ -39,7 +39,7 @@ const state = {
  * Getters
  */
 const getters = {
-	darkMode: _state => ({ 'dark-mode': _state.isDarkModeOn }),
+	darkMode: state => ({ 'dark-mode': state.isDarkModeOn }),
 };
 
 /**
@@ -49,18 +49,18 @@ const mutations = {
 	...make.mutations(state),
 	...makeTogglers(state),
 
-	setInstrument(_state, _value)
+	setInstrument(state, value)
 	{
 		// Reset the tuning to default when switching between different instruments
-		_state.tuning     = 'standard';
-		_state.instrument = _value;
+		state.tuning     = 'standard';
+		state.instrument = value;
 	},
 };
 
 /**
  * Plugin to automatically save some state properties in the local storage upon certain mutations
  */
-const storeOnMutation = _store => _store.subscribe(function(_mutation, _state)
+const storeOnMutation = store => store.subscribe(function(mutation, state)
 {
 	const saveUponMutations = {
 		// Fretboard settings
@@ -69,24 +69,24 @@ const storeOnMutation = _store => _store.subscribe(function(_mutation, _state)
 		'setFretRange':  'fretRange',
 
 		// Various settings
-		'toggleIs.+': __mutation => `is${__mutation.slice(8)}`,
+		'toggleIs.+': mutation => `is${mutation.slice(8)}`,
 
 		// Scales
-		'scales/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: _state.scales.scales }),
+		'scales/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: state.scales.scales }),
 	};
 
-	objectForEach(saveUponMutations, function(__key, __prop)
+	objectForEach(saveUponMutations, function(key, value)
 	{
 		// Check that the name of the mutation matches the key
-		const rx = new RegExp(`^${__key}$`);
-		if (!rx.test(_mutation.type)) return;
+		const rx = new RegExp(`^${key}$`);
+		if (!rx.test(mutation.type)) return;
 
 		// Execute the callback to get the prop name or object
-		const prop = typeof __prop == 'function' ? __prop(_mutation.type) : __prop;
+		const prop = typeof value == 'function' ? value(mutation.type) : value;
 
 		storage.set(
 			isObject(prop) ? prop.name  : prop,
-			isObject(prop) ? prop.value : _state[prop]
+			isObject(prop) ? prop.value : state[prop]
 		);
 	});
 });

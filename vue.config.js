@@ -25,7 +25,7 @@ module.exports = {
 					'@/styles/layout',
 					'@/styles/transitions',
 				]
-				.map(_file => `@use "${_file}" as *;`)
+				.map(file => `@use "${file}" as *;`)
 				.join('\n')
 			}
 		},

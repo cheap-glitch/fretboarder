@@ -28,7 +28,7 @@ v-tour(
 				:is-first="tour.isFirst"
 				:is-last="tour.isLast"
 
-				v-click-outside="_event => stopTour(_event, tour.stop)"
+				v-click-outside="event => stopTour(event, tour.stop)"
 				)
 
 				//- Footer
@@ -144,13 +144,13 @@ const helpTourMessages = [
 ];
 
 const helpTourTargets = [
-	...[...Array(6).keys()].map(_n => `#help-tour-step--${_n}`),
+	...[...Array(6).keys()].map(n => `#help-tour-step--${n}`),
 	'.FretboardScale .scale-props',
 	'.FretboardScale .select-position',
 	'.FretboardScale .scale-tools__intervals',
 	'.FretboardScale .scale-tools .VButtonIcon:nth-of-type(2)',
 	'.FretboardScale .scale-tools .VButtonIcon:nth-last-of-type(2)',
-	...[...Array(4).keys()].map(_n => `#help-tour-step--${_n + 12}`),
+	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 12}`),
 ];
 
 export default {
@@ -162,35 +162,35 @@ export default {
 
 	created()
 	{
-		this.steps = helpTourMessages.map((_message, _index) => ({
-			target:  helpTourTargets[_index],
-			content: `<p>${_message.replace('<br>', '</p><p>')}</p>`,
+		this.steps = helpTourMessages.map((message, index) => ({
+			target:  helpTourTargets[index],
+			content: `<p>${message.replace('<br>', '</p><p>')}</p>`,
 		}));
 	},
 
 	methods: {
-		onNextStep(_step)
+		onNextStep(step)
 		{
 			/**
 			 * Make sure there is at least one scale before
 			 * reaching the step where the scales settings are presented
 			 */
-			if ((_step + 1) == 6 && this.scales.length == 0)
+			if ((step + 1) == 6 && this.scales.length == 0)
 				this.addScale();
 
 			/**
 			 * Make sure there is at least two scales before
 			 * reaching the step where the scales tools are presented
 			 */
-			if ((_step + 1) == 9)
+			if ((step + 1) == 9)
 			{
 				while (this.scales.length <= 1)
 					this.addScale(this.scales.length == 1 ? { tonality: 'C#', model: 'majb'} : {});
 			}
 		},
-		stopTour(_event, _stopTour)
+		stopTour(event, stopTour)
 		{
-			const el      = _event.target;
+			const el      = event.target;
 			const classes = el.classList;
 
 			const ignoredClasses = [
@@ -213,13 +213,13 @@ export default {
 			 * accidentally closing it
 			 */
 			if (this.$store.state.isFretRangeSliderClicked
-			|| ignoredClasses.some(_class => classes.contains(_class) || (el.parentElement && el.parentElement.classList.contains(_class))))
+			|| ignoredClasses.some(name => classes.contains(name) || (el.parentElement && el.parentElement.classList.contains(name))))
 			{
 				this.$store.commit('setFretRangeSliderClicked', false);
 				return;
 			}
 
-			_stopTour();
+			stopTour();
 		},
 		...mapMutations('scales', [
 			'addScale'

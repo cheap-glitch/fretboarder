@@ -62,11 +62,11 @@ export default {
 
 					// Get the list of scales the note of the fret belongs to
 					let scales = this.scales.filter(
-						_scale => _scale.notes.includes(note)
+						scale => scale.notes.includes(note)
 						&& (
-						       _scale.type     == 'arpeggio'
-						    || _scale.position == 0
-						    || _scale.posCoordinates.filter(_c => _c.string == string && _c.fret == fret).length > 0
+						       scale.type     == 'arpeggio'
+						    || scale.position == 0
+						    || scale.posCoordinates.filter(c => c.string == string && c.fret == fret).length > 0
 						)
 					);
 
@@ -77,15 +77,15 @@ export default {
 						string,
 						fret,
 						note,
-						scales:    scales.map(_scale => ({ id: _scale.id, color: _scale.color })),
-						intervals: scales.map(_scale => (
+						scales:    scales.map(scale => ({ id: scale.id, color: scale.color })),
+						intervals: scales.map(scale => (
 						{
-							id:     _scale.id,
-							color:  _scale.color,
-							value:  music.getNotesInterval(_scale.notes[0], note),
+							id:     scale.id,
+							color:  scale.color,
+							value:  music.getNotesInterval(scale.notes[0], note),
 						})),
 
-						isHighlightedNote: scales.some(_s => _s.highlightedNote === music.getNotesInterval(_s.notes[0], note)),
+						isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
 						isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
 					});
 				}
@@ -95,21 +95,21 @@ export default {
 		},
 		scales()
 		{
-			return this.activeScales.map(_scale =>
+			return this.activeScales.map(scale =>
 			{
-				const notes          = music.generateModelNotes(data[`${_scale.type}s`][_scale.model].model, _scale.tonality);
-				const posCoordinates = _scale.type == 'arpeggio'
+				const notes          = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality);
+				const posCoordinates = scale.type == 'arpeggio'
 					? []
 					: music.generateModelPosition(
 						this.nbStrings,
 						this.nbFrets,
 						this.tuningNotes,
 						notes,
-						data.scales[_scale.model].nbNotesPerString,
-						_scale.position
+						data.scales[scale.model].nbNotesPerString,
+						scale.position
 					);
 
-				return { notes, posCoordinates, ..._scale };
+				return { notes, posCoordinates, ...scale };
 			});
 		},
 		inlays()
@@ -123,24 +123,24 @@ export default {
 				 * Bass, ukulele, guitar
 				 * Single inlay in the middle + double inlay at the 12th fret
 				 */
-				case 4:  return ['12-1', '12-3'].concat(frets.map(_f => `${_f}-2`));
-				case 6:  return ['12-2', '12-4'].concat(frets.map(_f => `${_f}-3`));
+				case 4:  return ['12-1', '12-3'].concat(frets.map(f => `${f}-2`));
+				case 6:  return ['12-2', '12-4'].concat(frets.map(f => `${f}-3`));
 
 				/**
 				 * Five-string banjo, seven-string guitar, mandolin, nine-, eleven- string guitar
 				 * Double inlay (close for odd frets, spreaded for the 12th)
 				 */
-				case 5:  return ['12-1', '12-4'].concat(frets.map(_f => `${_f}-2`), frets.map(_f => `${_f}-3`));
-				case 7:  return ['12-2', '12-5'].concat(frets.map(_f => `${_f}-3`), frets.map(_f => `${_f}-4`));
-				case 8:  return ['12-2', '12-6'].concat(frets.map(_f => `${_f}-3`), frets.map(_f => `${_f}-5`));
-				case 9:  return ['12-2', '12-7'].concat(frets.map(_f => `${_f}-3`), frets.map(_f => `${_f}-6`));
-				case 11: return ['12-3', '12-8'].concat(frets.map(_f => `${_f}-4`), frets.map(_f => `${_f}-7`));
+				case 5:  return ['12-1', '12-4'].concat(frets.map(f => `${f}-2`), frets.map(f => `${f}-3`));
+				case 7:  return ['12-2', '12-5'].concat(frets.map(f => `${f}-3`), frets.map(f => `${f}-4`));
+				case 8:  return ['12-2', '12-6'].concat(frets.map(f => `${f}-3`), frets.map(f => `${f}-5`));
+				case 9:  return ['12-2', '12-7'].concat(frets.map(f => `${f}-3`), frets.map(f => `${f}-6`));
+				case 11: return ['12-3', '12-8'].concat(frets.map(f => `${f}-4`), frets.map(f => `${f}-7`));
 
 				/**
 				 * Ten-string guitar
 				 * Double inlay for odd frets, triple for the 12th
 				 */
-				case 10: return ['12-2', '12-8'].concat(frets.map(_f => `${_f}-4`), frets.map(_f => `${_f}-6`), ['12-5']);
+				case 10: return ['12-2', '12-8'].concat(frets.map(f => `${f}-4`), frets.map(f => `${f}-6`), ['12-5']);
 
 				default: return [];
 			}
@@ -186,8 +186,8 @@ export default {
 		fretNumbers()
 		{
 			return [...Array(this.nbFrets).keys()]
-				.map(_index => this.isFretboardFlipped ? this.fretMax - _index : this.fretMin + _index)
-				.map(_fret  => _fret == 0 ? '' : _fret);
+				.map(index => this.isFretboardFlipped ? this.fretMax - index : this.fretMin + index)
+				.map(fret  => fret == 0 ? '' : fret);
 		},
 		tuningNotes()
 		{
