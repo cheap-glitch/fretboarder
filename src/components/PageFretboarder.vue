@@ -112,7 +112,7 @@ div.PageFretboarder
 
 						v-mods="darkMode"
 						v-model="fretRange"
-						@mousedown.left.native="$store.commit('setFretRangeSliderClicked', true)"
+						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
 		div.scales
