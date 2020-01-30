@@ -391,32 +391,11 @@ export default {
 <!--{{{ Global styles -->
 <style lang="scss">
 
-// Apply the reset stylesheet
 @use '@cheap-glitch/scss-reset/_reset';
-
-// Load the global styles
 @use '@/styles/global';
+@use '@/styles/slider';
 
-// Load the styles for the slider component
-@use '~vue-slider-component/lib/theme/default' with (
-	$themeColor: $color-azure,
-);
-
-// Load the fonts
 @include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
-
-// Improved styles for the slider component
-.vue-slider                  { cursor: pointer;  }
-.vue-slider-dot-handle       { cursor: grab;     }
-.vue-slider-dot-handle-focus { cursor: grabbing; }
-
-.vue-slider-dot-tooltip-inner {
-	padding: 6px;
-}
-
-.vue-slider-dot-tooltip-inner {
-	font-family: $fonts-text;
-}
 
 </style>
 <!--}}}-->

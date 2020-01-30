@@ -110,6 +110,7 @@ div.PageFretboarder
 						tooltip="active"
 						:tooltip-formatter="tooltipFormatter"
 
+						v-mods="darkMode"
 						v-model="fretRange"
 						@mousedown.left.native="$store.commit('setFretRangeSliderClicked', true)"
 						)
