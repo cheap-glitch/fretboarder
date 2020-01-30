@@ -8,7 +8,7 @@ import Vuex                        from 'vuex'
 import { make }                    from 'vuex-pathify'
 import pathify, { makeTogglers }   from '@/modules/pathify'
 
-import data                        from '@/modules/storage'
+import data                        from '@/modules/data'
 import storage                     from '@/modules/storage'
 import { isObject, objectForEach } from '@/modules/object'
 
