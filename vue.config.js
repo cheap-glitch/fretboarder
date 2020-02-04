@@ -96,16 +96,15 @@ module.exports = {
 		 * Sitemap
 		 */
 		sitemap: {
-			baseURL:         'https://fretboarder.app',
-			trailingSlash:   false,
-			productionOnly:  true,
-
 			urls: [
 				{
-					loc:         '/',
+					loc:         'https://fretboarder.app',
 					changefreq:  'always',
 				},
-			]
+			],
+
+			productionOnly: true,
+			trailingSlash:  false,
 		},
 	},
 }

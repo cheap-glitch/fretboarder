@@ -37,7 +37,7 @@
     "core-js": "^3.6.4",
     "file-saver": "^2.0.2",
     "jspdf": "^1.5.3",
-    "v-click-outside": "^3.0.0",
+    "v-click-outside": "^3.0.1",
     "vue": "^2.6.11",
     "vue-css-modifiers": "^1.0.6",
     "vue-slider-component": "^3.1.0",
@@ -64,7 +64,7 @@
     "eslint-plugin-smarter-tabs": "^1.1.0",
     "eslint-plugin-vue": "^6.1.2",
     "fibers": "^4.0.2",
-    "jsdom": "^16.0.1",
+    "jsdom": "^16.1.0",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
     "pug": "^2.0.4",
@@ -72,7 +72,7 @@
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
     "sass-mq": "^5.0.1",
-    "vue-cli-plugin-sitemap": "^1.0.4",
+    "vue-cli-plugin-sitemap": "^2.0.1",
     "vue-simple-portal": "^1.0.3",
     "vue-template-compiler": "^2.6.11"
   }

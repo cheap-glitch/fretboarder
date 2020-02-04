@@ -115,6 +115,7 @@ import { get }                  from 'vuex-pathify'
 import { saveAs }               from 'file-saver'
 
 import data                     from '@/modules/data'
+import { EventBus }             from '@/modules/bus'
 import * as exportFretboard     from '@/modules/export'
 import PageFretboarder          from '@/components/PageFretboarder'
 import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
@@ -161,6 +162,8 @@ export default {
 
 	created()
 	{
+		document.body.addEventListener('keydown', this.registerKeypress, { passive: true });
+
 		this.exportMenuTooltip = [{
 			target:  '#button-export-menu',
 			content: `<strong>Choose a format to export in</strong><br>
@@ -169,7 +172,16 @@ export default {
 		}];
 	},
 
+	destroyed()
+	{
+		document.body.removeEventListener('keydown', this.registerKeypress, { passive: true });
+	},
+
 	methods: {
+		registerKeypress(event)
+		{
+			EventBus.$emit('keypress', event.key);
+		},
 		startHelpTour()
 		{
 			const helpTour = this.$tours['help'];
