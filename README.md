@@ -34,4 +34,4 @@ Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunk
 See the full changelog [here](https://github.com/cheap-glitch/fretboarder/releases).
 
 ## License
-This software is distributed under the GNU GPL v3.0.
+This software is distributed under the [GNU LGPL 3.0](https://spdx.org/licenses/LGPL-3.0-only.html).
