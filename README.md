@@ -13,16 +13,10 @@ of scales and arpeggios across a variety of fretboards. Features:
   * 🎯 highlighting of specific notes and intervals
   * 🤘 support for both left and right-handed fretting
   * 🌒 dark mode
-  * 🖼️ exporting in PNG, JPG, SVG and PDF formats
+  * 🖼️ export in PNG, JPG, SVG and PDF formats
 
-## Screenshots
 ![screenshot (light mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-01.png)
-<p align="center"><em>Light mode</em></p>
-
-<p>&nbsp;</p>
-
 ![screenshot (dark  mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-02.png)
-<p align="center"><em>Dark mode</em></p>
 
 ## Credits & acknowledgements
 Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).

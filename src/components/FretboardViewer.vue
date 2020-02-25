@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(:style="[grid, inlays]")
+div.FretboardViewer(:style="[grid, inlays, minWidth]")
 
 	//- Frets
 	FretboardViewerFret(
@@ -41,6 +41,13 @@ export default {
 
 	components: {
 		FretboardViewerFret,
+	},
+
+	data() {
+		return {
+			fretMinWidth:        25,
+			openStringFretsSize: 30,
+		}
 	},
 
 	computed: {
@@ -145,27 +152,35 @@ export default {
 				default: return [];
 			}
 		},
+		minWidth()
+		{
+			/**
+			 * The width of the fretboard must be so that the width
+			 * of the smallest fret is equal or greater than a set width
+			 */
+			return { 'min-width': `${Math.ceil(this.fretMinWidth * (this.nbFrets / this.fretSizes.slice(-1)[0]) + (this.fretMin == 0 ? this.openStringFretsSize : 0))}px` };
+		},
 		grid()
 		{
-			let openStringFretsSize = '30px';
+			// Add the open-string fret if needed
+			const fretSizes = (this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []).concat(this.fretSizes.map(size => `${size}fr`));
 
+			return { 'grid-template-columns': (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ') };
+		},
+		fretSizes()
+		{
 			/**
 			 * Compute the size of each fret so that:
-			 *     - f(1) = 3/2
-			 *     - f(n) = 1/2 (n = total number of frets)
+			 *     - size(1) = 3/2
+			 *     - size(n) = 1/2 (n = total number of frets)
 			 *
 			 * Which gives the following function:
 			 *     f(x) = (3n - 1)/(2n - 2) - x/(n - 1)
 			 */
-			let fretSizes = [];
-			for (let i=0, n=this.nbFrets; i<this.nbFrets; i++)
-			{
-				fretSizes.push((i + this.fretMin == 0)
-					? openStringFretsSize
-					: ((3*n - 1)/(2*n - 2) - i/(n - 1)) + 'fr');
-			}
+			const n = this.nbFrets;
+			const c = (3*n - 1)/(2*n - 2);
 
-			return { 'grid-template-columns': (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ') };
+			return [...Array(this.nbFrets - (this.fretMin == 0 ? 1 : 0)).keys()].map(i => c - i/(n - 1));
 		},
 		nbStrings()
 		{
