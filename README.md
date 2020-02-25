@@ -4,8 +4,6 @@
 	</a>
 </p>
 
---------------------------------------------------------------------------------
-
 **[Fretboarder](https://fretboarder.app)** is  a webapp to visualize  the layout
 of scales and arpeggios across a variety of fretboards. Features:
   * 🎸 support for a variety of stringed instruments, from ukulele to eleven-string guitar, and many different tunings
@@ -15,7 +13,12 @@ of scales and arpeggios across a variety of fretboards. Features:
   * 🌒 dark mode
   * 🖼️ export in PNG, JPG, SVG and PDF formats
 
+<p>&nbsp;</p>
+
 ![screenshot (light mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-01.png)
+
+<p>&nbsp;</p>
+
 ![screenshot (dark  mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-02.png)
 
 ## Credits & acknowledgements
