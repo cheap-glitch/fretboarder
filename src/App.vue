@@ -279,10 +279,15 @@ export default {
  * -----------------------------------------------------------------------------
  */
 .page-header {
-	display: flex;
+	display: none;
 	justify-content: space-between;
 
 	margin-bottom: 60px;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+	}
 }
 
 .page-header__title {
@@ -367,12 +372,17 @@ export default {
  * -----------------------------------------------------------------------------
  */
 .page-footer {
-	display: flex;
+	display: none;
 	align-items: flex-end;
 	justify-content: flex-end;
 	@include space-children-h(10px);
 
 	flex: 1 1 100%;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+	}
 }
 
 .page-footer__text,

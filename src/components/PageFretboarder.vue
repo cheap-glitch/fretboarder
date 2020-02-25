@@ -12,7 +12,7 @@ div.PageFretboarder
 		//- Current tuning
 		p.tuning-infos(v-mods="darkMode") {{ tuningNotesList }}
 
-		//- Infos on the hovered fret
+		//- Infos about the hovered fret
 		div.fret-infos(
 			v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
 			)
@@ -236,15 +236,19 @@ export default {
  * Above the fretboard
  * -----------------------------------------------------------------------------
  */
-
 .above-fretboard {
-	display: flex;
+	display: none;
 	align-items: flex-end;
 	justify-content: space-between;
 
 	position: relative;
 
 	margin-bottom: 40px;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+	}
 }
 
 .tuning-infos {
@@ -312,8 +316,15 @@ export default {
  * -----------------------------------------------------------------------------
  */
 .below-fretboard {
-	margin-top: 40px;
+	display: none;
 	@include space-children-v(40px);
+
+	margin-top: 40px;
+
+	@include mq($from: desktop)
+	{
+		display: block;
+	}
 }
 
 .settings {

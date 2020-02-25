@@ -16,17 +16,18 @@ module.exports = {
 		// Import the colorscheme & mixins globally
 		loaderOptions: {
 			sass: {
-				prependData: [
-					'sass-mq/_mq',
-					'@cheap-glitch/scss-mixins/_mixins',
+				prependData: `
+					@use "@cheap-glitch/scss-mixins/_mixins" as *;
 
-					'@/styles/colorscheme',
-					'@/styles/fonts',
-					'@/styles/layout',
-					'@/styles/transitions',
-				]
-				.map(file => `@use "${file}" as *;`)
-				.join('\n')
+					@use "@/styles/layout" as *;
+					@use "sass-mq/_mq" as * with (
+						$mq-breakpoints: $mq-breakpoints,
+					);
+
+					@use "@/styles/colorscheme" as *;
+					@use "@/styles/fonts"       as *;
+					@use "@/styles/transitions" as *;
+				`
 			}
 		},
 	},
