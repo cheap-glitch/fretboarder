@@ -18,11 +18,12 @@ div.FretboardViewer(:style="[minWidth, grid, inlays]")
 		)
 
 	//- Fret numbers
-	div.fret-number(
-		v-for="fret in fretNumbers"
-		:key="`fret-number--${fret}`"
-		)
-		p.fret-number__text(v-mods="darkMode") {{ fret }}
+	template(v-if="!isVertical")
+		div.fret-number(
+			v-for="fret in fretNumbers"
+			:key="`fret-number--${fret}`"
+			)
+			p.fret-number__text(v-mods="darkMode") {{ fret }}
 
 </template>
 <!--}}}-->

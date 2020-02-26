@@ -261,14 +261,16 @@ export default {
 		}
 
 		// Nut
-		&.is-first-fret {
-			&.is-fretboard-flipped        { border-bottom-width: 2px; }
-			&:not(.is-fretboard-flipped)  { border-top-width:    2px; }
-		}
+		&:not(.is-on-last-string) {
+			&.is-first-fret {
+				&.is-fretboard-flipped        { border-bottom-width: 2px; }
+				&:not(.is-fretboard-flipped)  { border-top-width:    2px; }
+			}
 
-		&.is-fret-one {
-			&.is-fretboard-flipped        { border-bottom-width: 5px; }
-			&:not(.is-fretboard-flipped)  { border-top-width:    5px; }
+			&.is-fret-one {
+				&.is-fretboard-flipped        { border-bottom-width: 5px; }
+				&:not(.is-fretboard-flipped)  { border-top-width:    5px; }
+			}
 		}
 	}
 }
