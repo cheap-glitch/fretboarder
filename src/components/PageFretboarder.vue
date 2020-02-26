@@ -73,7 +73,7 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer#help-tour-step--12
+	FretboardViewer#help-tour-step--12(is-vertical)
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
@@ -135,6 +135,11 @@ div.PageFretboarder
 				@click="addScale"
 				)
 
+	//----------------------------------------------------------------------
+	//- Mobile toolbar
+	//----------------------------------------------------------------------
+	PageFretboarderMobileToolbar
+
 </template>
 <!--}}}-->
 
@@ -142,13 +147,14 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations } from 'vuex'
-import { get, sync }    from 'vuex-pathify'
+import { mapMutations }             from 'vuex'
+import { get, sync }                from 'vuex-pathify'
 
-import data             from '@/modules/data'
-import { objectMap }    from '@/modules/object'
-import FretboardScale   from '@/components/FretboardScale'
-import FretboardViewer  from '@/components/FretboardViewer'
+import data                         from '@/modules/data'
+import { objectMap }                from '@/modules/object'
+import FretboardScale               from '@/components/FretboardScale'
+import FretboardViewer              from '@/components/FretboardViewer'
+import PageFretboarderMobileToolbar from '@/components/PageFretboarderMobileToolbar'
 
 export default {
 	name: 'PageFretboarder',
@@ -156,6 +162,7 @@ export default {
 	components: {
 		FretboardScale,
 		FretboardViewer,
+		PageFretboarderMobileToolbar,
 	},
 
 	computed: {

@@ -7,7 +7,7 @@
 <template lang="pug">
 
 div.FretboardViewerFret(
-	v-mods="{ isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
+	v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
 	)
 
 	//- Inlay
@@ -24,7 +24,7 @@ div.FretboardViewerFret(
 
 	//- Note
 	div.FretboardViewerFret__note(
-		v-mods="{ isActive, isHighlightedNote, isOpenString, isFretboardFlipped, ...darkMode }"
+		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped, ...darkMode }"
 		:style="noteColors"
 
 		@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
@@ -71,6 +71,10 @@ export default {
 		intervals: {
 			type: Array,
 			required: true,
+		},
+		isVertical: {
+			type: Boolean,
+			default: false,
 		},
 		isHighlightedNote: {
 			type: Boolean,
@@ -187,6 +191,7 @@ export default {
 
 .FretboardViewerFret {
 	display: flex;
+	align-items: center;
 	justify-content: center;
 
 	position: relative;
@@ -197,39 +202,74 @@ export default {
 		border-color: $color-ebony-clay;
 	}
 
-	&:not(.is-on-last-string) {
-		height: 40px;
-	}
-
 	&.is-open-string {
 		display: block;
 	}
 
-	// String
-	&:not(.is-open-string) {
-		border-top-width: 2px;
-		border-top-color: black;
+	// Horizontal fretboard
+	&:not(.is-vertical) {
 
-		&.dark-mode {
-			border-top-color: $color-oxford-blue;
+		&:not(.is-on-last-string) {
+			height: 40px;
+		}
+
+		// String
+		&:not(.is-open-string) {
+			border-top-width: 2px;
+			border-top-color: black;
+
+			&.dark-mode {
+				border-top-color: $color-oxford-blue;
+			}
+		}
+
+		// Fret
+		&:not(.is-open-string):not(.is-on-last-string) {
+			&.is-fretboard-flipped        { border-left-width:  2px; }
+			&:not(.is-fretboard-flipped)  { border-right-width: 2px; }
+		}
+
+		// Nut
+		&.is-first-fret {
+			&.is-fretboard-flipped        { border-right-width: 2px; }
+			&:not(.is-fretboard-flipped)  { border-left-width:  2px; }
+		}
+
+		&.is-fret-one {
+			&.is-fretboard-flipped        { border-right-width: 5px; }
+			&:not(.is-fretboard-flipped)  { border-left-width:  5px; }
 		}
 	}
 
-	// Fret
-	&:not(.is-open-string):not(.is-on-last-string) {
-		&.is-fretboard-flipped        { border-left-width:  2px; }
-		&:not(.is-fretboard-flipped)  { border-right-width: 2px; }
-	}
+	// Vertical fretboard
+	&.is-vertical {
 
-	// Nut
-	&.is-first-fret {
-		&.is-fretboard-flipped        { border-right-width: 2px; }
-		&:not(.is-fretboard-flipped)  { border-left-width:  2px; }
-	}
+		// String
+		&:not(.is-open-string) {
+			border-left-width: 2px;
+			border-left-color: black;
 
-	&.is-fret-one {
-		&.is-fretboard-flipped        { border-right-width: 5px; }
-		&:not(.is-fretboard-flipped)  { border-left-width:  5px; }
+			&.dark-mode {
+				border-left-color: $color-oxford-blue;
+			}
+		}
+
+		// Fret
+		&:not(.is-open-string):not(.is-on-last-string) {
+			&.is-fretboard-flipped        { border-top-width:    2px; }
+			&:not(.is-fretboard-flipped)  { border-bottom-width: 2px; }
+		}
+
+		// Nut
+		&.is-first-fret {
+			&.is-fretboard-flipped        { border-bottom-width: 2px; }
+			&:not(.is-fretboard-flipped)  { border-top-width:    2px; }
+		}
+
+		&.is-fret-one {
+			&.is-fretboard-flipped        { border-bottom-width: 5px; }
+			&:not(.is-fretboard-flipped)  { border-top-width:    5px; }
+		}
 	}
 }
 
@@ -237,7 +277,6 @@ export default {
 	box-sizing: content-box;
 
 	position: absolute;
-	transform: translateY(-50%);
 	z-index: 10;
 
 	@include square(30px);
@@ -256,6 +295,16 @@ export default {
 
 	&:not(.is-highlighted-note) {
 		border-radius: 50%;
+	}
+
+	// Horizontal fretboard
+	&:not(.is-vertical) {
+		transform: translateY(-50%);
+	}
+
+	// Vertical fretboard
+	&.is-vertical {
+		transform: translateX(-50%);
 	}
 
 	&.is-open-string {

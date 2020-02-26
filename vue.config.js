@@ -6,6 +6,11 @@
 module.exports = {
 	productionSourceMap: false,
 
+	devServer: {
+		https: true,
+		proxy: 'https://localhost:8080',
+	},
+
 	/**
 	 * CSS-related settings
 	 */
