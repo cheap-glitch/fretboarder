@@ -3,5 +3,7 @@
     "env": {
       "NPM_RC": "@npmrc"
     }
-  }
+  },
+  "cleanUrls": true,
+  "trailingSlash": false
 }
