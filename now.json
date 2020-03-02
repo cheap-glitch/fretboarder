@@ -5,5 +5,29 @@
     }
   },
   "cleanUrls": true,
+  "headers": {
+    "source": "/(.*)",
+    "headers": [
+      {
+        "key":   "Content-Security-Policy",
+        "value": "default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self';"
+      },
+      {
+        "key":   "Referrer-Policy",
+        "value": "strict-origin"
+      },
+      {
+        "key":   "X-Content-Type-Options",
+        "value": "nosniff"
+      },
+      {
+        "key":   "X-Frame-Options",
+        "value": "DENY"
+      },
+      {
+        "key":   "X-XSS-Protection",
+        "value": "1; mode=block"
+      }
+  },
   "trailingSlash": false
 }
