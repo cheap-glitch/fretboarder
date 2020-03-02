@@ -138,9 +138,11 @@ div.PageFretboarder
 				)
 
 	//----------------------------------------------------------------------
-	//- Mobile toolbar
+	//- Mobile action
 	//----------------------------------------------------------------------
-	PageFretboarderMobileToolbar
+	div.mobile-actions
+		div.mobile-actions__item: fa-icon(icon="list-music")
+		div.mobile-actions__item: fa-icon(icon="cog")
 
 </template>
 <!--}}}-->
@@ -149,14 +151,13 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }             from 'vuex'
-import { get, sync }                from 'vuex-pathify'
+import { mapMutations } from 'vuex'
+import { get, sync }    from 'vuex-pathify'
 
-import data                         from '@/modules/data'
-import { objectMap }                from '@/modules/object'
-import FretboardScale               from '@/components/FretboardScale'
-import FretboardViewer              from '@/components/FretboardViewer'
-import PageFretboarderMobileToolbar from '@/components/PageFretboarderMobileToolbar'
+import data             from '@/modules/data'
+import { objectMap }    from '@/modules/object'
+import FretboardScale   from '@/components/FretboardScale'
+import FretboardViewer  from '@/components/FretboardViewer'
 
 export default {
 	name: 'PageFretboarder',
@@ -164,7 +165,6 @@ export default {
 	components: {
 		FretboardScale,
 		FretboardViewer,
-		PageFretboarderMobileToolbar,
 	},
 
 	computed: {
@@ -366,6 +366,36 @@ export default {
 
 .no-scales-text.dark-mode {
 	color: $color-nepal;
+}
+
+/**
+ * Mobile actions
+ * -----------------------------------------------------------------------------
+ */
+.mobile-actions {
+	display: flex;
+	@include space-children-h(10px);
+
+	position: fixed;
+	z-index: 1000;
+	bottom: 10px;
+	right: 10px;
+}
+
+.mobile-actions__item {
+	@include center-content;
+	@include circle(48px);
+
+	font-size: 22px;
+
+	color: white;
+
+	box-shadow: -4px -4px 8px 2px rgba(0, 0, 0, 0.6);
+
+	cursor: pointer;
+
+	&:nth-child(1) { background-color: $color-azure; }
+	&:nth-child(2) { background-color: #aaa;         }
 }
 
 </style>

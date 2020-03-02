@@ -81,11 +81,12 @@ module.exports = {
 				{
 					set: 'pro-solid',
 					icons: [
-						// 404 page
-						'empty-set',
-
 						// Scales
 						'intersection',
+
+						// Mobile actions
+						'cog',
+						'list-music',
 					]
 				},
 				{
