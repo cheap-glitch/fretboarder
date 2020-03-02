@@ -5,7 +5,7 @@
     }
   },
   "cleanUrls": true,
-  "headers": {
+  "headers": [{
     "source": "/(.*)",
     "headers": [
       {
@@ -28,6 +28,7 @@
         "key":   "X-XSS-Protection",
         "value": "1; mode=block"
       }
-  },
+    ]
+  }],
   "trailingSlash": false
 }
