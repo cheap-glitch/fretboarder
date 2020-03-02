@@ -81,8 +81,8 @@ export default {
 			const gridLayout = (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ');
 
 			return !this.isVertical
-				? { 'grid-template-columns': gridLayout                                             }
-				: { 'grid-template-rows':    gridLayout, 'grid-template-columns': 'repeat(6, 40px)' };
+				? { 'grid-template-columns': gridLayout                                               }
+				: { 'grid-template-rows':    gridLayout, 'grid-template-columns': 'repeat(5, 40px) 0' };
 		},
 		inlays()
 		{
@@ -255,6 +255,11 @@ export default {
 
 .FretboardViewer {
 	display: grid;
+
+	@include mq($until: desktop)
+	{
+		justify-content: center;
+	}
 }
 
 .fret-number {

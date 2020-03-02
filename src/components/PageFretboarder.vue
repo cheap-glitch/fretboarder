@@ -373,13 +373,17 @@ export default {
  * -----------------------------------------------------------------------------
  */
 .mobile-actions {
-	display: flex;
-	@include space-children-h(10px);
+	@include space-children-v(10px);
 
 	position: fixed;
 	z-index: 1000;
 	bottom: 10px;
 	right: 10px;
+
+	@include mq($from: desktop)
+	{
+		display: none;
+	}
 }
 
 .mobile-actions__item {
