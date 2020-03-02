@@ -73,7 +73,9 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer#help-tour-step--12(is-vertical)
+	FretboardViewer#help-tour-step--12(
+		:is-vertical="isFretboardVertical"
+		)
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
@@ -174,6 +176,10 @@ export default {
 		{
 			return data.tuningsNames[this.tuning]
 			     + ` (${data.tunings[this.instrument][this.tuning].map(note => data.tonalities[note]).join(', ')})`;
+		},
+		isFretboardVertical()
+		{
+			return window.innerWidth < 1000;
 		},
 		...sync([
 			'instrument',

@@ -191,8 +191,6 @@ export default {
 
 .FretboardViewerFret {
 	display: flex;
-	align-items: center;
-	justify-content: center;
 
 	position: relative;
 
@@ -208,6 +206,7 @@ export default {
 
 	// Horizontal fretboard
 	&:not(.is-vertical) {
+		justify-content: center;
 
 		&:not(.is-on-last-string) {
 			height: 40px;
@@ -243,6 +242,7 @@ export default {
 
 	// Vertical fretboard
 	&.is-vertical {
+		align-items: center;
 
 		// String
 		&:not(.is-open-string) {
@@ -256,8 +256,8 @@ export default {
 
 		// Fret
 		&:not(.is-open-string):not(.is-on-last-string) {
-			&.is-fretboard-flipped        { border-top-width:    2px; }
-			&:not(.is-fretboard-flipped)  { border-bottom-width: 2px; }
+			&.is-fretboard-flipped                { border-top-width:    2px; }
+			&:not(.is-fretboard-flipped)          { border-bottom-width: 2px; }
 		}
 
 		// Nut
