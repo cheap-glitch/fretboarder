@@ -232,6 +232,11 @@ export default {
 <style lang="scss" scoped>
 
 @use 'sass:color';
+@use 'sass-mq/_mq' as * with (
+	$mq-breakpoints: (
+		desktop: 800px,
+	)
+);
 
 .App {
 	display: flex;

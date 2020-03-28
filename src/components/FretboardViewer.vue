@@ -253,6 +253,12 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use 'sass-mq/_mq' as * with (
+	$mq-breakpoints: (
+		desktop: 800px,
+	)
+);
+
 .FretboardViewer {
 	display: grid;
 

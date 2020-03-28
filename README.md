@@ -11,7 +11,7 @@ of scales and arpeggios across a variety of fretboards. Features:
   * 🎯 highlighting of specific notes and intervals
   * 🤘 support for both left and right-handed fretting
   * 🌒 dark mode
-  * 🖼️ export in PNG, JPG, SVG and PDF formats
+  * 🖼️ export to the PNG, JPG, SVG and PDF formats
 
 <p>&nbsp;</p>
 

@@ -8,7 +8,6 @@ module.exports = {
 
 	devServer: {
 		https: true,
-		proxy: 'https://localhost:8080',
 	},
 
 	/**
@@ -21,18 +20,15 @@ module.exports = {
 		// Import the colorscheme & mixins globally
 		loaderOptions: {
 			sass: {
-				prependData: `
-					@use "@cheap-glitch/scss-mixins/_mixins" as *;
+				prependData: [
+					'@cheap-glitch/scss-mixins/_mixins',
 
-					@use "@/styles/layout" as *;
-					@use "sass-mq/_mq" as * with (
-						$mq-breakpoints: $mq-breakpoints,
-					);
-
-					@use "@/styles/colorscheme" as *;
-					@use "@/styles/fonts"       as *;
-					@use "@/styles/transitions" as *;
-				`
+					'@/styles/colorscheme',
+					'@/styles/fonts',
+					'@/styles/transitions',
+				]
+				.map(file => `@use "${file}" as *;`)
+				.join('\n')
 			}
 		},
 	},

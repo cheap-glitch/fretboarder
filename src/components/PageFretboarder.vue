@@ -151,13 +151,14 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations } from 'vuex'
-import { get, sync }    from 'vuex-pathify'
+import { mapMutations }        from 'vuex'
+import { get, sync }           from 'vuex-pathify'
 
-import data             from '@/modules/data'
-import { objectMap }    from '@/modules/object'
-import FretboardScale   from '@/components/FretboardScale'
-import FretboardViewer  from '@/components/FretboardViewer'
+import data                    from '@/modules/data'
+import { objectMap }           from '@/modules/object'
+import { isFretboardVertical } from '@/modules/layout'
+import FretboardScale          from '@/components/FretboardScale'
+import FretboardViewer         from '@/components/FretboardViewer'
 
 export default {
 	name: 'PageFretboarder',
@@ -177,10 +178,7 @@ export default {
 			return data.tuningsNames[this.tuning]
 			     + ` (${data.tunings[this.instrument][this.tuning].map(note => data.tonalities[note]).join(', ')})`;
 		},
-		isFretboardVertical()
-		{
-			return window.innerWidth < 1000;
-		},
+		isFretboardVertical,
 		...sync([
 			'instrument',
 			'tuning',
@@ -244,6 +242,12 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
+
+@use 'sass-mq/_mq' as * with (
+	$mq-breakpoints: (
+		desktop: 800px,
+	)
+);
 
 /**
  * Above the fretboard
