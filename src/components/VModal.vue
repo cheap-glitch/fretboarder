@@ -6,15 +6,18 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VModal: Portal: transition(name="fade")
+div.VModal: transition(name="fade")
 
 	div.modal(v-if="isOpen")
+
+		//- Content slot
 		slot
 
+		//- Close button
 		fa-icon.modal__button-close(
 			:icon="['far', 'times-circle']"
 
-			@click.left="isOpen = false"
+			@click.left="$emit('close')"
 			)
 
 </template>
@@ -24,18 +27,13 @@ div.VModal: Portal: transition(name="fade")
 <!--{{{ JavaScript -->
 <script>
 
-import { Portal } from 'vue-simple-portal'
-
 export default {
 	name: 'VModal',
 
-	components: {
-		Portal,
-	},
-
-	data() {
-		return {
-			isOpen: true,
+	props: {
+		isOpen: {
+			type: Boolean,
+			default: false,
 		}
 	},
 }

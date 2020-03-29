@@ -117,15 +117,23 @@ div.PageFretboarder
 						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
-		div.scales: PageFretboarderScales
-		VModal: PageFretboarderScales
+		PageFretboarderScales(v-if="!isFretboardVertical")
 
 	//----------------------------------------------------------------------
-	//- Mobile actions
+	//- Mobile actions & modals
 	//----------------------------------------------------------------------
 	div.mobile-actions
-		div.mobile-actions__item: fa-icon(icon="list-music")
-		div.mobile-actions__item: fa-icon(icon="cog")
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
+
+	//- Scales & arpeggios
+	VModal(
+		v-if="isFretboardVertical"
+
+		:is-open="isModalScalesOpen"
+		@close="isModalScalesOpen = false"
+		)
+		PageFretboarderScales
 
 </template>
 <!--}}}-->
@@ -147,6 +155,13 @@ export default {
 	components: {
 		FretboardViewer,
 		PageFretboarderScales,
+	},
+
+	data() {
+		return {
+			isModalScalesOpen:   false,
+			isModalSettingsOpen: false,
+		}
 	},
 
 	computed: {
