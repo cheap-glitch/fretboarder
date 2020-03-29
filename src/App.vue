@@ -59,7 +59,6 @@ div.App(v-mods="darkMode")
 	//----------------------------------------------------------------------
 	//- Body
 	//----------------------------------------------------------------------
-	VModal
 	PageFretboarder
 	PageFretboarderHelpTour
 	v-tour(name="export-menu" :steps="exportMenuTooltip")
@@ -163,12 +162,6 @@ export default {
 
 	created()
 	{
-		// Register all key presses on the page
-		document.body.addEventListener('keydown', this.registerKeypress, { passive: true });
-
-		// Update the width of the window on every resize
-		window.addEventListener('resize', () => this.$store.commit('setClientWidth', window.innerWidth), { passive: true });
-
 		this.exportMenuTooltip = [{
 			target:  '#button-export-menu',
 			content: `<strong>Choose a format to export in</strong><br>
@@ -177,15 +170,31 @@ export default {
 		}];
 	},
 
+	mounted()
+	{
+		// Register all key presses on the page
+		window.addEventListener('keydown', this.registerKeypress, { passive: true });
+
+		// Update the width of the window on every resize
+		window.addEventListener('resize', this.updateClientWidth, { passive: true });
+	},
+
 	destroyed()
 	{
-		document.body.removeEventListener('keydown', this.registerKeypress, { passive: true });
+		// Clear the event listeners
+		window.removeEventListener('keydown', this.registerKeypress,  { passive: true });
+		window.removeEventListener('resize',  this.updateClientWidth, { passive: true });
 	},
 
 	methods: {
 		registerKeypress(event)
 		{
-			EventBus.$emit('keypress', event.key);
+			//- EventBus.$emit('keypress', event.key);
+			console.log(event.key);
+		},
+		updateClientWidth()
+		{
+			this.$store.commit('setClientWidth', window.innerWidth);
 		},
 		startHelpTour()
 		{

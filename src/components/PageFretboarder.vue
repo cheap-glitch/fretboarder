@@ -117,25 +117,8 @@ div.PageFretboarder
 						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
-		div.scales
-			div.scales-list
-				FretboardScale(
-					v-for="scale in scales"
-					:key="`scale--${scale.id}`"
-
-					v-bind="scale"
-					)
-			p.no-scales-text(
-				v-show="scales.length == 0"
-				v-mods="darkMode"
-				) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
-			VButtonIcon#help-tour-step--5(
-				v-show="scales.length < maxNbScales"
-
-				icon="plus-circle"
-				tooltip="Add a new scale or arpeggio"
-				@click="addScale"
-				)
+		div.scales: PageFretboarderScales
+		VModal: PageFretboarderScales
 
 	//----------------------------------------------------------------------
 	//- Mobile actions
@@ -151,20 +134,19 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }        from 'vuex'
-import { get, sync }           from 'vuex-pathify'
+import { get, sync }         from 'vuex-pathify'
 
-import data                    from '@/modules/data'
-import { objectMap }           from '@/modules/object'
-import FretboardScale          from '@/components/FretboardScale'
-import FretboardViewer         from '@/components/FretboardViewer'
+import data                  from '@/modules/data'
+import { objectMap }         from '@/modules/object'
+import FretboardViewer       from '@/components/FretboardViewer'
+import PageFretboarderScales from '@/components/PageFretboarderScales'
 
 export default {
 	name: 'PageFretboarder',
 
 	components: {
-		FretboardScale,
 		FretboardViewer,
+		PageFretboarderScales,
 	},
 
 	computed: {
@@ -181,18 +163,17 @@ export default {
 			'instrument',
 			'tuning',
 			'fretRange',
-			'scales/scales',
-			'scales/maxNbScales',
 		]),
 		...get([
+			'hoveredFretInfos',
+			'scales/scales',
+
 			'isDarkModeOn',
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
 			'isFretboardVertical',
 
 			'darkMode',
-
-			'hoveredFretInfos',
 		]),
 	},
 
@@ -229,9 +210,6 @@ export default {
 				default:  return `${number}th fret`;
 			}
 		},
-		...mapMutations({
-			addScale: 'scales/addScale',
-		}),
 	}
 }
 
@@ -361,14 +339,6 @@ export default {
 .scales {
 	@include center-column;
 	@include space-children-v(20px);
-}
-
-.scales-list {
-	@include space-children-v(20px);
-}
-
-.no-scales-text.dark-mode {
-	color: $color-nepal;
 }
 
 /**
