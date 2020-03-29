@@ -8,7 +8,10 @@
 
 div.VModal: transition(name="fade")
 
-	div.modal(v-if="isOpen")
+	div.modal(
+		v-if="isOpen"
+		v-mods="darkMode"
+		)
 
 		//- Content slot
 		slot
@@ -27,6 +30,8 @@ div.VModal: transition(name="fade")
 <!--{{{ JavaScript -->
 <script>
 
+import { get } from 'vuex-pathify'
+
 export default {
 	name: 'VModal',
 
@@ -35,6 +40,10 @@ export default {
 			type: Boolean,
 			default: false,
 		}
+	},
+
+	computed: {
+		...get(['darkMode']),
 	},
 }
 
@@ -54,6 +63,10 @@ export default {
 	bottom: 0;
 
 	background-color: snow;
+
+	&.dark-mode {
+		background-color: $color-mirage;
+	}
 }
 
 .modal__button-close {
