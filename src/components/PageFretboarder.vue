@@ -336,11 +336,6 @@ export default {
 	margin: 0 10px;
 }
 
-.scales {
-	@include center-column;
-	@include space-children-v(20px);
-}
-
 /**
  * Mobile actions
  * -----------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 <template lang="pug">
 
 div.PageFretboarderScales
-	div.scales-list
+	div.scales
 		FretboardScale(
 			v-for="scale in scales"
 			:key="`scale--${scale.id}`"
@@ -68,7 +68,12 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.scales-list {
+.PageFretboarderScales {
+	@include center-column;
+	@include space-children-v(20px);
+}
+
+.scales {
 	@include space-children-v(20px);
 }
 

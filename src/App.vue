@@ -162,21 +162,18 @@ export default {
 
 	created()
 	{
+		// Register all key presses on the page
+		window.addEventListener('keydown', this.registerKeypress,  { passive: true });
+
+		// Update the width of the window on every resize
+		window.addEventListener('resize',  this.updateClientWidth, { passive: true });
+
 		this.exportMenuTooltip = [{
 			target:  '#button-export-menu',
 			content: `<strong>Choose a format to export in</strong><br>
 				  <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
 				      for embedding in web pages as it will scale perfectly when resized.</em>`
 		}];
-	},
-
-	mounted()
-	{
-		// Register all key presses on the page
-		window.addEventListener('keydown', this.registerKeypress, { passive: true });
-
-		// Update the width of the window on every resize
-		window.addEventListener('resize', this.updateClientWidth, { passive: true });
 	},
 
 	destroyed()
@@ -189,8 +186,7 @@ export default {
 	methods: {
 		registerKeypress(event)
 		{
-			//- EventBus.$emit('keypress', event.key);
-			console.log(event.key);
+			EventBus.$emit('keypress', event.key);
 		},
 		updateClientWidth()
 		{

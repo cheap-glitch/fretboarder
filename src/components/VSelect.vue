@@ -133,7 +133,7 @@ export default {
 
 	destroyed()
 	{
-		EventBus.$on('keypress');
+		EventBus.$off('keypress');
 	},
 
 	methods: {
