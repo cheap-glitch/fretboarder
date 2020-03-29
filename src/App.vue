@@ -59,6 +59,7 @@ div.App(v-mods="darkMode")
 	//----------------------------------------------------------------------
 	//- Body
 	//----------------------------------------------------------------------
+	VModal
 	PageFretboarder
 	PageFretboarderHelpTour
 	v-tour(name="export-menu" :steps="exportMenuTooltip")
@@ -162,7 +163,11 @@ export default {
 
 	created()
 	{
+		// Register all key presses on the page
 		document.body.addEventListener('keydown', this.registerKeypress, { passive: true });
+
+		// Update the width of the window on every resize
+		window.addEventListener('resize', () => this.$store.commit('setClientWidth', window.innerWidth), { passive: true });
 
 		this.exportMenuTooltip = [{
 			target:  '#button-export-menu',

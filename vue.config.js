@@ -47,6 +47,7 @@ module.exports = {
 						// General UI
 						'chevron-down',
 						'external-link-square-alt',
+						'times-circle',
 
 						// Header
 						'banjo',

@@ -18,6 +18,8 @@ import scales                      from '@/stores/scales'
  * State
  */
 const state = {
+	clientWidth:            window.innerWidth,
+
 	instrument:             storage.get('instrument',             'guitar',   v => (v in data.instruments)),
 	tuning:                 storage.get('tuning',                 'standard', v => (v in data.tuningsNames)),
 	fretRange:              storage.get('fretRange',              [0, 22],    v => Array.isArray(v) && v.length == 2),
@@ -39,7 +41,8 @@ const state = {
  * Getters
  */
 const getters = {
-	darkMode: state => ({ 'dark-mode': state.isDarkModeOn }),
+	darkMode:               state => ({ 'dark-mode': state.isDarkModeOn }),
+	isFretboardVertical:    state => state.clientWidth < 800,
 };
 
 /**

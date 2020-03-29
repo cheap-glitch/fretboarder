@@ -138,7 +138,7 @@ div.PageFretboarder
 				)
 
 	//----------------------------------------------------------------------
-	//- Mobile action
+	//- Mobile actions
 	//----------------------------------------------------------------------
 	div.mobile-actions
 		div.mobile-actions__item: fa-icon(icon="list-music")
@@ -156,7 +156,6 @@ import { get, sync }           from 'vuex-pathify'
 
 import data                    from '@/modules/data'
 import { objectMap }           from '@/modules/object'
-import { isFretboardVertical } from '@/modules/layout'
 import FretboardScale          from '@/components/FretboardScale'
 import FretboardViewer         from '@/components/FretboardViewer'
 
@@ -178,7 +177,6 @@ export default {
 			return data.tuningsNames[this.tuning]
 			     + ` (${data.tunings[this.instrument][this.tuning].map(note => data.tonalities[note]).join(', ')})`;
 		},
-		isFretboardVertical,
 		...sync([
 			'instrument',
 			'tuning',
@@ -190,6 +188,7 @@ export default {
 			'isDarkModeOn',
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
+			'isFretboardVertical',
 
 			'darkMode',
 
