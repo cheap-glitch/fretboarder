@@ -27,7 +27,7 @@
     "core-js": "^3.6.4",
     "file-saver": "^2.0.2",
     "jspdf": "^1.5.3",
-    "v-click-outside": "^3.0.0",
+    "v-click-outside": "^3.0.1",
     "vue": "^2.6.11",
     "vue-css-modifiers": "^1.0.6",
     "vue-slider-component": "^3.1.0",
