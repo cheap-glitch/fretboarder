@@ -11,50 +11,53 @@ div.App(v-mods="darkMode")
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
-	header.page-header
-		h1.page-header__title(v-mods="darkMode")
-			fa-icon.page-header__title__logo(
+	header.header
+		h1.header__title(v-mods="darkMode")
+			fa-icon.header__title__logo(
 				:icon="['far', instrumentIcon]"
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
 				)
-			h1.page-header__title__text Fretboarder
+			h1.header__title__text Fretboarder
 
-		nav.page-header__nav
+		nav.header__nav
 			//- Quick help
-			VButtonText.page-header__nav__link#help-tour-step--0(
+			VButtonText.header__nav__link#help-tour-step--0(
 				v-mods="darkMode"
 				@click.native.left="startHelpTour"
 				)
-				fa-icon.page-header__nav__link__icon(:icon="['far', 'question-circle']")
-				p Quick help
+				fa-icon.header__nav__link__icon(:icon="['far', 'question-circle']")
+				p.header__nav__link__text--small Help
+				p.header__nav__link__text--wide  Quick help
 
 			//- Github link
-			VButtonText.page-header__nav__link#help-tour-step--13(
+			VButtonText.header__nav__link#help-tour-step--13(
 				mode="link-external"
 				href="https://github.com/cheap-glitch/fretboarder/issues"
 				v-mods="darkMode"
 				)
-				fa-icon.page-header__nav__link__icon(:icon="['far', 'bug']")
-				p Bug report / Feature request
+				fa-icon.header__nav__link__icon(:icon="['far', 'bug']")
+				p.header__nav__link__text--small Bugs
+				p.header__nav__link__text--wide  Bugs report / Feature request
 
 			//- Patreon link
-			VButtonText.page-header__nav__link.support-link#help-tour-step--14(
+			VButtonText.header__nav__link.support-link#help-tour-step--14(
 				mode="link-external"
 				is-filled
 				href="https://www.patreon.com/cheap_glitch"
 				v-mods="darkMode"
 				)
-				fa-icon.page-header__nav__link__icon(:icon="['far', 'heart']")
+				fa-icon.header__nav__link__icon(:icon="['far', 'heart']")
 				p Support
 
 			//- TGLD link
-			VButtonText.page-header__nav__link#help-tour-step--15(
+			VButtonText.header__nav__link#help-tour-step--15(
 				mode="link-external"
 				href="https://www.theguitarlickdatabase.com"
 				v-mods="darkMode"
 				)
-				p The Guitar Lick Database
-				fa-icon.page-header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
+				p.header__nav__link__text--small TGLD
+				p.header__nav__link__text--wide  The Guitar Lick Database
+				fa-icon.header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
 
 	//----------------------------------------------------------------------
 	//- Body
@@ -244,7 +247,8 @@ export default {
 @use 'sass:color';
 @use 'sass-mq/_mq' as * with (
 	$mq-breakpoints: (
-		desktop: 800px,
+		desktop:    800px,
+		wideHeader: 1200px,
 	)
 );
 
@@ -293,7 +297,7 @@ export default {
  * Header
  * -----------------------------------------------------------------------------
  */
-.page-header {
+.header {
 	display: none;
 	justify-content: space-between;
 
@@ -305,7 +309,7 @@ export default {
 	}
 }
 
-.page-header__title {
+.header__title {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
@@ -324,7 +328,7 @@ export default {
 	}
 }
 
-.page-header__title__logo {
+.header__title__logo {
 	font-size: 25px;
 
 	&.is-ukulele {
@@ -332,18 +336,23 @@ export default {
 	}
 }
 
-.page-header__title__text {
+.header__title__text {
 	font-size: 30px;
 	font-weight: bold;
 }
 
-.page-header__nav {
+.header__nav {
 	display: flex;
 	align-items: center;
-	@include space-children-h(10px);
+	@include space-children-h(6px);
+
+	@include mq($from: wideHeader)
+	{
+		@include space-children-h(10px);
+	}
 }
 
-.page-header__nav__link {
+.header__nav__link {
 	color: gray;
 	border-color: lightgray;
 
@@ -359,8 +368,24 @@ export default {
 	}
 }
 
-.page-header__nav__link__icon {
+.header__nav__link__icon {
 	transform: translateY(1px);
+}
+
+.header__nav__link__text--small {
+	@include mq($from: wideHeader)
+	{
+		display: none;
+	}
+}
+
+.header__nav__link__text--wide {
+	display: none;
+
+	@include mq($from: wideHeader)
+	{
+		display: inline;
+	}
 }
 
 .support-link,

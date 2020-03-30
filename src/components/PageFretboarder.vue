@@ -123,8 +123,8 @@ div.PageFretboarder
 	//- Mobile actions & modals
 	//----------------------------------------------------------------------
 	div.mobile-actions
-		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
-		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = false"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = false"): fa-icon(icon="cog")
 
 	//- Scales & arpeggios
 	VModal(
