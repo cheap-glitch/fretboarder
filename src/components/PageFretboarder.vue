@@ -12,7 +12,7 @@ div.PageFretboarder
 		//- Current tuning
 		p.tuning-infos(v-mods="darkMode") {{ tuningNotesList }}
 
-		//- Infos on the hovered fret
+		//- Infos about the hovered fret
 		div.fret-infos(
 			v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
 			)
@@ -73,7 +73,9 @@ div.PageFretboarder
 	//----------------------------------------------------------------------
 	//- Fretboard
 	//----------------------------------------------------------------------
-	FretboardViewer#help-tour-step--12
+	FretboardViewer#help-tour-step--12(
+		:is-vertical="isFretboardVertical"
+		)
 
 	//----------------------------------------------------------------------
 	//- Fretboard settings & scales
@@ -110,29 +112,28 @@ div.PageFretboarder
 						tooltip="active"
 						:tooltip-formatter="tooltipFormatter"
 
+						v-mods="darkMode"
 						v-model="fretRange"
-						@mousedown.left.native="$store.commit('setFretRangeSliderClicked', true)"
+						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
-		div.scales
-			div.scales-list
-				FretboardScale(
-					v-for="scale in scales"
-					:key="`scale--${scale.id}`"
+		PageFretboarderScales(v-if="!isFretboardVertical")
 
-					v-bind="scale"
-					)
-			p.no-scales-text(
-				v-show="scales.length == 0"
-				v-mods="darkMode"
-				) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
-			VButtonIcon#help-tour-step--5(
-				v-show="scales.length < maxNbScales"
+	//----------------------------------------------------------------------
+	//- Mobile actions & modals
+	//----------------------------------------------------------------------
+	div.mobile-actions
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
 
-				icon="plus-circle"
-				tooltip="Add a new scale or arpeggio"
-				@click="addScale"
-				)
+	//- Scales & arpeggios
+	VModal(
+		v-if="isFretboardVertical"
+
+		:is-open="isModalScalesOpen"
+		@close="isModalScalesOpen = false"
+		)
+		PageFretboarderScales
 
 </template>
 <!--}}}-->
@@ -141,20 +142,26 @@ div.PageFretboarder
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations } from 'vuex'
-import { get, sync }    from 'vuex-pathify'
+import { get, sync }         from 'vuex-pathify'
 
-import data             from '@/modules/data'
-import { objectMap }    from '@/modules/object'
-import FretboardScale   from '@/components/FretboardScale'
-import FretboardViewer  from '@/components/FretboardViewer'
+import data                  from '@/modules/data'
+import { objectMap }         from '@/modules/object'
+import FretboardViewer       from '@/components/FretboardViewer'
+import PageFretboarderScales from '@/components/PageFretboarderScales'
 
 export default {
 	name: 'PageFretboarder',
 
 	components: {
-		FretboardScale,
 		FretboardViewer,
+		PageFretboarderScales,
+	},
+
+	data() {
+		return {
+			isModalScalesOpen:   false,
+			isModalSettingsOpen: false,
+		}
 	},
 
 	computed: {
@@ -171,17 +178,17 @@ export default {
 			'instrument',
 			'tuning',
 			'fretRange',
-			'scales/scales',
-			'scales/maxNbScales',
 		]),
 		...get([
+			'hoveredFretInfos',
+			'scales/scales',
+
 			'isDarkModeOn',
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
+			'isFretboardVertical',
 
 			'darkMode',
-
-			'hoveredFretInfos',
 		]),
 	},
 
@@ -218,9 +225,6 @@ export default {
 				default:  return `${number}th fret`;
 			}
 		},
-		...mapMutations({
-			addScale: 'scales/addScale',
-		}),
 	}
 }
 
@@ -231,19 +235,29 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use 'sass-mq/_mq' as * with (
+	$mq-breakpoints: (
+		desktop: 800px,
+	)
+);
+
 /**
  * Above the fretboard
  * -----------------------------------------------------------------------------
  */
-
 .above-fretboard {
-	display: flex;
+	display: none;
 	align-items: flex-end;
 	justify-content: space-between;
 
 	position: relative;
 
 	margin-bottom: 40px;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+	}
 }
 
 .tuning-infos {
@@ -311,8 +325,15 @@ export default {
  * -----------------------------------------------------------------------------
  */
 .below-fretboard {
-	margin-top: 40px;
+	display: none;
 	@include space-children-v(40px);
+
+	margin-top: 40px;
+
+	@include mq($from: desktop)
+	{
+		display: block;
+	}
 }
 
 .settings {
@@ -330,17 +351,38 @@ export default {
 	margin: 0 10px;
 }
 
-.scales {
-	@include center-column;
-	@include space-children-v(20px);
+/**
+ * Mobile actions
+ * -----------------------------------------------------------------------------
+ */
+.mobile-actions {
+	@include space-children-v(10px);
+
+	position: fixed;
+	z-index: 1000;
+	bottom: 10px;
+	right: 10px;
+
+	@include mq($from: desktop)
+	{
+		display: none;
+	}
 }
 
-.scales-list {
-	@include space-children-v(20px);
-}
+.mobile-actions__item {
+	@include center-content;
+	@include circle(48px);
 
-.no-scales-text.dark-mode {
-	color: $color-nepal;
+	font-size: 22px;
+
+	color: white;
+
+	box-shadow: -4px -4px 8px 2px rgba(0, 0, 0, 0.6);
+
+	cursor: pointer;
+
+	&:nth-child(1) { background-color: $color-azure; }
+	&:nth-child(2) { background-color: #aaa;         }
 }
 
 </style>

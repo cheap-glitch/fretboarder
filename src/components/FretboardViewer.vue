@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(:style="[grid, inlays]")
+div.FretboardViewer(:style="[minWidth, grid, inlays]")
 
 	//- Frets
 	FretboardViewerFret(
@@ -14,14 +14,16 @@ div.FretboardViewer(:style="[grid, inlays]")
 		:key="`fret--${fret.fret}-${fret.string+1}`"
 
 		v-bind="fret"
+		:is-vertical="isVertical"
 		)
 
 	//- Fret numbers
-	div.fret-number(
-		v-for="fret in fretNumbers"
-		:key="`fret-number--${fret}`"
-		)
-		p.fret-number__text(v-mods="darkMode") {{ fret }}
+	template(v-if="!isVertical")
+		div.fret-number(
+			v-for="fret in fretNumbers"
+			:key="`fret-number--${fret}`"
+			)
+			p.fret-number__text(v-mods="darkMode") {{ fret }}
 
 </template>
 <!--}}}-->
@@ -43,74 +45,44 @@ export default {
 		FretboardViewerFret,
 	},
 
-	computed: {
-		frets()
-		{
-			let frets = [];
-
-			// Generate a list of the frets of each string
-			for (let string=this.nbStrings - 1; string>=0; string--)
-			{
-				// Get all the notes of the string according to the current tuning
-				const stringNotes = music.getStringNotes(this.tuningNotes[string]);
-
-				for (let j=this.fretMin; j<=this.fretMax; j++)
-				{
-					// Invert the order of the frets if the fretboard is flipped
-					const fret = this.isFretboardFlipped ? this.fretMin + this.fretMax - j : j;
-					const note = stringNotes[fret];
-
-					// Get the list of scales the note of the fret belongs to
-					let scales = this.scales.filter(
-						scale => scale.notes.includes(note)
-						&& (
-						       scale.type     == 'arpeggio'
-						    || scale.position == 0
-						    || scale.posCoordinates.filter(c => c.string == string && c.fret == fret).length > 0
-						)
-					);
-
-					// Remove the scales displaying intersections only if they are alone
-					if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
-
-					frets.push({
-						string,
-						fret,
-						note,
-						scales:    scales.map(scale => ({ id: scale.id, color: scale.color })),
-						intervals: scales.map(scale => (
-						{
-							id:     scale.id,
-							color:  scale.color,
-							value:  music.getNotesInterval(scale.notes[0], note),
-						})),
-
-						isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
-						isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
-					});
-				}
-			}
-
-			return frets;
+	props: {
+		isVertical: {
+			type: Boolean,
+			default: false,
 		},
-		scales()
-		{
-			return this.activeScales.map(scale =>
-			{
-				const notes          = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality);
-				const posCoordinates = scale.type == 'arpeggio'
-					? []
-					: music.generateModelPosition(
-						this.nbStrings,
-						this.nbFrets,
-						this.tuningNotes,
-						notes,
-						data.scales[scale.model].nbNotesPerString,
-						scale.position
-					);
+	},
 
-				return { notes, posCoordinates, ...scale };
-			});
+	data() {
+		return {
+			fretMinWidth:        25,
+			fretMinHeight:       40,
+			openStringFretsSize: 30,
+		}
+	},
+
+	computed: {
+		minWidth()
+		{
+			/**
+			 * The width of the fretboard must be so that the width
+			 * of the smallest fret is equal or greater than a set width
+			 */
+			const fbWidth = (this.isVertical ? this.fretMinHeight : this.fretMinWidth) * (this.nbFrets / this.fretSizes.slice(-1)[0])
+			              + (this.fretMin == 0 ? this.openStringFretsSize : 0);
+
+			return { [this.isVertical ? 'min-height': 'min-width']: `${Math.ceil(fbWidth)}px` };
+		},
+		grid()
+		{
+			// Add the open-string fret to the list of frets if needed
+			const fretSizes  = (this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []).concat(this.fretSizes.map(size => `${size}fr`));
+
+			// Build the grid layout
+			const gridLayout = (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ');
+
+			return !this.isVertical
+				? { 'grid-template-columns': gridLayout                                               }
+				: { 'grid-template-rows':    gridLayout, 'grid-template-columns': 'repeat(5, 40px) 0' };
 		},
 		inlays()
 		{
@@ -145,27 +117,97 @@ export default {
 				default: return [];
 			}
 		},
-		grid()
+		fretSizes()
 		{
-			let openStringFretsSize = '30px';
-
 			/**
 			 * Compute the size of each fret so that:
-			 *     - f(1) = 3/2
-			 *     - f(n) = 1/2 (n = total number of frets)
+			 *     - size(1) = 3/2
+			 *     - size(n) = 1/2 (n = total number of frets)
 			 *
 			 * Which gives the following function:
 			 *     f(x) = (3n - 1)/(2n - 2) - x/(n - 1)
 			 */
-			let fretSizes = [];
-			for (let i=0, n=this.nbFrets; i<this.nbFrets; i++)
+			const n = this.nbFrets;
+			const c = (3*n - 1)/(2*n - 2);
+
+			return [...Array(this.nbFrets - (this.fretMin == 0 ? 1 : 0)).keys()].map(i => c - i/(n - 1));
+		},
+		frets()
+		{
+			let frets = [];
+
+			// Get all the notes of each string according to the current tuning
+			const stringNotes = [...Array(this.nbStrings).keys()].map(string => music.getStringNotes(this.tuningNotes[string]));
+
+			const addFret = (string, _fret) =>
 			{
-				fretSizes.push((i + this.fretMin == 0)
-					? openStringFretsSize
-					: ((3*n - 1)/(2*n - 2) - i/(n - 1)) + 'fr');
+				// Invert the order of the frets if the fretboard is flipped
+				const fret = this.isFretboardFlipped ? this.fretMin + this.fretMax - _fret : _fret;
+				const note = stringNotes[string][fret];
+
+				// Get the list of scales the note of the fret belongs to
+				let scales = this.scales.filter(
+					scale => scale.notes.includes(note)
+					&& (
+					       scale.type     == 'arpeggio'
+					    || scale.position == 0
+					    || scale.posCoordinates.filter(c => c.string == string && c.fret == fret).length > 0
+					)
+				);
+
+				// Remove the scales displaying intersections only if they are alone
+				if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
+
+				frets.push({
+					string,
+					fret,
+					note,
+					scales:    scales.map(scale => ({ id: scale.id, color: scale.color })),
+					intervals: scales.map(scale => (
+					{
+						id:     scale.id,
+						color:  scale.color,
+						value:  music.getNotesInterval(scale.notes[0], note),
+					})),
+
+					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
+					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
+				});
 			}
 
-			return { 'grid-template-columns': (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ') };
+			if (this.isVertical)
+			{
+				for (let fret=this.fretMin;         fret<=this.fretMax; fret++)
+				for (let string=this.nbStrings - 1; string>=0;          string--)
+					addFret(string, fret);
+			}
+			else
+			{
+				for (let string=this.nbStrings - 1; string>=0;          string--)
+				for (let fret=this.fretMin;         fret<=this.fretMax; fret++)
+					addFret(string, fret);
+			}
+
+			return frets;
+		},
+		scales()
+		{
+			return this.activeScales.map(scale =>
+			{
+				const notes          = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality);
+				const posCoordinates = scale.type == 'arpeggio'
+					? []
+					: music.generateModelPosition(
+						this.nbStrings,
+						this.nbFrets,
+						this.tuningNotes,
+						notes,
+						data.scales[scale.model].nbNotesPerString,
+						scale.position
+					);
+
+				return { notes, posCoordinates, ...scale };
+			});
 		},
 		nbStrings()
 		{
@@ -211,8 +253,19 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use 'sass-mq/_mq' as * with (
+	$mq-breakpoints: (
+		desktop: 800px,
+	)
+);
+
 .FretboardViewer {
 	display: grid;
+
+	@include mq($until: desktop)
+	{
+		justify-content: center;
+	}
 }
 
 .fret-number {

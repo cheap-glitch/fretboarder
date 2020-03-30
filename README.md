@@ -4,28 +4,24 @@
 	</a>
 </p>
 
---------------------------------------------------------------------------------
+<p>&nbsp;</p>
 
 **[Fretboarder](https://fretboarder.app)** is  a webapp to visualize  the layout
 of scales and arpeggios across a variety of fretboards. Features:
-  * 🎸 explore  a   diverse    collection  of   instruments,  from   ukulele  to
-    eleven-string guitar, with many different tunings
-  * 🎨 display several scales  and arpeggios  at once, select  precise positions,
-    overlap them or show their intersections
-  * 🎯 highlight specific notes and intervals
-  * 🤘 switch between left and right-handed fretting
-  * 🌒 enjoy the app in dark mode
-  * 🖼️ export the result in PNG, JPG, SVG or PDF to embed it in your webpages or
-    documents
+  * 🎸 support for a variety of stringed instruments, from ukulele to eleven-string guitar, and many different tunings
+  * 🎨 visualization of several scales and arpeggios at once (full scales, positions, overlaps and intersections)
+  * 🎯 highlighting of specific notes and intervals
+  * 🤘 support for both left and right-handed fretting
+  * 🌒 dark mode
+  * 🖼️ export to the PNG, JPG, SVG and PDF formats
 
-## Screenshots
+<p>&nbsp;</p>
+
 ![screenshot (light mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-01.png)
-<p align="center"><em>Light mode</em></p>
 
 <p>&nbsp;</p>
 
 ![screenshot (dark  mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-02.png)
-<p align="center"><em>Dark mode</em></p>
 
 ## Credits & acknowledgements
 Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).
@@ -34,4 +30,4 @@ Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunk
 See the full changelog [here](https://github.com/cheap-glitch/fretboarder/releases).
 
 ## License
-This software is distributed under the GNU GPL v3.0.
+This software is distributed under the [GNU LGPL 3.0](https://spdx.org/licenses/LGPL-3.0-only.html).

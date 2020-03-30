@@ -6,6 +6,10 @@
 module.exports = {
 	productionSourceMap: false,
 
+	devServer: {
+		https: true,
+	},
+
 	/**
 	 * CSS-related settings
 	 */
@@ -17,12 +21,10 @@ module.exports = {
 		loaderOptions: {
 			sass: {
 				prependData: [
-					'sass-mq/_mq',
 					'@cheap-glitch/scss-mixins/_mixins',
 
 					'@/styles/colorscheme',
 					'@/styles/fonts',
-					'@/styles/layout',
 					'@/styles/transitions',
 				]
 				.map(file => `@use "${file}" as *;`)
@@ -45,6 +47,7 @@ module.exports = {
 						// General UI
 						'chevron-down',
 						'external-link-square-alt',
+						'times-circle',
 
 						// Header
 						'banjo',
@@ -75,11 +78,12 @@ module.exports = {
 				{
 					set: 'pro-solid',
 					icons: [
-						// 404 page
-						'empty-set',
-
 						// Scales
 						'intersection',
+
+						// Mobile actions
+						'cog',
+						'list-music',
 					]
 				},
 				{
@@ -96,16 +100,15 @@ module.exports = {
 		 * Sitemap
 		 */
 		sitemap: {
-			baseURL:         'https://fretboarder.app',
-			trailingSlash:   false,
-			productionOnly:  true,
-
 			urls: [
 				{
-					loc:         '/',
+					loc:         'https://fretboarder.app',
 					changefreq:  'always',
 				},
-			]
+			],
+
+			productionOnly: true,
+			trailingSlash:  false,
 		},
 	},
 }

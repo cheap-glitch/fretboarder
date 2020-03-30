@@ -27,6 +27,8 @@ div.VSelect(ref="vselectbar")
 	//- Options
 	transition(name="fade")
 		div.VSelect__options(
+			ref="options"
+
 			v-show="isOpened"
 			v-mods="{ isOpeningDirectionUp: openingDirection == 'up', ...darkMode }"
 			)
@@ -49,7 +51,12 @@ div.VSelect(ref="vselectbar")
 
 import { get }       from 'vuex-pathify'
 
-import { objectMap } from '@/modules/object.js'
+import { EventBus  } from '@/modules/bus'
+import { objectMap } from '@/modules/object'
+
+// Store the timestamp and value of the last alphabetic keypress
+let lastKeypressTime  = 0;
+let lastKeypressValue = '';
 
 export default {
 	name: 'VSelect',
@@ -114,8 +121,19 @@ export default {
 		instrument: 'updateOpeningDirection',
 	},
 
-	mounted() {
+	created()
+	{
+		EventBus.$on('keypress', key => this.jumpToOption(key));
+	},
+
+	mounted()
+	{
 		this.updateOpeningDirection();
+	},
+
+	destroyed()
+	{
+		EventBus.$off('keypress');
 	},
 
 	methods: {
@@ -147,6 +165,26 @@ export default {
 			this.openingDirection = windowHeight - elemYPosition < 380
 				? 'up'
 				: 'down';
+		},
+		jumpToOption(key)
+		{
+			if (!this.isOpened) return;
+
+			// Ignore non-alphabetic keys
+			if (!/^[a-zA-z]$/.test(key)) return;
+
+			// If the keypress followed the last one quickly, append to the search string instead of replacing it
+			const now = Date.now();
+			lastKeypressValue = (now - lastKeypressTime < 500) ? lastKeypressValue + key : key;
+			lastKeypressTime  = now;
+
+			// Search for an option whose name starts with the given key and scroll to it
+			const index = this.optionsList.findIndex(option => option.name.toLowerCase().startsWith(lastKeypressValue.toLowerCase()));
+			if (index !== -1)
+			{
+				const optionBoxHeight = this.$refs.options.children.item(0).offsetHeight || 35;
+				this.$refs.options.scrollTo({ top: index*optionBoxHeight, behavior: 'auto' });
+			}
 		},
 	},
 }

@@ -215,7 +215,7 @@ export default {
 			if (this.$store.state.isFretRangeSliderClicked
 			|| ignoredClasses.some(name => classes.contains(name) || (el.parentElement && el.parentElement.classList.contains(name))))
 			{
-				this.$store.commit('setFretRangeSliderClicked', false);
+				this.$store.commit('setIsFretRangeSliderClicked', false);
 				return;
 			}
 
