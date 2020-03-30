@@ -28,7 +28,7 @@ module.exports = {
 	},
 
 	overrides: [{
-		files: ['**/__tests__/*.{j,t}s?(x)'],
+		files: ['test/*.test.js'],
 		env: {
 			mocha: true
 		}
