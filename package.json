@@ -63,7 +63,7 @@
     "eslint-plugin-smarter-tabs": "^1.1.0",
     "eslint-plugin-vue": "^6.2.2",
     "fibers": "^4.0.2",
-    "jsdom": "^16.2.1",
+    "jsdom": "^16.2.2",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
     "pug": "^2.0.4",

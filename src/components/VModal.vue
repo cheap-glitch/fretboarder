@@ -75,7 +75,7 @@ export default {
 	top: 20px;
 	right: 20px;
 
-	@include square(40px);
+	@include square(30px);
 
 	color: gray;
 
