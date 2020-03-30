@@ -120,9 +120,12 @@ export function getIntervalSecondNote(root, interval)
 }
 
 /**
- * Return the interval between two notes
+ * Return the interval between two notes, starting from the first one and going up the chromatic scale
  */
 export function getNotesInterval(note1, note2)
 {
-	return Math.abs(data.notes.indexOf(note1) - data.notes.indexOf(note2));
+	let interval = 0;
+	for (let i = data.notes.indexOf(note1); data.notes[i % data.notes.length] != note2; i++, interval++);
+
+	return interval;
 }
