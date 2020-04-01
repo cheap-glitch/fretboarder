@@ -42,7 +42,7 @@ const state = {
  */
 const getters = {
 	darkMode:               state => ({ 'dark-mode': state.isDarkModeOn }),
-	isFretboardVertical:    state => state.clientWidth < 800,
+	isMobileDevice:         state => state.clientWidth < 800,
 };
 
 /**

@@ -74,7 +74,7 @@ div.PageFretboarder
 	//- Fretboard
 	//----------------------------------------------------------------------
 	FretboardViewer#help-tour-step--12(
-		:is-vertical="isFretboardVertical"
+		:is-vertical="isMobileDevice"
 		)
 
 	//----------------------------------------------------------------------
@@ -117,7 +117,7 @@ div.PageFretboarder
 						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 						)
 		//- Scales & arpeggios
-		PageFretboarderScales(v-if="!isFretboardVertical")
+		PageFretboarderScales(v-if="!isMobileDevice")
 
 	//----------------------------------------------------------------------
 	//- Mobile actions & modals
@@ -128,7 +128,7 @@ div.PageFretboarder
 
 	//- Scales & arpeggios
 	VModal(
-		v-if="isFretboardVertical"
+		v-if="isMobileDevice"
 
 		:is-open="isModalScalesOpen"
 		@close="isModalScalesOpen = false"
@@ -186,7 +186,7 @@ export default {
 			'isDarkModeOn',
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
-			'isFretboardVertical',
+			'isMobileDevice',
 
 			'darkMode',
 		]),
