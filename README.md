@@ -38,4 +38,5 @@ Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunk
   * [JGuitar](https://jguitar.com): lots of tools regarding chords and music theory
   * [Johann](https://scribbletune.github.io/johann/#/guitar): fretboard visualizer (can also display piano keyboards)
 
+#### License
 This software is distributed under the [GNU LGPL 3.0](https://spdx.org/licenses/LGPL-3.0-only.html).
