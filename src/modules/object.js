@@ -3,7 +3,7 @@
  * modules/object.js
  */
 
-export const objectMapToObj = (object, callback) => Object.keys(object).reduce((result, key) => ({ ...result, [key]: callback(key, object[key]) }));
+export const objectMapToObj = (object, callback) => Object.keys(object).reduce((result, key) => ({ ...result, [key]: callback(key, object[key]) }), {});
 export const objectMap      = (object, callback) => Object.keys(object).map(key => callback(key, object[key]));
 export const objectForEach  = (object, callback) => Object.keys(object).forEach(key => callback(key, object[key]));
 export const isObject       = value              => value && Object.prototype.toString.call(value) == '[object Object]';

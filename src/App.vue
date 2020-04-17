@@ -312,6 +312,8 @@ export default {
 
 	color: var(--color--bg);
 	background-color: var(--color--logo--bg);
+
+	transition: color 0.2s, background-color 0.2s;
 }
 
 .header__title__logo {
