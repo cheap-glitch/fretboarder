@@ -7,24 +7,23 @@
 <template lang="pug">
 
 div.FretboardViewerFret(
-	v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
+	v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }"
 	)
 
 	//- Inlay
 	div.FretboardViewerFret__inlay(
 		v-if="isDisplayingInlay"
-		v-mods="darkMode"
 		)
 
 	//- Open string note placeholder
 	div.FretboardViewerFret__open-string-note-placeholder(
 		v-show="fret == 0 && !isActive"
-		v-mods="{ isOpenString, isFretboardFlipped, ...darkMode }"
+		v-mods="{ isOpenString, isFretboardFlipped }"
 		)
 
 	//- Note
 	div.FretboardViewerFret__note(
-		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped, ...darkMode }"
+		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped, isDarkModeOn }"
 		:style="noteColors"
 
 		@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
@@ -156,8 +155,7 @@ export default {
 
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
-
-			'darkMode',
+			'isDarkModeOn',
 		]),
 	},
 
@@ -194,11 +192,7 @@ export default {
 
 	position: relative;
 
-	border: 0 solid gray;
-
-	&.dark-mode {
-		border-color: $color-ebony-clay;
-	}
+	border: 0 solid var(--color--fret--border);
 
 	&.is-open-string {
 		display: block;
@@ -215,11 +209,7 @@ export default {
 		// String
 		&:not(.is-open-string) {
 			border-top-width: 2px;
-			border-top-color: black;
-
-			&.dark-mode {
-				border-top-color: $color-oxford-blue;
-			}
+			border-top-color: var(--color--string--border);
 		}
 
 		// Fret
@@ -247,11 +237,7 @@ export default {
 		// String
 		&:not(.is-open-string) {
 			border-left-width: 2px;
-			border-left-color: black;
-
-			&.dark-mode {
-				border-left-color: $color-oxford-blue;
-			}
+			border-left-color: var(--color--string--border);
 		}
 
 		// Fret
@@ -320,7 +306,7 @@ export default {
 	}
 
 	// Slightly darken the notes in dark mode
-	&.dark-mode {
+	&.is-dark-mode-on {
 		filter: brightness(0.8);
 	}
 }
@@ -331,7 +317,7 @@ export default {
 
 	@include circle(30px);
 
-	border: 2px dashed lightgray;
+	border: 2px dashed var(--color--border);
 
 	&.is-open-string {
 		right: 100%;
@@ -341,10 +327,6 @@ export default {
 	&.is-open-string.is-fretboard-flipped {
 		left: 100%;
 		transform: translate(-50%, -50%);
-	}
-
-	&.dark-mode {
-		border-color: $color-oxford-blue;
 	}
 }
 
@@ -360,13 +342,9 @@ export default {
 	@include center-position;
 	@include circle(15px);
 
-	background-color: lightgray;
+	background-color: var(--color--inlay--bg);
 
 	transition: background-color 0.2s;
-
-	&.dark-mode {
-		background-color: $color-mirage-2;
-	}
 }
 
 </style>

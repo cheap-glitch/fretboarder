@@ -23,7 +23,7 @@ div.FretboardViewer(:style="[minWidth, grid, inlays]")
 			v-for="fret in fretNumbers"
 			:key="`fret-number--${fret}`"
 			)
-			p.fret-number__text(v-mods="darkMode") {{ fret }}
+			p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -239,9 +239,10 @@ export default {
 			'instrument',
 			'tuning',
 			'fretRange',
+
 			'scales/activeScales',
+
 			'isFretboardFlipped',
-			'darkMode',
 		]),
 	},
 }
@@ -252,12 +253,6 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
-
-@use 'sass-mq/_mq' as * with (
-	$mq-breakpoints: (
-		desktop: 800px,
-	)
-);
 
 .FretboardViewer {
 	display: grid;
@@ -277,11 +272,7 @@ export default {
 }
 
 .fret-number__text {
-	color: gray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-	}
+	color: var(--color--text-2);
 }
 
 </style>

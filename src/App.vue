@@ -6,13 +6,13 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.App(v-mods="darkMode")
+div.App(:style="colorscheme")
 
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
 	header.header
-		h1.header__title(v-mods="darkMode")
+		h1.header__title
 			fa-icon.header__title__logo(
 				:icon="['far', instrumentIcon]"
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
@@ -22,7 +22,6 @@ div.App(v-mods="darkMode")
 		nav.header__nav
 			//- Quick help
 			VButtonText.header__nav__link#help-tour-step--0(
-				v-mods="darkMode"
 				@click.native.left="startHelpTour"
 				)
 				fa-icon.header__nav__link__icon(:icon="['far', 'question-circle']")
@@ -33,7 +32,6 @@ div.App(v-mods="darkMode")
 			VButtonText.header__nav__link#help-tour-step--13(
 				mode="link-external"
 				href="https://github.com/cheap-glitch/fretboarder/issues"
-				v-mods="darkMode"
 				)
 				fa-icon.header__nav__link__icon(:icon="['far', 'bug']")
 				p.header__nav__link__text--small Bugs
@@ -44,7 +42,8 @@ div.App(v-mods="darkMode")
 				mode="link-external"
 				is-filled
 				href="https://www.patreon.com/cheap_glitch"
-				v-mods="darkMode"
+
+				v-mods="{ isDarkModeOn }"
 				)
 				fa-icon.header__nav__link__icon(:icon="['far', 'heart']")
 				p Support
@@ -53,7 +52,6 @@ div.App(v-mods="darkMode")
 			VButtonText.header__nav__link#help-tour-step--15(
 				mode="link-external"
 				href="https://www.theguitarlickdatabase.com"
-				v-mods="darkMode"
 				)
 				p.header__nav__link__text--small TGLD
 				p.header__nav__link__text--wide  The Guitar Lick Database
@@ -91,19 +89,17 @@ div.App(v-mods="darkMode")
 	//- Footer
 	//----------------------------------------------------------------------
 	footer.page-footer
-		p.page-footer__text(v-mods="darkMode") Fretboarder v2.0 by cheap glitch
+		p.page-footer__text Fretboarder v2.0 by cheap glitch
 		a.page-footer__link(
 			href="https://twitter.com/cheap_glitch"
 			target="_blank"
 			rel="external nofollow noopener noreferrer"
-			v-mods="darkMode"
 			)
 			fa-icon(:icon="['fab', 'twitter']")
 		a.page-footer__link(
 			href="https://github.com/cheap-glitch/fretboarder"
 			target="_blank"
 			rel="external nofollow noopener noreferrer"
-			v-mods="darkMode"
 			)
 			fa-icon(:icon="['fab', 'github']")
 
@@ -117,9 +113,12 @@ div.App(v-mods="darkMode")
 import { get }                  from 'vuex-pathify'
 import { saveAs }               from 'file-saver'
 
-import data                     from '@/modules/data'
 import { EventBus }             from '@/modules/bus'
+import data                     from '@/modules/data'
+import colorscheme              from '@/modules/colorscheme'
+import { objectMapToObj }       from '@/modules/object'
 import * as exportFretboard     from '@/modules/export'
+
 import PageFretboarder          from '@/components/PageFretboarder'
 import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
 
@@ -132,6 +131,10 @@ export default {
 	},
 
 	computed: {
+		colorscheme()
+		{
+			return objectMapToObj(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
+		},
 		instrumentIcon()
 		{
 			switch (this.instrument)
@@ -158,8 +161,7 @@ export default {
 
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
-
-			'darkMode',
+			'isDarkModeOn',
 		]),
 	},
 
@@ -245,12 +247,6 @@ export default {
 <style lang="scss" scoped>
 
 @use 'sass:color';
-@use 'sass-mq/_mq' as * with (
-	$mq-breakpoints: (
-		desktop:    800px,
-		wideHeader: 1200px,
-	)
-);
 
 .App {
 	display: flex;
@@ -262,13 +258,9 @@ export default {
 
 	min-height: 100%;
 
-	background-color: snow;
+	background-color: var(--color--bg);
 
 	transition: background-color 0.2s;
-
-	&.dark-mode {
-		background-color: $color-mirage;
-	}
 }
 
 .export-menu {
@@ -289,7 +281,7 @@ export default {
 	background-color: white;
 
 	&:hover {
-		color: $color-vue-tour-bg;
+		color: $color-slate-gray;
 	}
 }
 
@@ -318,14 +310,8 @@ export default {
 
 	border-radius: 6px;
 
-	color: snow;
-
-	background-color: lightgray;
-
-	&.dark-mode {
-		color: $color-mirage;
-		background-color: $color-oxford-blue;
-	}
+	color: var(--color--bg);
+	background-color: var(--color--logo--bg);
 }
 
 .header__title__logo {
@@ -353,19 +339,8 @@ export default {
 }
 
 .header__nav__link {
-	color: gray;
-	border-color: lightgray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-		border-color: $color-oxford-blue;
-
-		transition: color 0.4s, border-color 0.2s;
-
-		&:hover {
-			color: $color-nepal;
-		}
-	}
+	color: var(--color--text-2);
+	border-color: var(--color--border);
 }
 
 .header__nav__link__icon {
@@ -388,22 +363,17 @@ export default {
 	}
 }
 
-.support-link,
-.support-link.dark-mode {
+.support-link {
 	color: $color-crimson;
 	border-color: $color-crimson;
 	background-color: $color-crimson;
-}
 
-.support-link.dark-mode {
-	filter: brightness(0.8);
-}
+	&:hover {
+		color: var(--color--support-link--text--hover);
+	}
 
-.support-link:hover {
-	color: white;
-
-	&.dark-mode {
-		color: $color-mirage;
+	&.is-dark-mode-on {
+		filter: brightness(0.8);
 	}
 }
 
@@ -429,11 +399,7 @@ export default {
 .page-footer__link {
 	font-size: 1.3rem;
 
-	color: gray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-	}
+	color: var(--color--text-2);
 }
 
 .page-footer__link {

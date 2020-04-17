@@ -10,7 +10,7 @@ div.PageFretboarder
 
 	section.above-fretboard
 		//- Current tuning
-		p.tuning-infos(v-mods="darkMode") {{ tuningNotesList }}
+		p.tuning-infos {{ tuningNotesList }}
 
 		//- Infos about the hovered fret
 		div.fret-infos(
@@ -19,7 +19,6 @@ div.PageFretboarder
 			div.fret-infos__item(
 				v-for="(info, index) in hoveredFretInfos"
 				:key="`fret-info--${index}`"
-				v-mods="darkMode"
 				)
 				div.fret-infos__item__color-dot(
 					v-for="color in info.colors"
@@ -53,7 +52,7 @@ div.PageFretboarder
 				@click="$store.commit('toggleIsFretboardFlipped')"
 				)
 
-			div.toolbar__separator(v-mods="darkMode")
+			div.toolbar__separator
 
 			//- Clear the fretboard
 			VButtonIcon#help-tour-step--4(
@@ -112,7 +111,6 @@ div.PageFretboarder
 						tooltip="active"
 						:tooltip-formatter="tooltipFormatter"
 
-						v-mods="darkMode"
 						v-model="fretRange"
 						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 						)
@@ -123,8 +121,8 @@ div.PageFretboarder
 	//- Mobile actions & modals
 	//----------------------------------------------------------------------
 	div.mobile-actions
-		div.mobile-actions__item(@click.left="isModalScalesOpen   = false"): fa-icon(icon="list-music")
-		div.mobile-actions__item(@click.left="isModalSettingsOpen = false"): fa-icon(icon="cog")
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
 
 	//- Scales & arpeggios
 	VModal(
@@ -187,8 +185,6 @@ export default {
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
 			'isMobileDevice',
-
-			'darkMode',
 		]),
 	},
 
@@ -235,12 +231,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use 'sass-mq/_mq' as * with (
-	$mq-breakpoints: (
-		desktop: 800px,
-	)
-);
-
 /**
  * Above the fretboard
  * -----------------------------------------------------------------------------
@@ -261,11 +251,7 @@ export default {
 }
 
 .tuning-infos {
-	color: gray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-	}
+	color: var(--color--text-2);
 }
 
 .fret-infos {
@@ -290,9 +276,7 @@ export default {
 	align-items: center;
 	@include space-children-h(5px);
 
-	&.dark-mode {
-		color: $color-nepal;
-	}
+	color: var(--color--text);
 }
 
 .fret-infos__item__color-dot {
@@ -308,11 +292,7 @@ export default {
 
 .toolbar__separator {
 	@include circle(6px);
-	background-color: lightgray;
-
-	&.dark-mode {
-		background-color: $color-ebony-clay;
-	}
+	background-color: var(--color--separator);
 }
 
 #canvas-export,

@@ -20,15 +20,15 @@ module.exports = {
 		// Import the colorscheme & mixins globally
 		loaderOptions: {
 			sass: {
-				prependData: [
-					'@cheap-glitch/scss-mixins/_mixins',
+				prependData: `
+					@use "@/styles/layout" as *;
+					@use "sass-mq/_mq"     as * with ($mq-breakpoints: $mq-breakpoints);
 
-					'@/styles/colorscheme',
-					'@/styles/fonts',
-					'@/styles/transitions',
-				]
-				.map(file => `@use "${file}" as *;`)
-				.join('\n')
+					@use "@cheap-glitch/scss-mixins/_mixins" as *;
+
+					@use "@/styles/colorscheme" as *;
+					@use "@/styles/fonts"       as *;
+					@use "@/styles/transitions" as *;`
 			}
 		},
 	},

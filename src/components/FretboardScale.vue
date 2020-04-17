@@ -57,14 +57,14 @@ div.FretboardScale
 				v-for="(interval, index) in intervals"
 				:key="`scale-${id}-interval--${index}`"
 
-				v-mods="{ isSelected: highlightedNote == interval.value, ...darkMode }"
+				v-mods="{ isSelected: highlightedNote == interval.value }"
 				:title="`Highlight ${intervalsNames[interval.value].toLowerCase()} notes`"
 
 				@click.left="update('highlightedNote', highlightedNote == interval.value ? null : interval.value)"
 				)
 				p.intervals__item__text {{ interval.name }}
 
-		div.scale-tools__separator(v-mods="darkMode")
+		div.scale-tools__separator
 
 		//- Show/hide
 		VButtonIcon(
@@ -92,7 +92,7 @@ div.FretboardScale
 			@click="update('isShowingIntersections', !isShowingIntersections)"
 			)
 
-		div.scale-tools__separator(v-mods="darkMode")
+		div.scale-tools__separator
 
 		//- Duplicate
 		VButtonIcon(
@@ -213,7 +213,6 @@ export default {
 		},
 		...get([
 			'scales/scales',
-			'darkMode',
 		]),
 	},
 
@@ -294,15 +293,18 @@ export default {
 	margin-right: 30px;
 }
 
+.scale-tools {
+	@include mq($until: desktop)
+	{
+		display: none;
+	}
+}
+
 .scale-tools__separator {
 	@include circle(4px);
 	flex: 0 0 auto;
 
-	background-color: lightgray;
-
-	&.dark-mode {
-		background-color: $color-ebony-clay;
-	}
+	background-color: var(--color--separator);
 }
 
 .scale-props {
@@ -319,7 +321,9 @@ export default {
 .scale-tools__intervals__item {
 	padding: 2px 8px;
 
-	border: 1px solid lightgray;
+	border: 1px solid var(--color--border);
+
+	color: var(--color--text);
 
 	cursor: pointer;
 
@@ -343,17 +347,7 @@ export default {
 
 	&:hover,
 	&.is-selected {
-		background-color: #f0f0f0;
-	}
-
-	&.dark-mode {
-		color: $color-nepal;
-		border-color: $color-oxford-blue;
-
-		&:hover,
-		&.is-selected {
-			background-color: $color-ebony-clay-2;
-		}
+		background-color: var(--color--scale-tool--bg--hover);
 	}
 
 	&.is-selected {

@@ -10,18 +10,18 @@ div.VSelect(ref="vselectbar")
 
 	//- Select bar
 	div.VSelect__bar(
-		v-mods="{ isDisabled, ...darkMode }"
+		v-mods="{ isDisabled }"
 		v-click-outside="close"
 		@click.left="toggleOpen"
 		)
 		p.VSelect__bar__text(
-			v-mods="{ isDisabled, ...darkMode }"
+			v-mods="{ isDisabled }"
 			v-html="selected.name"
 			)
 
 		fa-icon.VSelect__bar__chevron(
 			:icon="['far', 'chevron-down']"
-			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped, ...darkMode }"
+			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped }"
 			)
 
 	//- Options
@@ -30,14 +30,13 @@ div.VSelect(ref="vselectbar")
 			ref="options"
 
 			v-show="isOpened"
-			v-mods="{ isOpeningDirectionUp: openingDirection == 'up', ...darkMode }"
+			v-mods="{ isOpeningDirectionUp: openingDirection == 'up' }"
 			)
 			p.VSelect__options__item(
 				v-for="option in optionsList"
 				:key="`key--v-select-${id}--${option.value}`"
 
 				v-html="option.name"
-				v-mods="darkMode"
 
 				@click.left="select(option)"
 				)
@@ -113,7 +112,6 @@ export default {
 		},
 		...get([
 			'instrument',
-			'darkMode',
 		]),
 	},
 
@@ -205,16 +203,11 @@ export default {
 
 .VSelect__bar,
 .VSelect__options {
-	border: 1px solid $color-azure;
+	border: 1px solid var(--color--select--border);
 
-	background-color: snow;
+	background-color: var(--color--select--bg);
 
 	transition: background-color 0.2s;
-
-	&.dark-mode {
-		border-color: $color-oxford-blue;
-		background-color: $color-mirage-2;
-	}
 }
 
 .VSelect__bar {
@@ -235,11 +228,7 @@ export default {
 	}
 
 	&:not(.is-disabled):hover {
-		background-color: #eee;
-
-		&.dark-mode {
-			background-color: $color-ebony-clay;
-		}
+		background-color: var(--color--select-bar--bg--hover);
 	}
 }
 
@@ -249,11 +238,9 @@ export default {
 	cursor: pointer;
 	user-select: none;
 
-	transition: color 0.2s;
+	color: var(--color--select--text);
 
-	&.dark-mode {
-		color: $color-nepal;
-	}
+	transition: color 0.2s;
 
 	&.is-disabled {
 		color: gray;
@@ -297,19 +284,11 @@ export default {
 	padding: 8px;
 
 	&:hover {
-		background-color: #eee;
-
-		&.dark-mode {
-			background-color: $color-oxford-blue;
-		}
+		background-color: var(--color--select-item--bg--hover);
 	}
 
 	&:not(:last-child) {
-		border-bottom: 1px solid lightgray;
-
-		&.dark-mode {
-			border-bottom-color: $color-ebony-clay;
-		}
+		border-bottom: 1px solid var(--color--separator);
 	}
 }
 

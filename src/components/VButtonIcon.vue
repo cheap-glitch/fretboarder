@@ -8,13 +8,13 @@
 
 button.VButtonIcon(
 	:title="tooltip"
-	v-mods="{ isDisabled, ...darkMode }"
+	v-mods="{ isDisabled }"
 	@click.left="click"
 	)
 	fa-icon.VButtonIcon__icon(
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:class="`size-${size}`"
-		v-mods="{ isActive, isDisabled, isFlipped, ...darkMode }"
+		v-mods="{ isActive, isDisabled, isFlipped }"
 		)
 
 </template>
@@ -23,8 +23,6 @@ button.VButtonIcon(
 
 <!--{{{ JavaScript -->
 <script>
-
-import { get } from 'vuex-pathify'
 
 export default {
 	name: 'VButtonIcon',
@@ -57,10 +55,6 @@ export default {
 		},
 	},
 
-	computed: {
-		darkMode: get('darkMode')
-	},
-
 	methods: {
 		click()
 		{
@@ -87,33 +81,22 @@ export default {
 }
 
 .VButtonIcon__icon {
-	color: gray;
+	color: var(--color--text-2);
 
 	transition: color 0.2s;
 
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-	}
-
-	&:hover {
+	&:not(.is-active):hover {
 		color: $color-azure;
 	}
 
 	&.is-disabled {
-		color: darkgray;
-		cursor: not-allowed;
+		color: var(--color--text-2--disabled);
 
-		&.dark-mode {
-			color: $color-ebony-clay;
-		}
+		cursor: not-allowed;
 	}
 
 	&.is-active {
 		color: $color-sun;
-
-		&:hover {
-			color: $color-sun;
-		}
 	}
 
 	&.is-flipped {

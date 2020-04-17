@@ -41,8 +41,7 @@ const state = {
  * Getters
  */
 const getters = {
-	darkMode:               state => ({ 'dark-mode': state.isDarkModeOn }),
-	isMobileDevice:         state => state.clientWidth < 800,
+	isMobileDevice: state => state.clientWidth < 800,
 };
 
 /**

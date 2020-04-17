@@ -265,7 +265,7 @@ export default {
 	background-color: white;
 
 	&.is-filled:hover {
-		color: $color-vue-tour-bg;
+		color: $color-slate-gray;
 	}
 }
 

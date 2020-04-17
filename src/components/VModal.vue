@@ -7,16 +7,8 @@
 <template lang="pug">
 
 div.VModal: transition(name="fade")
-
-	div.modal(
-		v-if="isOpen"
-		v-mods="darkMode"
-		)
-
-		//- Content slot
+	div.modal(v-if="isOpen")
 		slot
-
-		//- Close button
 		fa-icon.modal__button-close(
 			:icon="['far', 'times-circle']"
 
@@ -30,8 +22,6 @@ div.VModal: transition(name="fade")
 <!--{{{ JavaScript -->
 <script>
 
-import { get } from 'vuex-pathify'
-
 export default {
 	name: 'VModal',
 
@@ -40,10 +30,6 @@ export default {
 			type: Boolean,
 			default: false,
 		}
-	},
-
-	computed: {
-		...get(['darkMode']),
 	},
 }
 
@@ -62,11 +48,7 @@ export default {
 	right: 0;
 	bottom: 0;
 
-	background-color: snow;
-
-	&.dark-mode {
-		background-color: $color-mirage;
-	}
+	background-color: var(--color--bg);
 }
 
 .modal__button-close {
