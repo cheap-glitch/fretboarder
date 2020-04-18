@@ -11,18 +11,22 @@ div.FretboardViewerFret(
 	)
 
 	//- Inlay
-	div.FretboardViewerFret__inlay(
+	div.inlay(
 		v-if="isDisplayingInlay"
 		)
 
 	//- Open string note placeholder
-	div.FretboardViewerFret__open-string-note-placeholder(
-		v-show="fret == 0 && !isActive"
+	div.open-string-note-placeholder(
+		v-if="fret == 0"
+		v-show="!isActive"
 		v-mods="{ isOpenString, isFretboardFlipped }"
 		)
+		p.note__name(
+			v-mods="{ isActive, isOpenString }"
+			) {{ noteName }}
 
 	//- Note
-	div.FretboardViewerFret__note(
+	div.note(
 		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped, isDarkModeOn }"
 		:style="noteColors"
 
@@ -30,8 +34,8 @@ div.FretboardViewerFret(
 		@mouseout=" $store.commit('setHoveredFretInfos', [])"
 		)
 		transition(name="fade")
-			p.FretboardViewerFret__note__info(
-				v-show="isDisplayingNotesName"
+			p.note__name(
+				v-show="isDisplayingNotesName || isOpenString"
 				) {{ noteName }}
 
 </template>
@@ -261,7 +265,7 @@ export default {
 	}
 }
 
-.FretboardViewerFret__note {
+.note {
 	box-sizing: content-box;
 
 	position: absolute;
@@ -312,7 +316,7 @@ export default {
 }
 
 // Display a dotted border around unactive open string notes
-.FretboardViewerFret__open-string-note-placeholder {
+.open-string-note-placeholder {
 	position: absolute;
 
 	@include circle(30px);
@@ -330,15 +334,19 @@ export default {
 	}
 }
 
-.FretboardViewerFret__note__info {
+.note__name {
 	@include center-position;
 
 	font-weight: bold;
 
 	color: white;
+
+	&.is-open-string:not(.is-active) {
+		color: var(--color--text-2);
+	}
 }
 
-.FretboardViewerFret__inlay {
+.inlay {
 	@include center-position;
 	@include circle(15px);
 

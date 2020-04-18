@@ -9,10 +9,48 @@
 div.PageFretboarder
 
 	section.above-fretboard
-		//- Current tuning
-		p.tuning-infos {{ tuningNotesList }}
 
+		//--------------------------------------------------------------
+		//- Tools & display options
+		//--------------------------------------------------------------
+		div.settings
+			//- Instrument & tuning
+			div.toolbar#help-tour-step--1
+				VSelect.select-instrument(
+					id="instrument"
+					:options="instrumentOptions"
+					v-model="instrument"
+					)
+				VSelect.select-tuning(
+					id="tuning"
+					:options="tuningsOptions"
+					v-model="tuning"
+					)
+
+			//- Frets range
+			div.toolbar#help-tour-step--2
+				div.fret-range-slider
+					vue-slider(
+						:min="0"
+						:max="24"
+						:interval="1"
+
+						:min-range="4"
+						:enable-cross="false"
+
+						:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
+						adsorb lazy
+
+						tooltip="active"
+						:tooltip-formatter="tooltipFormatter"
+
+						v-model="fretRange"
+						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
+						)
+
+		//--------------------------------------------------------------
 		//- Infos about the hovered fret
+		//--------------------------------------------------------------
 		div.fret-infos(
 			v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
 			)
@@ -77,44 +115,9 @@ div.PageFretboarder
 		)
 
 	//----------------------------------------------------------------------
-	//- Fretboard settings & scales
+	//- Scales & arpeggios
 	//----------------------------------------------------------------------
 	section.below-fretboard
-		div.settings
-			//- Instrument & tuning
-			div.toolbar#help-tour-step--1
-				VSelect.select-instrument(
-					id="instrument"
-					:options="instrumentOptions"
-					v-model="instrument"
-					)
-				VSelect.select-tuning(
-					id="tuning"
-					:options="tuningsOptions"
-					v-model="tuning"
-					)
-
-			//- Frets range
-			div.toolbar#help-tour-step--2
-				div.fret-range-slider
-					vue-slider(
-						:min="0"
-						:max="24"
-						:interval="1"
-
-						:min-range="4"
-						:enable-cross="false"
-
-						:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
-						adsorb lazy
-
-						tooltip="active"
-						:tooltip-formatter="tooltipFormatter"
-
-						v-model="fretRange"
-						@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
-						)
-		//- Scales & arpeggios
 		PageFretboarderScales(v-if="!isMobileDevice")
 
 	//----------------------------------------------------------------------
@@ -250,10 +253,6 @@ export default {
 	}
 }
 
-.tuning-infos {
-	color: var(--color--text-2);
-}
-
 .fret-infos {
 	display: flex;
 	@include space-children-h(10px);
@@ -306,7 +305,6 @@ export default {
  */
 .below-fretboard {
 	display: none;
-	@include space-children-v(40px);
 
 	margin-top: 40px;
 
