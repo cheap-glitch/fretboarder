@@ -47,6 +47,7 @@ module.exports = {
 					set: 'pro-regular',
 					icons: [
 						// General UI
+						'arrow-left',
 						'chevron-down',
 						'external-link-square-alt',
 						'times-circle',

@@ -9,30 +9,33 @@
 div.VSelect(ref="vselectbar")
 
 	//- Select bar
-	div.VSelect__bar(
+	div.bar(
 		v-mods="{ isDisabled }"
 		v-click-outside="close"
 		@click.left="toggleOpen"
 		)
-		p.VSelect__bar__text(
+		p.bar__text(
 			v-mods="{ isDisabled }"
 			v-html="selected.name"
 			)
 
-		fa-icon.VSelect__bar__chevron(
+		fa-icon.bar__chevron(
 			:icon="['far', 'chevron-down']"
 			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped }"
 			)
 
 	//- Options
 	transition(name="fade")
-		div.VSelect__options(
+		div.options(
 			ref="options"
-
 			v-show="isOpened"
 			v-mods="{ isOpeningDirectionUp: openingDirection == 'up' }"
 			)
-			p.VSelect__options__item(
+			div.options__button-close(
+				@click.left="isOpened = false"
+				)
+				fa-icon(:icon="['far', 'arrow-left']")
+			p.options__item(
 				v-for="option in optionsList"
 				:key="`key--v-select-${id}--${option.value}`"
 
@@ -201,8 +204,8 @@ export default {
 	max-width: 200px;
 }
 
-.VSelect__bar,
-.VSelect__options {
+.bar,
+.options {
 	border: 1px solid var(--color--select--border);
 
 	background-color: var(--color--select--bg);
@@ -210,7 +213,7 @@ export default {
 	transition: background-color 0.2s;
 }
 
-.VSelect__bar {
+.bar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -232,9 +235,10 @@ export default {
 	}
 }
 
-.VSelect__bar__text,
-.VSelect__bar__chevron,
-.VSelect__options__item {
+.bar__text,
+.bar__chevron,
+.options__item,
+.options__button-close {
 	cursor: pointer;
 	user-select: none;
 
@@ -249,7 +253,7 @@ export default {
 	}
 }
 
-.VSelect__bar__chevron {
+.bar__chevron {
 	font-size: 0.8em;
 
 	@include flip;
@@ -259,36 +263,63 @@ export default {
 	}
 }
 
-.VSelect__options {
+.options {
 	overflow-y: auto;
 
-	position: absolute;
+	/**
+	 * On mobile: modal
+	 */
+	position: fixed;
 	z-index: 1000;
+	top: 0;
 	left: 0;
 	right: 0;
+	bottom: 0;
 
-	max-height: 300px;
-
-	&.is-opening-direction-up {
-		bottom: 100%;
-		border-bottom: none;
+	@include mq($until: desktop)
+	{
+		border: none;
 	}
 
-	&:not(.is-opening-direction-up) {
-		top: 100%;
-		border-top: none;
+	/**
+	 * On desktop: popup
+	 */
+	@include mq($from: desktop)
+	{
+		&.is-opening-direction-up {
+			bottom: 100%;
+			border-bottom: none;
+		}
+
+		&:not(.is-opening-direction-up) {
+			top: 100%;
+			border-top: none;
+		}
+
+		position: absolute;
+		z-index: 1000;
+		left: 0;
+		right: 0;
+
+		max-height: 300px;
 	}
 }
 
-.VSelect__options__item {
-	padding: 8px;
+.options__item,
+.options__button-close {
+	padding: 20px;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid var(--color--separator);
+	}
 
 	&:hover {
 		background-color: var(--color--select-item--bg--hover);
 	}
 
-	&:not(:last-child) {
-		border-bottom: 1px solid var(--color--separator);
+	@include mq($from: desktop)
+	{
+		padding: 8px;
 	}
 }
 
