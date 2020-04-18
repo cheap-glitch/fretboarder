@@ -8,6 +8,8 @@ module.exports = {
 
 	devServer: {
 		https: true,
+		host:  'localhost',
+		port:  '8080',
 	},
 
 	/**
@@ -102,8 +104,8 @@ module.exports = {
 		sitemap: {
 			urls: [
 				{
-					loc:         'https://fretboarder.app',
-					changefreq:  'always',
+					loc:        'https://fretboarder.app',
+					changefreq: 'always',
 				},
 			],
 

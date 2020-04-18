@@ -8,18 +8,26 @@ import Vue          from 'vue'
 import storage      from '@/modules/storage'
 import { isObject } from '@/modules/object'
 
-/**
- * Define the maximum number of scales outside the store
- * to be able to use it anywhere in the code
- */
 export const MAX_NB_SCALES = 6;
+const defaultScale = {
+	id:                     0,
+	model:                  'maj',
+	position:               0,
+	tonality:               'A',
+	type:                   'scale',
+	color:                  '#0093ee',
+	highlightedNote:        null,
+	isVisible:              true,
+	isFocused:              false,
+	isShowingIntersections: false,
+};
 
 export default
 {
 	namespaced: true,
 
 	state: {
-		scales:       storage.get('scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
+		scales:       storage.get('scales', [defaultScale], v => Array.isArray(v) && v.every(item => isObject(item))),
 		maxNbScales:  MAX_NB_SCALES,
 
 		colors: [

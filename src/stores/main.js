@@ -25,7 +25,7 @@ const state = {
 	fretRange:              storage.get('fretRange',              [0, 22],    v => Array.isArray(v) && v.length == 2),
 
 	isDarkModeOn:           storage.get('isDarkModeOn',           false,      v => typeof v == 'boolean'),
-	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false,      v => typeof v == 'boolean'),
+	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  true,       v => typeof v == 'boolean'),
 	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      v => typeof v == 'boolean'),
 
 	hoveredFretInfos:       [],
