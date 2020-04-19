@@ -3,7 +3,7 @@
  * modules/colorscheme.js
  */
 
-import colors from '@/styles/colorscheme.scss'
+import colors from '@/styles/colorscheme-exports.scss'
 
 export default {
 

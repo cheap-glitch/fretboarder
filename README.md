@@ -8,12 +8,12 @@
 
 **[Fretboarder](https://fretboarder.app)** is  a webapp to visualize  the layout
 of scales and arpeggios across a variety of fretboards. Features:
-  * 🎸 support for a variety of stringed instruments, from ukulele to eleven-string guitar, and many different tunings
-  * 🎨 visualization of several scales and arpeggios at once (full scales, positions, overlaps and intersections)
-  * 🎯 highlighting of specific notes and intervals
+  * 🎸 support for a variety of string instruments, from ukulele to eleven-string guitar, and many different tunings
+  * 🎨 visualize several scales and arpeggios at once (full scales, positions, overlaps and intersections)
+  * 🎯 highlight specific notes and intervals
   * 🤘 support for both left and right-handed fretting
   * 🌒 dark mode
-  * 🖼️ export to the PNG, JPG, SVG and PDF formats
+  * 🖼️ export the result to the PNG, JPG, SVG and PDF formats
 
 <p>&nbsp;</p>
 

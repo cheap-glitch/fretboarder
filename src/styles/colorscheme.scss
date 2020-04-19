@@ -29,28 +29,3 @@ $color-ebony-clay-2:    #283243;
 $color-ebony-clay:      #232d3d;
 $color-mirage-2:        #1c2532;
 $color-mirage:          #171e29;
-
-// Export variables to use in the JS scripts
-:export {
-	sun:            $color-sun;
-	cinnabar:       $color-cinnabar;
-	crimson:        $color-crimson;
-	malachite:      $color-malachite;
-	azure:          $color-azure;
-	portage:        $color-portage;
-
-	athensGray:     $color-athens-gray;
-	barleyWhite:    $color-barley-white;
-	regentStBlue:   $color-regent-st-blue;
-	nepal:          $color-nepal;
-
-	oxfordBlue2:    $color-oxford-blue-2;
-
-	oxfordBlue:     $color-oxford-blue;
-
-	slateGray:      $color-slate-gray;
-	ebonyClay2:     $color-ebony-clay-2;
-	ebonyClay:      $color-ebony-clay;
-	mirage2:        $color-mirage-2;
-	mirage:         $color-mirage;
-}
