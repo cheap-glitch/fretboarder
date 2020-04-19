@@ -269,15 +269,15 @@ export default {
 	/**
 	 * On mobile: modal
 	 */
-	position: fixed;
-	z-index: 1000;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-
 	@include mq($until: desktop)
 	{
+		position: fixed;
+		z-index: 1000;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+
 		border: none;
 	}
 
@@ -320,6 +320,13 @@ export default {
 	@include mq($from: desktop)
 	{
 		padding: 8px;
+	}
+}
+
+.options__button-close {
+	@include mq($from: desktop)
+	{
+		display: none;
 	}
 }
 

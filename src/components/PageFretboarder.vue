@@ -41,7 +41,7 @@ div.PageFretboarder
 						:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
 						adsorb lazy
 
-						tooltip="active"
+						tooltip="always"
 						:tooltip-formatter="tooltipFormatter"
 
 						v-model="fretRange"
@@ -282,6 +282,13 @@ export default {
 	@include circle(10px);
 }
 
+.settings {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	@include space-children-h(20px);
+}
+
 .toolbar {
 	display: flex;
 	align-items: center;
@@ -292,6 +299,14 @@ export default {
 .toolbar__separator {
 	@include circle(6px);
 	background-color: var(--color--separator);
+}
+
+.select-instrument { min-width: 180px; }
+.select-tuning     { min-width: 260px; }
+
+.fret-range-slider {
+	width: 300px;
+	margin: 0 10px;
 }
 
 #canvas-export,
@@ -312,21 +327,6 @@ export default {
 	{
 		display: block;
 	}
-}
-
-.settings {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	@include space-children-h(20px);
-}
-
-.select-instrument { min-width: 180px; }
-.select-tuning     { min-width: 260px; }
-
-.fret-range-slider {
-	width: 300px;
-	margin: 0 10px;
 }
 
 /**
