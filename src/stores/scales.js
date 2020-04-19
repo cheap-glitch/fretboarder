@@ -29,7 +29,6 @@ export default
 	state: {
 		scales:       storage.get('scales', [defaultScale], v => Array.isArray(v) && v.every(item => isObject(item))),
 		maxNbScales:  MAX_NB_SCALES,
-
 		colors: [
 			'#0093ee',
 			'#1bb934',
@@ -41,12 +40,11 @@ export default
 	},
 
 	getters: {
-		activeScales: state => state.scales.filter(state.scales.some(scale => scale.isFocused)
-		                                             ? sc => sc.isFocused
-		                                             : scale => scale.isVisible)
+		activeScales: state => state.scales.filter(state.scales.some(scale => scale.isFocused) ? sc => sc.isFocused : scale => scale.isVisible),
 	},
 
-	mutations: {
+	mutations:
+	{
 		addScale(state, params = {})
 		{
 			// Limit the number of simultaneous scales
@@ -73,6 +71,7 @@ export default
 				isFocused:  false,
 			});
 		},
+
 		removeScale(state, id)
 		{
 			state.scales = state.scales.filter(scale => scale.id != id);
@@ -81,8 +80,11 @@ export default
 			if (state.scales.length == 1)
 				Vue.set(state.scales[0], 'isShowingIntersections', false);
 		},
-		updateScale:      (state,  p) => Vue.set(state.scales.find(scale => scale.id == p.id), p.prop, p.value),
-		toggleFocusScale: (state, id) => state.scales.forEach(scale => scale.isFocused = (scale.id == id && !scale.isFocused)),
-		clearScales:      state        => state.scales = [],
+
+		updateScale:      (state, payload) => Vue.set(state.scales.find(scale => scale.id == payload.id), payload.prop, payload.value),
+		toggleFocusScale: (state, id)      => state.scales.forEach(scale => scale.isFocused = (scale.id == id && !scale.isFocused)),
+
+		removeAllScales:  state => state.scales = [],
+		hideAllScales:    state => state.scales.forEach(scale => Vue.set(scale, 'isVisible', false)),
 	}
 }

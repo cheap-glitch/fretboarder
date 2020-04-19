@@ -74,6 +74,7 @@ module.exports = {
 						'copy',
 						'eye',
 						'eye-slash',
+						'low-vision',
 						'plus-circle',
 						'trash-alt',
 					]

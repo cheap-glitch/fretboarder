@@ -105,7 +105,7 @@ div.FretboardScale
 			)
 		//- Remove
 		VButtonIcon(
-			icon="trash-alt"
+			icon="times-circle"
 			size="small"
 			tooltip="Remove"
 			@click="removeScale(id)"

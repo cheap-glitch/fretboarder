@@ -93,7 +93,7 @@ div.PageFretboarder
 			div.toolbar__separator
 
 			//- Clear the fretboard
-			VButtonIcon#help-tour-step--4(
+			//- VButtonIcon#help-tour-step--4(
 				icon="eraser"
 				tooltip="Clear the freatboard"
 				@click="$store.commit('scales/clearScales')"
@@ -234,18 +234,16 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-/**
- * Above the fretboard
- * -----------------------------------------------------------------------------
- */
+.PageFretboarder {
+	@include space-children-v(60px);
+}
+
 .above-fretboard {
 	display: none;
 	align-items: flex-end;
 	justify-content: space-between;
 
 	position: relative;
-
-	margin-bottom: 40px;
 
 	@include mq($from: desktop)
 	{
@@ -306,7 +304,6 @@ export default {
 
 .fret-range-slider {
 	width: 300px;
-	margin: 0 10px;
 }
 
 #canvas-export,
@@ -314,14 +311,8 @@ export default {
 	display: none;
 }
 
-/**
- * Below the fretboard
- * -----------------------------------------------------------------------------
- */
 .below-fretboard {
 	display: none;
-
-	margin-top: 40px;
 
 	@include mq($from: desktop)
 	{
@@ -329,10 +320,6 @@ export default {
 	}
 }
 
-/**
- * Mobile actions
- * -----------------------------------------------------------------------------
- */
 .mobile-actions {
 	@include space-children-v(10px);
 
