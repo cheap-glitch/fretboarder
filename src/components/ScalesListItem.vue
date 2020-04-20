@@ -101,7 +101,7 @@ div.ScalesListItem
 			tooltip="Duplicate"
 			@click="addScale(id)"
 
-			:is-disabled="nbScales == 5"
+			:is-disabled="nbScales == MAX_NB_SCALES"
 			)
 		//- Remove
 		VButtonIcon(
@@ -118,11 +118,12 @@ div.ScalesListItem
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations } from 'vuex'
-import { get }          from 'vuex-pathify'
+import { mapMutations }  from 'vuex'
+import { get }           from 'vuex-pathify'
 
-import data             from '@/modules/data'
-import { objectMap }    from '@/modules/object'
+import data              from '@/modules/data'
+import { objectMap }     from '@/modules/object'
+import { MAX_NB_SCALES } from '@/stores/scales'
 
 export default {
 	name: 'ScalesListItem',
@@ -218,6 +219,7 @@ export default {
 
 	created()
 	{
+		this.MAX_NB_SCALES  = MAX_NB_SCALES;
 		this.tonalities     = data.tonalities,
 		this.intervalsNames = data.intervalsNames,
 

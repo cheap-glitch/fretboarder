@@ -11,7 +11,7 @@ div.ScalesList
 	div.scales
 		div.scale__tools
 			//- Hide all scales
-			VButtonIcon(
+			VButtonIcon.scale__tools__hide-all(
 				v-show="scales.length >= 2"
 
 				icon="low-vision"
@@ -106,7 +106,15 @@ export default {
 .scale__tools {
 	display: flex;
 	justify-content: flex-end;
-	@include space-children-h(10px);
+}
+
+.scale__tools__hide-all {
+	/**
+	 * Place the "Hide all" tool above the "Hide" button of the scales
+	 *
+	 *                 three icons       separator
+	 */
+	margin-right: calc(3*(22px + 10px) + 24px);
 }
 
 .text-no-scales {

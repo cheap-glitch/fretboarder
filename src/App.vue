@@ -242,11 +242,11 @@ export default {
 }
 
 .settings {
-	margin: 20px 0 60px 0;
+	margin: 20px 0 80px 0;
 }
 
 .scales {
-	margin-top: 40px;
+	margin-top: 60px;
 }
 
 .mobile-actions {
