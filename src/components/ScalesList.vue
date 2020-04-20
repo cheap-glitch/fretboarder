@@ -1,12 +1,12 @@
 
 
-<!-- components/PageFretboarderScales.vue -->
+<!-- components/ScalesList.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.PageFretboarderScales
+div.ScalesList
 
 	div.scales
 		div.scale__tools
@@ -21,7 +21,7 @@ div.PageFretboarderScales
 				@click="$store.commit('scales/hideAllScales')"
 			)
 			//- Remove all scales
-			VButtonIcon(
+			VButtonIcon#help-tour-step--4(
 				v-show="scales.length >= 2"
 
 				icon="trash-alt"
@@ -32,7 +32,7 @@ div.PageFretboarderScales
 			)
 
 		//- Scales & arpeggios
-		FretboardScale(
+		ScalesListItem(
 			v-for="scale in scales"
 			:key="`scale--${scale.id}`"
 
@@ -64,13 +64,13 @@ div.PageFretboarderScales
 import { get }          from 'vuex-pathify'
 import { mapMutations } from 'vuex'
 
-import FretboardScale from '@/components/FretboardScale'
+import ScalesListItem   from '@/components/ScalesListItem'
 
 export default {
-	name: 'PageFretboarderScales',
+	name: 'ScalesList',
 
 	components: {
-		FretboardScale,
+		ScalesListItem,
 	},
 
 	computed: {
@@ -94,7 +94,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.PageFretboarderScales {
+.ScalesList {
 	@include center-column;
 	@include space-children-v(20px);
 }

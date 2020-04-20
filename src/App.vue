@@ -9,9 +9,45 @@
 div.App(:style="colorscheme")
 
 	//----------------------------------------------------------------------
-	//- Header
+	//- Page content
 	//----------------------------------------------------------------------
-	header.header
+
+	//- Tools & settings
+	FretboardSettings.settings
+
+	//- Fretboard
+	FretboardViewer#help-tour-step--12(:is-vertical="isMobileDevice")
+
+	//- Scales & arpeggios
+	ScalesList.scales(v-if="!isMobileDevice")
+
+	//- Help tour
+	HelpTour
+
+	//----------------------------------------------------------------------
+	//- Mobile actions & modals
+	//----------------------------------------------------------------------
+
+	div.mobile-actions
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
+
+	//- Scales & arpeggios
+	VModal(
+		v-if="isMobileDevice"
+
+		:is-open="isModalScalesOpen"
+		@close="isModalScalesOpen = false"
+		)
+		ScalesList
+
+	//----------------------------------------------------------------------
+	//- Footer
+	//----------------------------------------------------------------------
+
+	//- footer.AppFooter
+
+		//- Logo
 		h1.header__title
 			fa-icon.header__title__logo(
 				:icon="['far', instrumentIcon]"
@@ -57,38 +93,6 @@ div.App(:style="colorscheme")
 				p.header__nav__link__text--wide  The Guitar Lick Database
 				fa-icon.header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
 
-	//----------------------------------------------------------------------
-	//- Body
-	//----------------------------------------------------------------------
-	PageFretboarder
-	PageFretboarderHelpTour
-	v-tour(name="export-menu" :steps="exportMenuTooltip")
-		template(v-slot="tour")
-			transition(name="fade")
-				v-step.export-menu(
-					v-if="tour.currentStep == 0"
-
-					:step="tour.steps[0]"
-					:labels="tour.labels"
-					:stop="tour.stop"
-
-					v-click-outside="tour.stop"
-					)
-					template(v-slot:actions)
-						div.export-menu__actions
-							VButtonText.export-menu__actions__button(
-								v-for="format in ['png', 'jpg', 'svg', 'pdf']"
-								:key="`export-button--${format}`"
-
-								is-filled
-								@click.native.left="exportFretboardToFile(format)"
-								)
-								p {{ format.toUpperCase() }}
-
-	//----------------------------------------------------------------------
-	//- Footer
-	//----------------------------------------------------------------------
-	footer.page-footer
 		p.page-footer__text Fretboarder v2.0 by cheap glitch
 		a.page-footer__link(
 			href="https://twitter.com/cheap_glitch"
@@ -110,24 +114,33 @@ div.App(:style="colorscheme")
 <!--{{{ JavaScript -->
 <script>
 
-import { get }                  from 'vuex-pathify'
-import { saveAs }               from 'file-saver'
+import { mapMutations }   from 'vuex'
+import { get }            from 'vuex-pathify'
 
-import { EventBus }             from '@/modules/bus'
-import data                     from '@/modules/data'
-import colorscheme              from '@/modules/colorscheme'
-import { objectMapToObj }       from '@/modules/object'
-import * as exportFretboard     from '@/modules/export'
+import colorscheme        from '@/modules/colorscheme'
+import { objectMapToObj } from '@/modules/object'
+import { EventBus }       from '@/modules/bus'
 
-import PageFretboarder          from '@/components/PageFretboarder'
-import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
+import FretboardSettings  from '@/components/FretboardSettings'
+import FretboardViewer    from '@/components/FretboardViewer'
+import ScalesList         from '@/components/ScalesList'
+import HelpTour           from '@/components/HelpTour'
 
 export default {
 	name: 'App',
 
 	components: {
-		PageFretboarder,
-		PageFretboarderHelpTour,
+		FretboardSettings,
+		FretboardViewer,
+		ScalesList,
+		HelpTour,
+	},
+
+	data() {
+		return {
+			isModalScalesOpen:   false,
+			isModalSettingsOpen: false,
+		}
 	},
 
 	computed: {
@@ -155,14 +168,17 @@ export default {
 		},
 		...get([
 			'instrument',
-			'tuning',
-			'fretRange',
-			'scales/activeScales',
+			'scales/scales',
 
-			'isFretboardFlipped',
-			'isDisplayingNotesName',
 			'isDarkModeOn',
+			'isMobileDevice',
 		]),
+	},
+
+	mounted()
+	{
+		if (this.scales.length == 0)
+			this.addScale();
 	},
 
 	created()
@@ -172,13 +188,6 @@ export default {
 
 		// Update the width of the window on every resize
 		window.addEventListener('resize',  this.updateClientWidth, { passive: true });
-
-		this.exportMenuTooltip = [{
-			target:  '#button-export-menu',
-			content: `<strong>Choose a format to export in</strong><br>
-				  <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
-				      for embedding in web pages as it will scale perfectly when resized.</em>`
-		}];
 	},
 
 	destroyed()
@@ -204,38 +213,7 @@ export default {
 			if (helpTour.currentStep == -1)
 				helpTour.start();
 		},
-		exportFretboardToFile(format)
-		{
-			// Close the export menu tootlip
-			this.$tours['export-menu'].stop();
-
-			const svg = exportFretboard.exportFretboardToSVG(
-				data.instruments[this.instrument].nbStrings,
-				this.fretRange[0],
-				this.fretRange[1],
-				data.tunings[this.instrument][this.tuning],
-				this.activeScales,
-				this.isFretboardFlipped,
-				this.isDisplayingNotesName,
-				format != 'svg',
-			);
-
-			switch (format)
-			{
-				case 'png':
-				case 'jpg':
-					exportFretboard.exportSVGToImage(svg, format);
-					break;
-
-				case 'svg':
-					saveAs(svg.blob, 'fretboard.svg');
-					break;
-
-				case 'pdf':
-					exportFretboard.exportSVGToPDF(svg);
-					break;
-			}
-		},
+		...mapMutations(['addScale']),
 	},
 }
 
@@ -263,32 +241,44 @@ export default {
 	transition: background-color 0.2s;
 }
 
-.export-menu {
-	z-index: 100;
+.settings {
+	margin: 20px 0 60px 0;
 }
 
-.export-menu__actions {
-	display: flex;
-	justify-content: center;
-	@include space-children-h(10px);
-
+.scales {
 	margin-top: 40px;
 }
 
-.export-menu__actions__button {
-	color: white;
-	border-color: white;
-	background-color: white;
+.mobile-actions {
+	@include space-children-v(10px);
 
-	&:hover {
-		color: $color-slate-gray;
+	position: fixed;
+	z-index: 1000;
+	bottom: 10px;
+	right: 10px;
+
+	@include mq($from: desktop)
+	{
+		display: none;
 	}
 }
 
-/**
- * Header
- * -----------------------------------------------------------------------------
- */
+.mobile-actions__item {
+	@include center-content;
+	@include circle(48px);
+
+	font-size: 22px;
+
+	color: white;
+
+	box-shadow: -4px -4px 8px 2px rgba(0, 0, 0, 0.6);
+
+	cursor: pointer;
+
+	&:nth-child(1) { background-color: $color-azure; }
+	&:nth-child(2) { background-color: #aaa;         }
+}
+
 .header {
 	display: none;
 	justify-content: space-between;
@@ -379,10 +369,6 @@ export default {
 	}
 }
 
-/**
- * Footer
- * -----------------------------------------------------------------------------
- */
 .page-footer {
 	display: none;
 	align-items: flex-end;

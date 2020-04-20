@@ -6,24 +6,41 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(:style="[minWidth, grid, inlays]")
+div.FretboardViewer
 
-	//- Frets
-	FretboardViewerFret(
-		v-for="fret in frets"
-		:key="`fret--${fret.fret}-${fret.string+1}`"
-
-		v-bind="fret"
-		:is-vertical="isVertical"
+	//- Infos about the hovered fret
+	//- div.fret-infos(
+		v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
 		)
-
-	//- Fret numbers
-	template(v-if="!isVertical")
-		div.fret-number(
-			v-for="fret in fretNumbers"
-			:key="`fret-number--${fret}`"
+		div.fret-infos__item(
+			v-for="(info, index) in hoveredFretInfos"
+			:key="`fret-info--${index}`"
 			)
-			p.fret-number__text {{ fret }}
+			div.fret-infos__item__color-dot(
+				v-for="color in info.colors"
+				:key="`fret-info--${index}-color--${color}`"
+				:style="{ 'background-color': color }"
+				)
+			p {{ info.interval }}
+
+	div.fretboard(:style="[minWidth, grid, inlays]")
+
+		//- Frets
+		FretboardViewerFret(
+			v-for="fret in frets"
+			:key="`fret--${fret.fret}-${fret.string+1}`"
+
+			v-bind="fret"
+			:is-vertical="isVertical"
+			)
+
+		//- Fret numbers
+		template(v-if="!isVertical")
+			div.fret-number(
+				v-for="fret in fretNumbers"
+				:key="`fret-number--${fret}`"
+				)
+				p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -254,7 +271,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardViewer {
+.fretboard {
 	display: grid;
 
 	@include mq($until: desktop)
@@ -274,6 +291,37 @@ export default {
 .fret-number__text {
 	color: var(--color--text-2);
 }
+
+/*
+.fret-infos {
+	display: flex;
+	@include space-children-h(10px);
+
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	transform: translateX(-50%);
+
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	&.is-visible {
+		opacity: 1;
+	}
+}
+
+.fret-infos__item {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	color: var(--color--text);
+}
+
+.fret-infos__item__color-dot {
+	@include circle(10px);
+}
+*/
 
 </style>
 <!--}}}-->

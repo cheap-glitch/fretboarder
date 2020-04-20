@@ -1,12 +1,12 @@
 
 
-<!-- FretboardScale.vue -->
+<!-- components/ScalesListItem.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardScale
+div.ScalesListItem
 
 	div.color-dot(:style="{ 'background-color': color }")
 
@@ -125,7 +125,7 @@ import data             from '@/modules/data'
 import { objectMap }    from '@/modules/object'
 
 export default {
-	name: 'FretboardScale',
+	name: 'ScalesListItem',
 
 	props: {
 		id: {
@@ -267,7 +267,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardScale {
+.ScalesListItem {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

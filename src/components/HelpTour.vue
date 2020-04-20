@@ -1,6 +1,6 @@
 
 
-<!-- PageFretboarderHelpTour.vue -->
+<!-- components/HelpTour.vue -->
 
 
 <!--{{{ Pug -->
@@ -13,50 +13,49 @@ v-tour(
 	)
 
 	//- Tour step
-	template(v-slot="tour")
-		transition(name="fade")
-			v-step.help-tour__step(
-				v-for="(step, index) of tour.steps"
-				:key="`help-tour-step--${index}`"
+	template(v-slot="tour"): transition(name="fade")
+		v-step.help-tour__step(
+			v-for="(step, index) of tour.steps"
+			:key="`help-tour-step--${index}`"
 
-				v-if="tour.currentStep == index"
-				:step="step"
-				:labels="tour.labels"
-				:previous-step="tour.previousStep"
-				:next-step="tour.nextStep"
-				:stop="tour.stop"
-				:is-first="tour.isFirst"
-				:is-last="tour.isLast"
+			v-if="tour.currentStep == index"
+			:step="step"
+			:labels="tour.labels"
+			:previous-step="tour.previousStep"
+			:next-step="tour.nextStep"
+			:stop="tour.stop"
+			:is-first="tour.isFirst"
+			:is-last="tour.isLast"
 
-				v-click-outside="event => stopTour(event, tour.stop)"
-				)
+			v-click-outside="event => stopTour(event, tour.stop)"
+			)
 
-				//- Footer
-				template(v-slot:actions)
-					div.help-tour__step__footer
+			//- Footer
+			template(v-slot:actions)
+				div.help-tour__step__footer
 
-						//- Pagination
-						p.help-tour__step__footer__page {{ index + 1 }} / {{ tour.steps.length }}
+					//- Pagination
+					p.help-tour__step__footer__page {{ index + 1 }} / {{ tour.steps.length }}
 
-						//- Prev/next/finish buttons
-						div.help-tour__actions
-							VButtonText.help-tour__actions__button(
-								v-show="!tour.isFirst"
-								@click.native.left="tour.previousStep"
-								)
-								p ← Previous
-							VButtonText.help-tour__actions__button(
-								v-show="!tour.isLast"
-								is-filled
-								@click.native.left="tour.nextStep"
-								)
-								p Next →
-							VButtonText.help-tour__actions__button(
-								v-show="tour.isLast"
-								is-filled
-								@click.native.left="tour.stop"
-								)
-								p Got it!
+					//- Prev/next/finish buttons
+					div.help-tour__actions
+						VButtonText.help-tour__actions__button(
+							v-show="!tour.isFirst"
+							@click.native.left="tour.previousStep"
+							)
+							p ← Previous
+						VButtonText.help-tour__actions__button(
+							v-show="!tour.isLast"
+							is-filled
+							@click.native.left="tour.nextStep"
+							)
+							p Next →
+						VButtonText.help-tour__actions__button(
+							v-show="tour.isLast"
+							is-filled
+							@click.native.left="tour.stop"
+							)
+							p Got it!
 
 </template>
 <!--}}}-->
@@ -71,6 +70,8 @@ import { get }           from 'vuex-pathify'
 import { MAX_NB_SCALES } from '@/stores/scales'
 
 const helpTourMessages = [
+	// {{{
+
 	// 1
 	`Welcome to Fretboarder!<br>
 	 This guide will take you on a quick tour of the main features.`,
@@ -141,20 +142,22 @@ const helpTourMessages = [
 
 	// 14
 	`Also, if you’re interested in lead guitar playing, check out <strong>The Guitar Lick Database</strong> to expand your lick vocabulary.`,
+
+	// }}}
 ];
 
 const helpTourTargets = [
 	...[...Array(6).keys()].map(n => `#help-tour-step--${n}`),
-	'.FretboardScale .scale-props',
-	'.FretboardScale .select-position',
-	'.FretboardScale .scale-tools__intervals',
-	'.FretboardScale .scale-tools .VButtonIcon:nth-of-type(2)',
-	'.FretboardScale .scale-tools .VButtonIcon:nth-last-of-type(2)',
+	'.ScalesListItem .scale-props',
+	'.ScalesListItem .select-position',
+	'.ScalesListItem .scale-tools__intervals',
+	'.ScalesListItem .scale-tools .VButtonIcon:nth-of-type(2)',
+	'.ScalesListItem .scale-tools .VButtonIcon:nth-last-of-type(2)',
 	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 12}`),
 ];
 
 export default {
-	name: 'PageFretboarderHelpTour',
+	name: 'HelpTour',
 
 	computed: {
 		...get('scales', ['scales'])
