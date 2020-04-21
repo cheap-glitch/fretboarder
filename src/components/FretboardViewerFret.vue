@@ -28,6 +28,9 @@ div.FretboardViewerFret(
 	div.note-placeholder(
 		v-show="!isActive"
 		v-mods="{ isOpenString, isFretboardFlipped }"
+
+		@mouseenter="$emit('hover-fret', [{ colors: ['gray'], interval: noteName }])"
+		@mouseleave="$emit('hover-fret', [])"
 		)
 		p.note-placeholder__name(
 			) {{ noteName }}
