@@ -11,18 +11,19 @@ div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 	//- Infos about the hovered fret
 	div.fret-infos(
 		v-if="!isMobileDevice"
-		v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
+		v-mods="{ isVisible: hoveredFret != null }"
 		)
+		p {{ hoveredFretInfos.note }}
 		div.fret-infos__item(
-			v-for="(info, index) in hoveredFretInfos"
+			v-for="(interval, index) in hoveredFretInfos.intervals"
 			:key="`fret-info--${index}`"
 			)
 			div.fret-infos__item__color-dot(
-				v-for="color in info.colors"
+				v-for="color in interval.colors"
 				:key="`fret-info--${index}-color--${color}`"
 				:style="{ 'background-color': color }"
 				)
-			p {{ info.interval }}
+			p {{ interval.name }}
 
 	div.fretboard-wrapper(
 		v-mods="{ isFretboardFlipped, isDisplayingFretNbs }"
@@ -37,7 +38,7 @@ div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 				v-bind="fret"
 				:is-vertical="isVertical"
 
-				@hover-fret="updateFretInfos"
+				@hover-fret="updateHoveredFret"
 				)
 
 			//- Fret numbers
@@ -83,11 +84,15 @@ export default {
 
 			openStringFretsSize: 30,
 
-			hoveredFretInfos:    [],
+			hoveredFret:         null,
 		}
 	},
 
 	computed: {
+		hoveredFretInfos()
+		{
+			return this.hoveredFret ? this.frets[this.hoveredFret].infos : { name: '', intervals: [] };
+		},
 		minWidth()
 		{
 			/**
@@ -186,48 +191,52 @@ export default {
 				if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
 
 				frets.push({
+					index: frets.length,
+
 					string, fret, note,
 
 					scales: scales.map(scale => ({ id: scale.id, color: scale.color })),
 
-					infos: objectMap(
-						// Build the list of intervals
-						scales.map(scale => (
-						{
-							id:     scale.id,
-							color:  scale.color,
-							value:  music.getNotesInterval(scale.notes[0], note),
-						}))
-						// Combine the same intervals together
-						.reduce(
-							function(list, interval)
+					infos: {
+						note, intervals: objectMap(
+							// Build the list of intervals
+							scales.map(scale => (
 							{
-								// If the interval is not in the list, initialize its color list
-								if (!(interval.value in list))
-									list[interval.value] = [];
+								id:     scale.id,
+								color:  scale.color,
+								value:  music.getNotesInterval(scale.notes[0], note),
+							}))
+							// Combine the same intervals together
+							.reduce(
+								function(list, interval)
+								{
+									// If the interval is not in the list, initialize its color list
+									if (!(interval.value in list))
+										list[interval.value] = [];
 
-								// Add it to the list of colors
-								list[interval.value].push({ id: interval.id, color: interval.color });
+									// Add it to the list of colors
+									list[interval.value].push({ id: interval.id, color: interval.color });
 
-								return list;
-							}, {}
-						),
-						(key, value) => ({
-							ids:       value.map(v => v.id).sort((a, b) => a - b),
-							colors:    value.sort((a, b) => a.id - b.id).map(v => v.color),
-							interval:  data.intervalsNames[key],
+									return list;
+								}, {}
+							),
+							(key, value) => ({
+								ids:    value.map(v => v.id).sort((a, b) => a - b),
+								name:   data.intervalsNames[key],
+								colors: value.sort((a, b) => a.id - b.id).map(v => v.color),
+							})
+						)
+						// Sort the intervals to always have the same scale order
+						.sort((a, b) => {
+							for (let i=0; i<a.ids.length && i<b.ids.length; i++)
+							{
+								if (a.ids[i] < b.ids[i]) return -1;
+								if (a.ids[i] > b.ids[i]) return  1;
+							}
+
+							return 0;
 						})
-					)
-					// Sort the intervals to always have the same scale order
-					.sort((a, b) => {
-						for (let i=0; i<a.ids.length && i<b.ids.length; i++)
-						{
-							if (a.ids[i] < b.ids[i]) return -1;
-							if (a.ids[i] > b.ids[i]) return  1;
-						}
-
-						return 0;
-					}),
+					},
 
 					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
 					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
@@ -308,9 +317,9 @@ export default {
 	},
 
 	methods: {
-		updateFretInfos(infos)
+		updateHoveredFret(index)
 		{
-			this.hoveredFretInfos = infos;
+			this.hoveredFret = index;
 		}
 	},
 }
@@ -323,7 +332,7 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardViewer {
-	@include space-children-v(40px);
+	@include space-children-v(20px);
 
 	&.is-vertical {
 		margin-top: 20px;

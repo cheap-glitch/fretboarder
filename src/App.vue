@@ -241,7 +241,7 @@ export default {
 	transition: background-color 0.2s;
 }
 
-.fretboard-settings { margin-bottom: 60px; }
+.fretboard-settings { margin-bottom: 40px; }
 .fretboard-scales   { margin-top:    60px; }
 
 .mobile-actions {

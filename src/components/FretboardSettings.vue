@@ -10,7 +10,7 @@ div.FretboardSettings
 
 	div.wrapper
 
-		div.settings
+		div.toolbar
 			//- Instrument & tuning
 			div.toolbar#help-tour-step--1
 				VSelect.select-instrument(
@@ -25,26 +25,24 @@ div.FretboardSettings
 					)
 
 			//- Frets range
-			div.toolbar
-				p Fret range:
-				div.fret-range-slider#help-tour-step--2: vue-slider(
-					:min="0"
-					:max="24"
-					:interval="1"
+			div.fret-range-slider#help-tour-step--2: vue-slider(
+				:min="0"
+				:max="24"
+				:interval="1"
 
-					:min-range="4"
-					:enable-cross="false"
+				:min-range="4"
+				:enable-cross="false"
 
-					:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
-					adsorb lazy
+				:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
+				adsorb lazy
 
-					tooltip="hover"
-					tooltip-placement="bottom"
-					:tooltip-formatter="tooltipFormatter"
+				tooltip="hover"
+				tooltip-placement="bottom"
+				:tooltip-formatter="tooltipFormatter"
 
-					v-model="fretRange"
-					@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
-					)
+				v-model="fretRange"
+				@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
+				)
 
 		div.toolbar
 			//- Toggle note names
@@ -216,10 +214,6 @@ export default {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-}
-
-.settings {
-	@include space-children-v(20px);
 }
 
 .toolbar {

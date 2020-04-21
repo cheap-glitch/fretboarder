@@ -18,8 +18,8 @@ div.FretboardViewerFret(
 		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
 		:style="noteColors"
 
-		@mouseenter="$emit('hover-fret', infos)"
-		@mouseleave="$emit('hover-fret', [])"
+		@mouseenter="$emit('hover-fret', index)"
+		@mouseleave="$emit('hover-fret', null)"
 		)
 		transition(name="fade")
 			p.note__name(v-show="isDisplayingNotesName || isOpenString") {{ noteName }}
@@ -29,8 +29,8 @@ div.FretboardViewerFret(
 		v-show="!isActive"
 		v-mods="{ isOpenString, isFretboardFlipped }"
 
-		@mouseenter="$emit('hover-fret', [{ colors: ['gray'], interval: noteName }])"
-		@mouseleave="$emit('hover-fret', [])"
+		@mouseenter="$emit('hover-fret', index)"
+		@mouseleave="$emit('hover-fret', null)"
 		)
 		p.note-placeholder__name {{ noteName }}
 
@@ -49,6 +49,10 @@ export default {
 	name: 'FretboardViewerFret',
 
 	props: {
+		index: {
+			type: Number,
+			required: true,
+		},
 		string: {
 			type: Number,
 			required: true,
@@ -63,10 +67,6 @@ export default {
 			validator: v => data.notes.includes(v)
 		},
 		scales: {
-			type: Array,
-			required: true,
-		},
-		infos: {
 			type: Array,
 			required: true,
 		},
