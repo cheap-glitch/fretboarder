@@ -7,13 +7,15 @@
 <template lang="pug">
 
 div.VModal: transition(name="fade")
-	div.modal(v-if="isOpen")
-		slot
-		fa-icon.modal__button-close(
-			:icon="['far', 'times-circle']"
 
-			@click.left="$emit('close')"
-			)
+	div.modal(v-if="isOpen")
+
+		//- Close button
+		div.modal__button-close(@click.left="$emit('close')")
+			fa-icon(:icon="['far', 'arrow-left']")
+
+		//- Content
+		slot
 
 </template>
 <!--}}}-->
@@ -48,20 +50,17 @@ export default {
 	right: 0;
 	bottom: 0;
 
+	padding: 0 20px 20px 20px;
+
 	background-color: var(--color--bg);
 }
 
 .modal__button-close {
-	position: fixed;
-	z-index: 100;
-	top: 20px;
-	right: 20px;
-
-	@include square(30px);
-
-	color: gray;
+	margin-bottom: 10px;
+	padding: 20px 0;
 
 	cursor: pointer;
+	user-select: none;
 }
 
 </style>

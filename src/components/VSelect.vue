@@ -201,16 +201,19 @@ export default {
 	position: relative;
 
 	flex: 1 1 auto;
-	max-width: 200px;
+
+	@include mq($from: desktop)
+	{
+		max-width: 200px;
+	}
 }
 
 .bar,
 .options {
-	border: 1px solid var(--color--select--border);
-
-	background-color: var(--color--select--bg);
-
-	transition: background-color 0.2s;
+	@include mq($from: desktop)
+	{
+		border: 1px solid var(--color--select--border);
+	}
 }
 
 .bar {
@@ -218,7 +221,7 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 
-	padding: 8px;
+	padding: 20px 10px 20px 20px;
 
 	cursor: pointer;
 
@@ -230,8 +233,21 @@ export default {
 		cursor: not-allowed;
 	}
 
-	&:not(.is-disabled):hover {
-		background-color: var(--color--select-bar--bg--hover);
+	@include mq($until: desktop)
+	{
+		height: 100%;
+	}
+
+	@include mq($from: desktop)
+	{
+		padding: 8px;
+
+		background-color: var(--color--select--bg);
+		transition: background-color 0.2s;
+
+		&:not(.is-disabled):hover {
+			background-color: var(--color--select-bar--bg--hover);
+		}
 	}
 }
 
@@ -256,15 +272,23 @@ export default {
 .bar__chevron {
 	font-size: 0.8em;
 
-	@include flip;
+	color: var(--color--select--chevron);
 
-	&.is-flipped {
-		transform: rotate(180deg);
+	@include mq($from: desktop)
+	{
+		@include flip;
+
+		&.is-flipped {
+			transform: rotate(180deg);
+		}
 	}
 }
 
 .options {
 	overflow-y: auto;
+
+	background-color: var(--color--select--bg);
+	transition: background-color 0.2s;
 
 	/**
 	 * On mobile: modal

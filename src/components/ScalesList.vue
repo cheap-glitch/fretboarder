@@ -47,7 +47,7 @@ div.ScalesList
 		) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 
 	//- Add a new scale
-	VButtonIcon#help-tour-step--5(
+	VButtonIcon.button-add-scale#help-tour-step--5(
 		v-show="scales.length < maxNbScales"
 
 		icon="plus-circle"
@@ -99,8 +99,12 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesList {
-	@include center-column;
 	@include space-children-v(20px);
+
+	@include mq($from: desktop)
+	{
+		@include center-column;
+	}
 }
 
 .scales {
@@ -123,6 +127,13 @@ export default {
 
 .text-no-scales {
 	color: var(--color--text);
+}
+
+.button-add-scale {
+	@include mq($until: desktop)
+	{
+		margin: auto;
+	}
 }
 
 </style>

@@ -6,7 +6,9 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.ScalesListItem
+div.ScalesListItem(
+	:style="{ 'border-color': color }"
+	)
 
 	div.color-dot(:style="{ 'background-color': color }")
 
@@ -49,7 +51,7 @@ div.ScalesListItem
 	//----------------------------------------------------------------------
 	//- Tools
 	//----------------------------------------------------------------------
-	div.scale-tools
+	//- div.scale-tools
 
 		//- Intervals
 		div.scale-tools__intervals
@@ -270,9 +272,19 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesListItem {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	@include mq($until: desktop)
+	{
+		border-width: 2px;
+		border-style: solid;
+		border-radius: 10px;
+	}
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 }
 
 .color-dot {
@@ -280,26 +292,36 @@ export default {
 	flex: 0 0 auto;
 
 	margin-right: 10px;
-}
 
-.scale-props,
-.scale-tools {
-	display: flex;
-	align-items: center;
-	@include space-children-h(10px);
+	@include mq($until: desktop)
+	{
+		display: none;
+	}
 }
 
 .scale-props {
 	flex: 1 1 100%;
 
-	margin-right: 30px;
+	@include mq($until: desktop)
+	{
+		display: grid;
+		grid-template-columns: repeat(5, [col] 1fr);
+	}
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: center;
+		@include space-children-h(10px);
+
+		margin-right: 30px;
+	}
 }
 
 .scale-tools {
-	@include mq($until: desktop)
-	{
-		display: none;
-	}
+	display: flex;
+	align-items: center;
+	@include space-children-h(10px);
 }
 
 .scale-tools__separator {
@@ -309,7 +331,24 @@ export default {
 	background-color: var(--color--separator);
 }
 
-.scale-props {
+@include mq($until: desktop)
+{
+	.select-type     { grid-column: col 1 / span 4; }
+	.select-tonality { grid-column: col 5 / span 1; }
+	.select-model    { grid-column: col 1 / span 3; }
+	.select-position { grid-column: col 4 / span 2; }
+
+	.select-type, .select-tonality {
+		border-bottom: 1px solid var(--color--border);
+	}
+
+	.select-type, .select-model {
+		border-right: 1px solid var(--color--border);
+	}
+}
+
+@include mq($from: desktop)
+{
 	.select-type     { max-width: 120px; min-width: 120px; }
 	.select-tonality { max-width: 60px;  min-width: 60px;  }
 	.select-model    { max-width: 220px; min-width: 220px; }

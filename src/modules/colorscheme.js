@@ -29,6 +29,7 @@ export default {
 	'--color--select--bg':                 ['snow',            colors.mirage2],
 	'--color--select--border':             [colors.azure,      colors.oxfordBlue],
 	'--color--select--text':               ['black',           colors.nepal],
+	'--color--select--chevron':            ['gray',            colors.nepal],
 	'--color--select-bar--bg--hover':      ['#eee',            colors.ebonyClay],
 	'--color--select-item--bg--hover':     ['#eee',            colors.oxfordBlue],
 
