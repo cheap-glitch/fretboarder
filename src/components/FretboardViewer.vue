@@ -6,10 +6,11 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer
+div.FretboardViewer(v-mods="{ isVertical }")
 
 	//- Infos about the hovered fret
-	//- div.fret-infos(
+	div.fret-infos(
+		v-if="!isMobileDevice"
 		v-mods="{ isVisible: hoveredFretInfos.length > 0 }"
 		)
 		div.fret-infos__item(
@@ -32,6 +33,8 @@ div.FretboardViewer
 
 			v-bind="fret"
 			:is-vertical="isVertical"
+
+			@hover-fret="updateFretInfos"
 			)
 
 		//- Fret numbers
@@ -53,6 +56,7 @@ import { get }             from 'vuex-pathify'
 
 import data                from '@/modules/data'
 import * as music          from '@/modules/music'
+import { objectMap }       from '@/modules/object'
 import FretboardViewerFret from '@/components/FretboardViewerFret'
 
 export default {
@@ -73,7 +77,10 @@ export default {
 		return {
 			fretMinWidth:        25,
 			fretMinHeight:       40,
+
 			openStringFretsSize: 30,
+
+			hoveredFretInfos:    [],
 		}
 	},
 
@@ -176,16 +183,48 @@ export default {
 				if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
 
 				frets.push({
-					string,
-					fret,
-					note,
-					scales:    scales.map(scale => ({ id: scale.id, color: scale.color })),
-					intervals: scales.map(scale => (
-					{
-						id:     scale.id,
-						color:  scale.color,
-						value:  music.getNotesInterval(scale.notes[0], note),
-					})),
+					string, fret, note,
+
+					scales: scales.map(scale => ({ id: scale.id, color: scale.color })),
+
+					infos: objectMap(
+						// Build the list of intervals
+						scales.map(scale => (
+						{
+							id:     scale.id,
+							color:  scale.color,
+							value:  music.getNotesInterval(scale.notes[0], note),
+						}))
+						// Combine the same intervals together
+						.reduce(
+							function(list, interval)
+							{
+								// If the interval is not in the list, initialize its color list
+								if (!(interval.value in list))
+									list[interval.value] = [];
+
+								// Add it to the list of colors
+								list[interval.value].push({ id: interval.id, color: interval.color });
+
+								return list;
+							}, {}
+						),
+						(key, value) => ({
+							ids:       value.map(v => v.id).sort((a, b) => a - b),
+							colors:    value.sort((a, b) => a.id - b.id).map(v => v.color),
+							interval:  data.intervalsNames[key],
+						})
+					)
+					// Sort the intervals to always have the same scale order
+					.sort((a, b) => {
+						for (let i=0; i<a.ids.length && i<b.ids.length; i++)
+						{
+							if (a.ids[i] < b.ids[i]) return -1;
+							if (a.ids[i] > b.ids[i]) return  1;
+						}
+
+						return 0;
+					}),
 
 					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
 					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
@@ -260,7 +299,15 @@ export default {
 			'scales/activeScales',
 
 			'isFretboardFlipped',
+			'isMobileDevice',
 		]),
+	},
+
+	methods: {
+		updateFretInfos(infos)
+		{
+			this.hoveredFretInfos = infos;
+		}
 	},
 }
 
@@ -270,6 +317,45 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
+
+.FretboardViewer {
+	@include space-children-v(40px);
+
+	&:not(.is-vertical) {
+		margin-left: 20px;
+	}
+
+	&.is-vertical {
+		margin-top: 20px;
+	}
+}
+
+.fret-infos {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
+
+	height: 2rem;
+
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	&.is-visible {
+		opacity: 1;
+	}
+}
+
+.fret-infos__item {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	color: var(--color--text);
+}
+
+.fret-infos__item__color-dot {
+	@include circle(10px);
+}
 
 .fretboard {
 	display: grid;
@@ -291,37 +377,6 @@ export default {
 .fret-number__text {
 	color: var(--color--text-2);
 }
-
-/*
-.fret-infos {
-	display: flex;
-	@include space-children-h(10px);
-
-	position: absolute;
-	left: 50%;
-	bottom: 0;
-	transform: translateX(-50%);
-
-	opacity: 0;
-	transition: opacity 0.2s;
-
-	&.is-visible {
-		opacity: 1;
-	}
-}
-
-.fret-infos__item {
-	display: flex;
-	align-items: center;
-	@include space-children-h(5px);
-
-	color: var(--color--text);
-}
-
-.fret-infos__item__color-dot {
-	@include circle(10px);
-}
-*/
 
 </style>
 <!--}}}-->

@@ -9,7 +9,9 @@
 div.ScalesList
 
 	div.scales
-		div.scale__tools
+		div.scale__tools(
+			v-if="!isMobileDevice"
+			)
 			//- Hide all scales
 			VButtonIcon.scale__tools__hide-all(
 				v-show="scales.length >= 2"
@@ -77,6 +79,8 @@ export default {
 		...get([
 			'scales/scales',
 			'scales/maxNbScales',
+
+			'isMobileDevice',
 		])
 	},
 

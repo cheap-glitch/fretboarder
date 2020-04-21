@@ -10,7 +10,7 @@ div.FretboardSettings
 
 	div.wrapper
 
-		div.toolbar
+		div.settings
 			//- Instrument & tuning
 			div.toolbar#help-tour-step--1
 				VSelect.select-instrument(
@@ -25,8 +25,9 @@ div.FretboardSettings
 					)
 
 			//- Frets range
-			div.fret-range-slider#help-tour-step--2
-				vue-slider(
+			div.toolbar
+				p Fret range:
+				div.fret-range-slider#help-tour-step--2: vue-slider(
 					:min="0"
 					:max="24"
 					:interval="1"
@@ -38,6 +39,7 @@ div.FretboardSettings
 					adsorb lazy
 
 					tooltip="hover"
+					tooltip-placement="bottom"
 					:tooltip-formatter="tooltipFormatter"
 
 					v-model="fretRange"
@@ -210,8 +212,12 @@ export default {
 
 .wrapper {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
+}
+
+.settings {
+	@include space-children-v(20px);
 }
 
 .toolbar {

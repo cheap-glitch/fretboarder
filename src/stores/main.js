@@ -28,8 +28,6 @@ const state = {
 	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  true,       v => typeof v == 'boolean'),
 	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      v => typeof v == 'boolean'),
 
-	hoveredFretInfos:       [],
-
 	/**
 	 * Allows v-click-outside to ignore mouseup
 	 * events on the fret slider during the help tour

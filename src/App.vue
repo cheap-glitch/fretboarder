@@ -13,13 +13,13 @@ div.App(:style="colorscheme")
 	//----------------------------------------------------------------------
 
 	//- Tools & settings
-	FretboardSettings.settings
+	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 	//- Fretboard
 	FretboardViewer#help-tour-step--12(:is-vertical="isMobileDevice")
 
 	//- Scales & arpeggios
-	ScalesList.scales(v-if="!isMobileDevice")
+	ScalesList.fretboard-scales(v-if="!isMobileDevice")
 
 	//- Help tour
 	HelpTour
@@ -28,7 +28,7 @@ div.App(:style="colorscheme")
 	//- Mobile actions & modals
 	//----------------------------------------------------------------------
 
-	div.mobile-actions
+	div.mobile-actions(v-if="isMobileDevice")
 		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
 		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
 
@@ -232,7 +232,7 @@ export default {
 	flex-direction: column;
 	overflow-y: hidden;
 
-	padding: 20px 40px;
+	padding: 20px;
 
 	min-height: 100%;
 
@@ -241,13 +241,8 @@ export default {
 	transition: background-color 0.2s;
 }
 
-.settings {
-	margin: 20px 0 80px 0;
-}
-
-.scales {
-	margin-top: 60px;
-}
+.fretboard-settings { margin-bottom: 60px; }
+.fretboard-scales   { margin-top:    60px; }
 
 .mobile-actions {
 	@include space-children-v(10px);
@@ -256,11 +251,6 @@ export default {
 	z-index: 1000;
 	bottom: 10px;
 	right: 10px;
-
-	@include mq($from: desktop)
-	{
-		display: none;
-	}
 }
 
 .mobile-actions__item {
