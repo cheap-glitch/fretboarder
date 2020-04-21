@@ -26,6 +26,7 @@ const state = {
 
 	isDarkModeOn:           storage.get('isDarkModeOn',           false,      v => typeof v == 'boolean'),
 	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  true,       v => typeof v == 'boolean'),
+	isDisplayingFretNbs:    storage.get('isDisplayingFretNbs',    true,       v => typeof v == 'boolean'),
 	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      v => typeof v == 'boolean'),
 
 	/**
@@ -58,7 +59,8 @@ const mutations = {
 };
 
 /**
- * Plugin to automatically save some state properties in the local storage upon certain mutations
+ * Automatically save some state properties
+ * in the local storage upon certain mutations
  */
 const storeOnMutation = store => store.subscribe(function(mutation, state)
 {

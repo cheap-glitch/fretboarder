@@ -62,9 +62,7 @@ module.exports = {
 						'mandolin',
 						'question-circle',
 
-						// Fretboard tools
-						'adjust',
-						'eraser',
+						// Tools & settings
 						'file-download',
 						'hand-paper',
 						'info-circle',
@@ -88,6 +86,13 @@ module.exports = {
 						// Mobile actions
 						'cog',
 						'list-music',
+					]
+				},
+				{
+					set: 'pro-light',
+					icons: [
+						// Tools & settings
+						'list-ol',
 					]
 				},
 				{

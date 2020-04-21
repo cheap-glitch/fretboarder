@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(v-mods="{ isVertical }")
+div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 
 	//- Infos about the hovered fret
 	div.fret-infos(
@@ -24,26 +24,29 @@ div.FretboardViewer(v-mods="{ isVertical }")
 				)
 			p {{ info.interval }}
 
-	div.fretboard(:style="[minWidth, grid, inlays]")
+	div.fretboard-wrapper(
+		v-mods="{ isFretboardFlipped, isDisplayingFretNbs }"
+		)
+		div.fretboard(:style="[minWidth, grid, inlays]")
 
-		//- Frets
-		FretboardViewerFret(
-			v-for="fret in frets"
-			:key="`fret--${fret.fret}-${fret.string+1}`"
+			//- Frets
+			FretboardViewerFret(
+				v-for="fret in frets"
+				:key="`fret--${fret.fret}-${fret.string+1}`"
 
-			v-bind="fret"
-			:is-vertical="isVertical"
+				v-bind="fret"
+				:is-vertical="isVertical"
 
-			@hover-fret="updateFretInfos"
-			)
-
-		//- Fret numbers
-		template(v-if="!isVertical")
-			div.fret-number(
-				v-for="fret in fretNumbers"
-				:key="`fret-number--${fret}`"
+				@hover-fret="updateFretInfos"
 				)
-				p.fret-number__text {{ fret }}
+
+			//- Fret numbers
+			template(v-if="!isVertical && isDisplayingFretNbs")
+				div.fret-number(
+					v-for="fret in fretNumbers"
+					:key="`fret-number--${fret}`"
+					)
+					p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -298,8 +301,9 @@ export default {
 
 			'scales/activeScales',
 
-			'isFretboardFlipped',
 			'isMobileDevice',
+			'isDisplayingFretNbs',
+			'isFretboardFlipped',
 		]),
 	},
 
@@ -320,10 +324,6 @@ export default {
 
 .FretboardViewer {
 	@include space-children-v(40px);
-
-	&:not(.is-vertical) {
-		margin-left: 20px;
-	}
 
 	&.is-vertical {
 		margin-top: 20px;
@@ -355,6 +355,22 @@ export default {
 
 .fret-infos__item__color-dot {
 	@include circle(10px);
+}
+
+.fretboard-wrapper {
+	@include mq($from: desktop)
+	{
+		overflow: auto visible;
+
+		// Add some padding to avoid cutting notes on the edges
+		padding: 20px 2px 20px 20px;
+		&.is-fretboard-flipped { padding: 20px 20px 20px 2px; }
+
+		// When the fret numbers are displayed, the bottom padding becomes redundant
+		&.is-displaying-fret-nbs {
+			padding-bottom: 2px;
+		}
+	}
 }
 
 .fretboard {

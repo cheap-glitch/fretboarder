@@ -32,8 +32,7 @@ div.FretboardViewerFret(
 		@mouseenter="$emit('hover-fret', [{ colors: ['gray'], interval: noteName }])"
 		@mouseleave="$emit('hover-fret', [])"
 		)
-		p.note-placeholder__name(
-			) {{ noteName }}
+		p.note-placeholder__name {{ noteName }}
 
 </template>
 <!--}}}-->

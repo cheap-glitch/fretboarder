@@ -47,18 +47,19 @@ div.FretboardSettings
 					)
 
 		div.toolbar
-			//- Switch between themes
-			VButtonIcon(
-				icon="adjust"
-				:tooltip="isDarkModeOn ? 'Switch to light mode' : 'Switch to dark mode'"
-				@click="$store.commit('toggleIsDarkModeOn')"
-				)
 			//- Toggle note names
 			VButtonIcon#help-tour-step--3(
 				icon="info-circle"
 				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
 				@click="$store.commit('toggleIsDisplayingNotesName')"
+				)
+			//- Toggle fret numbers
+			VButtonIcon(
+				:icon="['fal', 'list-ol']"
+				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
+				:is-active="isDisplayingFretNbs"
+				@click="$store.commit('toggleIsDisplayingFretNbs')"
 				)
 			//- Switch fretting hand
 			VButtonIcon(
@@ -131,6 +132,7 @@ export default {
 
 			'isDarkModeOn',
 			'isDisplayingNotesName',
+			'isDisplayingFretNbs',
 			'isFretboardFlipped',
 		]),
 	},
