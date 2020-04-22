@@ -51,7 +51,7 @@ div.ScalesListItem(
 	//----------------------------------------------------------------------
 	//- Tools
 	//----------------------------------------------------------------------
-	//- div.scale-tools
+	div.scale-tools
 
 		//- Intervals
 		div.scale-tools__intervals
@@ -331,28 +331,30 @@ export default {
 	background-color: var(--color--separator);
 }
 
-@include mq($until: desktop)
-{
-	.select-type     { grid-column: col 1 / span 4; }
-	.select-tonality { grid-column: col 5 / span 1; }
-	.select-model    { grid-column: col 1 / span 3; }
-	.select-position { grid-column: col 4 / span 2; }
+.scale-props {
+	@include mq($until: desktop)
+	{
+		.select-type     { grid-column: col 1 / span 4; }
+		.select-tonality { grid-column: col 5 / span 1; }
+		.select-model    { grid-column: col 1 / span 3; }
+		.select-position { grid-column: col 4 / span 2; }
 
-	.select-type, .select-tonality {
-		border-bottom: 1px solid var(--color--border);
+		.select-type, .select-tonality {
+			border-bottom: 1px solid var(--color--border);
+		}
+
+		.select-type, .select-model {
+			border-right: 1px solid var(--color--border);
+		}
 	}
 
-	.select-type, .select-model {
-		border-right: 1px solid var(--color--border);
+	@include mq($from: desktop)
+	{
+		.select-type     { max-width: 120px; min-width: 120px; }
+		.select-tonality { max-width: 60px;  min-width: 60px;  }
+		.select-model    { max-width: 220px; min-width: 220px; }
+		.select-position { max-width: 100px; min-width: 100px; }
 	}
-}
-
-@include mq($from: desktop)
-{
-	.select-type     { max-width: 120px; min-width: 120px; }
-	.select-tonality { max-width: 60px;  min-width: 60px;  }
-	.select-model    { max-width: 220px; min-width: 220px; }
-	.select-position { max-width: 100px; min-width: 100px; }
 }
 
 .scale-tools__intervals {
