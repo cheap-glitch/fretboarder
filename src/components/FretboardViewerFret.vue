@@ -315,8 +315,13 @@ export default {
 	font-weight: bold;
 }
 
-.note__name             { color: white;                }
-.note-placeholder__name { color: var(--color--text-2); }
+.note__name {
+	color: white;
+}
+
+.note-placeholder__name {
+	color: var(--color--text--secondary);
+}
 
 .inlay {
 	@include center-position;

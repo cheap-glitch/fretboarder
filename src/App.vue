@@ -321,7 +321,7 @@ export default {
 }
 
 .header__nav__link {
-	color: var(--color--text-2);
+	color: var(--color--text--secondary);
 	border-color: var(--color--border);
 }
 
@@ -377,7 +377,7 @@ export default {
 .page-footer__link {
 	font-size: 1.3rem;
 
-	color: var(--color--text-2);
+	color: var(--color--text--secondary);
 }
 
 .page-footer__link {

@@ -81,7 +81,7 @@ export default {
 }
 
 .VButtonIcon__icon {
-	color: var(--color--text-2);
+	color: var(--color--text--secondary);
 
 	transition: color 0.2s;
 
@@ -90,7 +90,7 @@ export default {
 	}
 
 	&.is-disabled {
-		color: var(--color--text-2--disabled);
+		color: var(--color--text--disabled);
 
 		cursor: not-allowed;
 	}

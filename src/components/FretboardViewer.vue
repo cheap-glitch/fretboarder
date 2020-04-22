@@ -400,7 +400,7 @@ export default {
 }
 
 .fret-number__text {
-	color: var(--color--text-2);
+	color: var(--color--text--secondary);
 }
 
 </style>
