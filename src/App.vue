@@ -29,7 +29,8 @@ div.App(:style="colorscheme")
 	//----------------------------------------------------------------------
 	footer.footer
 
-		nav.footer__nav
+		div.footer__nav
+
 			//- Logo
 			h1.logo
 				fa-icon.logo__icon(
@@ -38,21 +39,47 @@ div.App(:style="colorscheme")
 					)
 				h1.logo__text Fretboarder
 
-			//- Quick help
-			div.footer__nav__link#help-tour-step--0(
-				@click.left="startHelpTour"
-				)
-				fa-icon(:icon="['far', 'question-circle']")
-				p.footer__nav__link__text Help
+			//- Links
+			nav.nav
 
-			//- Patreon link
-			a.footer__nav__link.link-support#help-tour-step--14(
-				href="https://www.patreon.com/cheap_glitch"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
-				)
-				fa-icon(:icon="['far', 'heart']")
-				p.footer__nav__link__text Support
+				//- GitHub & Twitter
+				a.nav__link(
+					href="https://github.com/cheap-glitch/fretboarder/issues"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'github']")
+				a.nav__link(
+					href="https://twitter.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'twitter']")
+
+				//- Quick help
+				div.nav__link#help-tour-step--0(
+					@click.left="startHelpTour"
+					)
+					fa-icon(:icon="['far', 'question-circle']")
+					p.nav__link__text Help
+
+				//- Patreon page
+				a.nav__link.link-support#help-tour-step--14(
+					href="https://www.patreon.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['far', 'heart']")
+					p.nav__link__text Support
+
+				//- TGLD
+				a.nav__link.link-tgld#help-tour-step--15(
+					href="https://www.theguitarlickdatabase.com"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['far', 'external-link-square-alt']")
+					p.nav__link__text TGLD
 
 		//- Light/dark switch
 		div.dark-mode-toggle(
@@ -61,50 +88,6 @@ div.App(:style="colorscheme")
 			fa-icon(:icon="['fas', 'sun']")
 			div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
 			fa-icon(:icon="['fas', 'moon']")
-
-			//-
-
-				//- Github link
-				VButtonText.header__nav__link#help-tour-step--13(
-					mode="link-external"
-					href="https://github.com/cheap-glitch/fretboarder/issues"
-					)
-					fa-icon.header__nav__link__icon(:icon="['far', 'bug']")
-					p.header__nav__link__text--small Bugs
-					p.header__nav__link__text--wide  Bugs report / Feature request
-
-				//- Patreon link
-				VButtonText.header__nav__link.support-link#help-tour-step--14(
-					mode="link-external"
-					is-filled
-
-					v-mods="{ isDarkModeOn }"
-					)
-					fa-icon.header__nav__link__icon(:icon="['far', 'heart']")
-					p Support
-
-				//- TGLD link
-				VButtonText.header__nav__link#help-tour-step--15(
-					mode="link-external"
-					href="https://www.theguitarlickdatabase.com"
-					)
-					p.header__nav__link__text--small TGLD
-					p.header__nav__link__text--wide  The Guitar Lick Database
-					fa-icon.header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
-
-		//- p.page-footer__text Fretboarder v2.0 by cheap glitch
-		//- a.page-footer__link(
-			href="https://twitter.com/cheap_glitch"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			)
-			fa-icon(:icon="['fab', 'twitter']")
-		//- a.page-footer__link(
-			href="https://github.com/cheap-glitch/fretboarder"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			)
-			fa-icon(:icon="['fab', 'github']")
 
 	//----------------------------------------------------------------------
 	//- Mobile actions & modals
@@ -271,7 +254,7 @@ export default {
 
 .footer__nav {
 	display: flex;
-	@include space-children-h(20px);
+	@include space-children-h(26px);
 }
 
 .logo {
@@ -306,7 +289,12 @@ export default {
 	font-weight: bold;
 }
 
-.footer__nav__link {
+.nav {
+	display: flex;
+	@include space-children-h(18px);
+}
+
+.nav__link {
 	display: flex;
 	align-items: center;
 	@include space-children-h(4px);
@@ -318,17 +306,16 @@ export default {
 	transition: color 0.2s;
 
 	&:hover {
-		color: var(--color--text);
+		color: var(--color--hover);
 	}
 }
 
-.footer__nav__link__text {
+.nav__link__text {
 	cursor: pointer;
 }
 
-.link-support:hover {
-	color: $color--crimson;
-}
+.link-support:hover { color: $color--crimson;  }
+.link-tgld:hover    { color: $color--cinnabar; }
 
 .dark-mode-toggle {
 	display: flex;
@@ -392,78 +379,6 @@ export default {
 	&:nth-child(1) { background-color: $color--azure; }
 	&:nth-child(2) { background-color: #aaa;          }
 }
-
-/*
-.header__nav__link {
-	color: var(--color--text--secondary);
-	border-color: var(--color--border);
-}
-
-.header__nav__link__icon {
-	transform: translateY(1px);
-}
-
-.header__nav__link__text--small {
-	@include mq($from: wideHeader)
-	{
-		display: none;
-	}
-}
-
-.header__nav__link__text--wide {
-	display: none;
-
-	@include mq($from: wideHeader)
-	{
-		display: inline;
-	}
-}
-
-.support-link {
-	color: $color--crimson;
-	border-color: $color--crimson;
-	background-color: $color--crimson;
-
-	&:hover {
-		color: var(--color--support-link--text--hover);
-	}
-
-	&.is-dark-mode-on {
-		filter: brightness(0.8);
-	}
-}
-
-.page-footer {
-	display: none;
-	align-items: flex-end;
-	justify-content: flex-end;
-	@include space-children-h(10px);
-
-	flex: 1 1 100%;
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-	}
-}
-
-.page-footer__text,
-.page-footer__link {
-	font-size: 1.3rem;
-
-	color: var(--color--text--secondary);
-}
-
-.page-footer__link {
-	cursor: pointer;
-
-	transition: color 0.2s;
-
-	&:hover {
-		color: var(--color--highlight);
-	}
-}
-*/
 
 </style>
 <!--}}}-->
