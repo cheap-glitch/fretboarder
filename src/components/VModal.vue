@@ -60,7 +60,6 @@ export default {
 	padding: 20px 0;
 
 	cursor: pointer;
-	user-select: none;
 }
 
 </style>

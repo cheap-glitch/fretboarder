@@ -9,9 +9,13 @@ export default {
 
 	// UI
 	'--color--bg':                        ['snow',           colors.mirage],
+	'--color--hover':                     [colors.azure,     colors.azure],
+	'--color--highlight':                 [colors.sun,       colors.sun],
+
 	'--color--text':                      ['black',          colors.nepal],
 	'--color--text--secondary':           ['gray',           colors.oxfordBlue2],
 	'--color--text--disabled':            ['darkgray',       colors.ebonyClay],
+
 	'--color--border':                    ['lightgray',      colors.oxfordBlue],
 	'--color--separator':                 ['lightgray',      colors.ebonyClay],
 
@@ -32,8 +36,5 @@ export default {
 	'--color--select--chevron':           ['gray',           colors.nepal],
 	'--color--select-bar--bg--hover':     ['#eee',           colors.ebonyClay],
 	'--color--select-item--bg--hover':    ['#eee',           colors.oxfordBlue],
-
-	// Others
-	'--color--vue-tour--bg':              [colors.slateGray, colors.slateGray],
 
 }

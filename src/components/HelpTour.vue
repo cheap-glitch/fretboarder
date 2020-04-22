@@ -293,13 +293,14 @@ export default {
 
 	font-family: $fonts-text;
 
+	user-select: none;
+
 	ul {
 		padding-left: 30px;
 
 		list-style: circle outside;
 
 		cursor: default;
-		user-select: none;
 	}
 }
 

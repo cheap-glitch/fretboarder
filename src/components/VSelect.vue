@@ -256,7 +256,6 @@ export default {
 .options__item,
 .options__button-close {
 	cursor: pointer;
-	user-select: none;
 
 	color: var(--color--select--text);
 

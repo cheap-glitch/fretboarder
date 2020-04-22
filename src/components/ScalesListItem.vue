@@ -54,8 +54,8 @@ div.ScalesListItem(
 	div.scale-tools
 
 		//- Intervals
-		div.scale-tools__intervals
-			div.scale-tools__intervals__item(
+		div.intervals
+			div.intervals__item(
 				v-for="(interval, index) in intervals"
 				:key="`scale-${id}-interval--${index}`"
 
@@ -271,8 +271,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use '@/styles/colors' as *;
-
 .ScalesListItem {
 	@include mq($until: desktop)
 	{
@@ -359,11 +357,11 @@ export default {
 	}
 }
 
-.scale-tools__intervals {
+.intervals {
 	display: flex;
 }
 
-.scale-tools__intervals__item {
+.intervals__item {
 	padding: 2px 8px;
 
 	border: 1px solid var(--color--border);
@@ -372,7 +370,7 @@ export default {
 
 	cursor: pointer;
 
-	transition: background-color 0.2s;
+	transition: color 0.2s, background-color 0.2s;
 
 	&:not(:last-child) {
 		border-right: none;
@@ -396,7 +394,7 @@ export default {
 	}
 
 	&.is-selected {
-		color: $color--sun;
+		color: var(--color--highlight);
 	}
 }
 
