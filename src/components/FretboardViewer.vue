@@ -6,24 +6,49 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(:style="[minWidth, grid, inlays]")
+div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 
-	//- Frets
-	FretboardViewerFret(
-		v-for="fret in frets"
-		:key="`fret--${fret.fret}-${fret.string+1}`"
-
-		v-bind="fret"
-		:is-vertical="isVertical"
+	//- Infos about the hovered fret
+	div.fret-infos(
+		v-if="!isMobileDevice"
+		v-mods="{ isVisible: hoveredFret != null }"
 		)
+		p.fret-infos__note {{ hoveredFretInfos.note }}
+		div.fret-infos__intervals
+			div.fret-infos__intervals__item(
+				v-for="(interval, index) in hoveredFretInfos.intervals"
+				:key="`fret-info--${index}`"
+				)
+				div.fret-infos__item__color-dot(
+					v-for="color in interval.colors"
+					:key="`fret-info--${index}-color--${color}`"
+					:style="{ 'background-color': color }"
+					)
+				p {{ interval.name }}
 
-	//- Fret numbers
-	template(v-if="!isVertical")
-		div.fret-number(
-			v-for="fret in fretNumbers"
-			:key="`fret-number--${fret}`"
-			)
-			p.fret-number__text(v-mods="darkMode") {{ fret }}
+	div.fretboard-wrapper(
+		v-mods="{ isFretboardFlipped, isDisplayingFretNbs }"
+		)
+		div.fretboard(:style="[minWidth, grid, inlays]")
+
+			//- Frets
+			FretboardViewerFret(
+				v-for="fret in frets"
+				:key="`fret--${fret.fret}-${fret.string+1}`"
+
+				v-bind="fret"
+				:is-vertical="isVertical"
+
+				@hover-fret="updateHoveredFret"
+				)
+
+			//- Fret numbers
+			template(v-if="!isVertical && isDisplayingFretNbs")
+				div.fret-number(
+					v-for="fret in fretNumbers"
+					:key="`fret-number--${fret}`"
+					)
+					p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -36,6 +61,7 @@ import { get }             from 'vuex-pathify'
 
 import data                from '@/modules/data'
 import * as music          from '@/modules/music'
+import { objectMap }       from '@/modules/object'
 import FretboardViewerFret from '@/components/FretboardViewerFret'
 
 export default {
@@ -56,11 +82,18 @@ export default {
 		return {
 			fretMinWidth:        25,
 			fretMinHeight:       40,
+
 			openStringFretsSize: 30,
+
+			hoveredFret:         null,
 		}
 	},
 
 	computed: {
+		hoveredFretInfos()
+		{
+			return this.hoveredFret ? this.frets[this.hoveredFret].infos : { name: '', intervals: [] };
+		},
 		minWidth()
 		{
 			/**
@@ -159,16 +192,53 @@ export default {
 				if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
 
 				frets.push({
-					string,
-					fret,
-					note,
-					scales:    scales.map(scale => ({ id: scale.id, color: scale.color })),
-					intervals: scales.map(scale => (
-					{
-						id:     scale.id,
-						color:  scale.color,
-						value:  music.getNotesInterval(scale.notes[0], note),
-					})),
+					index: frets.length,
+
+					string, fret, note,
+
+					scales: scales.map(scale => ({ id: scale.id, color: scale.color })),
+
+					infos: {
+						note: data.tonalities[note],
+						intervals: objectMap(
+							// Build the list of intervals
+							scales.map(scale => (
+							{
+								id:     scale.id,
+								color:  scale.color,
+								value:  music.getNotesInterval(scale.notes[0], note),
+							}))
+							// Combine the same intervals together
+							.reduce(
+								function(list, interval)
+								{
+									// If the interval is not in the list, initialize its color list
+									if (!(interval.value in list))
+										list[interval.value] = [];
+
+									// Add it to the list of colors
+									list[interval.value].push({ id: interval.id, color: interval.color });
+
+									return list;
+								}, {}
+							),
+							(key, value) => ({
+								ids:    value.map(v => v.id).sort((a, b) => a - b),
+								name:   data.intervalsNames[key],
+								colors: value.sort((a, b) => a.id - b.id).map(v => v.color),
+							})
+						)
+						// Sort the intervals to always have the same scale order
+						.sort((a, b) => {
+							for (let i=0; i<a.ids.length && i<b.ids.length; i++)
+							{
+								if (a.ids[i] < b.ids[i]) return -1;
+								if (a.ids[i] > b.ids[i]) return  1;
+							}
+
+							return 0;
+						})
+					},
 
 					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
 					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
@@ -239,10 +309,20 @@ export default {
 			'instrument',
 			'tuning',
 			'fretRange',
+
 			'scales/activeScales',
+
+			'isMobileDevice',
+			'isDisplayingFretNbs',
 			'isFretboardFlipped',
-			'darkMode',
 		]),
+	},
+
+	methods: {
+		updateHoveredFret(index)
+		{
+			this.hoveredFret = index;
+		}
 	},
 }
 
@@ -253,13 +333,67 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use 'sass-mq/_mq' as * with (
-	$mq-breakpoints: (
-		desktop: 800px,
-	)
-);
-
 .FretboardViewer {
+	@include space-children-v(20px);
+
+	&.is-vertical {
+		margin-top: 20px;
+	}
+}
+
+.fret-infos {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(12px);
+
+	height: 2rem;
+
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	&.is-visible {
+		opacity: 1;
+	}
+}
+
+.fret-infos__intervals {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
+}
+
+.fret-infos__note,
+.fret-infos__intervals__item {
+	color: var(--color--text);
+}
+
+.fret-infos__intervals__item {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+}
+
+.fret-infos__item__color-dot {
+	@include circle(10px);
+}
+
+.fretboard-wrapper {
+	@include mq($from: desktop)
+	{
+		overflow: auto visible;
+
+		// Add some padding to avoid cutting notes on the edges
+		padding: 20px 2px 20px 20px;
+		&.is-fretboard-flipped { padding: 20px 20px 20px 2px; }
+
+		// When the fret numbers are displayed, the bottom padding becomes redundant
+		&.is-displaying-fret-nbs {
+			padding-bottom: 2px;
+		}
+	}
+}
+
+.fretboard {
 	display: grid;
 
 	@include mq($until: desktop)
@@ -277,11 +411,7 @@ export default {
 }
 
 .fret-number__text {
-	color: gray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-	}
+	color: var(--color--text--secondary);
 }
 
 </style>

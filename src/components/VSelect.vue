@@ -9,35 +9,37 @@
 div.VSelect(ref="vselectbar")
 
 	//- Select bar
-	div.VSelect__bar(
-		v-mods="{ isDisabled, ...darkMode }"
+	div.bar(
+		v-mods="{ isDisabled }"
 		v-click-outside="close"
 		@click.left="toggleOpen"
 		)
-		p.VSelect__bar__text(
-			v-mods="{ isDisabled, ...darkMode }"
+		p.bar__text(
+			v-mods="{ isDisabled }"
 			v-html="selected.name"
 			)
 
-		fa-icon.VSelect__bar__chevron(
+		fa-icon.bar__chevron(
 			:icon="['far', 'chevron-down']"
-			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped, ...darkMode }"
+			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped }"
 			)
 
 	//- Options
 	transition(name="fade")
-		div.VSelect__options(
+		div.options(
 			ref="options"
-
 			v-show="isOpened"
-			v-mods="{ isOpeningDirectionUp: openingDirection == 'up', ...darkMode }"
+			v-mods="{ isOpeningDirectionUp: openingDirection == 'up' }"
 			)
-			p.VSelect__options__item(
+			div.options__button-close(
+				@click.left="isOpened = false"
+				)
+				fa-icon(:icon="['far', 'arrow-left']")
+			p.options__item(
 				v-for="option in optionsList"
 				:key="`key--v-select-${id}--${option.value}`"
 
 				v-html="option.name"
-				v-mods="darkMode"
 
 				@click.left="select(option)"
 				)
@@ -113,7 +115,6 @@ export default {
 		},
 		...get([
 			'instrument',
-			'darkMode',
 		]),
 	},
 
@@ -200,29 +201,27 @@ export default {
 	position: relative;
 
 	flex: 1 1 auto;
-	max-width: 200px;
-}
 
-.VSelect__bar,
-.VSelect__options {
-	border: 1px solid $color-azure;
-
-	background-color: snow;
-
-	transition: background-color 0.2s;
-
-	&.dark-mode {
-		border-color: $color-oxford-blue;
-		background-color: $color-mirage-2;
+	@include mq($from: desktop)
+	{
+		max-width: 200px;
 	}
 }
 
-.VSelect__bar {
+.bar,
+.options {
+	@include mq($from: desktop)
+	{
+		border: 1px solid var(--color--select--border);
+	}
+}
+
+.bar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 
-	padding: 8px;
+	padding: 20px 10px 20px 20px;
 
 	cursor: pointer;
 
@@ -234,26 +233,33 @@ export default {
 		cursor: not-allowed;
 	}
 
-	&:not(.is-disabled):hover {
-		background-color: #eee;
+	@include mq($until: desktop)
+	{
+		height: 100%;
+	}
 
-		&.dark-mode {
-			background-color: $color-ebony-clay;
+	@include mq($from: desktop)
+	{
+		padding: 8px;
+
+		background-color: var(--color--select--bg);
+		transition: background-color 0.2s;
+
+		&:not(.is-disabled):hover {
+			background-color: var(--color--select-bar--bg--hover);
 		}
 	}
 }
 
-.VSelect__bar__text,
-.VSelect__bar__chevron,
-.VSelect__options__item {
+.bar__text,
+.bar__chevron,
+.options__item,
+.options__button-close {
 	cursor: pointer;
-	user-select: none;
+
+	color: var(--color--select--text);
 
 	transition: color 0.2s;
-
-	&.dark-mode {
-		color: $color-nepal;
-	}
 
 	&.is-disabled {
 		color: gray;
@@ -262,54 +268,88 @@ export default {
 	}
 }
 
-.VSelect__bar__chevron {
+.bar__chevron {
 	font-size: 0.8em;
 
-	@include flip;
+	color: var(--color--select--chevron);
 
-	&.is-flipped {
-		transform: rotate(180deg);
+	@include mq($from: desktop)
+	{
+		@include flip;
+
+		&.is-flipped {
+			transform: rotate(180deg);
+		}
 	}
 }
 
-.VSelect__options {
+.options {
 	overflow-y: auto;
 
-	position: absolute;
-	z-index: 1000;
-	left: 0;
-	right: 0;
+	background-color: var(--color--select--bg);
+	transition: background-color 0.2s;
 
-	max-height: 300px;
+	/**
+	 * On mobile: modal
+	 */
+	@include mq($until: desktop)
+	{
+		position: fixed;
+		z-index: 1000;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 
-	&.is-opening-direction-up {
-		bottom: 100%;
-		border-bottom: none;
+		border: none;
 	}
 
-	&:not(.is-opening-direction-up) {
-		top: 100%;
-		border-top: none;
+	/**
+	 * On desktop: popup
+	 */
+	@include mq($from: desktop)
+	{
+		&.is-opening-direction-up {
+			bottom: 100%;
+			border-bottom: none;
+		}
+
+		&:not(.is-opening-direction-up) {
+			top: 100%;
+			border-top: none;
+		}
+
+		position: absolute;
+		z-index: 1000;
+		left: 0;
+		right: 0;
+
+		max-height: 300px;
 	}
 }
 
-.VSelect__options__item {
-	padding: 8px;
-
-	&:hover {
-		background-color: #eee;
-
-		&.dark-mode {
-			background-color: $color-oxford-blue;
-		}
-	}
+.options__item,
+.options__button-close {
+	padding: 20px;
 
 	&:not(:last-child) {
-		border-bottom: 1px solid lightgray;
+		border-bottom: 1px solid var(--color--separator);
+	}
 
-		&.dark-mode {
-			border-bottom-color: $color-ebony-clay;
-		}
+	&:hover {
+		background-color: var(--color--select-item--bg--hover);
+	}
+
+	@include mq($from: desktop)
+	{
+		padding: 8px;
+	}
+}
+
+.options__button-close {
+	@include mq($from: desktop)
+	{
+		display: none;
 	}
 }
 

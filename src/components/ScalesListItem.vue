@@ -1,12 +1,14 @@
 
 
-<!-- FretboardScale.vue -->
+<!-- components/ScalesListItem.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardScale
+div.ScalesListItem(
+	:style="{ 'border-color': color }"
+	)
 
 	div.color-dot(:style="{ 'background-color': color }")
 
@@ -52,19 +54,19 @@ div.FretboardScale
 	div.scale-tools
 
 		//- Intervals
-		div.scale-tools__intervals
-			div.scale-tools__intervals__item(
+		div.intervals
+			div.intervals__item(
 				v-for="(interval, index) in intervals"
 				:key="`scale-${id}-interval--${index}`"
 
-				v-mods="{ isSelected: highlightedNote == interval.value, ...darkMode }"
+				v-mods="{ isSelected: highlightedNote == interval.value }"
 				:title="`Highlight ${intervalsNames[interval.value].toLowerCase()} notes`"
 
 				@click.left="update('highlightedNote', highlightedNote == interval.value ? null : interval.value)"
 				)
 				p.intervals__item__text {{ interval.name }}
 
-		div.scale-tools__separator(v-mods="darkMode")
+		div.scale-tools__separator
 
 		//- Show/hide
 		VButtonIcon(
@@ -92,7 +94,7 @@ div.FretboardScale
 			@click="update('isShowingIntersections', !isShowingIntersections)"
 			)
 
-		div.scale-tools__separator(v-mods="darkMode")
+		div.scale-tools__separator
 
 		//- Duplicate
 		VButtonIcon(
@@ -101,11 +103,11 @@ div.FretboardScale
 			tooltip="Duplicate"
 			@click="addScale(id)"
 
-			:is-disabled="nbScales == 5"
+			:is-disabled="nbScales == MAX_NB_SCALES"
 			)
 		//- Remove
 		VButtonIcon(
-			icon="trash-alt"
+			icon="times-circle"
 			size="small"
 			tooltip="Remove"
 			@click="removeScale(id)"
@@ -118,14 +120,15 @@ div.FretboardScale
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations } from 'vuex'
-import { get }          from 'vuex-pathify'
+import { mapMutations }  from 'vuex'
+import { get }           from 'vuex-pathify'
 
-import data             from '@/modules/data'
-import { objectMap }    from '@/modules/object'
+import data              from '@/modules/data'
+import { objectMap }     from '@/modules/object'
+import { MAX_NB_SCALES } from '@/stores/scales'
 
 export default {
-	name: 'FretboardScale',
+	name: 'ScalesListItem',
 
 	props: {
 		id: {
@@ -213,12 +216,12 @@ export default {
 		},
 		...get([
 			'scales/scales',
-			'darkMode',
 		]),
 	},
 
 	created()
 	{
+		this.MAX_NB_SCALES  = MAX_NB_SCALES;
 		this.tonalities     = data.tonalities,
 		this.intervalsNames = data.intervalsNames,
 
@@ -268,10 +271,20 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardScale {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+.ScalesListItem {
+	@include mq($until: desktop)
+	{
+		border-width: 2px;
+		border-style: solid;
+		border-radius: 10px;
+	}
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 }
 
 .color-dot {
@@ -279,51 +292,85 @@ export default {
 	flex: 0 0 auto;
 
 	margin-right: 10px;
+
+	@include mq($until: desktop)
+	{
+		display: none;
+	}
 }
 
-.scale-props,
+.scale-props {
+	flex: 1 1 100%;
+
+	@include mq($until: desktop)
+	{
+		display: grid;
+		grid-template-columns: repeat(5, [col] 1fr);
+	}
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: center;
+		@include space-children-h(10px);
+
+		margin-right: 30px;
+	}
+}
+
 .scale-tools {
 	display: flex;
 	align-items: center;
 	@include space-children-h(10px);
 }
 
-.scale-props {
-	flex: 1 1 100%;
-
-	margin-right: 30px;
-}
-
 .scale-tools__separator {
 	@include circle(4px);
 	flex: 0 0 auto;
 
-	background-color: lightgray;
-
-	&.dark-mode {
-		background-color: $color-ebony-clay;
-	}
+	background-color: var(--color--separator);
 }
 
 .scale-props {
-	.select-type     { max-width: 120px; min-width: 120px; }
-	.select-tonality { max-width: 60px;  min-width: 60px;  }
-	.select-model    { max-width: 220px; min-width: 220px; }
-	.select-position { max-width: 100px; min-width: 100px; }
+	@include mq($until: desktop)
+	{
+		.select-type     { grid-column: col 1 / span 4; }
+		.select-tonality { grid-column: col 5 / span 1; }
+		.select-model    { grid-column: col 1 / span 3; }
+		.select-position { grid-column: col 4 / span 2; }
+
+		.select-type, .select-tonality {
+			border-bottom: 1px solid var(--color--border);
+		}
+
+		.select-type, .select-model {
+			border-right: 1px solid var(--color--border);
+		}
+	}
+
+	@include mq($from: desktop)
+	{
+		.select-type     { max-width: 120px; min-width: 120px; }
+		.select-tonality { max-width: 60px;  min-width: 60px;  }
+		.select-model    { max-width: 220px; min-width: 220px; }
+		.select-position { max-width: 100px; min-width: 100px; }
+	}
 }
 
-.scale-tools__intervals {
+.intervals {
 	display: flex;
 }
 
-.scale-tools__intervals__item {
+.intervals__item {
 	padding: 2px 8px;
 
-	border: 1px solid lightgray;
+	border: 1px solid var(--color--border);
+
+	color: var(--color--text);
 
 	cursor: pointer;
 
-	transition: background-color 0.2s;
+	transition: color 0.2s, background-color 0.2s;
 
 	&:not(:last-child) {
 		border-right: none;
@@ -343,21 +390,11 @@ export default {
 
 	&:hover,
 	&.is-selected {
-		background-color: #f0f0f0;
-	}
-
-	&.dark-mode {
-		color: $color-nepal;
-		border-color: $color-oxford-blue;
-
-		&:hover,
-		&.is-selected {
-			background-color: $color-ebony-clay-2;
-		}
+		background-color: var(--color--scale-tool--bg--hover);
 	}
 
 	&.is-selected {
-		color: $color-sun;
+		color: var(--color--highlight);
 	}
 }
 

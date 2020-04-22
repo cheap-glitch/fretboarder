@@ -17,7 +17,7 @@ import VueTour       from 'vue-tour'
 import VueSlider     from 'vue-slider-component'
 import VClickOutside from 'v-click-outside'
 import VCSSModifiers from 'vue-css-modifiers'
-require('vue-tour/dist/vue-tour.css');
+import                    'vue-tour/dist/vue-tour.css'
 
 import App           from '@/App'
 import store         from '@/stores/main'

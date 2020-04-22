@@ -7,33 +7,32 @@
 <template lang="pug">
 
 div.FretboardViewerFret(
-	v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne, ...darkMode }"
+	v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }"
 	)
 
 	//- Inlay
-	div.FretboardViewerFret__inlay(
-		v-if="isDisplayingInlay"
-		v-mods="darkMode"
-		)
-
-	//- Open string note placeholder
-	div.FretboardViewerFret__open-string-note-placeholder(
-		v-show="fret == 0 && !isActive"
-		v-mods="{ isOpenString, isFretboardFlipped, ...darkMode }"
-		)
+	div.inlay(v-if="isDisplayingInlay")
 
 	//- Note
-	div.FretboardViewerFret__note(
-		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped, ...darkMode }"
+	div.note(
+		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
 		:style="noteColors"
 
-		@mouseover="$store.commit('setHoveredFretInfos', fretInfos)"
-		@mouseout=" $store.commit('setHoveredFretInfos', [])"
+		@mouseenter="$emit('hover-fret', index)"
+		@mouseleave="$emit('hover-fret', null)"
 		)
 		transition(name="fade")
-			p.FretboardViewerFret__note__info(
-				v-show="isDisplayingNotesName"
-				) {{ noteName }}
+			p.note__name(v-show="isDisplayingNotesName || isOpenString") {{ noteName }}
+
+	//- Note placeholder
+	div.note-placeholder(
+		v-show="!isActive"
+		v-mods="{ isOpenString, isFretboardFlipped }"
+
+		@mouseenter="$emit('hover-fret', index)"
+		@mouseleave="$emit('hover-fret', null)"
+		)
+		p.note-placeholder__name {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -45,12 +44,15 @@ div.FretboardViewerFret(
 import { get }       from 'vuex-pathify'
 
 import data          from '@/modules/data'
-import { objectMap } from '@/modules/object'
 
 export default {
 	name: 'FretboardViewerFret',
 
 	props: {
+		index: {
+			type: Number,
+			required: true,
+		},
 		string: {
 			type: Number,
 			required: true,
@@ -65,10 +67,6 @@ export default {
 			validator: v => data.notes.includes(v)
 		},
 		scales: {
-			type: Array,
-			required: true,
-		},
-		intervals: {
 			type: Array,
 			required: true,
 		},
@@ -93,40 +91,6 @@ export default {
 	},
 
 	computed: {
-		fretInfos()
-		{
-			const intervalsList = this.intervals.reduce(
-				function(list, interval)
-				{
-					// If the interval is not in the list, initialize its color list
-					if (!(interval.value in list))
-						list[interval.value] = [];
-
-					// Add it to the list of colors
-					list[interval.value].push({ id: interval.id, color: interval.color });
-
-					return list;
-				},
-				{}
-			);
-
-			const fretInfos = objectMap(intervalsList, (key, value) => ({
-				ids:       value.map(v => v.id).sort((a, b) => a - b),
-				colors:    value.sort((a, b) => a.id - b.id).map(v => v.color),
-				interval:  data.intervalsNames[key],
-			}));
-
-			// Sort the intervals to always have the same scale order
-			return fretInfos.sort((a, b) => {
-				for (let i=0; i<a.ids.length && i<b.ids.length; i++)
-				{
-					if (a.ids[i] < b.ids[i]) return -1;
-					if (a.ids[i] > b.ids[i]) return  1;
-				}
-
-				return 0;
-			});
-		},
 		noteName()
 		{
 			return data.tonalities[this.note];
@@ -156,8 +120,6 @@ export default {
 
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
-
-			'darkMode',
 		]),
 	},
 
@@ -194,11 +156,9 @@ export default {
 
 	position: relative;
 
-	border: 0 solid gray;
+	border: 0 solid var(--color--fret--border);
 
-	&.dark-mode {
-		border-color: $color-ebony-clay;
-	}
+	transition: border-color 0.2s;
 
 	&.is-open-string {
 		display: block;
@@ -209,17 +169,13 @@ export default {
 		justify-content: center;
 
 		&:not(.is-on-last-string) {
-			height: 40px;
+			height: 42px;
 		}
 
 		// String
 		&:not(.is-open-string) {
 			border-top-width: 2px;
-			border-top-color: black;
-
-			&.dark-mode {
-				border-top-color: $color-oxford-blue;
-			}
+			border-top-color: var(--color--string--border);
 		}
 
 		// Fret
@@ -247,11 +203,7 @@ export default {
 		// String
 		&:not(.is-open-string) {
 			border-left-width: 2px;
-			border-left-color: black;
-
-			&.dark-mode {
-				border-left-color: $color-oxford-blue;
-			}
+			border-left-color: var(--color--string--border);
 		}
 
 		// Fret
@@ -275,11 +227,10 @@ export default {
 	}
 }
 
-.FretboardViewerFret__note {
+.note {
 	box-sizing: content-box;
 
 	position: absolute;
-	z-index: 10;
 
 	@include square(30px);
 
@@ -318,55 +269,67 @@ export default {
 		left: 100%;
 		transform: translate(-50%, -50%);
 	}
-
-	// Slightly darken the notes in dark mode
-	&.dark-mode {
-		filter: brightness(0.8);
-	}
 }
 
-// Display a dotted border around unactive open string notes
-.FretboardViewerFret__open-string-note-placeholder {
+.note-placeholder {
 	position: absolute;
+	right: 50%;
+	transform: translate(50%, -50%);
 
 	@include circle(30px);
 
-	border: 2px dashed lightgray;
+	border: 2px solid var(--color--border);
 
-	&.is-open-string {
-		right: 100%;
-		transform: translate(50%, -50%);
-	}
+	transition: opacity 0.2s, border-color 0.2s;
 
-	&.is-open-string.is-fretboard-flipped {
-		left: 100%;
+	&.is-fretboard-flipped {
+		left: 50%;
 		transform: translate(-50%, -50%);
 	}
 
-	&.dark-mode {
-		border-color: $color-oxford-blue;
+	&:not(.is-open-string) {
+		background-color: var(--color--bg);
+
+		opacity: 0;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	&.is-open-string {
+		border-style: dashed;
+
+		right: 100%;
+
+		&.is-fretboard-flipped {
+			left: 100%;
+		}
 	}
 }
 
-.FretboardViewerFret__note__info {
+.note__name,
+.note-placeholder__name {
 	@include center-position;
 
 	font-weight: bold;
+}
 
+.note__name {
 	color: white;
 }
 
-.FretboardViewerFret__inlay {
+.note-placeholder__name {
+	color: var(--color--text--secondary);
+}
+
+.inlay {
 	@include center-position;
 	@include circle(15px);
 
-	background-color: lightgray;
+	background-color: var(--color--inlay--bg);
 
 	transition: background-color 0.2s;
-
-	&.dark-mode {
-		background-color: $color-mirage-2;
-	}
 }
 
 </style>

@@ -8,6 +8,8 @@ module.exports = {
 
 	devServer: {
 		https: true,
+		host:  'localhost',
+		port:  '8080',
 	},
 
 	/**
@@ -20,15 +22,14 @@ module.exports = {
 		// Import the colorscheme & mixins globally
 		loaderOptions: {
 			sass: {
-				prependData: [
-					'@cheap-glitch/scss-mixins/_mixins',
+				prependData: `
+					@use "@cheap-glitch/scss-mixins/_mixins" as *;
 
-					'@/styles/colorscheme',
-					'@/styles/fonts',
-					'@/styles/transitions',
-				]
-				.map(file => `@use "${file}" as *;`)
-				.join('\n')
+					@use "@/styles/layout"      as *;
+					@use "sass-mq/_mq"          as * with ($mq-breakpoints: $mq-breakpoints);
+
+					@use "@/styles/fonts"       as *;
+					@use "@/styles/transitions" as *;`
 			}
 		},
 	},
@@ -45,6 +46,7 @@ module.exports = {
 					set: 'pro-regular',
 					icons: [
 						// General UI
+						'arrow-left',
 						'chevron-down',
 						'external-link-square-alt',
 						'times-circle',
@@ -59,9 +61,7 @@ module.exports = {
 						'mandolin',
 						'question-circle',
 
-						// Fretboard tools
-						'adjust',
-						'eraser',
+						// Tools & settings
 						'file-download',
 						'hand-paper',
 						'info-circle',
@@ -71,6 +71,7 @@ module.exports = {
 						'copy',
 						'eye',
 						'eye-slash',
+						'low-vision',
 						'plus-circle',
 						'trash-alt',
 					]
@@ -78,12 +79,23 @@ module.exports = {
 				{
 					set: 'pro-solid',
 					icons: [
+						// Light/dark mode switch
+						'moon',
+						'sun',
+
 						// Scales
 						'intersection',
 
 						// Mobile actions
 						'cog',
 						'list-music',
+					]
+				},
+				{
+					set: 'pro-light',
+					icons: [
+						// Tools & settings
+						'list-ol',
 					]
 				},
 				{
@@ -102,8 +114,8 @@ module.exports = {
 		sitemap: {
 			urls: [
 				{
-					loc:         'https://fretboarder.app',
-					changefreq:  'always',
+					loc:        'https://fretboarder.app',
+					changefreq: 'always',
 				},
 			],
 

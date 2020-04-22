@@ -1,10 +1,15 @@
 {
   "build": {
-    "env": {
-      "NPM_RC": "@npmrc"
-    }
+    "env": { "NPM_RC": "@npmrc" }
   },
+
+  "github": {
+    "silent": true
+  },
+
   "cleanUrls": true,
+  "trailingSlash": false,
+
   "headers": [{
     "source": "/(.*)",
     "headers": [
@@ -29,6 +34,5 @@
         "value": "1; mode=block"
       }
     ]
-  }],
-  "trailingSlash": false
+  }]
 }

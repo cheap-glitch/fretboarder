@@ -25,10 +25,9 @@ const state = {
 	fretRange:              storage.get('fretRange',              [0, 22],    v => Array.isArray(v) && v.length == 2),
 
 	isDarkModeOn:           storage.get('isDarkModeOn',           false,      v => typeof v == 'boolean'),
-	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  false,      v => typeof v == 'boolean'),
+	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  true,       v => typeof v == 'boolean'),
+	isDisplayingFretNbs:    storage.get('isDisplayingFretNbs',    true,       v => typeof v == 'boolean'),
 	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      v => typeof v == 'boolean'),
-
-	hoveredFretInfos:       [],
 
 	/**
 	 * Allows v-click-outside to ignore mouseup
@@ -41,8 +40,7 @@ const state = {
  * Getters
  */
 const getters = {
-	darkMode:               state => ({ 'dark-mode': state.isDarkModeOn }),
-	isFretboardVertical:    state => state.clientWidth < 800,
+	isMobileDevice: state => state.clientWidth < 800,
 };
 
 /**
@@ -61,7 +59,8 @@ const mutations = {
 };
 
 /**
- * Plugin to automatically save some state properties in the local storage upon certain mutations
+ * Automatically save some state properties
+ * in the local storage upon certain mutations
  */
 const storeOnMutation = store => store.subscribe(function(mutation, state)
 {

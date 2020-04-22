@@ -6,106 +6,105 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.App(v-mods="darkMode")
+div.App(:style="colorscheme")
 
 	//----------------------------------------------------------------------
-	//- Header
+	//- Page content
 	//----------------------------------------------------------------------
-	header.header
-		h1.header__title(v-mods="darkMode")
-			fa-icon.header__title__logo(
-				:icon="['far', instrumentIcon]"
-				v-mods="{ isUkulele: instrument == 'ukulele' }"
-				)
-			h1.header__title__text Fretboarder
 
-		nav.header__nav
-			//- Quick help
-			VButtonText.header__nav__link#help-tour-step--0(
-				v-mods="darkMode"
-				@click.native.left="startHelpTour"
-				)
-				fa-icon.header__nav__link__icon(:icon="['far', 'question-circle']")
-				p.header__nav__link__text--small Help
-				p.header__nav__link__text--wide  Quick help
+	//- Tools & settings
+	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
-			//- Github link
-			VButtonText.header__nav__link#help-tour-step--13(
-				mode="link-external"
-				href="https://github.com/cheap-glitch/fretboarder/issues"
-				v-mods="darkMode"
-				)
-				fa-icon.header__nav__link__icon(:icon="['far', 'bug']")
-				p.header__nav__link__text--small Bugs
-				p.header__nav__link__text--wide  Bugs report / Feature request
+	//- Fretboard
+	FretboardViewer.fretboard-viewer#help-tour-step--12(:is-vertical="isMobileDevice")
 
-			//- Patreon link
-			VButtonText.header__nav__link.support-link#help-tour-step--14(
-				mode="link-external"
-				is-filled
-				href="https://www.patreon.com/cheap_glitch"
-				v-mods="darkMode"
-				)
-				fa-icon.header__nav__link__icon(:icon="['far', 'heart']")
-				p Support
+	//- Scales & arpeggios
+	ScalesList.fretboard-scales(v-if="!isMobileDevice")
 
-			//- TGLD link
-			VButtonText.header__nav__link#help-tour-step--15(
-				mode="link-external"
-				href="https://www.theguitarlickdatabase.com"
-				v-mods="darkMode"
-				)
-				p.header__nav__link__text--small TGLD
-				p.header__nav__link__text--wide  The Guitar Lick Database
-				fa-icon.header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
-
-	//----------------------------------------------------------------------
-	//- Body
-	//----------------------------------------------------------------------
-	PageFretboarder
-	PageFretboarderHelpTour
-	v-tour(name="export-menu" :steps="exportMenuTooltip")
-		template(v-slot="tour")
-			transition(name="fade")
-				v-step.export-menu(
-					v-if="tour.currentStep == 0"
-
-					:step="tour.steps[0]"
-					:labels="tour.labels"
-					:stop="tour.stop"
-
-					v-click-outside="tour.stop"
-					)
-					template(v-slot:actions)
-						div.export-menu__actions
-							VButtonText.export-menu__actions__button(
-								v-for="format in ['png', 'jpg', 'svg', 'pdf']"
-								:key="`export-button--${format}`"
-
-								is-filled
-								@click.native.left="exportFretboardToFile(format)"
-								)
-								p {{ format.toUpperCase() }}
+	//- Help tour
+	HelpTour
 
 	//----------------------------------------------------------------------
 	//- Footer
 	//----------------------------------------------------------------------
-	footer.page-footer
-		p.page-footer__text(v-mods="darkMode") Fretboarder v2.0 by cheap glitch
-		a.page-footer__link(
-			href="https://twitter.com/cheap_glitch"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			v-mods="darkMode"
+	footer.footer
+
+		div.footer__nav
+
+			//- Logo
+			h1.logo
+				fa-icon.logo__icon(
+					:icon="['far', instrumentIcon]"
+					v-mods="{ isUkulele: instrument == 'ukulele' }"
+					)
+				h1.logo__text Fretboarder
+
+			//- Links
+			nav.nav
+
+				//- GitHub & Twitter
+				a.nav__link(
+					href="https://github.com/cheap-glitch/fretboarder/issues"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'github']")
+				a.nav__link(
+					href="https://twitter.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'twitter']")
+
+				//- Quick help
+				div.nav__link#help-tour-step--0(
+					@click.left="startHelpTour"
+					)
+					fa-icon(:icon="['far', 'question-circle']")
+					p.nav__link__text Help
+
+				//- Patreon page
+				a.nav__link.link-support#help-tour-step--14(
+					href="https://www.patreon.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['far', 'heart']")
+					p.nav__link__text Support
+
+				//- TGLD
+				a.nav__link.link-tgld#help-tour-step--15(
+					href="https://www.theguitarlickdatabase.com"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['far', 'external-link-square-alt']")
+					p.nav__link__text TGLD
+
+		//- Light/dark switch
+		div.dark-mode-toggle(
+			@click="$store.commit('toggleIsDarkModeOn')"
 			)
-			fa-icon(:icon="['fab', 'twitter']")
-		a.page-footer__link(
-			href="https://github.com/cheap-glitch/fretboarder"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			v-mods="darkMode"
-			)
-			fa-icon(:icon="['fab', 'github']")
+			fa-icon(:icon="['fas', 'sun']")
+			div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
+			fa-icon(:icon="['fas', 'moon']")
+
+	//----------------------------------------------------------------------
+	//- Mobile actions & modals
+	//----------------------------------------------------------------------
+
+	div.mobile-actions(v-if="isMobileDevice")
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
+
+	//- Scales & arpeggios
+	VModal(
+		v-if="isMobileDevice"
+
+		:is-open="isModalScalesOpen"
+		@close="isModalScalesOpen = false"
+		)
+		ScalesList
 
 </template>
 <!--}}}-->
@@ -114,24 +113,40 @@ div.App(v-mods="darkMode")
 <!--{{{ JavaScript -->
 <script>
 
-import { get }                  from 'vuex-pathify'
-import { saveAs }               from 'file-saver'
+import { mapMutations }   from 'vuex'
+import { get }            from 'vuex-pathify'
 
-import data                     from '@/modules/data'
-import { EventBus }             from '@/modules/bus'
-import * as exportFretboard     from '@/modules/export'
-import PageFretboarder          from '@/components/PageFretboarder'
-import PageFretboarderHelpTour  from '@/components/PageFretboarderHelpTour'
+import colorscheme        from '@/modules/colorscheme'
+import { objectMapToObj } from '@/modules/object'
+import { EventBus }       from '@/modules/bus'
+
+import FretboardSettings  from '@/components/FretboardSettings'
+import FretboardViewer    from '@/components/FretboardViewer'
+import ScalesList         from '@/components/ScalesList'
+import HelpTour           from '@/components/HelpTour'
 
 export default {
 	name: 'App',
 
 	components: {
-		PageFretboarder,
-		PageFretboarderHelpTour,
+		FretboardSettings,
+		FretboardViewer,
+		ScalesList,
+		HelpTour,
+	},
+
+	data() {
+		return {
+			isModalScalesOpen:   false,
+			isModalSettingsOpen: false,
+		}
 	},
 
 	computed: {
+		colorscheme()
+		{
+			return objectMapToObj(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
+		},
 		instrumentIcon()
 		{
 			switch (this.instrument)
@@ -152,15 +167,17 @@ export default {
 		},
 		...get([
 			'instrument',
-			'tuning',
-			'fretRange',
-			'scales/activeScales',
+			'scales/scales',
 
-			'isFretboardFlipped',
-			'isDisplayingNotesName',
-
-			'darkMode',
+			'isDarkModeOn',
+			'isMobileDevice',
 		]),
+	},
+
+	mounted()
+	{
+		if (this.scales.length == 0)
+			this.addScale();
 	},
 
 	created()
@@ -170,13 +187,6 @@ export default {
 
 		// Update the width of the window on every resize
 		window.addEventListener('resize',  this.updateClientWidth, { passive: true });
-
-		this.exportMenuTooltip = [{
-			target:  '#button-export-menu',
-			content: `<strong>Choose a format to export in</strong><br>
-				  <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
-				      for embedding in web pages as it will scale perfectly when resized.</em>`
-		}];
 	},
 
 	destroyed()
@@ -202,38 +212,7 @@ export default {
 			if (helpTour.currentStep == -1)
 				helpTour.start();
 		},
-		exportFretboardToFile(format)
-		{
-			// Close the export menu tootlip
-			this.$tours['export-menu'].stop();
-
-			const svg = exportFretboard.exportFretboardToSVG(
-				data.instruments[this.instrument].nbStrings,
-				this.fretRange[0],
-				this.fretRange[1],
-				data.tunings[this.instrument][this.tuning],
-				this.activeScales,
-				this.isFretboardFlipped,
-				this.isDisplayingNotesName,
-				format != 'svg',
-			);
-
-			switch (format)
-			{
-				case 'png':
-				case 'jpg':
-					exportFretboard.exportSVGToImage(svg, format);
-					break;
-
-				case 'svg':
-					saveAs(svg.blob, 'fretboard.svg');
-					break;
-
-				case 'pdf':
-					exportFretboard.exportSVGToPDF(svg);
-					break;
-			}
-		},
+		...mapMutations(['addScale']),
 	},
 }
 
@@ -244,206 +223,161 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use 'sass:color';
-@use 'sass-mq/_mq' as * with (
-	$mq-breakpoints: (
-		desktop:    800px,
-		wideHeader: 1200px,
-	)
-);
+@use '@/styles/colors' as *;
 
 .App {
-	display: flex;
-	align-items: stretch;
-	flex-direction: column;
-	overflow-y: hidden;
+	display: grid;
+	grid-template: auto 1fr 1.4fr auto / 1fr;
 
-	padding: 20px 40px;
+	height: 100%;
 
-	min-height: 100%;
+	padding: 20px;
 
-	background-color: snow;
-
+	background-color: var(--color--bg);
 	transition: background-color 0.2s;
-
-	&.dark-mode {
-		background-color: $color-mirage;
-	}
 }
 
-.export-menu {
-	z-index: 100;
-}
-
-.export-menu__actions {
+.fretboard-viewer {
 	display: flex;
-	justify-content: center;
-	@include space-children-h(10px);
-
-	margin-top: 40px;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
-.export-menu__actions__button {
-	color: white;
-	border-color: white;
-	background-color: white;
+.fretboard-settings { margin-bottom: 20px; }
+.fretboard-scales   { margin-top:    60px; }
 
-	&:hover {
-		color: $color-vue-tour-bg;
-	}
-}
-
-/**
- * Header
- * -----------------------------------------------------------------------------
- */
-.header {
-	display: none;
+.footer {
+	display: flex;
+	align-items: flex-end;
 	justify-content: space-between;
-
-	margin-bottom: 60px;
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-	}
 }
 
-.header__title {
+.footer__nav {
+	display: flex;
+	@include space-children-h(26px);
+}
+
+.logo {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
 
-	padding: 2px 6px;
+	padding: 4px 6px;
 
 	border-radius: 6px;
 
-	color: snow;
+	color: var(--color--bg);
+	background-color: var(--color--logo--bg);
 
-	background-color: lightgray;
+	transition: color 0.2s, background-color 0.2s;
 
-	&.dark-mode {
-		color: $color-mirage;
-		background-color: $color-oxford-blue;
+	&:hover {
+		background-color: var(--color--hover);
 	}
 }
 
-.header__title__logo {
-	font-size: 25px;
+.logo__icon {
+	font-size: 20px;
 
 	&.is-ukulele {
-		font-size: 20px;
+		font-size: 14px;
 	}
 }
 
-.header__title__text {
-	font-size: 30px;
+.logo__text {
+	font-size: 24px;
 	font-weight: bold;
 }
 
-.header__nav {
+.nav {
+	display: flex;
+	@include space-children-h(18px);
+}
+
+.nav__link {
 	display: flex;
 	align-items: center;
-	@include space-children-h(6px);
+	@include space-children-h(4px);
 
-	@include mq($from: wideHeader)
-	{
-		@include space-children-h(10px);
-	}
-}
+	color: var(--color--text--secondary);
 
-.header__nav__link {
-	color: gray;
-	border-color: lightgray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-		border-color: $color-oxford-blue;
-
-		transition: color 0.4s, border-color 0.2s;
-
-		&:hover {
-			color: $color-nepal;
-		}
-	}
-}
-
-.header__nav__link__icon {
-	transform: translateY(1px);
-}
-
-.header__nav__link__text--small {
-	@include mq($from: wideHeader)
-	{
-		display: none;
-	}
-}
-
-.header__nav__link__text--wide {
-	display: none;
-
-	@include mq($from: wideHeader)
-	{
-		display: inline;
-	}
-}
-
-.support-link,
-.support-link.dark-mode {
-	color: $color-crimson;
-	border-color: $color-crimson;
-	background-color: $color-crimson;
-}
-
-.support-link.dark-mode {
-	filter: brightness(0.8);
-}
-
-.support-link:hover {
-	color: white;
-
-	&.dark-mode {
-		color: $color-mirage;
-	}
-}
-
-/**
- * Footer
- * -----------------------------------------------------------------------------
- */
-.page-footer {
-	display: none;
-	align-items: flex-end;
-	justify-content: flex-end;
-	@include space-children-h(10px);
-
-	flex: 1 1 100%;
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-	}
-}
-
-.page-footer__text,
-.page-footer__link {
-	font-size: 1.3rem;
-
-	color: gray;
-
-	&.dark-mode {
-		color: $color-oxford-blue-2;
-	}
-}
-
-.page-footer__link {
 	cursor: pointer;
 
 	transition: color 0.2s;
 
 	&:hover {
-		color: $color-sun;
+		color: var(--color--hover);
 	}
+}
+
+.nav__link__text {
+	cursor: pointer;
+}
+
+.link-support:hover { color: $color--crimson;  }
+.link-tgld:hover    { color: $color--cinnabar; }
+
+.dark-mode-toggle {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
+}
+
+.dark-mode-toggle__switch {
+	position: relative;
+
+	width: 20px;
+	height: 12px;
+	@include pill;
+
+	border: 2px solid var(--color--border);
+
+	&::after {
+		content: '';
+
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		@include circle(8px);
+
+		background-color: var(--color--highlight);
+
+		transition: transform 0.2s;
+	}
+
+	&.is-dark-mode-on::after {
+		transform: translateX(8px);
+	}
+}
+
+.mobile-actions {
+	@include space-children-v(10px);
+
+	position: fixed;
+	z-index: 1000;
+	bottom: 10px;
+	right: 10px;
+}
+
+.mobile-actions__item {
+	@include center-content;
+	@include circle(48px);
+
+	font-size: 22px;
+
+	color: white;
+
+	box-shadow: -4px -4px 8px 2px rgba(0, 0, 0, 0.6);
+
+	cursor: pointer;
+
+	&:nth-child(1) { background-color: $color--azure; }
+	&:nth-child(2) { background-color: #aaa;          }
 }
 
 </style>
