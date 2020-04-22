@@ -199,7 +199,8 @@ export default {
 					scales: scales.map(scale => ({ id: scale.id, color: scale.color })),
 
 					infos: {
-						note, intervals: objectMap(
+						note: data.tonalities[note],
+						intervals: objectMap(
 							// Build the list of intervals
 							scales.map(scale => (
 							{
