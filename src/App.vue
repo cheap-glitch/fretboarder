@@ -30,21 +30,23 @@ div.App(:style="colorscheme")
 	//----------------------------------------------------------------------
 	footer.footer
 
-		//- Logo
-		h1.logo
-			fa-icon.logo__icon(
-				:icon="['far', instrumentIcon]"
-				v-mods="{ isUkulele: instrument == 'ukulele' }"
-				)
-			h1.logo__text Fretboarder
+		section.footer__section
+			//- Logo
+			h1.logo
+				fa-icon.logo__icon(
+					:icon="['far', instrumentIcon]"
+					v-mods="{ isUkulele: instrument == 'ukulele' }"
+					)
+				h1.logo__text Fretboarder
 
-		//- Light/dark switch
-		div.dark-mode-toggle(
-			@click="$store.commit('toggleIsDarkModeOn')"
-			)
-			fa-icon(:icon="['fas', 'sun']")
-			div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
-			fa-icon(:icon="['fas', 'moon']")
+		section.footer__section
+			//- Light/dark switch
+			div.dark-mode-toggle(
+				@click="$store.commit('toggleIsDarkModeOn')"
+				)
+				fa-icon(:icon="['fas', 'sun']")
+				div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
+				fa-icon(:icon="['fas', 'moon']")
 
 		//- nav.header__nav
 			//- Quick help
@@ -258,6 +260,12 @@ export default {
 
 .footer {
 	display: flex;
+	justify-content: space-between;
+}
+
+.footer__section {
+	display: flex;
+	align-items: flex-end;
 }
 
 .logo {
@@ -265,7 +273,7 @@ export default {
 	align-items: center;
 	@include space-children-h(5px);
 
-	padding: 2px 6px;
+	padding: 4px 6px;
 
 	border-radius: 6px;
 
@@ -273,18 +281,22 @@ export default {
 	background-color: var(--color--logo--bg);
 
 	transition: color 0.2s, background-color 0.2s;
+
+	&:hover {
+		background-color: $color--azure;
+	}
 }
 
 .logo__icon {
 	font-size: 20px;
 
 	&.is-ukulele {
-		font-size: 15px;
+		font-size: 14px;
 	}
 }
 
 .logo__text {
-	font-size: 25px;
+	font-size: 24px;
 	font-weight: bold;
 }
 
@@ -322,7 +334,7 @@ export default {
 	}
 
 	&.is-dark-mode-on::after {
-		transform: translateX(20px);
+		transform: translateX(8px);
 	}
 }
 
