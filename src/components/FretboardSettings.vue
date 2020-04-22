@@ -45,19 +45,19 @@ div.FretboardSettings
 				)
 
 		div.toolbar
-			//- Toggle note names
-			VButtonIcon#help-tour-step--3(
-				icon="info-circle"
-				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
-				:is-active="isDisplayingNotesName"
-				@click="$store.commit('toggleIsDisplayingNotesName')"
-				)
 			//- Toggle fret numbers
 			VButtonIcon(
 				:icon="['fal', 'list-ol']"
 				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
 				:is-active="isDisplayingFretNbs"
 				@click="$store.commit('toggleIsDisplayingFretNbs')"
+				)
+			//- Toggle note names
+			VButtonIcon#help-tour-step--3(
+				icon="info-circle"
+				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
+				:is-active="isDisplayingNotesName"
+				@click="$store.commit('toggleIsDisplayingNotesName')"
 				)
 			//- Switch fretting hand
 			VButtonIcon(
@@ -210,6 +210,8 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use '@/styles/colors' as *;
+
 .wrapper {
 	display: flex;
 	align-items: flex-start;
@@ -249,7 +251,7 @@ export default {
 	background-color: white;
 
 	&:hover {
-		color: $color-slate-gray;
+		color: $color--slate-gray;
 	}
 }
 

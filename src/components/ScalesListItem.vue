@@ -271,6 +271,8 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use '@/styles/colors' as *;
+
 .ScalesListItem {
 	@include mq($until: desktop)
 	{
@@ -394,7 +396,7 @@ export default {
 	}
 
 	&.is-selected {
-		color: $color-sun;
+		color: $color--sun;
 	}
 }
 

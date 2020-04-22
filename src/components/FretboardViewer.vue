@@ -13,17 +13,18 @@ div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 		v-if="!isMobileDevice"
 		v-mods="{ isVisible: hoveredFret != null }"
 		)
-		p {{ hoveredFretInfos.note }}
-		div.fret-infos__item(
-			v-for="(interval, index) in hoveredFretInfos.intervals"
-			:key="`fret-info--${index}`"
-			)
-			div.fret-infos__item__color-dot(
-				v-for="color in interval.colors"
-				:key="`fret-info--${index}-color--${color}`"
-				:style="{ 'background-color': color }"
+		p.fret-infos__note {{ hoveredFretInfos.note }}
+		div.fret-infos__intervals
+			div.fret-infos__intervals__item(
+				v-for="(interval, index) in hoveredFretInfos.intervals"
+				:key="`fret-info--${index}`"
 				)
-			p {{ interval.name }}
+				div.fret-infos__item__color-dot(
+					v-for="color in interval.colors"
+					:key="`fret-info--${index}-color--${color}`"
+					:style="{ 'background-color': color }"
+					)
+				p {{ interval.name }}
 
 	div.fretboard-wrapper(
 		v-mods="{ isFretboardFlipped, isDisplayingFretNbs }"
@@ -342,7 +343,7 @@ export default {
 .fret-infos {
 	display: flex;
 	justify-content: center;
-	@include space-children-h(10px);
+	@include space-children-h(12px);
 
 	height: 2rem;
 
@@ -354,12 +355,21 @@ export default {
 	}
 }
 
-.fret-infos__item {
+.fret-infos__intervals {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
+}
+
+.fret-infos__note,
+.fret-infos__intervals__item {
+	color: var(--color--text);
+}
+
+.fret-infos__intervals__item {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
-
-	color: var(--color--text);
 }
 
 .fret-infos__item__color-dot {

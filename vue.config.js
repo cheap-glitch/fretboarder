@@ -23,12 +23,11 @@ module.exports = {
 		loaderOptions: {
 			sass: {
 				prependData: `
-					@use "@/styles/layout" as *;
-					@use "sass-mq/_mq"     as * with ($mq-breakpoints: $mq-breakpoints);
-
 					@use "@cheap-glitch/scss-mixins/_mixins" as *;
 
-					@use "@/styles/colorscheme" as *;
+					@use "@/styles/layout"      as *;
+					@use "sass-mq/_mq"          as * with ($mq-breakpoints: $mq-breakpoints);
+
 					@use "@/styles/fonts"       as *;
 					@use "@/styles/transitions" as *;`
 			}
@@ -80,6 +79,10 @@ module.exports = {
 				{
 					set: 'pro-solid',
 					icons: [
+						// Light/dark mode switch
+						'moon',
+						'sun',
+
 						// Scales
 						'intersection',
 

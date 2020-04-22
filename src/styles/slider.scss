@@ -3,8 +3,8 @@
  * styles/slider.scss
  */
 
-@use 'fonts'       as *;
-@use 'colorscheme' as *;
+@use 'fonts'  as *;
+@use 'colors' as *;
 
 /**
  * Mixins
@@ -104,7 +104,7 @@
 
 .vue-slider-process {
 	border-radius: 15px;
-	background-color: $color-azure;
+	background-color: $color--azure;
 
 	transition: background-color 0.2s;
 }
@@ -116,7 +116,7 @@
 	height: 100%;
 
 	border-radius: 50%;
-	border: 1px solid $color-azure;
+	border: 1px solid $color--azure;
 
 	background-color: snow;
 
@@ -142,7 +142,7 @@
 	padding: 6px;
 
 	border-radius: 5px;
-	border-color: $color-azure;
+	border-color: $color--azure;
 
 	text-align: center;
 	white-space: nowrap;
@@ -151,7 +151,7 @@
 	font-family: $fonts-text;
 
 	color: #fff;
-	background-color: $color-azure;
+	background-color: $color--azure;
 
 	@include arrow(10px, inherit);
 }
@@ -170,15 +170,15 @@
  */
 .vue-slider.dark-mode {
 	.vue-slider-rail {
-		background-color: $color-ebony-clay-2;
+		background-color: $color--ebony-clay-2;
 	}
 
 	.vue-slider-dot-handle {
-		border-color: $color-nepal;
-		background-color: $color-ebony-clay;
+		border-color: $color--nepal;
+		background-color: $color--ebony-clay;
 	}
 
 	.vue-slider-process {
-		background-color: $color-oxford-blue-2;
+		background-color: $color--oxford-blue-2;
 	}
 }

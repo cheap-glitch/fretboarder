@@ -70,6 +70,8 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use '@/styles/colors' as *;
+
 .VButtonIcon {
 	display: block;
 
@@ -86,7 +88,7 @@ export default {
 	transition: color 0.2s;
 
 	&:not(.is-active):hover {
-		color: $color-azure;
+		color: $color--azure;
 	}
 
 	&.is-disabled {
@@ -96,7 +98,7 @@ export default {
 	}
 
 	&.is-active {
-		color: $color-sun;
+		color: $color--sun;
 	}
 
 	&.is-flipped {

@@ -11,51 +11,42 @@ div.App(:style="colorscheme")
 	//----------------------------------------------------------------------
 	//- Page content
 	//----------------------------------------------------------------------
+	section.page
 
-	//- Tools & settings
-	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
+		//- Tools & settings
+		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
-	//- Fretboard
-	FretboardViewer#help-tour-step--12(:is-vertical="isMobileDevice")
+		//- Fretboard
+		FretboardViewer#help-tour-step--12(:is-vertical="isMobileDevice")
 
-	//- Scales & arpeggios
-	ScalesList.fretboard-scales(v-if="!isMobileDevice")
+		//- Scales & arpeggios
+		ScalesList.fretboard-scales(v-if="!isMobileDevice")
 
-	//- Help tour
-	HelpTour
-
-	//----------------------------------------------------------------------
-	//- Mobile actions & modals
-	//----------------------------------------------------------------------
-
-	div.mobile-actions(v-if="isMobileDevice")
-		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
-		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
-
-	//- Scales & arpeggios
-	VModal(
-		v-if="isMobileDevice"
-
-		:is-open="isModalScalesOpen"
-		@close="isModalScalesOpen = false"
-		)
-		ScalesList
+		//- Help tour
+		HelpTour
 
 	//----------------------------------------------------------------------
 	//- Footer
 	//----------------------------------------------------------------------
-
-	//- footer.AppFooter
+	footer.footer
 
 		//- Logo
-		h1.header__title
-			fa-icon.header__title__logo(
+		h1.logo
+			fa-icon.logo__icon(
 				:icon="['far', instrumentIcon]"
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
 				)
-			h1.header__title__text Fretboarder
+			h1.logo__text Fretboarder
 
-		nav.header__nav
+		//- Light/dark switch
+		div.dark-mode-toggle(
+			@click="$store.commit('toggleIsDarkModeOn')"
+			)
+			fa-icon(:icon="['fas', 'sun']")
+			div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
+			fa-icon(:icon="['fas', 'moon']")
+
+		//- nav.header__nav
 			//- Quick help
 			VButtonText.header__nav__link#help-tour-step--0(
 				@click.native.left="startHelpTour"
@@ -93,19 +84,36 @@ div.App(:style="colorscheme")
 				p.header__nav__link__text--wide  The Guitar Lick Database
 				fa-icon.header__nav__link__icon(:icon="['far', 'external-link-square-alt']")
 
-		p.page-footer__text Fretboarder v2.0 by cheap glitch
-		a.page-footer__link(
+		//- p.page-footer__text Fretboarder v2.0 by cheap glitch
+		//- a.page-footer__link(
 			href="https://twitter.com/cheap_glitch"
 			target="_blank"
 			rel="external nofollow noopener noreferrer"
 			)
 			fa-icon(:icon="['fab', 'twitter']")
-		a.page-footer__link(
+		//- a.page-footer__link(
 			href="https://github.com/cheap-glitch/fretboarder"
 			target="_blank"
 			rel="external nofollow noopener noreferrer"
 			)
 			fa-icon(:icon="['fab', 'github']")
+
+	//----------------------------------------------------------------------
+	//- Mobile actions & modals
+	//----------------------------------------------------------------------
+
+	div.mobile-actions(v-if="isMobileDevice")
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
+
+	//- Scales & arpeggios
+	VModal(
+		v-if="isMobileDevice"
+
+		:is-open="isModalScalesOpen"
+		@close="isModalScalesOpen = false"
+		)
+		ScalesList
 
 </template>
 <!--}}}-->
@@ -224,7 +232,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use 'sass:color';
+@use '@/styles/colors' as *;
 
 .App {
 	display: flex;
@@ -241,8 +249,82 @@ export default {
 	transition: background-color 0.2s;
 }
 
+.page {
+	flex: 1 1 100%;
+}
+
 .fretboard-settings { margin-bottom: 40px; }
 .fretboard-scales   { margin-top:    60px; }
+
+.footer {
+	display: flex;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	padding: 2px 6px;
+
+	border-radius: 6px;
+
+	color: var(--color--bg);
+	background-color: var(--color--logo--bg);
+
+	transition: color 0.2s, background-color 0.2s;
+}
+
+.logo__icon {
+	font-size: 20px;
+
+	&.is-ukulele {
+		font-size: 15px;
+	}
+}
+
+.logo__text {
+	font-size: 25px;
+	font-weight: bold;
+}
+
+.dark-mode-toggle {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
+}
+
+.dark-mode-toggle__switch {
+	position: relative;
+
+	width: 20px;
+	height: 12px;
+	@include pill;
+
+	border: 2px solid var(--color--border);
+
+	&::after {
+		content: '';
+
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		@include circle(8px);
+
+		background-color: $color--sun;
+
+		transition: transform 0.2s;
+	}
+
+	&.is-dark-mode-on::after {
+		transform: translateX(20px);
+	}
+}
 
 .mobile-actions {
 	@include space-children-v(10px);
@@ -265,50 +347,11 @@ export default {
 
 	cursor: pointer;
 
-	&:nth-child(1) { background-color: $color-azure; }
-	&:nth-child(2) { background-color: #aaa;         }
+	&:nth-child(1) { background-color: $color--azure; }
+	&:nth-child(2) { background-color: #aaa;          }
 }
 
-.header {
-	display: none;
-	justify-content: space-between;
-
-	margin-bottom: 60px;
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-	}
-}
-
-.header__title {
-	display: flex;
-	align-items: center;
-	@include space-children-h(5px);
-
-	padding: 2px 6px;
-
-	border-radius: 6px;
-
-	color: var(--color--bg);
-	background-color: var(--color--logo--bg);
-
-	transition: color 0.2s, background-color 0.2s;
-}
-
-.header__title__logo {
-	font-size: 25px;
-
-	&.is-ukulele {
-		font-size: 20px;
-	}
-}
-
-.header__title__text {
-	font-size: 30px;
-	font-weight: bold;
-}
-
+/*
 .header__nav {
 	display: flex;
 	align-items: center;
@@ -346,9 +389,9 @@ export default {
 }
 
 .support-link {
-	color: $color-crimson;
-	border-color: $color-crimson;
-	background-color: $color-crimson;
+	color: $color--crimson;
+	border-color: $color--crimson;
+	background-color: $color--crimson;
 
 	&:hover {
 		color: var(--color--support-link--text--hover);
@@ -386,9 +429,10 @@ export default {
 	transition: color 0.2s;
 
 	&:hover {
-		color: $color-sun;
+		color: $color--sun;
 	}
 }
+*/
 
 </style>
 <!--}}}-->

@@ -1,0 +1,33 @@
+
+/**
+ * styles/colors.scss
+ */
+
+@use 'sass:color';
+
+// Highlights
+$color--sun:             #ffb610;
+$color--cinnabar:        #e54124;
+$color--crimson:         #e1112c;
+$color--malachite:       #1bb934;
+$color--azure:           #0093ee;
+$color--portage:         #ab7ef6;
+
+// Text
+$color--athens-gray:     #fafbfc;
+$color--barley-white:    #fff5cd;
+$color--regent-st-blue:  #a9c7df;
+$color--nepal:           #8eacc5;
+
+// Borders
+$color--oxford-blue:     #323e4f;
+
+// Buttons
+$color--oxford-blue-2:   color.scale($color--oxford-blue, $lightness: +5%);
+
+// Backgrounds
+$color--slate-gray:      #50596c;
+$color--ebony-clay-2:    #283243;
+$color--ebony-clay:      #232d3d;
+$color--mirage-2:        #1c2532;
+$color--mirage:          #171e29;
