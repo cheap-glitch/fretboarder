@@ -104,6 +104,8 @@ export default {
 	@include mq($from: desktop)
 	{
 		@include center-column;
+
+		overflow-y: auto;
 	}
 }
 
