@@ -9,7 +9,7 @@
 div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 
 	//- Infos about the hovered fret
-	div.fret-infos(
+	//- div.fret-infos(
 		v-if="!isMobileDevice"
 		v-mods="{ isVisible: hoveredFret != null }"
 		)

@@ -214,7 +214,7 @@ export default {
 
 .wrapper {
 	display: flex;
-	align-items: flex-start;
+	align-items: flex-end;
 	justify-content: space-between;
 }
 
