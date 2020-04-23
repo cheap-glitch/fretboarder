@@ -115,7 +115,7 @@ export default {
 
 			return !this.isVertical
 				? { 'grid-template-columns': gridLayout                                               }
-				: { 'grid-template-rows':    gridLayout, 'grid-template-columns': 'repeat(5, 40px) 0' };
+				: { 'grid-template-rows':    gridLayout, 'grid-template-columns': 'repeat(5, 42px) 0' };
 		},
 		inlays()
 		{

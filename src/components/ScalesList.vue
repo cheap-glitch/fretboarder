@@ -52,6 +52,7 @@ div.ScalesList
 
 		icon="plus-circle"
 		tooltip="Add a new scale or arpeggio"
+		tooltip-placement="bottom"
 
 		@click="$store.commit('scales/addScale')"
 		)

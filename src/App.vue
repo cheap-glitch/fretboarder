@@ -233,7 +233,7 @@ export default {
 	@include mq($from: desktop)
 	{
 		display: grid;
-		grid-template: auto minmax(0, 1fr) auto 1.6fr / 1fr;
+		grid-template: auto minmax(0, 1fr) auto 2fr / 1fr;
 
 		height: 100%;
 	}
@@ -385,7 +385,7 @@ export default {
 
 	color: white;
 
-	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
 
 	cursor: pointer;
 

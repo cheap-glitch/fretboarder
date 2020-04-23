@@ -7,15 +7,28 @@
 <template lang="pug">
 
 button.VButtonIcon(
-	:title="tooltip"
+	ref="button"
 	v-mods="{ isDisabled }"
+
 	@click.left="click"
+	@mouseenter="showTooltip = true"
+	@mouseleave="showTooltip = false"
 	)
-	fa-icon.VButtonIcon__icon(
+
+	fa-icon.icon(
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:class="`size-${size}`"
 		v-mods="{ isActive, isDisabled, isFlipped }"
 		)
+
+	VTooltip(
+		v-if="!isMobileDevice"
+
+		:target="$refs.button || false"
+		:placement="tooltipPlacement"
+		:is-open="showTooltip && !isTooltipDisabled"
+		)
+		p {{ tooltip }}
 
 </template>
 <!--}}}-->
@@ -23,6 +36,8 @@ button.VButtonIcon(
 
 <!--{{{ JavaScript -->
 <script>
+
+import { get } from 'vuex-pathify'
 
 export default {
 	name: 'VButtonIcon',
@@ -39,13 +54,14 @@ export default {
 		},
 		tooltip: {
 			type: String,
-			default: null,
+			required: true,
+		},
+		tooltipPlacement: {
+			type: String,
+			default: 'top',
+			validator: v => ['top', 'bottom'].includes(v),
 		},
 		isActive: {
-			type: Boolean,
-			default: false,
-		},
-		isDisabled: {
 			type: Boolean,
 			default: false,
 		},
@@ -53,6 +69,24 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isDisabled: {
+			type: Boolean,
+			default: false,
+		},
+		isTooltipDisabled: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	data() {
+		return {
+			showTooltip: false,
+		}
+	},
+
+	computed: {
+		...get(['isMobileDevice']),
 	},
 
 	methods: {
@@ -80,7 +114,7 @@ export default {
 	cursor: pointer;
 }
 
-.VButtonIcon__icon {
+.icon {
 	color: var(--color--text--secondary);
 
 	transition: color 0.2s;
