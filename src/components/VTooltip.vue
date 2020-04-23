@@ -45,43 +45,47 @@ export default {
 		},
 	},
 
+	computed: {
+		targetElement()
+		{
+			return (typeof this.target == 'string') ? document.getElementById(this.target) : this.target;
+		},
+	},
+
 	watch: {
 		isOpen()
 		{
 			if (this.isOpen)
 			{
-				this.popper = createPopper(
-					typeof this.target == 'string' ? document.getElementById(this.target) : this.target,
-					this.$refs.tooltip,
-					{
-						placement: this.placement,
-						modifiers: [
-							{
-								...offset,
-								options: {
-									offset: [0, 10],
-								}
-							},
-							{
-								...preventOverflow,
-								options: {
-									boundary: document.body,
-									padding: 8,
-								}
-							},
-							{
-								...flip,
-								options: {
-									boundary: document.body,
-								}
-							},
-							{
-								...arrow,
-								options: {
-									padding: 8,
-								}
-							},
-						]
+				this.popper = createPopper(this.targetElement, this.$refs.tooltip, {
+					placement: this.placement,
+					modifiers: [
+						{
+							...offset,
+							options: {
+								offset: [0, 10],
+							}
+						},
+						{
+							...preventOverflow,
+							options: {
+								boundary: document.body,
+								padding: 8,
+							}
+						},
+						{
+							...flip,
+							options: {
+								boundary: document.body,
+							}
+						},
+						{
+							...arrow,
+							options: {
+								padding: 8,
+							}
+						},
+					]
 				});
 			}
 			else if (this.popper !== null)

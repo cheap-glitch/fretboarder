@@ -23,6 +23,7 @@ button.VButtonIcon(
 
 	VTooltip(
 		v-if="!isMobileDevice"
+		v-show="showTooltip && !isTooltipDisabled"
 
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"

@@ -6,49 +6,27 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
+div.FretboardViewer(
+	v-mods="{ isVertical, isFretboardFlipped, isDisplayingFretNbs }"
+	:style="[minWidth, grid, inlays]"
+	)
 
-	//- Infos about the hovered fret
-	//- div.fret-infos(
-		v-if="!isMobileDevice"
-		v-mods="{ isVisible: hoveredFret != null }"
+	//- Frets
+	FretboardViewerFret(
+		v-for="fret in frets"
+		:key="`fret--${fret.fret}-${fret.string+1}`"
+
+		v-bind="fret"
+		:is-vertical="isVertical"
 		)
-		p {{ hoveredFretInfos.note }}
-		div.fret-infos__intervals
-			div.fret-infos__intervals__item(
-				v-for="(interval, index) in hoveredFretInfos.intervals"
-				:key="`fret-info--${index}`"
-				)
-				div.fret-infos__item__color-dot(
-					v-for="color in interval.colors"
-					:key="`fret-info--${index}-color--${color}`"
-					:style="{ 'background-color': color }"
-					)
-				p {{ interval.name }}
 
-	div.fretboard-wrapper(
-		v-mods="{ isFretboardFlipped, isDisplayingFretNbs }"
-		)
-		div.fretboard(:style="[minWidth, grid, inlays]")
-
-			//- Frets
-			FretboardViewerFret(
-				v-for="fret in frets"
-				:key="`fret--${fret.fret}-${fret.string+1}`"
-
-				v-bind="fret"
-				:is-vertical="isVertical"
-
-				@hover-fret="updateHoveredFret"
-				)
-
-			//- Fret numbers
-			template(v-if="!isVertical && isDisplayingFretNbs")
-				div.fret-number(
-					v-for="fret in fretNumbers"
-					:key="`fret-number--${fret}`"
-					)
-					p.fret-number__text {{ fret }}
+	//- Fret numbers
+	template(v-if="!isVertical && isDisplayingFretNbs")
+		div.fret-number(
+			v-for="fret in fretNumbers"
+			:key="`fret-number--${fret}`"
+			)
+			p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -84,16 +62,10 @@ export default {
 			fretMinHeight:       40,
 
 			openStringFretsSize: 30,
-
-			hoveredFret:         null,
 		}
 	},
 
 	computed: {
-		hoveredFretInfos()
-		{
-			return this.hoveredFret ? this.fretsInfos[this.hoveredFret] : { name: '', intervals: [] };
-		},
 		minWidth()
 		{
 			/**
@@ -197,10 +169,48 @@ export default {
 					string, fret, note,
 
 					scales: scales.map(scale => ({
-						id:       scale.id,
-						color:    scale.color,
-						rootNote: scale.notes[0],
+						id:    scale.id,
+						color: scale.color,
 					})),
+
+					intervals: objectMap(
+						// Build the list of intervals
+						scales.map(scale => (
+						{
+							id:    scale.id,
+							size:  music.getNotesInterval(scale.notes[0], note),
+							color: scale.color,
+						}))
+						// Group the intervals of same size together
+						.reduce(
+							function(intervals, interval)
+							{
+								// If the interval is not in the list, initialize its color list
+								if (!(interval.size in intervals))
+									intervals[interval.size] = [];
+
+								// Add it to the list of colors
+								intervals[interval.size].push({ id: interval.id, color: interval.color });
+
+								return intervals;
+							}, {}
+						),
+						(interval, props) => ({
+							ids:    props.map(v => v.id).sort((a, b) => a - b),
+							name:   data.intervalsNames[interval],
+							colors: props.sort((a, b) => a.id - b.id).map(v => v.color),
+						})
+					)
+					// Sort the intervals to always have the same scale order
+					.sort((a, b) => {
+						for (let i=0; i<a.ids.length && i<b.ids.length; i++)
+						{
+							if (a.ids[i] < b.ids[i]) return -1;
+							if (a.ids[i] > b.ids[i]) return  1;
+						}
+
+						return 0;
+					}),
 
 					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
 					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
@@ -221,50 +231,6 @@ export default {
 			}
 
 			return frets;
-		},
-		fretsInfos()
-		{
-			return this.frets.map(fret => ({
-				note:      data.tonalities[fret.note],
-				intervals: objectMap(
-					// Build the list of intervals
-					fret.scales.map(scale => (
-					{
-						id:     scale.id,
-						color:  scale.color,
-						value:  music.getNotesInterval(scale.rootNote, fret.note),
-					}))
-					// Combine the same intervals together
-					.reduce(
-						function(list, interval)
-						{
-							// If the interval is not in the list, initialize its color list
-							if (!(interval.value in list))
-								list[interval.value] = [];
-
-							// Add it to the list of colors
-							list[interval.value].push({ id: interval.id, color: interval.color });
-
-							return list;
-						}, {}
-					),
-					(key, value) => ({
-						ids:    value.map(v => v.id).sort((a, b) => a - b),
-						name:   data.intervalsNames[key],
-						colors: value.sort((a, b) => a.id - b.id).map(v => v.color),
-					})
-				)
-				// Sort the intervals to always have the same scale order
-				.sort((a, b) => {
-					for (let i=0; i<a.ids.length && i<b.ids.length; i++)
-					{
-						if (a.ids[i] < b.ids[i]) return -1;
-						if (a.ids[i] > b.ids[i]) return  1;
-					}
-
-					return 0;
-				})
-			}));
 		},
 		scales()
 		{
@@ -323,13 +289,6 @@ export default {
 			'isFretboardFlipped',
 		]),
 	},
-
-	methods: {
-		updateHoveredFret(index)
-		{
-			this.hoveredFret = index;
-		}
-	},
 }
 
 </script>
@@ -340,48 +299,20 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardViewer {
-	@include space-children-v(20px);
+	display: grid;
 
 	&.is-vertical {
 		margin-top: 20px;
 	}
-}
 
-.fret-infos {
-	display: flex;
-	justify-content: center;
-	@include space-children-h(12px);
-
-	height: 2rem;
-
-	opacity: 0;
-	transition: opacity 0.2s;
-
-	&.is-visible {
-		opacity: 1;
+	@include mq($until: desktop)
+	{
+		justify-content: center;
 	}
-}
 
-.fret-infos__intervals {
-	display: flex;
-	justify-content: center;
-	@include space-children-h(10px);
-}
-
-.fret-infos__intervals__item {
-	display: flex;
-	align-items: center;
-	@include space-children-h(5px);
-}
-
-.fret-infos__item__color-dot {
-	@include circle(10px);
-}
-
-.fretboard-wrapper {
 	@include mq($from: desktop)
 	{
-		overflow: auto visible;
+		//- overflow: auto visible;
 
 		// Add some padding to avoid cutting notes on the edges
 		padding: 20px 2px 20px 20px;
@@ -391,15 +322,6 @@ export default {
 		&.is-displaying-fret-nbs {
 			padding-bottom: 2px;
 		}
-	}
-}
-
-.fretboard {
-	display: grid;
-
-	@include mq($until: desktop)
-	{
-		justify-content: center;
 	}
 }
 

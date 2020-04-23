@@ -287,7 +287,6 @@ export default {
 	overflow-y: auto;
 
 	background-color: var(--color--select--bg);
-	transition: background-color 0.2s;
 
 	/**
 	 * On mobile: modal

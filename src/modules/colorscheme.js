@@ -9,6 +9,7 @@ export default {
 
 	// UI
 	'--color--bg':                        ['snow',       colors.mirage],
+	'--color--bg--accent':                ['lightgray',  colors.mirage2],
 	'--color--hover':                     [colors.azure, colors.azure],
 	'--color--highlight':                 [colors.sun,   colors.sun],
 
@@ -25,8 +26,7 @@ export default {
 
 	// Fretboard
 	'--color--fret--border':              ['gray',       colors.ebonyClay],
-	'--color--string--border':            ['black',      colors.oxfordBlue],
-	'--color--inlay--bg':                 ['lightgray',  colors.mirage2],
+	'--color--string--border':            ['#222',       colors.oxfordBlue],
 	'--color--scale-tool--bg--hover':     ['#f0f0f0',    colors.ebonyClay2],
 
 	// VSelect

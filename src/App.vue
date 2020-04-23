@@ -63,8 +63,8 @@ div.App(:style="colorscheme")
 					target="_blank"
 					rel="external nofollow noopener noreferrer"
 					)
-					fa-icon(:icon="['far', 'external-link-square-alt']")
 					p.nav__link__text The Guitar Lick Database
+					fa-icon(:icon="['far', 'external-link-square-alt']")
 
 		//- Light/dark switch
 		div.dark-mode-toggle(

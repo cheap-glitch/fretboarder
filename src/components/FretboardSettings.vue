@@ -204,8 +204,6 @@ export default {
 		},
 		closeExportMenu(event)
 		{
-			console.log(event.target, this.buttonExportMenu, this.buttonExportMenu.contains(event.target));
-
 			if (!this.buttonExportMenu.contains(event.target))
 				this.isExportMenuOpened = false;
 		},
