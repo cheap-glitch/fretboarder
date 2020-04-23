@@ -40,22 +40,25 @@ v-tour(
 					//- Prev/next/finish buttons
 					div.help-tour__actions
 						VButtonText.help-tour__actions__button(
+							text="← Previous"
+
 							v-show="!tour.isFirst"
 							@click.native.left="tour.previousStep"
 							)
-							p ← Previous
 						VButtonText.help-tour__actions__button(
-							v-show="!tour.isLast"
+							text="Next →"
 							is-filled
+
+							v-show="!tour.isLast"
 							@click.native.left="tour.nextStep"
 							)
-							p Next →
 						VButtonText.help-tour__actions__button(
-							v-show="tour.isLast"
 							is-filled
+							text="Got it!"
+
+							v-show="tour.isLast"
 							@click.native.left="tour.stop"
 							)
-							p Got it!
 
 </template>
 <!--}}}-->

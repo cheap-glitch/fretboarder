@@ -57,6 +57,8 @@ export default {
 	border-radius: 10px;
 
 	background-color: var(--color--hover);
+
+	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 }
 
 .VTooltip__arrow {

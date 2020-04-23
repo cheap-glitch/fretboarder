@@ -13,7 +13,7 @@ div.FretboardViewer(v-mods="{ isVertical, isFretboardFlipped }")
 		v-if="!isMobileDevice"
 		v-mods="{ isVisible: hoveredFret != null }"
 		)
-		p.fret-infos__note {{ hoveredFretInfos.note }}
+		p {{ hoveredFretInfos.note }}
 		div.fret-infos__intervals
 			div.fret-infos__intervals__item(
 				v-for="(interval, index) in hoveredFretInfos.intervals"
@@ -92,7 +92,7 @@ export default {
 	computed: {
 		hoveredFretInfos()
 		{
-			return this.hoveredFret ? this.frets[this.hoveredFret].infos : { name: '', intervals: [] };
+			return this.hoveredFret ? this.fretsInfos[this.hoveredFret] : { name: '', intervals: [] };
 		},
 		minWidth()
 		{
@@ -196,49 +196,11 @@ export default {
 
 					string, fret, note,
 
-					scales: scales.map(scale => ({ id: scale.id, color: scale.color })),
-
-					infos: {
-						note: data.tonalities[note],
-						intervals: objectMap(
-							// Build the list of intervals
-							scales.map(scale => (
-							{
-								id:     scale.id,
-								color:  scale.color,
-								value:  music.getNotesInterval(scale.notes[0], note),
-							}))
-							// Combine the same intervals together
-							.reduce(
-								function(list, interval)
-								{
-									// If the interval is not in the list, initialize its color list
-									if (!(interval.value in list))
-										list[interval.value] = [];
-
-									// Add it to the list of colors
-									list[interval.value].push({ id: interval.id, color: interval.color });
-
-									return list;
-								}, {}
-							),
-							(key, value) => ({
-								ids:    value.map(v => v.id).sort((a, b) => a - b),
-								name:   data.intervalsNames[key],
-								colors: value.sort((a, b) => a.id - b.id).map(v => v.color),
-							})
-						)
-						// Sort the intervals to always have the same scale order
-						.sort((a, b) => {
-							for (let i=0; i<a.ids.length && i<b.ids.length; i++)
-							{
-								if (a.ids[i] < b.ids[i]) return -1;
-								if (a.ids[i] > b.ids[i]) return  1;
-							}
-
-							return 0;
-						})
-					},
+					scales: scales.map(scale => ({
+						id:       scale.id,
+						color:    scale.color,
+						rootNote: scale.notes[0],
+					})),
 
 					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
 					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
@@ -259,6 +221,50 @@ export default {
 			}
 
 			return frets;
+		},
+		fretsInfos()
+		{
+			return this.frets.map(fret => ({
+				note:      data.tonalities[fret.note],
+				intervals: objectMap(
+					// Build the list of intervals
+					fret.scales.map(scale => (
+					{
+						id:     scale.id,
+						color:  scale.color,
+						value:  music.getNotesInterval(scale.rootNote, fret.note),
+					}))
+					// Combine the same intervals together
+					.reduce(
+						function(list, interval)
+						{
+							// If the interval is not in the list, initialize its color list
+							if (!(interval.value in list))
+								list[interval.value] = [];
+
+							// Add it to the list of colors
+							list[interval.value].push({ id: interval.id, color: interval.color });
+
+							return list;
+						}, {}
+					),
+					(key, value) => ({
+						ids:    value.map(v => v.id).sort((a, b) => a - b),
+						name:   data.intervalsNames[key],
+						colors: value.sort((a, b) => a.id - b.id).map(v => v.color),
+					})
+				)
+				// Sort the intervals to always have the same scale order
+				.sort((a, b) => {
+					for (let i=0; i<a.ids.length && i<b.ids.length; i++)
+					{
+						if (a.ids[i] < b.ids[i]) return -1;
+						if (a.ids[i] > b.ids[i]) return  1;
+					}
+
+					return 0;
+				})
+			}));
 		},
 		scales()
 		{
@@ -360,11 +366,6 @@ export default {
 	display: flex;
 	justify-content: center;
 	@include space-children-h(10px);
-}
-
-.fret-infos__note,
-.fret-infos__intervals__item {
-	color: var(--color--text);
 }
 
 .fret-infos__intervals__item {

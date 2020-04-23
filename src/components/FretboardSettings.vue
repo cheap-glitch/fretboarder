@@ -93,10 +93,11 @@ div.FretboardSettings
 								v-for="format in ['png', 'jpg', 'svg', 'pdf']"
 								:key="`export-button--${format}`"
 
+								:text="format.toUpperCase()"
 								is-filled
+
 								@click.native.left="exportFretboardToFile(format)"
 								)
-								p {{ format.toUpperCase() }}
 
 </template>
 <!--}}}-->

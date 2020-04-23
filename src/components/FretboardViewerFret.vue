@@ -26,6 +26,7 @@ div.FretboardViewerFret(
 
 	//- Note placeholder
 	div.note-placeholder(
+		v-if="!isMobileDevice || isOpenString"
 		v-show="!isActive"
 		v-mods="{ isOpenString, isFretboardFlipped }"
 
@@ -118,6 +119,7 @@ export default {
 		...get([
 			'fretRange',
 
+			'isMobileDevice',
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
 		]),

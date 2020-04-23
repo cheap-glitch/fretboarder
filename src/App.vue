@@ -11,7 +11,7 @@ div.App(:style="colorscheme")
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
-	header.header
+	header.header(v-if="!isMobileDevice")
 
 		div.header__nav
 
@@ -225,15 +225,18 @@ export default {
 @use '@/styles/colors' as *;
 
 .App {
-	display: grid;
-	grid-template: auto minmax(0, 1fr) auto 1.6fr / 1fr;
-
-	height: 100%;
-
 	padding: 20px;
 
 	background-color: var(--color--bg);
 	transition: background-color 0.2s;
+
+	@include mq($from: desktop)
+	{
+		display: grid;
+		grid-template: auto minmax(0, 1fr) auto 1.6fr / 1fr;
+
+		height: 100%;
+	}
 }
 
 .fretboard-settings {
@@ -382,12 +385,12 @@ export default {
 
 	color: white;
 
-	box-shadow: -4px -4px 8px 2px rgba(0, 0, 0, 0.6);
+	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 
 	cursor: pointer;
 
-	&:nth-child(1) { background-color: $color--azure; }
-	&:nth-child(2) { background-color: #aaa;          }
+	&:nth-child(1) { background-color: $color--azure;          }
+	&:nth-child(2) { background-color: var(--color--logo--bg); }
 }
 
 </style>
