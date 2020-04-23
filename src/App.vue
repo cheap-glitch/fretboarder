@@ -27,18 +27,19 @@ div.App(:style="colorscheme")
 			nav.nav
 
 				//- GitHub & Twitter
-				a.nav__link(
-					href="https://github.com/cheap-glitch/fretboarder/issues"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'github']")
-				a.nav__link(
-					href="https://twitter.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'twitter']")
+				div.nav__social#help-tour-step--12
+					a.nav__link(
+						href="https://github.com/cheap-glitch/fretboarder"
+						target="_blank"
+						rel="external nofollow noopener noreferrer"
+						)
+						fa-icon(:icon="['fab', 'github']")
+					a.nav__link(
+						href="https://twitter.com/cheap_glitch"
+						target="_blank"
+						rel="external nofollow noopener noreferrer"
+						)
+						fa-icon(:icon="['fab', 'twitter']")
 
 				//- Quick help
 				div.nav__link#help-tour-step--0(
@@ -48,7 +49,7 @@ div.App(:style="colorscheme")
 					p.nav__link__text Help
 
 				//- Patreon page
-				a.nav__link.link-support#help-tour-step--14(
+				a.nav__link.link-support#help-tour-step--13(
 					href="https://www.patreon.com/cheap_glitch"
 					target="_blank"
 					rel="external nofollow noopener noreferrer"
@@ -57,7 +58,7 @@ div.App(:style="colorscheme")
 					p.nav__link__text Support the app!
 
 				//- TGLD
-				a.nav__link.link-tgld#help-tour-step--15(
+				a.nav__link.link-tgld#help-tour-step--14(
 					href="https://www.theguitarlickdatabase.com"
 					target="_blank"
 					rel="external nofollow noopener noreferrer"
@@ -81,7 +82,7 @@ div.App(:style="colorscheme")
 	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 	//- Fretboard
-	FretboardViewer.fretboard-viewer#help-tour-step--12(:is-vertical="isMobileDevice")
+	FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice")
 
 	//- Scales & arpeggios
 	ScalesList.fretboard-scales(v-if="!isMobileDevice")
@@ -293,7 +294,12 @@ export default {
 
 .nav {
 	display: flex;
-	@include space-children-h(18px);
+	@include space-children-h(20px);
+}
+
+.nav__social {
+	display: flex;
+	@include space-children-h(10px);
 }
 
 .nav__link {

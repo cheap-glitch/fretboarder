@@ -71,10 +71,10 @@ const storeOnMutation = store => store.subscribe(function(mutation, state)
 		'setInstrument': ['instrument', 'tuning'],
 
 		// Various settings
-		'toggleIs.+': mutation => `is${mutation.slice(8)}`,
+		'toggleIs.+':    mutation => `is${mutation.slice(8)}`,
 
 		// Scales
-		'scales/(add|update|toggle|remove)Scale': () => ({ name: 'scales', value: state.scales.scales }),
+		'scales/.+':     () => ({ name: 'scales', value: state.scales.scales }),
 	};
 
 	objectForEach(saveUponMutations, function(key, value)

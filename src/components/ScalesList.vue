@@ -23,7 +23,7 @@ div.ScalesList
 				@click="$store.commit('scales/hideAllScales')"
 			)
 			//- Remove all scales
-			VButtonIcon#help-tour-step--4(
+			VButtonIcon(
 				v-show="scales.length >= 2"
 
 				icon="trash-alt"
@@ -47,13 +47,13 @@ div.ScalesList
 		) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 
 	//- Add a new scale
-	VButtonIcon.button-add-scale#help-tour-step--5(
-		v-show="scales.length < maxNbScales"
+	VButtonIcon.button-add-scale#help-tour-step--4(
+		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"
 		tooltip="Add a new scale or arpeggio"
 
-		@click="addScale"
+		@click="$store.commit('scales/addScale')"
 		)
 
 </template>
@@ -63,10 +63,10 @@ div.ScalesList
 <!--{{{ JavaScript -->
 <script>
 
-import { get }          from 'vuex-pathify'
-import { mapMutations } from 'vuex'
+import { get }           from 'vuex-pathify'
 
-import ScalesListItem   from '@/components/ScalesListItem'
+import { MAX_NB_SCALES } from '@/stores/scales'
+import ScalesListItem    from '@/components/ScalesListItem'
 
 export default {
 	name: 'ScalesList',
@@ -78,16 +78,13 @@ export default {
 	computed: {
 		...get([
 			'scales/scales',
-			'scales/maxNbScales',
-
 			'isMobileDevice',
 		])
 	},
 
-	methods: {
-		...mapMutations({
-			addScale: 'scales/addScale',
-		}),
+	created()
+	{
+		this.MAX_NB_SCALES = MAX_NB_SCALES;
 	},
 }
 

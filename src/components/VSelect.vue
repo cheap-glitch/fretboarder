@@ -93,8 +93,8 @@ export default {
 
 	data() {
 		return {
-			isOpened:          false,
-			openingDirection:  'down',
+			isOpened:         false,
+			openingDirection: 'down',
 		}
 	},
 
@@ -161,11 +161,11 @@ export default {
 			const windowHeight  = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 			const elemYPosition = this.$refs.vselectbar.getBoundingClientRect().top;
 
-			// If the element is positioned low in the viewport,
-			// open the options menu upward instead of downward to avoid vertical overflow
-			this.openingDirection = windowHeight - elemYPosition < 380
-				? 'up'
-				: 'down';
+			/**
+			 * If the element is positioned low in the viewport,
+			 * open the options menu upward instead of downward to avoid vertical overflow
+			 */
+			this.openingDirection = (windowHeight - elemYPosition < 380) ? 'up' : 'down';
 		},
 		jumpToOption(key)
 		{

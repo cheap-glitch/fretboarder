@@ -64,9 +64,7 @@ v-tour(
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }  from 'vuex'
 import { get }           from 'vuex-pathify'
-
 import { MAX_NB_SCALES } from '@/stores/scales'
 
 const helpTourMessages = [
@@ -84,38 +82,31 @@ const helpTourMessages = [
 	`This slider control the number of frets displayed. Try moving both handles to see the effect on the fretboard.`,
 
 	// 4
-	`These are the visual settings. From left to right:
+	`These are the main settings &amp; tools. From left to right:
 	 <ul>
-	     <li>Toggle dark mode</li>
+	     <li>Toggle fret numbers</li>
 	     <li>Toggle note names</li>
 	     <li>Switch between left- and right-handed fretting and flip the fretboard accordingly</li>
+	     <li>Export the fretboard image in various formats (PNG, JPG, PDF, …)</li>
 	 </ul>
 	`,
 
 	// 5
-	`Other tools:
-	 <ul>
-	     <li>Remove all scales and arpeggios</li>
-	     <li>Export the fretboard image in various formats (PNG, JPG, PDF, …)</li>
-	 </ul>
-	 `,
-
-	// 6
 	`Click here to add new scales and arpeggios.<br>
 	 You can display up to ${MAX_NB_SCALES} simultaneously.`,
 
-	// 7
+	// 6
 	`Each scale and arpeggio can be configured independently.`,
 
-	// 8
+	// 7
 	`You can choose to display scales in their entirety, or only a single position at a time.<br>
-	 <em>Conventionally, the first position is always the one where the root is on the first string.</em>`,
+	 <em>Conventionally, the first position is always the one where the root note is on the first string.</em>`,
 
-	// 9
+	// 8
 	`You can use this selector to emphasize a particular interval of the scale.<br>
 	 Try clicking on the <strong>R</strong> to highlight the root notes.`,
 
-	// 10
+	// 9
 	`These settings provide more control over how each scale is displayed:
 	 <ul>
 	     <li>Toggle the visibility of the scale</li>
@@ -123,17 +114,17 @@ const helpTourMessages = [
 	     <li>Display only the intersections, <em>i.e.</em> the notes this scales has in common with other scales and/or arpeggios</li>
 	 </ul>`,
 
-	// 11
+	// 10
 	`Other tools:
 	 <ul>
 	     <li>Duplicate the scale</li>
 	     <li>Remove the scale</li>
 	 </ul>`,
 
-	// 12
-	`Hover on the notes to see which interval they correspond with.`,
+	// 11
+	`Hover on the notes to see which intervals they match with.`,
 
-	// 13
+	// 12
 	`That’s it for now!<br>
 	 If you notice a nasty bug or if you’d really like to see a particular feature implemented, don’t hesitate to send a quick feedback.`,
 
@@ -147,13 +138,13 @@ const helpTourMessages = [
 ];
 
 const helpTourTargets = [
-	...[...Array(6).keys()].map(n => `#help-tour-step--${n}`),
+	...[...Array(5).keys()].map(n => `#help-tour-step--${n}`),
 	'.ScalesListItem .scale-props',
 	'.ScalesListItem .select-position',
-	'.ScalesListItem .scale-tools__intervals',
+	'.ScalesListItem .intervals',
 	'.ScalesListItem .scale-tools .VButtonIcon:nth-of-type(2)',
 	'.ScalesListItem .scale-tools .VButtonIcon:nth-last-of-type(2)',
-	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 12}`),
+	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 11}`),
 ];
 
 export default {
@@ -178,17 +169,17 @@ export default {
 			 * Make sure there is at least one scale before
 			 * reaching the step where the scales settings are presented
 			 */
-			if ((step + 1) == 6 && this.scales.length == 0)
-				this.addScale();
+			if ((step + 1) == 4 && this.scales.length == 0)
+				this.$store.commit('scales/addScale');
 
 			/**
 			 * Make sure there is at least two scales before
 			 * reaching the step where the scales tools are presented
 			 */
-			if ((step + 1) == 9)
+			if ((step + 1) == 8)
 			{
 				while (this.scales.length <= 1)
-					this.addScale(this.scales.length == 1 ? { tonality: 'C#', model: 'majb'} : {});
+					this.$store.commit('scales/addScale', this.scales.length == 1 ? { tonality: 'C#', model: 'majb'} : {});
 			}
 		},
 		stopTour(event, stopTour)
@@ -204,8 +195,8 @@ export default {
 				'VSelect__bar',
 				'VSelect__options',
 
-				'scale-tools__intervals',
-				'scale-tools__intervals__item',
+				'intervals',
+				'intervals__item',
 			];
 
 			/**
@@ -224,9 +215,6 @@ export default {
 
 			stopTour();
 		},
-		...mapMutations('scales', [
-			'addScale'
-		]),
 	},
 }
 

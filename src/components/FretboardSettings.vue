@@ -37,7 +37,7 @@ div.FretboardSettings
 				adsorb lazy
 
 				tooltip="hover"
-				tooltip-placement="bottom"
+				tooltip-placement="top"
 				:tooltip-formatter="tooltipFormatter"
 
 				v-model="fretRange"
