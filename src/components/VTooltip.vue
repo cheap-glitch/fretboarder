@@ -8,7 +8,7 @@
 
 div.VTooltip(
 	ref="tooltip"
-	v-show="isOpen"
+	v-show="isTooltipShown"
 	)
 	slot
 	div.VTooltip__arrow(data-popper-arrow)
@@ -39,10 +39,20 @@ export default {
 			default: 'top',
 			validator: v => ['top', 'bottom'].includes(v),
 		},
+		delay: {
+			type: Number,
+			default: 0,
+		},
 		isOpen: {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	data() {
+		return {
+			isTooltipShown: false,
+		}
 	},
 
 	computed: {
@@ -57,6 +67,30 @@ export default {
 		{
 			if (this.isOpen)
 			{
+				if (this.delay)
+					setTimeout(this.createTooltip, this.delay);
+				else
+					this.createTooltip();
+			}
+			else
+			{
+				this.destroyTooltip();
+			}
+		}
+	},
+
+	created()
+	{
+		this.popper = null;
+	},
+
+	methods: {
+		createTooltip()
+		{
+			if (this.isOpen && this.popper === null)
+			{
+				this.isTooltipShown = true;
+
 				this.popper = createPopper(this.targetElement, this.$refs.tooltip, {
 					placement: this.placement,
 					modifiers: [
@@ -88,17 +122,17 @@ export default {
 					]
 				});
 			}
-			else if (this.popper !== null)
+		},
+		destroyTooltip()
+		{
+			if (this.popper !== null)
 			{
+				this.isTooltipShown = false;
+
 				this.popper.destroy();
 				this.popper = null;
 			}
-		}
-	},
-
-	created()
-	{
-		this.popper = null;
+		},
 	},
 }
 

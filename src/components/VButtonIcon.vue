@@ -22,11 +22,11 @@ button.VButtonIcon(
 		)
 
 	VTooltip(
-		v-if="!isMobileDevice"
-		v-show="showTooltip && !isTooltipDisabled"
+		v-if="!isMobileDevice && !isTooltipDisabled"
 
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"
+		:delay="500"
 		:is-open="showTooltip && !isTooltipDisabled"
 		)
 		p {{ tooltip }}
