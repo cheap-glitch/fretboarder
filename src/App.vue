@@ -113,7 +113,6 @@ div.App(:style="colorscheme")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }   from 'vuex'
 import { get }            from 'vuex-pathify'
 
 import colorscheme        from '@/modules/colorscheme'
@@ -177,7 +176,7 @@ export default {
 	mounted()
 	{
 		if (this.scales.length == 0)
-			this.addScale();
+			this.$store.commit('scales/addScale');
 	},
 
 	created()
@@ -212,7 +211,6 @@ export default {
 			if (helpTour.currentStep == -1)
 				helpTour.start();
 		},
-		...mapMutations(['addScale']),
 	},
 }
 

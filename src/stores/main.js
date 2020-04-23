@@ -25,8 +25,8 @@ const state = {
 	fretRange:              storage.get('fretRange',              [0, 22],    v => Array.isArray(v) && v.length == 2),
 
 	isDarkModeOn:           storage.get('isDarkModeOn',           false,      v => typeof v == 'boolean'),
+	isDisplayingFretNbs:    storage.get('isDisplayingFretNbs',    false,      v => typeof v == 'boolean'),
 	isDisplayingNotesName:  storage.get('isDisplayingNotesName',  true,       v => typeof v == 'boolean'),
-	isDisplayingFretNbs:    storage.get('isDisplayingFretNbs',    true,       v => typeof v == 'boolean'),
 	isFretboardFlipped:     storage.get('isFretboardFlipped',     false,      v => typeof v == 'boolean'),
 
 	/**
@@ -67,8 +67,8 @@ const storeOnMutation = store => store.subscribe(function(mutation, state)
 	const saveUponMutations = {
 		// Fretboard settings
 		'setTuning':     'tuning',
-		'setInstrument': 'instrument',
 		'setFretRange':  'fretRange',
+		'setInstrument': ['instrument', 'tuning'],
 
 		// Various settings
 		'toggleIs.+': mutation => `is${mutation.slice(8)}`,
@@ -83,13 +83,15 @@ const storeOnMutation = store => store.subscribe(function(mutation, state)
 		const rx = new RegExp(`^${key}$`);
 		if (!rx.test(mutation.type)) return;
 
-		// Execute the callback to get the prop name or object
-		const prop = typeof value == 'function' ? value(mutation.type) : value;
+		(Array.isArray(value) ? value : [value]).forEach(function(setting)
+		{
+			const prop = (typeof setting == 'function') ? setting(mutation.type) : setting;
 
-		storage.set(
-			isObject(prop) ? prop.name  : prop,
-			isObject(prop) ? prop.value : state[prop]
-		);
+			storage.set(
+				isObject(prop) ? prop.name  : prop,
+				isObject(prop) ? prop.value : state[prop]
+			);
+		});
 	});
 });
 

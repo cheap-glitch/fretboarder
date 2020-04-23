@@ -303,7 +303,7 @@ export default {
 		},
 		tuningNotes()
 		{
-			return data.tunings[this.instrument][this.tuning];
+			return data.tunings[this.instrument][this.tuning] || data.tunings[this.instrument]['standard'];
 		},
 		...get([
 			'instrument',
