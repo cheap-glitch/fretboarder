@@ -8,10 +8,13 @@
 
 div.VTooltip(
 	ref="tooltip"
-	v-show="isTooltipShown"
+	v-show="isDisplayed"
+	v-mods="{ isActive }"
 	)
 	slot
-	div.VTooltip__arrow(data-popper-arrow)
+	div.VTooltip__arrow(
+		data-popper-arrow
+		)
 
 </template>
 <!--}}}-->
@@ -51,7 +54,8 @@ export default {
 
 	data() {
 		return {
-			isTooltipShown: false,
+			isActive:    false,
+			isDisplayed: false,
 		}
 	},
 
@@ -65,16 +69,20 @@ export default {
 	watch: {
 		isOpen()
 		{
-			if (this.isOpen)
+			if (!this.isOpen)
 			{
-				if (this.delay)
-					setTimeout(this.createTooltip, this.delay);
-				else
-					this.createTooltip();
+				this.isActive = false;
 			}
 			else
 			{
-				this.destroyTooltip();
+				if (this.delay)
+				{
+					setTimeout(this.createPopper, this.delay);
+				}
+				else
+				{
+					this.createPopper();
+				}
 			}
 		}
 	},
@@ -84,12 +92,19 @@ export default {
 		this.popper = null;
 	},
 
+	mounted()
+	{
+		this.$refs.tooltip.addEventListener('transitionend', ()  => { if (!this.isOpen) this.destroyPopper(); });
+	},
+
 	methods: {
-		createTooltip()
+		createPopper()
 		{
-			if (this.isOpen && this.popper === null)
+			if (this.isOpen)
 			{
-				this.isTooltipShown = true;
+				if (this.popper !== null) this.destroyPopper();
+
+				this.isDisplayed = true;
 
 				this.popper = createPopper(this.targetElement, this.$refs.tooltip, {
 					placement: this.placement,
@@ -121,16 +136,18 @@ export default {
 						},
 					]
 				});
+
+				this.isActive = true;
 			}
 		},
-		destroyTooltip()
+		destroyPopper()
 		{
 			if (this.popper !== null)
 			{
-				this.isTooltipShown = false;
-
 				this.popper.destroy();
 				this.popper = null;
+
+				this.isDisplayed = false;
 			}
 		},
 	},
@@ -157,6 +174,13 @@ export default {
 	background-color: $color--slate-gray;;
 
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	&.is-active {
+		opacity: 1;
+	}
 
 	&[data-popper-placement^="top"]    > .VTooltip__arrow { bottom: -4px; }
 	&[data-popper-placement^="bottom"] > .VTooltip__arrow { top:    -4px; }

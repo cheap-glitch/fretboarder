@@ -6,20 +6,21 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-button.VButtonIcon(
-	ref="button"
-	v-mods="{ isDisabled }"
+div
+	button.VButtonIcon(
+		ref="button"
+		v-mods="{ isDisabled }"
 
-	@click.left="click"
-	@mouseenter="showTooltip = true"
-	@mouseleave="showTooltip = false"
-	)
-
-	fa-icon.icon(
-		:icon="Array.isArray(icon) ? icon : ['far', icon]"
-		:class="`size-${size}`"
-		v-mods="{ isActive, isDisabled, isFlipped }"
+		@click.left="click"
+		@mouseenter="showTooltip = true"
+		@mouseleave="showTooltip = false"
 		)
+
+		fa-icon.icon(
+			:icon="Array.isArray(icon) ? icon : ['far', icon]"
+			:class="`size-${size}`"
+			v-mods="{ isActive, isDisabled, isFlipped }"
+			)
 
 	VTooltip(
 		v-if="!isMobileDevice && !isTooltipDisabled"
