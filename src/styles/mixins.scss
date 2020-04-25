@@ -1,0 +1,13 @@
+
+/**
+ * styles/mixins.scss
+ */
+
+@mixin flip()
+{
+	transition: transform 0.2s;
+
+	&.is-flipped {
+		transform: rotate(180deg);
+	}
+}

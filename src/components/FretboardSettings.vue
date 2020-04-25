@@ -37,7 +37,7 @@ div.FretboardSettings
 				adsorb lazy
 
 				tooltip="hover"
-				tooltip-placement="bottom"
+				tooltip-placement="top"
 				:tooltip-formatter="tooltipFormatter"
 
 				v-model="fretRange"
@@ -70,33 +70,37 @@ div.FretboardSettings
 			div#canvas-wrapper
 			VButtonIcon#button-export-menu(
 				icon="file-download"
+				:is-active="isExportMenuOpened"
+
 				tooltip="Export the fretboard image"
-				@click="openExportMenu"
+				:is-tooltip-disabled="isExportMenuOpened"
+
+				@click="isExportMenuOpened = !isExportMenuOpened"
 				)
 
-	//- Exporting menu
-	v-tour(name="export-menu" :steps="exportMenuTooltip")
-		template(v-slot="tour")
-			transition(name="fade")
-				v-step.export-menu(
-					v-if="tour.currentStep == 0"
+	//- Export menu
+	VTooltip(
+		target="button-export-menu"
+		placement="bottom"
+		:is-open="isExportMenuOpened"
 
-					:step="tour.steps[0]"
-					:labels="tour.labels"
-					:stop="tour.stop"
+		v-click-outside="closeExportMenu"
+		)
+		div
+			p.export-menu__text
+				strong Choose a format to export in
+			p.export-menu__text
+				em If you want to print this  fretboard, choose PDF. The SVG format is useful for embedding in web pages as it will scale perfectly when resized.
+			div.export-menu__buttons
+				VButtonText.export-menu__buttons__item(
+					v-for="format in ['png', 'jpg', 'svg', 'pdf']"
+					:key="`export-button--${format}`"
 
-					v-click-outside="tour.stop"
+					:text="format.toUpperCase()"
+					is-filled
+
+					@click.native.left="exportFretboardToFile(format)"
 					)
-					template(v-slot:actions)
-						div.export-menu__actions
-							VButtonText.export-menu__actions__button(
-								v-for="format in ['png', 'jpg', 'svg', 'pdf']"
-								:key="`export-button--${format}`"
-
-								is-filled
-								@click.native.left="exportFretboardToFile(format)"
-								)
-								p {{ format.toUpperCase() }}
 
 </template>
 <!--}}}-->
@@ -114,6 +118,12 @@ import * as exportFretboard from '@/modules/export'
 
 export default {
 	name: 'FretboardSettings',
+
+	data() {
+		return {
+			isExportMenuOpened: false,
+		}
+	},
 
 	computed: {
 		tuningsOptions()
@@ -138,20 +148,14 @@ export default {
 	created()
 	{
 		this.instrumentOptions = objectMap(data.instruments, (key, instrument) => ({ name: instrument.name, value: key }));
-		this.exportMenuTooltip = [{
-			target:  '#button-export-menu',
-			content: `<strong>Choose a format to export in</strong><br>
-				  <em>If you want to print this  fretboard, choose PDF. The SVG format is useful
-				      for embedding in web pages as it will scale perfectly when resized.</em>`
-		}];
+	},
+
+	mounted()
+	{
+		this.buttonExportMenu  = document.getElementById('button-export-menu');
 	},
 
 	methods: {
-		openExportMenu()
-		{
-			if (this.$tours['export-menu'].currentStep == -1)
-				this.$tours['export-menu'].start();
-		},
 		tooltipFormatter(number)
 		{
 			if (number == 0)
@@ -171,7 +175,7 @@ export default {
 		exportFretboardToFile(format)
 		{
 			// Close the export menu tootlip
-			this.$tours['export-menu'].stop();
+			this.isExportMenuOpened = false;
 
 			const svg = exportFretboard.exportFretboardToSVG(
 				data.instruments[this.instrument].nbStrings,
@@ -200,6 +204,11 @@ export default {
 					break;
 			}
 		},
+		closeExportMenu(event)
+		{
+			if (!this.buttonExportMenu.contains(event.target))
+				this.isExportMenuOpened = false;
+		},
 	},
 }
 
@@ -214,7 +223,7 @@ export default {
 
 .wrapper {
 	display: flex;
-	align-items: flex-start;
+	align-items: flex-end;
 	justify-content: space-between;
 }
 
@@ -233,11 +242,17 @@ export default {
 	margin-left: 10px;
 }
 
-.export-menu {
-	z-index: 100;
+.export-menu__text {
+	max-width: 300px;
+
+	font-size: 1.6rem;
+
+	&:first-of-type {
+		margin-bottom: 10px;
+	}
 }
 
-.export-menu__actions {
+.export-menu__buttons {
 	display: flex;
 	justify-content: center;
 	@include space-children-h(10px);
@@ -245,7 +260,7 @@ export default {
 	margin-top: 40px;
 }
 
-.export-menu__actions__button {
+.export-menu__buttons__item {
 	color: white;
 	border-color: white;
 	background-color: white;

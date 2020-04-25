@@ -24,12 +24,13 @@ module.exports = {
 			sass: {
 				prependData: `
 					@use "@cheap-glitch/scss-mixins/_mixins" as *;
+					@use "@/styles/mixins"                   as *;
 
-					@use "@/styles/layout"      as *;
-					@use "sass-mq/_mq"          as * with ($mq-breakpoints: $mq-breakpoints);
+					@use "@/styles/layout" as *;
+					@use "sass-mq/_mq"     as * with ($mq-breakpoints: $mq-breakpoints);
 
-					@use "@/styles/fonts"       as *;
-					@use "@/styles/transitions" as *;`
+					@use "@/styles/fonts"  as *;
+				`
 			}
 		},
 	},

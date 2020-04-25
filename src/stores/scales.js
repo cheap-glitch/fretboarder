@@ -15,8 +15,7 @@ export default
 	namespaced: true,
 
 	state: {
-		scales:       storage.get('scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
-		maxNbScales:  MAX_NB_SCALES,
+		scales: storage.get('scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
 		colors: [
 			'#0093ee',
 			'#1bb934',

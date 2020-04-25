@@ -6,112 +6,139 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.ScalesListItem(
-	:style="{ 'border-color': color }"
-	)
+div.ScalesListItem
 
-	div.color-dot(:style="{ 'background-color': color }")
+	div.wrapper(:style="{ 'border-color': color }")
 
-	//----------------------------------------------------------------------
-	//- Scale properties
-	//----------------------------------------------------------------------
-	div.scale-props
+		div.color-dot(:style="{ 'background-color': color }")
 
-		//- Type
-		VSelect.select-type(
-			id="scale-type"
-			:value="type"
-			:options="{ scale: 'Scale', arpeggio: 'Arpeggio' }"
-			@change="updateType"
-			)
-		//- Tonality
-		VSelect.select-tonality(
-			id="scale-tonality"
-			:value="tonality"
-			:options="tonalities"
-			@change="v => update('tonality', v)"
-			)
-		//- Model
-		VSelect.select-model(
-			id="scale-model"
-			:value="model"
-			:options="modelsNames"
-			@change="updateModel"
-			)
-		//- Position
-		VSelect.select-position(
-			v-show="type == 'scale'"
-			id="scale-position"
-			:value="position"
-			:options="positions"
-			is-value-number
-			@change="v => update('position', v)"
-			)
+		//----------------------------------------------------------------------
+		//- Scale properties
+		//----------------------------------------------------------------------
+		div.scale-props
 
-	//----------------------------------------------------------------------
-	//- Tools
-	//----------------------------------------------------------------------
-	div.scale-tools
-
-		//- Intervals
-		div.intervals
-			div.intervals__item(
-				v-for="(interval, index) in intervals"
-				:key="`scale-${id}-interval--${index}`"
-
-				v-mods="{ isSelected: highlightedNote == interval.value }"
-				:title="`Highlight ${intervalsNames[interval.value].toLowerCase()} notes`"
-
-				@click.left="update('highlightedNote', highlightedNote == interval.value ? null : interval.value)"
+			//- Type
+			VSelect.select-type(
+				id="scale-type"
+				:value="type"
+				:options="{ scale: 'Scale', arpeggio: 'Arpeggio' }"
+				@change="updateType"
 				)
-				p.intervals__item__text {{ interval.name }}
+			//- Tonality
+			VSelect.select-tonality(
+				id="scale-tonality"
+				:value="tonality"
+				:options="tonalities"
+				@change="v => update('tonality', v)"
+				)
+			//- Model
+			VSelect.select-model(
+				id="scale-model"
+				:value="model"
+				:options="modelsNames"
+				@change="updateModel"
+				)
+			//- Position
+			VSelect.select-position(
+				v-show="type == 'scale'"
+				id="scale-position"
+				:value="position"
+				:options="positions"
+				is-value-number
+				@change="v => update('position', v)"
+				)
 
-		div.scale-tools__separator
+		//----------------------------------------------------------------------
+		//- Tools
+		//----------------------------------------------------------------------
+		div.scale-tools(v-if="!isMobileDevice")
 
-		//- Show/hide
-		VButtonIcon(
-			:icon="isVisible ? 'eye' : 'eye-slash'"
-			size="small"
-			:tooltip="isVisible ? 'Hide' : 'Show'"
-			@click="update('isVisible', !isVisible)"
-			)
-		//- Focus
-		VButtonIcon(
-			v-show="nbScales > 1"
-			icon="bullseye"
-			size="small"
-			tooltip="Focus"
-			:is-active="isFocused"
-			@click="toggleFocusScale(id)"
-			)
-		//- Show intersections only
-		VButtonIcon(
-			v-show="nbScales > 1"
-			:icon="['fas', 'intersection']"
-			size="small"
-			tooltip="Show only intersections with other scales"
-			:is-active="isShowingIntersections"
-			@click="update('isShowingIntersections', !isShowingIntersections)"
-			)
+			//- Intervals
+			div.intervals
+				div.intervals__item(
+					v-for="(interval, index) in intervals"
+					:key="`scale-${id}-interval--${index}`"
+					ref="interval"
 
-		div.scale-tools__separator
+					v-mods="{ isSelected: highlightedNote == interval.value }"
 
-		//- Duplicate
-		VButtonIcon(
-			icon="copy"
-			size="small"
-			tooltip="Duplicate"
-			@click="addScale(id)"
+					@click.left="update('highlightedNote', highlightedNote == interval.value ? null : interval.value)"
+					@mouseenter="hoveredInterval = index"
+					@mouseleave="hoveredInterval = null"
+					)
+					p.intervals__item__text {{ interval.name }}
 
-			:is-disabled="nbScales == MAX_NB_SCALES"
+			div.scale-tools__separator
+
+			//- Show/hide
+			VButtonIcon(
+				:icon="isVisible ? 'eye' : 'eye-slash'"
+				size="small"
+				:tooltip="isVisible ? 'Hide' : 'Show'"
+				tooltip-placement="bottom"
+
+				@click="update('isVisible', !isVisible)"
+				)
+			//- Focus
+			VButtonIcon(
+				v-show="nbScales > 1"
+
+				icon="bullseye"
+				size="small"
+				tooltip="Focus"
+				tooltip-placement="bottom"
+
+				:is-active="isFocused"
+				@click="toggleFocusScale(id)"
+				)
+			//- Show intersections only
+			VButtonIcon(
+				v-show="nbScales > 1"
+
+				:icon="['fas', 'intersection']"
+				size="small"
+				tooltip="Show only intersections with other scales"
+				tooltip-placement="bottom"
+
+				:is-active="isShowingIntersections"
+				@click="update('isShowingIntersections', !isShowingIntersections)"
+				)
+
+			div.scale-tools__separator
+
+			//- Duplicate
+			VButtonIcon(
+				icon="copy"
+				size="small"
+				tooltip="Duplicate"
+				tooltip-placement="bottom"
+
+				:is-disabled="nbScales == MAX_NB_SCALES"
+				@click="addScale(id)"
+				)
+			//- Remove
+			VButtonIcon(
+				icon="times-circle"
+				size="small"
+				tooltip="Remove"
+				tooltip-placement="bottom"
+
+				@click="removeScale(id)"
+				)
+
+	//- Interval tooltips
+	template(v-if="!isMobileDevice")
+		VTooltip(
+			v-for="(interval, index) in intervals"
+			:key="`scale-${id}-interval--${index}--tooltip`"
+
+			:is-open="hoveredInterval === index"
+
+			:target="$refs.interval ? $refs.interval[index] : false"
+			placement="bottom"
+			:delay="500"
 			)
-		//- Remove
-		VButtonIcon(
-			icon="times-circle"
-			size="small"
-			tooltip="Remove"
-			@click="removeScale(id)"
-			)
+			p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
 
 </template>
 <!--}}}-->
@@ -174,6 +201,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			hoveredInterval: null,
+		}
+	},
+
 	computed: {
 		nbScales()
 		{
@@ -216,6 +249,7 @@ export default {
 		},
 		...get([
 			'scales/scales',
+			'isMobileDevice',
 		]),
 	},
 
@@ -224,8 +258,7 @@ export default {
 		this.MAX_NB_SCALES  = MAX_NB_SCALES;
 		this.tonalities     = data.tonalities,
 		this.intervalsNames = data.intervalsNames,
-
-		this.positions = {
+		this.positions      = {
 			0: 'Whole',
 			1: '1<sup>st</sup> pos',
 			2: '2<sup>nd</sup> pos',
@@ -271,7 +304,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.ScalesListItem {
+.wrapper {
 	@include mq($until: desktop)
 	{
 		border-width: 2px;

@@ -6,17 +6,8 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-button.VButtonText(
-	:is="elemType"
-
-	v-bind:[linkTo]="to"
-
-	v-bind:[extLinkRel]="'external nofollow noopener noreferrer'"
-	v-bind:[extLinkTarget]="'_blank'"
-
-	v-mods="{ isFilled }"
-	)
-	slot
+button.VButtonText(v-mods="{ isFilled }")
+	p {{ text }}
 
 </template>
 <!--}}}-->
@@ -29,35 +20,14 @@ export default {
 	name: 'VButtonText',
 
 	props: {
-		mode: {
+		text: {
 			type: String,
-			default: 'button',
-			validator: v => ['button', 'link', 'link-external'].includes(v)
-		},
-		to: {
-			type: String,
-			default: '',
+			required: true,
 		},
 		isFilled: {
 			type: Boolean,
 			default: false,
 		},
-	},
-
-	computed: {
-		elemType()
-		{
-			switch (this.mode)
-			{
-				case 'link':           return 'router-link';
-				case 'link-external':  return 'a';
-				case 'button':         return 'button';
-				default:               return 'button';
-			}
-		},
-		linkTo()        { return this.mode == 'link'          ? 'to'     : null; },
-		extLinkRel()    { return this.mode == 'link-external' ? 'rel'    : null; },
-		extLinkTarget() { return this.mode == 'link-external' ? 'target' : null; },
 	},
 }
 

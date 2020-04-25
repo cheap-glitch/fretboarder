@@ -29,7 +29,7 @@ div.VSelect(ref="vselectbar")
 		div.options(
 			ref="options"
 			v-show="isOpened"
-			v-mods="{ isOpeningDirectionUp: openingDirection == 'up' }"
+			v-mods="{ isOpeningDirectionUp: openingDirection == 'above' }"
 			)
 			div.options__button-close(
 				@click.left="isOpened = false"
@@ -93,8 +93,8 @@ export default {
 
 	data() {
 		return {
-			isOpened:          false,
-			openingDirection:  'down',
+			isOpened:         false,
+			openingDirection: 'below',
 		}
 	},
 
@@ -110,8 +110,8 @@ export default {
 		},
 		isChevronFlipped()
 		{
-			return (this.openingDirection == 'down' &&  this.isOpened)
-			    || (this.openingDirection == 'up'   && !this.isOpened)
+			return (this.openingDirection == 'below' &&  this.isOpened)
+			    || (this.openingDirection == 'above' && !this.isOpened)
 		},
 		...get([
 			'instrument',
@@ -161,11 +161,11 @@ export default {
 			const windowHeight  = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 			const elemYPosition = this.$refs.vselectbar.getBoundingClientRect().top;
 
-			// If the element is positioned low in the viewport,
-			// open the options menu upward instead of downward to avoid vertical overflow
-			this.openingDirection = windowHeight - elemYPosition < 380
-				? 'up'
-				: 'down';
+			/**
+			 * If the element is positioned low in the viewport,
+			 * open the options menu upward instead of downward to avoid vertical overflow
+			 */
+			this.openingDirection = (windowHeight - elemYPosition < 380) ? 'above' : 'below';
 		},
 		jumpToOption(key)
 		{
@@ -287,7 +287,6 @@ export default {
 	overflow-y: auto;
 
 	background-color: var(--color--select--bg);
-	transition: background-color 0.2s;
 
 	/**
 	 * On mobile: modal

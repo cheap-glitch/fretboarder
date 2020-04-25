@@ -6,33 +6,52 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewerFret(
-	v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }"
-	)
+div.FretboardViewerFret
 
-	//- Inlay
-	div.inlay(v-if="isDisplayingInlay")
+	//- Intervals tooltip
+	VTooltip(
+		v-if="!isMobileDevice"
 
-	//- Note
-	div.note(
-		v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
-		:style="noteColors"
-
-		@mouseenter="$emit('hover-fret', index)"
-		@mouseleave="$emit('hover-fret', null)"
+		:target="$refs.note || false"
+		:is-open="isHovered"
 		)
-		transition(name="fade")
-			p.note__name(v-show="isDisplayingNotesName || isOpenString") {{ noteName }}
+		div.intervals
+			div.intervals__item(
+				v-for="(interval, index) in intervals"
+				:key="`fret-info--${index}`"
+				)
+				div.intervals__item__color-dot(
+					v-for="color in interval.colors"
+					:key="`fret-interval--${index}--color--${color}`"
+					:style="{ 'background-color': color }"
+					)
+				p {{ interval.name }}
 
-	//- Note placeholder
-	div.note-placeholder(
-		v-show="!isActive"
-		v-mods="{ isOpenString, isFretboardFlipped }"
+	div.fret(v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }")
 
-		@mouseenter="$emit('hover-fret', index)"
-		@mouseleave="$emit('hover-fret', null)"
-		)
-		p.note-placeholder__name {{ noteName }}
+		//- Inlay
+		div.fret__inlay(v-if="isDisplayingInlay")
+
+		//- Note
+		div.fret__note(
+			ref="note"
+
+			v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
+			:style="noteColors"
+
+			@mouseenter="isHovered = true"
+			@mouseleave="isHovered = false"
+			)
+			transition(name="fade")
+				p.fret__note__name(v-show="isDisplayingNotesName || isOpenString") {{ noteName }}
+
+		//- Note placeholder
+		div.fret__placeholder(
+			v-if="!isMobileDevice || isOpenString"
+			v-show="!isActive"
+			v-mods="{ isOpenString, isFretboardFlipped }"
+			)
+			p.fret__placeholder__name {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -70,6 +89,10 @@ export default {
 			type: Array,
 			required: true,
 		},
+		intervals: {
+			type: Array,
+			required: true,
+		},
 		isVertical: {
 			type: Boolean,
 			default: false,
@@ -87,6 +110,7 @@ export default {
 	data() {
 		return {
 			noteColors: {},
+			isHovered:  false,
 		}
 	},
 
@@ -118,6 +142,7 @@ export default {
 		...get([
 			'fretRange',
 
+			'isMobileDevice',
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
 		]),
@@ -137,9 +162,11 @@ export default {
 			if (!this.isActive) return;
 
 			// Build a solid gradient with the colors of every active scale the note belongs to
+			//- const blurZoneSize  = Math.ceil
 			const fillingSize   = Math.ceil(100 / this.scales.length);
-			const getColorStops = (scale, index) => `${scale.color} ${index * fillingSize}% ${(index + 1)*fillingSize}%`;
-			this.noteColors     = { background: `linear-gradient(to right, ${this.scales.map(getColorStops)})`};
+			const getColorStops = (scale, index) => `${scale.color} ${index*fillingSize}% ${(index + 1)*fillingSize}%`;
+			//- const getColorStops = (scale, index, scales) => `${scale.color} ${index*fillingSize + (index > 0)*3}% ${(index + 1)*fillingSize - (index < scales.length - 1)*3}%`;
+			this.noteColors     = { background: `linear-gradient(-45deg, ${this.scales.map(getColorStops)})`};
 		},
 	},
 }
@@ -151,10 +178,11 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardViewerFret {
+.fret {
 	display: flex;
 
 	position: relative;
+	z-index: 10;
 
 	border: 0 solid var(--color--fret--border);
 
@@ -198,6 +226,7 @@ export default {
 
 	// Vertical fretboard
 	&.is-vertical {
+		height: 100%;
 		align-items: center;
 
 		// String
@@ -227,7 +256,7 @@ export default {
 	}
 }
 
-.note {
+.fret__note {
 	box-sizing: content-box;
 
 	position: absolute;
@@ -271,14 +300,16 @@ export default {
 	}
 }
 
-.note-placeholder {
+.fret__placeholder {
+	box-sizing: content-box;
+
 	position: absolute;
 	right: 50%;
 	transform: translate(50%, -50%);
 
 	@include circle(30px);
 
-	border: 2px solid var(--color--border);
+	border: 2px dashed var(--color--border);
 
 	transition: opacity 0.2s, border-color 0.2s;
 
@@ -298,8 +329,6 @@ export default {
 	}
 
 	&.is-open-string {
-		border-style: dashed;
-
 		right: 100%;
 
 		&.is-fretboard-flipped {
@@ -308,26 +337,44 @@ export default {
 	}
 }
 
-.note__name,
-.note-placeholder__name {
+.fret__note__name,
+.fret__placeholder__name {
 	@include center-position;
 
 	font-weight: bold;
 }
 
-.note__name {
+.fret__note__name {
 	color: white;
 }
 
-.note-placeholder__name {
+.fret__placeholder__name {
 	color: var(--color--text--secondary);
 }
 
-.inlay {
+.intervals {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
+}
+
+.intervals__item {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	flex: 0 0 auto;
+}
+
+.intervals__item__color-dot {
+	@include circle(10px);
+}
+
+.fret__inlay {
 	@include center-position;
 	@include circle(15px);
 
-	background-color: var(--color--inlay--bg);
+	background-color: var(--color--bg--accent);
 
 	transition: background-color 0.2s;
 }

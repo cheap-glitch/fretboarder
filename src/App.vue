@@ -9,27 +9,11 @@
 div.App(:style="colorscheme")
 
 	//----------------------------------------------------------------------
-	//- Page content
+	//- Header
 	//----------------------------------------------------------------------
+	header.header(v-if="!isMobileDevice")
 
-	//- Tools & settings
-	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
-
-	//- Fretboard
-	FretboardViewer.fretboard-viewer#help-tour-step--12(:is-vertical="isMobileDevice")
-
-	//- Scales & arpeggios
-	ScalesList.fretboard-scales(v-if="!isMobileDevice")
-
-	//- Help tour
-	HelpTour
-
-	//----------------------------------------------------------------------
-	//- Footer
-	//----------------------------------------------------------------------
-	footer.footer
-
-		div.footer__nav
+		div.header__nav
 
 			//- Logo
 			h1.logo
@@ -43,18 +27,19 @@ div.App(:style="colorscheme")
 			nav.nav
 
 				//- GitHub & Twitter
-				a.nav__link(
-					href="https://github.com/cheap-glitch/fretboarder/issues"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'github']")
-				a.nav__link(
-					href="https://twitter.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'twitter']")
+				div.nav__social#help-tour-step--12
+					a.nav__link(
+						href="https://github.com/cheap-glitch/fretboarder"
+						target="_blank"
+						rel="external nofollow noopener noreferrer"
+						)
+						fa-icon(:icon="['fab', 'github']")
+					a.nav__link(
+						href="https://twitter.com/cheap_glitch"
+						target="_blank"
+						rel="external nofollow noopener noreferrer"
+						)
+						fa-icon(:icon="['fab', 'twitter']")
 
 				//- Quick help
 				div.nav__link#help-tour-step--0(
@@ -64,22 +49,22 @@ div.App(:style="colorscheme")
 					p.nav__link__text Help
 
 				//- Patreon page
-				a.nav__link.link-support#help-tour-step--14(
+				a.nav__link.link-support#help-tour-step--13(
 					href="https://www.patreon.com/cheap_glitch"
 					target="_blank"
 					rel="external nofollow noopener noreferrer"
 					)
 					fa-icon(:icon="['far', 'heart']")
-					p.nav__link__text Support
+					p.nav__link__text Support the app!
 
 				//- TGLD
-				a.nav__link.link-tgld#help-tour-step--15(
+				a.nav__link.link-tgld#help-tour-step--14(
 					href="https://www.theguitarlickdatabase.com"
 					target="_blank"
 					rel="external nofollow noopener noreferrer"
 					)
+					p.nav__link__text The Guitar Lick Database
 					fa-icon(:icon="['far', 'external-link-square-alt']")
-					p.nav__link__text TGLD
 
 		//- Light/dark switch
 		div.dark-mode-toggle(
@@ -88,6 +73,22 @@ div.App(:style="colorscheme")
 			fa-icon(:icon="['fas', 'sun']")
 			div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
 			fa-icon(:icon="['fas', 'moon']")
+
+	//----------------------------------------------------------------------
+	//- Page content
+	//----------------------------------------------------------------------
+
+	//- Tools & settings
+	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
+
+	//- Fretboard
+	FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice")
+
+	//- Scales & arpeggios
+	ScalesList.fretboard-scales(v-if="!isMobileDevice")
+
+	//- Help tour
+	HelpTour
 
 	//----------------------------------------------------------------------
 	//- Mobile actions & modals
@@ -113,7 +114,6 @@ div.App(:style="colorscheme")
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }   from 'vuex'
 import { get }            from 'vuex-pathify'
 
 import colorscheme        from '@/modules/colorscheme'
@@ -177,7 +177,7 @@ export default {
 	mounted()
 	{
 		if (this.scales.length == 0)
-			this.addScale();
+			this.$store.commit('scales/addScale');
 	},
 
 	created()
@@ -212,7 +212,6 @@ export default {
 			if (helpTour.currentStep == -1)
 				helpTour.start();
 		},
-		...mapMutations(['addScale']),
 	},
 }
 
@@ -226,34 +225,41 @@ export default {
 @use '@/styles/colors' as *;
 
 .App {
-	display: grid;
-	grid-template: auto 1fr 1.4fr auto / 1fr;
-
-	height: 100%;
-
 	padding: 20px;
 
 	background-color: var(--color--bg);
 	transition: background-color 0.2s;
+
+	@include mq($from: desktop)
+	{
+		display: grid;
+		grid-template: auto minmax(0, 1fr) auto 2fr / 1fr;
+
+		height: 100%;
+	}
 }
 
-.fretboard-viewer {
+.fretboard-settings {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
+
+	margin: 20px 0;
 }
 
-.fretboard-settings { margin-bottom: 20px; }
-.fretboard-scales   { margin-top:    60px; }
+.fretboard-scales {
+	margin: 60px 0 20px 0;
+}
 
-.footer {
+.header {
 	display: flex;
-	align-items: flex-end;
+	align-items: flex-start;
 	justify-content: space-between;
 }
 
-.footer__nav {
+.header__nav {
 	display: flex;
+	align-items: baseline;
 	@include space-children-h(26px);
 }
 
@@ -291,13 +297,20 @@ export default {
 
 .nav {
 	display: flex;
-	@include space-children-h(18px);
+	@include space-children-h(20px);
+}
+
+.nav__social {
+	display: flex;
+	@include space-children-h(10px);
 }
 
 .nav__link {
 	display: flex;
 	align-items: center;
 	@include space-children-h(4px);
+
+	font-size: 1.4rem;
 
 	color: var(--color--text--secondary);
 
@@ -372,12 +385,12 @@ export default {
 
 	color: white;
 
-	box-shadow: -4px -4px 8px 2px rgba(0, 0, 0, 0.6);
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
 
 	cursor: pointer;
 
-	&:nth-child(1) { background-color: $color--azure; }
-	&:nth-child(2) { background-color: #aaa;          }
+	&:nth-child(1) { background-color: $color--azure;          }
+	&:nth-child(2) { background-color: var(--color--logo--bg); }
 }
 
 </style>

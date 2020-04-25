@@ -6,16 +6,31 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-button.VButtonIcon(
-	:title="tooltip"
-	v-mods="{ isDisabled }"
-	@click.left="click"
-	)
-	fa-icon.VButtonIcon__icon(
-		:icon="Array.isArray(icon) ? icon : ['far', icon]"
-		:class="`size-${size}`"
-		v-mods="{ isActive, isDisabled, isFlipped }"
+div
+	button.VButtonIcon(
+		ref="button"
+		v-mods="{ isDisabled }"
+
+		@click.left="click"
+		@mouseenter="showTooltip = true"
+		@mouseleave="showTooltip = hasBeenClicked = false"
 		)
+
+		fa-icon.icon(
+			:icon="Array.isArray(icon) ? icon : ['far', icon]"
+			:class="`size-${size}`"
+			v-mods="{ isActive, isDisabled, isFlipped }"
+			)
+
+	VTooltip(
+		v-if="!isMobileDevice && !isTooltipDisabled && !hasBeenClicked"
+
+		:target="$refs.button || false"
+		:placement="tooltipPlacement"
+		:delay="500"
+		:is-open="showTooltip && !isTooltipDisabled"
+		)
+		p {{ tooltip }}
 
 </template>
 <!--}}}-->
@@ -23,6 +38,8 @@ button.VButtonIcon(
 
 <!--{{{ JavaScript -->
 <script>
+
+import { get } from 'vuex-pathify'
 
 export default {
 	name: 'VButtonIcon',
@@ -39,13 +56,14 @@ export default {
 		},
 		tooltip: {
 			type: String,
-			default: null,
+			required: true,
+		},
+		tooltipPlacement: {
+			type: String,
+			default: 'top',
+			validator: v => ['top', 'bottom'].includes(v),
 		},
 		isActive: {
-			type: Boolean,
-			default: false,
-		},
-		isDisabled: {
 			type: Boolean,
 			default: false,
 		},
@@ -53,12 +71,35 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isDisabled: {
+			type: Boolean,
+			default: false,
+		},
+		isTooltipDisabled: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	data() {
+		return {
+			showTooltip:    false,
+			hasBeenClicked: false,
+		}
+	},
+
+	computed: {
+		...get(['isMobileDevice']),
 	},
 
 	methods: {
 		click()
 		{
-			if (!this.isDisabled) this.$emit('click');
+			if (!this.isDisabled)
+			{
+				this.hasBeenClicked = true;
+				this.$emit('click');
+			}
 		}
 	},
 }
@@ -80,7 +121,7 @@ export default {
 	cursor: pointer;
 }
 
-.VButtonIcon__icon {
+.icon {
 	color: var(--color--text--secondary);
 
 	transition: color 0.2s;
