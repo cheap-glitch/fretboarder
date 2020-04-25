@@ -100,7 +100,7 @@ export default {
 	methods: {
 		createPopper()
 		{
-			if (this.isOpen)
+			if (this.isOpen && this.targetElement !== false)
 			{
 				if (this.popper !== null) this.destroyPopper();
 

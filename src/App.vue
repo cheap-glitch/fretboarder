@@ -8,87 +8,90 @@
 
 div.App(:style="colorscheme")
 
-	//----------------------------------------------------------------------
-	//- Header
-	//----------------------------------------------------------------------
-	header.header(v-if="!isMobileDevice")
-
-		div.header__nav
-
-			//- Logo
-			h1.logo
-				fa-icon.logo__icon(
-					:icon="['far', instrumentIcon]"
-					v-mods="{ isUkulele: instrument == 'ukulele' }"
-					)
-				h1.logo__text Fretboarder
-
-			//- Links
-			nav.nav
-
-				//- GitHub & Twitter
-				div.nav__social#help-tour-step--12
-					a.nav__link(
-						href="https://github.com/cheap-glitch/fretboarder"
-						target="_blank"
-						rel="external nofollow noopener noreferrer"
-						)
-						fa-icon(:icon="['fab', 'github']")
-					a.nav__link(
-						href="https://twitter.com/cheap_glitch"
-						target="_blank"
-						rel="external nofollow noopener noreferrer"
-						)
-						fa-icon(:icon="['fab', 'twitter']")
-
-				//- Quick help
-				div.nav__link#help-tour-step--0(
-					@click.left="startHelpTour"
-					)
-					fa-icon(:icon="['far', 'question-circle']")
-					p.nav__link__text Help
-
-				//- Patreon page
-				a.nav__link.link-support#help-tour-step--13(
-					href="https://www.patreon.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['far', 'heart']")
-					p.nav__link__text Support the app!
-
-				//- TGLD
-				a.nav__link.link-tgld#help-tour-step--14(
-					href="https://www.theguitarlickdatabase.com"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					p.nav__link__text The Guitar Lick Database
-					fa-icon(:icon="['far', 'external-link-square-alt']")
-
-		//- Light/dark switch
-		div.dark-mode-toggle(
-			@click="$store.commit('toggleIsDarkModeOn')"
-			)
-			fa-icon(:icon="['fas', 'sun']")
-			div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
-			fa-icon(:icon="['fas', 'moon']")
-
-	//----------------------------------------------------------------------
-	//- Page content
-	//----------------------------------------------------------------------
-
-	//- Tools & settings
-	FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
-
-	//- Fretboard
-	FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice")
-
-	//- Scales & arpeggios
-	ScalesList.fretboard-scales(v-if="!isMobileDevice")
-
 	//- Help tour
-	HelpTour
+	HelpTour(v-if="!isMobileDevice")
+
+	//- Page content
+	section.page
+
+		//----------------------------------------------------------------------
+		//- Header
+		//----------------------------------------------------------------------
+		header.header(v-if="!isMobileDevice")
+
+			div.header__nav
+
+				//- Logo
+				h1.logo
+					fa-icon.logo__icon(
+						:icon="['far', instrumentIcon]"
+						v-mods="{ isUkulele: instrument == 'ukulele' }"
+						)
+					h1.logo__text Fretboarder
+
+				//- Links
+				nav.nav
+
+					//- GitHub & Twitter
+					div.nav__social#help-tour-step--12
+						a.nav__link(
+							href="https://github.com/cheap-glitch/fretboarder"
+							target="_blank"
+							rel="external nofollow noopener noreferrer"
+							)
+							fa-icon(:icon="['fab', 'github']")
+						a.nav__link(
+							href="https://twitter.com/cheap_glitch"
+							target="_blank"
+							rel="external nofollow noopener noreferrer"
+							)
+							fa-icon(:icon="['fab', 'twitter']")
+
+					//- Quick help
+					div.nav__link#help-tour-step--0(
+						@click.left="startHelpTour"
+						)
+						fa-icon(:icon="['far', 'question-circle']")
+						p.nav__link__text Help
+
+					//- Patreon page
+					a.nav__link.link-support#help-tour-step--13(
+						href="https://www.patreon.com/cheap_glitch"
+						target="_blank"
+						rel="external nofollow noopener noreferrer"
+						)
+						fa-icon(:icon="['far', 'heart']")
+						p.nav__link__text Support the app!
+
+					//- TGLD
+					a.nav__link.link-tgld#help-tour-step--14(
+						href="https://www.theguitarlickdatabase.com"
+						target="_blank"
+						rel="external nofollow noopener noreferrer"
+						)
+						p.nav__link__text The Guitar Lick Database
+						fa-icon(:icon="['far', 'external-link-square-alt']")
+
+			//- Light/dark switch
+			div.dark-mode-toggle(
+				@click="$store.commit('toggleIsDarkModeOn')"
+				)
+				fa-icon(:icon="['fas', 'sun']")
+				div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
+				fa-icon(:icon="['fas', 'moon']")
+
+		//----------------------------------------------------------------------
+		//- Page content
+		//----------------------------------------------------------------------
+
+		//- Tools & settings
+		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
+
+		//- Fretboard
+		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice")
+
+		//- Scales & arpeggios
+		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
 
 	//----------------------------------------------------------------------
 	//- Mobile actions & modals
@@ -225,17 +228,19 @@ export default {
 @use '@/styles/colors' as *;
 
 .App {
-	padding: 20px;
+	flex: 1 1 auto;
 
 	background-color: var(--color--bg);
 	transition: background-color 0.2s;
+}
+
+.page {
+	padding: 20px;
 
 	@include mq($from: desktop)
 	{
-		display: grid;
-		grid-template: auto minmax(0, 1fr) auto 2fr / 1fr;
-
-		height: 100%;
+		@include space-children-v(40px);
+		padding-bottom: 0;
 	}
 }
 
@@ -243,12 +248,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-
-	margin: 20px 0;
-}
-
-.fretboard-scales {
-	margin: 60px 0 20px 0;
 }
 
 .header {

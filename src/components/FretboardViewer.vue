@@ -301,27 +301,12 @@ export default {
 .FretboardViewer {
 	display: grid;
 
-	&.is-vertical {
-		margin-top: 20px;
-	}
+	&:not(.is-vertical) { margin-left: 14px; }
+	&.is-vertical       { margin-top:  20px; }
 
 	@include mq($until: desktop)
 	{
 		justify-content: center;
-	}
-
-	@include mq($from: desktop)
-	{
-		//- overflow: auto visible;
-
-		// Add some padding to avoid cutting notes on the edges
-		padding: 20px 2px 20px 20px;
-		&.is-fretboard-flipped { padding: 20px 20px 20px 2px; }
-
-		// When the fret numbers are displayed, the bottom padding becomes redundant
-		&.is-displaying-fret-nbs {
-			padding-bottom: 2px;
-		}
 	}
 }
 

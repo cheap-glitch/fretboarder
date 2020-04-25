@@ -85,7 +85,7 @@ div.ScalesListItem
 
 				icon="bullseye"
 				size="small"
-				tooltip="Focus"
+				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
 				tooltip-placement="bottom"
 
 				:is-active="isFocused"

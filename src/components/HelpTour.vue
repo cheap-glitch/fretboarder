@@ -142,11 +142,11 @@ const helpTourMessages = [
 
 const helpTourTargets = [
 	...[...Array(5).keys()].map(n => `#help-tour-step--${n}`),
-	'.ScalesListItem .scale-props',
-	'.ScalesListItem .select-position',
-	'.ScalesListItem .intervals',
-	'.ScalesListItem .scale-tools .VButtonIcon:nth-of-type(2)',
-	'.ScalesListItem .scale-tools .VButtonIcon:nth-last-of-type(2)',
+	'#help-tour--scales .scale-props',
+	'#help-tour--scales .select-position',
+	'#help-tour--scales .intervals',
+	'#help-tour--scales .scale-tools > .VButtonIcon',
+	'#help-tour--scales .scale-tools > .VButtonIcon:nth-last-child(2)',
 	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 11}`),
 ];
 
