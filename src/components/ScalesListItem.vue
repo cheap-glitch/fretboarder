@@ -51,7 +51,7 @@ div.ScalesListItem
 		//----------------------------------------------------------------------
 		//- Tools
 		//----------------------------------------------------------------------
-		div.scale-tools
+		div.scale-tools(v-if="!isMobileDevice")
 
 			//- Intervals
 			div.intervals

@@ -70,6 +70,8 @@ div.FretboardSettings
 			div#canvas-wrapper
 			VButtonIcon#button-export-menu(
 				icon="file-download"
+				:is-active="isExportMenuOpened"
+
 				tooltip="Export the fretboard image"
 				:is-tooltip-disabled="isExportMenuOpened"
 

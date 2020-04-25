@@ -133,20 +133,17 @@
 }
 
 .vue-slider-dot-tooltip {
-	border-radius: 4px;
-
-	color: white;
-	background-color: $color--slate-gray;
-
-	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 }
 
 .vue-slider-dot-tooltip-inner {
 	min-width: 20px;
 
 	padding: 6px;
+	border-radius: 4px;
 
+	color: white;
 	border-color: $color--slate-gray;
+	background-color: $color--slate-gray;
 
 	font-size: 1.4rem;
 	font-family: $fonts-text;

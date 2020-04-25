@@ -226,6 +226,7 @@ export default {
 
 	// Vertical fretboard
 	&.is-vertical {
+		height: 100%;
 		align-items: center;
 
 		// String
