@@ -162,9 +162,11 @@ export default {
 			if (!this.isActive) return;
 
 			// Build a solid gradient with the colors of every active scale the note belongs to
+			//- const blurZoneSize  = Math.ceil
 			const fillingSize   = Math.ceil(100 / this.scales.length);
-			const getColorStops = (scale, index) => `${scale.color} ${index * fillingSize}% ${(index + 1)*fillingSize}%`;
-			this.noteColors     = { background: `linear-gradient(to right, ${this.scales.map(getColorStops)})`};
+			const getColorStops = (scale, index) => `${scale.color} ${index*fillingSize}% ${(index + 1)*fillingSize}%`;
+			//- const getColorStops = (scale, index, scales) => `${scale.color} ${index*fillingSize + (index > 0)*3}% ${(index + 1)*fillingSize - (index < scales.length - 1)*3}%`;
+			this.noteColors     = { background: `linear-gradient(-45deg, ${this.scales.map(getColorStops)})`};
 		},
 	},
 }

@@ -13,7 +13,7 @@ div
 
 		@click.left="click"
 		@mouseenter="showTooltip = true"
-		@mouseleave="showTooltip = false"
+		@mouseleave="showTooltip = hasBeenClicked = false"
 		)
 
 		fa-icon.icon(
@@ -23,7 +23,7 @@ div
 			)
 
 	VTooltip(
-		v-if="!isMobileDevice && !isTooltipDisabled"
+		v-if="!isMobileDevice && !isTooltipDisabled && !hasBeenClicked"
 
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"
@@ -83,7 +83,8 @@ export default {
 
 	data() {
 		return {
-			showTooltip: false,
+			showTooltip:    false,
+			hasBeenClicked: false,
 		}
 	},
 
@@ -94,7 +95,11 @@ export default {
 	methods: {
 		click()
 		{
-			if (!this.isDisabled) this.$emit('click');
+			if (!this.isDisabled)
+			{
+				this.hasBeenClicked = true;
+				this.$emit('click');
+			}
 		}
 	},
 }
