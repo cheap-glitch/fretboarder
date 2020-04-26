@@ -48,8 +48,6 @@ export default {
 	border-style: solid;
 	border-radius: 6px;
 
-	font-family: $fonts-text;
-
 	appearance: none;
 	background-image: none;
 

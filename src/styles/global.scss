@@ -3,9 +3,6 @@
  * styles/global.scss
  */
 
-@use 'fonts'  as *;
-@use 'colors' as *;
-
 /**
  * Layout
  */
@@ -30,7 +27,7 @@ p,
 a,
 h1,
 h2 {
-	font-family: $fonts-text;
+	font-family: "IBM Plex", "Helvetica", "Arial", sans-serif;
 
 	cursor: default;
 	user-select: none;

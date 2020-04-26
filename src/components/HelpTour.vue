@@ -228,8 +228,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use '@/styles/colors' as *;
-
 .help-tour__step {
 	z-index: 100;
 }
@@ -261,7 +259,7 @@ export default {
 	background-color: white;
 
 	&.is-filled:hover {
-		color: $color--slate-gray;
+		color: var(--color--bg--tooltip);
 	}
 }
 
@@ -281,8 +279,6 @@ export default {
 
 	text-align: left;
 	line-height: 1.4;
-
-	font-family: $fonts-text;
 
 	user-select: none;
 

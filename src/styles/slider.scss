@@ -3,9 +3,6 @@
  * styles/slider.scss
  */
 
-@use 'fonts'  as *;
-@use 'colors' as *;
-
 /**
  * Mixins
  * {{{
@@ -97,14 +94,14 @@
 
 .vue-slider-rail {
 	border-radius: 15px;
-	background-color: var(--color--bg--accent);
+	background-color: var(--color--bg--highlight);
 
 	transition: background-color 0.2s;
 }
 
 .vue-slider-process {
 	border-radius: 15px;
-	background-color: var(--color--border);
+	background-color: var(--color--text--secondary);
 
 	transition: background-color 0.2s;
 }
@@ -114,7 +111,6 @@
 	height: 100%;
 
 	border-radius: 50%;
-	border: 1px solid var(--color--text);
 
 	background-color: var(--color--border);
 
@@ -122,9 +118,13 @@
 
 	transition: border-color 0.2s, background-color 0.2s;
 
+	&:hover {
+		background-color: var(--color--hover);
+	}
+
 	@at-root &-focus {
-		background-color: lightgray;
 		cursor: grabbing;
+		background-color: var(--color--hover);
 	}
 
 	@at-root &-disabled {
@@ -142,11 +142,11 @@
 	border-radius: 4px;
 
 	color: white;
-	border-color: $color--slate-gray;
-	background-color: $color--slate-gray;
+	border-color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--tooltip);
 
 	font-size: 1.4rem;
-	font-family: $fonts-text;
+	font-family: "IBM Plex", "Helvetica", "Arial", sans-serif;
 
 	text-align: center;
 	white-space: nowrap;

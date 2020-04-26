@@ -219,8 +219,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use '@/styles/colors' as *;
-
 .wrapper {
 	display: flex;
 	align-items: flex-end;
@@ -266,7 +264,7 @@ export default {
 	background-color: white;
 
 	&:hover {
-		color: $color--slate-gray;
+		color: var(--color--bg--tooltip);
 	}
 }
 

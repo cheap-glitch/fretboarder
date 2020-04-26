@@ -126,12 +126,12 @@ export default {
 
 	transition: color 0.2s;
 
-	&:not(.is-active):hover {
+	&:not(.is-active):not(.is-disabled):hover {
 		color: var(--color--hover);
 	}
 
 	&.is-disabled {
-		color: var(--color--text--disabled);
+		color: var(--color--bg--highlight);
 
 		cursor: not-allowed;
 	}

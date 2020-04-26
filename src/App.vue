@@ -119,7 +119,7 @@ div.App(:style="colorscheme")
 
 import { get }            from 'vuex-pathify'
 
-import colorscheme        from '@/modules/colorscheme'
+import { colorscheme }    from '@/modules/colorscheme'
 import { objectMapToObj } from '@/modules/object'
 import { EventBus }       from '@/modules/bus'
 
@@ -225,8 +225,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use '@/styles/colors' as *;
-
 .App {
 	flex: 1 1 auto;
 
@@ -272,7 +270,7 @@ export default {
 	border-radius: 6px;
 
 	color: var(--color--bg);
-	background-color: var(--color--logo--bg);
+	background-color: var(--color--border);
 
 	transition: color 0.2s, background-color 0.2s;
 
@@ -326,8 +324,8 @@ export default {
 	cursor: pointer;
 }
 
-.link-support:hover { color: $color--crimson;  }
-.link-tgld:hover    { color: $color--cinnabar; }
+.link-support:hover { color: var(--color--red);    }
+.link-tgld:hover    { color: var(--color--orange); }
 
 .dark-mode-toggle {
 	display: flex;
@@ -388,8 +386,8 @@ export default {
 
 	cursor: pointer;
 
-	&:nth-child(1) { background-color: $color--azure;          }
-	&:nth-child(2) { background-color: var(--color--logo--bg); }
+	&:nth-child(1) { background-color: var(--color--hover);       }
+	&:nth-child(2) { background-color: var(--color--bg--tooltip); }
 }
 
 </style>
@@ -399,10 +397,16 @@ export default {
 <!--{{{ Global styles -->
 <style lang="scss">
 
+// Load reset stylesheet
 @use '@cheap-glitch/scss-reset/_reset';
+
+// Load global styles
 @use '@/styles/global';
+
+// Override styles of the slider component
 @use '@/styles/slider';
 
+// Load IBM Plex
 @include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
 
 </style>

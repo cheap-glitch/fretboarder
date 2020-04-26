@@ -22,15 +22,12 @@ module.exports = {
 		// Import the colorscheme & mixins globally
 		loaderOptions: {
 			sass: {
-				prependData: `
-					@use "@cheap-glitch/scss-mixins/_mixins" as *;
-					@use "@/styles/mixins"                   as *;
-
-					@use "@/styles/layout" as *;
-					@use "sass-mq/_mq"     as * with ($mq-breakpoints: $mq-breakpoints);
-
-					@use "@/styles/fonts"  as *;
-				`
+				prependData: [
+					'@cheap-glitch/scss-mixins/_mixins',
+					'@/styles/mq',
+				]
+				.map(stylesheet => `@use '${stylesheet}' as *;`)
+				.join('\n')
 			}
 		},
 	},
