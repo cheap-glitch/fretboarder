@@ -301,8 +301,14 @@ export default {
 .FretboardViewer {
 	display: grid;
 
-	&:not(.is-vertical) { margin-left: 14px; }
-	&.is-vertical       { margin-top:  20px; }
+	&:not(.is-vertical) {
+		&:not(.is-fretboard-flipped) { margin-left:  14px; }
+		&.is-fretboard-flipped       { margin-right: 14px; }
+	}
+
+	&.is-vertical {
+		margin-top: 20px;
+	}
 
 	@include mq($until: desktop)
 	{
