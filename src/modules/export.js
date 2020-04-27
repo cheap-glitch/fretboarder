@@ -3,7 +3,6 @@
  * modules/export.js
  */
 
-import jsPDF      from 'jspdf'
 import { saveAs } from 'file-saver'
 
 import data       from '@/modules/data'
@@ -14,72 +13,34 @@ import * as music from '@/modules/music'
  */
 const getAttrsString  = attrs => Object.keys(attrs).reduce((str, attr) => attrs[attr] ? `${str} ${attr}="${attrs[attr]}"` : str, '');
 const openTag         = (xml, tag, attrs) => xml.push(`<${tag}${getAttrsString(attrs)}>`);
-const closeTag        = (xml, tag)         => xml.push(`</${tag}>`);
+const closeTag        = (xml, tag)        => xml.push(`</${tag}>`);
 const appendSingleTag = (xml, tag, attrs) => xml.push(`<${tag}${getAttrsString(attrs)} />`);
 const appendFullTag   = (xml, tag, innerText, attrs) => { openTag(xml, tag, attrs); xml.push(innerText); closeTag(xml, tag); }
 
 /**
- * Create and export a PDF from a SVG
+ * Create and save an image of the fretboard
  */
-export function exportSVGToPDF(svg)
+export function exportFretboard(format, ...fretboardParams)
 {
-	createCanvasFromSVG(svg.blob, svg.w*20, svg.h*20, function(canvas)
+	const svg = exportFretboardToSVG.apply(null, fretboardParams);
+
+	switch (format)
 	{
-		// Create a landscape-oriented A4-sized PDF (units are in milimeters)
-		let pdf = new jsPDF({ orientation: 'landscape' });
+		case 'jpg':
+		case 'png':
+			createCanvasFromSVG(svg.blob, svg.w*10, svg.h*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
+			break;
 
-		// Insert the canvas in the PDF and save it
-		pdf.addImage(canvas, 'PNG', 0, 0, 297, (canvas.height*297)/canvas.width, 'NONE', 0);
-		pdf.save('fretboard.pdf');
-	});
+		case 'svg':
+			saveAs(svg.blob, 'fretboard.svg');
+			break;
+	}
 }
 
 /**
- * Create and save an image (PNG or JPEG format) from a SVG using a canvas
+ * Return a snapshot of the current state of the fretboard in SVG format
  */
-export function exportSVGToImage(svg, format)
-{
-	// Create a canvas & export it as an image
-	createCanvasFromSVG(svg.blob, svg.w*10, svg.h*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
-}
-
-/**
- * Create a canvas from a SVG and apply a callback to the result
- */
-export function createCanvasFromSVG(SVGBlob, canvasW, canvasH, callback)
-{
-	// Create a canvas the size of the SVG
-	let canvasWrapper = document.getElementById('canvas-wrapper');
-	canvasWrapper.innerHTML = `<canvas width="${canvasW}" height="${canvasH}" id="canvas-export"><canvas>`;
-
-	let canvas  = document.getElementById('canvas-export');
-	let context = canvas.getContext('2d');
-	let domURL  = window.URL || window.webkitURL || window;
-	let url     = domURL.createObjectURL(SVGBlob);
-	let img     = new Image();
-
-	img.onload = function ()
-	{
-		// Draw the SVG on a white background
-		context.fillStyle = 'white';
-		context.fillRect(      0, 0, canvas.width, canvas.height);
-		context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-		// Apply the callback on the resulting canvas
-		callback(canvas);
-
-		// Destroy the URL object and remove the canvas
-		domURL.revokeObjectURL(url);
-		canvasWrapper.removeChild();
-	};
-
-	img.src = url;
-}
-
-/**
- * Return a SVG drawing the current state of the fretboard
- */
-export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFlipped, isDisplayingNotesName, isSizeFixed)
+function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFlipped, isDisplayingNotesName, isSizeFixed)
 {
 	let svg            = [];
 	let gradients      = [];
@@ -104,11 +65,11 @@ export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales
 
 	// Start the SVG output
 	openTag(svg, 'svg', {
-		xmlns:    'http://www.w3.org/2000/svg',
-		version:  '1.2',
-		width:    isSizeFixed ? svgW : '',
-		height:   isSizeFixed ? svgH : '',
-		viewBox:  `0 0 ${svgW} ${svgH}`,
+		xmlns:   'http://www.w3.org/2000/svg',
+		version: '1.2',
+		width:   isSizeFixed ? svgW : '',
+		height:  isSizeFixed ? svgH : '',
+		viewBox: `0 0 ${svgW} ${svgH}`,
 	});
 
 	// Embed some basic styles for text
@@ -133,15 +94,15 @@ export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales
 		{
 			let x = offset - getFretY(fret)/2 + marginRight;
 
-			// Inverse à nouveau le numéro si besoin
+			// Flip the fret numbers if needed
 			if (isFlipped) openTag(svg, 'g', { 'transform': `translate(${svgW}, 0) scale(-1, 1)` });
 
 			appendFullTag(svg, 'text', fret, {
-				'x':            isFlipped ? (svgW - x) : x,
-				'y':            fbH + marginTop + 4,
-				'fill':         '#aaa',
-				'class':        fbInlayFrets.includes(fret) ? 'bold' : 'normal',
-				'text-anchor':  'middle',
+				'x':           isFlipped ? (svgW - x) : x,
+				'y':           fbH + marginTop + 4,
+				'fill':        '#aaa',
+				'class':       fbInlayFrets.includes(fret) ? 'bold' : 'normal',
+				'text-anchor': 'middle',
 			});
 
 			if (isFlipped) closeTag(svg, 'g');
@@ -150,14 +111,14 @@ export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales
 		// Draw the next fret bar
 		offset += getFretY(fret + 1);
 		appendSingleTag(svg, 'line', {
-			'x1':               offset + marginRight,
-			'x2':               offset + marginRight,
-			'y1':               marginTop,
-			'y2':               fbH + marginTop,
-			'stroke':           'gray',
-			'stroke-width':     2,
-			'vector-effect':    'non-scaling-stroke',
-			'shape-rendering':  'crispEdges',
+			'x1':              offset + marginRight,
+			'x2':              offset + marginRight,
+			'y1':              marginTop,
+			'y2':              fbH + marginTop,
+			'stroke':          'gray',
+			'stroke-width':    2,
+			'vector-effect':   'non-scaling-stroke',
+			'shape-rendering': 'crispEdges',
 		});
 
 		// Function to draw the inlays
@@ -237,26 +198,26 @@ export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales
 	for (let string=0; string<nbStrings; string++)
 	{
 		appendSingleTag(svg, 'line', {
-			'x1':               marginRight,
-			'x2':               fbW + marginRight,
-			'y1':               string*fretH + marginTop,
-			'y2':               string*fretH + marginTop,
-			'stroke-width':     2,
-			'stroke':           '#222',
-			'shape-rendering':  'crispEdges',
-			'vector-effect':    'non-scaling-stroke',
+			'x1':              marginRight,
+			'x2':              fbW + marginRight,
+			'y1':              string*fretH + marginTop,
+			'y2':              string*fretH + marginTop,
+			'stroke-width':    2,
+			'stroke':          '#222',
+			'shape-rendering': 'crispEdges',
+			'vector-effect':   'non-scaling-stroke',
 		});
 	}
 
 	// Draw the nut
 	appendSingleTag(svg, 'line', {
-		'x1':               marginRight + .5,
-		'x2':               marginRight + .5,
-		'y1':               marginTop,
-		'y2':               fbH + marginTop,
-		'stroke-width':     1,
-		'stroke':           '#666',
-		'shape-rendering':  'crispEdges',
+		'x1':              marginRight + .5,
+		'x2':              marginRight + .5,
+		'y1':              marginTop,
+		'y2':              fbH + marginTop,
+		'stroke-width':    1,
+		'stroke':          '#666',
+		'shape-rendering': 'crispEdges',
 	});
 
 	// Draw the highlighted notes
@@ -299,13 +260,12 @@ export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales
 					// If the fretboard is flipped, flip the text again to render it properly
 					if (isFlipped) openTag(svg, 'g', { transform: `translate(${svgW}, 0) scale(-1, 1)` });
 
-					appendFullTag(svg, 'text', data.tonalities[stringNotes[fret]],
-					{
-						'x':            isFlipped ? (svgW - x) :  x,
-						'y':            y + r/3,
-						'fill':         'white',
-						'class':        'note',
-						'text-anchor':  'middle',
+					appendFullTag(svg, 'text', data.tonalities[stringNotes[fret]], {
+						'x':           isFlipped ? (svgW - x) :  x,
+						'y':           y + r/3,
+						'fill':        'white',
+						'class':       'note',
+						'text-anchor': 'middle',
 					});
 
 					if (isFlipped) closeTag(svg, 'g');
@@ -352,4 +312,37 @@ export function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales
 
 	// Return an object containing the dimensions of the SVG and the blob itself
 	return { w: svgW, h: svgH, blob, };
+}
+
+/**
+ * Create a canvas from a SVG and apply a callback on the result
+ */
+function createCanvasFromSVG(svg, width, height, callback)
+{
+	// Create a canvas the size of the SVG
+	let canvasWrapper = document.getElementById('canvas-wrapper');
+	canvasWrapper.innerHTML = `<canvas width="${width}" height="${height}" id="canvas-export"><canvas>`;
+
+	let canvas  = document.getElementById('canvas-export');
+	let context = canvas.getContext('2d');
+	let domURL  = window.URL || window.webkitURL || window;
+	let url     = domURL.createObjectURL(svg);
+	let img     = new Image();
+
+	img.onload = function ()
+	{
+		// Draw the SVG on a white background
+		context.fillStyle = 'white';
+		context.fillRect(      0, 0, canvas.width, canvas.height);
+		context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+		// Apply the callback on the resulting canvas
+		callback(canvas);
+
+		// Destroy the URL object and remove the canvas
+		domURL.revokeObjectURL(url);
+		canvasWrapper.removeChild();
+	};
+
+	img.src = url;
 }

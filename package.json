@@ -11,6 +11,7 @@
     "test": "test"
   },
   "scripts": {
+    "analyze": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
     "build": "vue-cli-service build --modern",
     "coverage": "nyc npm test",
     "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
@@ -42,10 +43,9 @@
     "@popperjs/core": "^2.3.3",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
-    "jspdf": "^1.5.3",
     "v-click-outside": "^3.0.1",
     "vue": "^2.6.11",
-    "vue-css-modifiers": "^1.0.6",
+    "vue-css-modifiers": "^1.0.7",
     "vue-slider-component": "^3.1.2",
     "vue-tour": "^1.3.0",
     "vuex": "^3.3.0",
@@ -78,6 +78,7 @@
     "sass-loader": "^8.0.2",
     "sass-mq": "^5.0.1",
     "vue-cli-plugin-sitemap": "^2.1.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "webpack-bundle-analyzer": "^3.7.0"
   }
 }

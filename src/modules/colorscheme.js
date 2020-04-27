@@ -12,7 +12,7 @@ export const colors = {
 	portage:                    '#ab7ef6',
 
 	athensGray:                 '#fafbfc',
-	barleyWhite:                '#fff5cd',
+	snow:                       '#f2f2f2',
 	regentStBlue:               '#a9c7df',
 	nepal:                      '#8eacc5',
 
@@ -23,33 +23,26 @@ export const colors = {
 	ebonyClay:                  '#232d3d',
 	mirage2:                    '#1c2532',
 	mirage:                     '#171e29',
+	black:                      '#222222',
 }
 
 export const colorscheme = {
-	'--color--bg':              ['white',          colors.mirage],
-	'--color--bg--accent':      ['#fcfcfc',        colors.mirage2],
-	'--color--bg--highlight':   ['#f2f2f2',        colors.ebonyClay],
-	'--color--bg--tooltip':     [colors.slateGray, colors.slateGray],
+	'--color--bg':              ['white',           colors.mirage],
+	'--color--bg--accent':      [colors.athensGray, colors.mirage2],
+	'--color--bg--highlight':   [colors.snow,       colors.ebonyClay],
+	'--color--bg--tooltip':     [colors.slateGray,  colors.slateGray],
 
-	'--color--border':          ['lightgray',      colors.oxfordBlue],
+	'--color--border':          ['lightgray',       colors.oxfordBlue],
 
-	'--color--text':            ['black',          colors.nepal],
-	'--color--text--secondary': ['gray',           colors.oxfordBlue2],
+	'--color--text':            [colors.black,      colors.nepal],
+	'--color--text--secondary': ['gray',            colors.oxfordBlue2],
 
-	'--color--hover':           [colors.azure,     colors.azure],
-	'--color--highlight':       [colors.sun,       colors.sun],
-	'--color--red':             [colors.crimson,   colors.crimson],
-	'--color--orange':          [colors.cinnabar,  colors.cinnabar],
+	'--color--hover':           [colors.azure,      colors.azure],
+	'--color--highlight':       [colors.sun,        colors.sun],
+
+	'--color--string':          [colors.black,      colors.oxfordBlue],
+	'--color--fret':            ['darkgray',        colors.ebonyClay],
+
+	'--color--red':             [colors.crimson,    colors.crimson],
+	'--color--orange':          [colors.cinnabar,   colors.cinnabar],
 }
-
-	/*
-	'--color--separator':                 ['lightgray',  colors.ebonyClay],
-
-	// Footer
-	'--color--logo--bg':                  ['lightgray',  colors.oxfordBlue],
-	'--color--support-link--text--hover': ['white',      colors.mirage],
-
-	// Fretboard
-	'--color--fret--border':              ['gray',       colors.ebonyClay],
-	'--color--string--border':            ['#222',       colors.oxfordBlue],
-	*/

@@ -90,7 +90,7 @@ const helpTourMessages = [
 	     <li>Toggle fret numbers</li>
 	     <li>Toggle note names</li>
 	     <li>Switch between left- and right-handed fretting and flip the fretboard accordingly</li>
-	     <li>Export the fretboard image in various formats (PNG, JPG, PDF, …)</li>
+	     <li>Export the fretboard image in various formats (PNG, JPG or SVG)</li>
 	 </ul>
 	`,
 
