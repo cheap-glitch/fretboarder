@@ -19,6 +19,7 @@ import scales                      from '@/stores/scales'
  */
 const state = {
 	clientWidth:              window.innerWidth,
+	clientHeight:             window.innerHeight,
 
 	instrument:               storage.get('instrument',            'guitar',   v => (v in data.instruments)),
 	tuning:                   storage.get('tuning',                'standard', v => (v in data.tuningsNames)),
@@ -40,7 +41,8 @@ const state = {
  * Getters
  */
 const getters = {
-	isMobileDevice: state => state.clientWidth < 800,
+	isMobileDevice:    state => state.clientWidth < 800,
+	layoutOrientation: state => state.clientWidth > state.clientHeight ? 'landscape' : 'portrait',
 };
 
 /**

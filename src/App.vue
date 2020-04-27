@@ -89,7 +89,7 @@ div.App(:style="colorscheme")
 		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 		//- Fretboard
-		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice")
+		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice && layoutOrientation == 'portrait'")
 
 		//- Scales & arpeggios
 		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
@@ -175,6 +175,7 @@ export default {
 
 			'isDarkModeOn',
 			'isMobileDevice',
+			'layoutOrientation',
 		]),
 	},
 
@@ -187,17 +188,17 @@ export default {
 	created()
 	{
 		// Register all key presses on the page
-		window.addEventListener('keydown', this.registerKeypress,  { passive: true });
+		window.addEventListener('keydown', this.registerKeypress, { passive: true });
 
 		// Update the width of the window on every resize
-		window.addEventListener('resize',  this.updateClientWidth, { passive: true });
+		window.addEventListener('resize',  this.updateClientSize, { passive: true });
 	},
 
 	destroyed()
 	{
 		// Clear the event listeners
-		window.removeEventListener('keydown', this.registerKeypress,  { passive: true });
-		window.removeEventListener('resize',  this.updateClientWidth, { passive: true });
+		window.removeEventListener('keydown', this.registerKeypress, { passive: true });
+		window.removeEventListener('resize',  this.updateClientSize, { passive: true });
 	},
 
 	methods: {
@@ -205,9 +206,10 @@ export default {
 		{
 			EventBus.$emit('keypress', event.key);
 		},
-		updateClientWidth()
+		updateClientSize()
 		{
-			this.$store.commit('setClientWidth', window.innerWidth);
+			this.$store.commit('setClientWidth',  window.innerWidth);
+			this.$store.commit('setClientHeight', window.innerHeight);
 		},
 		startHelpTour()
 		{
@@ -230,6 +232,15 @@ export default {
 	flex: 1 1 auto;
 
 	background-color: var(--color--bg);
+
+	@include mq($until: desktop)
+	{
+		@media (orientation: landscape)
+		{
+			display: flex;
+			align-items: center;
+		}
+	}
 }
 
 .page {
@@ -374,12 +385,21 @@ export default {
 }
 
 .mobile-actions {
-	@include space-children-v(10px);
-
 	position: fixed;
 	z-index: 1000;
 	bottom: 10px;
 	right: 10px;
+
+	@media (orientation: portrait)
+	{
+		@include space-children-v(10px);
+	}
+
+	@media (orientation: landscape)
+	{
+		display: flex;
+		@include space-children-h(10px);
+	}
 }
 
 .mobile-actions__item {
