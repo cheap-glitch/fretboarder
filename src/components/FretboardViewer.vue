@@ -303,7 +303,7 @@ export default {
 
 	&:not(.is-vertical) {
 		&:not(.is-fretboard-flipped) { margin-left:  14px; }
-		&.is-fretboard-flipped       { margin-right: 14px; }
+		&.is-fretboard-flipped       { margin-right: 16px; }
 	}
 
 	&.is-vertical {

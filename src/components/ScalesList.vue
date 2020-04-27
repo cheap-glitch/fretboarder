@@ -13,7 +13,7 @@ div.ScalesList
 			v-if="!isMobileDevice"
 			)
 			//- Hide all scales
-			VButtonIcon.scale__tools__hide-all(
+			VButton.scale__tools__hide-all(
 				v-show="scales.length >= 2"
 
 				icon="low-vision"
@@ -23,7 +23,7 @@ div.ScalesList
 				@click="$store.commit('scales/hideAllScales')"
 			)
 			//- Remove all scales
-			VButtonIcon(
+			VButton(
 				v-show="scales.length >= 2"
 
 				icon="trash-alt"
@@ -47,7 +47,7 @@ div.ScalesList
 		) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 
 	//- Add a new scale
-	VButtonIcon.button-add-scale#help-tour-step--4(
+	VButton.button-add-scale#help-tour-step--4(
 		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"

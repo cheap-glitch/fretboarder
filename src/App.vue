@@ -22,7 +22,7 @@ div.App(:style="colorscheme")
 			div.header__nav
 
 				//- Logo
-				h1.logo
+				div.logo
 					fa-icon.logo__icon(
 						:icon="['far', instrumentIcon]"
 						v-mods="{ isUkulele: instrument == 'ukulele' }"
@@ -74,11 +74,12 @@ div.App(:style="colorscheme")
 
 			//- Light/dark switch
 			div.dark-mode-toggle(
+				v-mods="{ isDarkModeOn }"
 				@click="$store.commit('toggleIsDarkModeOn')"
 				)
-				fa-icon(:icon="['fas', 'sun']")
-				div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
-				fa-icon(:icon="['fas', 'moon']")
+				fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
+				div.dark-mode-toggle__switch
+				fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
 
 		//----------------------------------------------------------------------
 		//- Page content
@@ -229,7 +230,6 @@ export default {
 	flex: 1 1 auto;
 
 	background-color: var(--color--bg);
-	transition: background-color 0.2s;
 }
 
 .page {
@@ -272,8 +272,6 @@ export default {
 	color: var(--color--bg);
 	background-color: var(--color--border);
 
-	transition: color 0.2s, background-color 0.2s;
-
 	&:hover {
 		background-color: var(--color--hover);
 	}
@@ -313,8 +311,6 @@ export default {
 
 	cursor: pointer;
 
-	transition: color 0.2s;
-
 	&:hover {
 		color: var(--color--hover);
 	}
@@ -335,6 +331,22 @@ export default {
 	color: var(--color--text--secondary);
 
 	cursor: pointer;
+
+	&.is-dark-mode-on {
+		&:hover .dark-mode-toggle__sun {
+			color: var(--color--hover);
+		}
+
+		.dark-mode-toggle__switch::after {
+			transform: translateX(8px);
+		}
+	}
+
+	&:not(.is-dark-mode-on) {
+		&:hover .dark-mode-toggle__moon {
+			color: var(--color--hover);
+		}
+	}
 }
 
 .dark-mode-toggle__switch {
@@ -358,10 +370,6 @@ export default {
 		background-color: var(--color--highlight);
 
 		transition: transform 0.2s;
-	}
-
-	&.is-dark-mode-on::after {
-		transform: translateX(8px);
 	}
 }
 

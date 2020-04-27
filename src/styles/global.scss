@@ -5,7 +5,9 @@
 
 /**
  * Layout
+ * -----------------------------------------------------------------------------
  */
+
 html {
 	display: flex;
 	flex-direction: column;
@@ -22,11 +24,14 @@ body {
 
 /**
  * Text
+ * -----------------------------------------------------------------------------
  */
+
 p,
 a,
 h1,
-h2 {
+h2,
+li {
 	font-family: "IBM Plex", "Helvetica", "Arial", sans-serif;
 
 	cursor: default;
@@ -43,7 +48,19 @@ sup {
 
 /**
  * Transitions
+ * -----------------------------------------------------------------------------
  */
+
+div {
+	transition: border-color 0.2s, background-color 0.2s;
+}
+
+p,
+a,
+.svg-inline--fa {
+	transition: color 0.2s;
+}
+
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;

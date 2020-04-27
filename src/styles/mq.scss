@@ -5,7 +5,6 @@
 
 @forward "sass-mq/_mq" with (
 	$mq-breakpoints: (
-		desktop:    800px,
-		wideHeader: 1200px,
+		desktop: 800px,
 	)
 );
