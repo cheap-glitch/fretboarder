@@ -21,7 +21,7 @@ div.FretboardViewer(
 		)
 
 	//- Fret numbers
-	template(v-if="!isVertical && isDisplayingFretNbs")
+	//- template(v-show="isDisplayingFretNbs")
 		div.fret-number(
 			v-for="fret in fretNumbers"
 			:key="`fret-number--${fret}`"
@@ -85,9 +85,9 @@ export default {
 			// Build the grid layout
 			const gridLayout = (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ');
 
-			return !this.isVertical
-				? { 'grid-template-columns': gridLayout                                               }
-				: { 'grid-template-rows':    gridLayout, 'grid-template-columns': 'repeat(5, 42px) 0' };
+			return this.isVertical
+				? { 'grid-template-columns': `repeat(${this.nbStrings - 1}, 42px) 0`, 'grid-template-rows': gridLayout }
+				: { 'grid-template-columns': gridLayout };
 		},
 		inlays()
 		{
