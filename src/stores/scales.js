@@ -7,8 +7,9 @@ import Vue          from 'vue'
 
 import storage      from '@/modules/storage'
 import { isObject } from '@/modules/object'
+import { colors }   from '@/modules/colorscheme'
 
-export const MAX_NB_SCALES = 6;
+export const MAX_NB_SCALES = 4;
 
 export default
 {
@@ -17,12 +18,10 @@ export default
 	state: {
 		scales: storage.get('scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
 		colors: [
-			'#0093ee',
-			'#1bb934',
-			'#e54124',
-			'#ffb610',
-			'#e1112c',
-			'#ab7ef6',
+			colors.azure,
+			colors.malachite,
+			colors.cinnabar,
+			colors.sun,
 		]
 	},
 

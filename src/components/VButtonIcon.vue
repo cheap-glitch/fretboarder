@@ -6,8 +6,8 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div
-	button.VButtonIcon(
+div.VButtonIcon
+	button.button(
 		ref="button"
 		v-mods="{ isDisabled }"
 
@@ -16,7 +16,7 @@ div
 		@mouseleave="showTooltip = hasBeenClicked = false"
 		)
 
-		fa-icon.icon(
+		fa-icon.button__icon(
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
 			:class="`size-${size}`"
 			v-mods="{ isActive, isDisabled, isFlipped }"
@@ -111,7 +111,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VButtonIcon {
+.button {
 	display: block;
 
 	border: none;
@@ -121,17 +121,17 @@ export default {
 	cursor: pointer;
 }
 
-.icon {
+.button__icon {
 	color: var(--color--text--secondary);
 
 	transition: color 0.2s;
 
-	&:not(.is-active):hover {
+	&:not(.is-active):not(.is-disabled):hover {
 		color: var(--color--hover);
 	}
 
 	&.is-disabled {
-		color: var(--color--text--disabled);
+		color: var(--color--bg--highlight);
 
 		cursor: not-allowed;
 	}

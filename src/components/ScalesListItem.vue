@@ -85,7 +85,7 @@ div.ScalesListItem
 
 				icon="bullseye"
 				size="small"
-				tooltip="Focus"
+				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
 				tooltip-placement="bottom"
 
 				:is-active="isFocused"
@@ -361,7 +361,7 @@ export default {
 	@include circle(4px);
 	flex: 0 0 auto;
 
-	background-color: var(--color--separator);
+	background-color: var(--color--border);
 }
 
 .scale-props {
@@ -421,19 +421,18 @@ export default {
 		border-radius: 0 1e3px 1e3px 0;
 	}
 
-	&:hover,
-	&.is-selected {
-		background-color: var(--color--scale-tool--bg--hover);
+	&:hover {
+		color: var(--color--hover);
+		background-color: var(--color--bg--highlight);
 	}
 
 	&.is-selected {
 		color: var(--color--highlight);
+		background-color: var(--color--bg--highlight);
 	}
 }
 
 .intervals__item__text {
-	font-family: $fonts-text;
-
 	cursor: pointer;
 }
 

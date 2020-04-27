@@ -10,7 +10,7 @@ div.VSelect(ref="vselectbar")
 
 	//- Select bar
 	div.bar(
-		v-mods="{ isDisabled }"
+		v-mods="{ isOpen, isDisabled }"
 		v-click-outside="close"
 		@click.left="toggleOpen"
 		)
@@ -21,18 +21,18 @@ div.VSelect(ref="vselectbar")
 
 		fa-icon.bar__chevron(
 			:icon="['far', 'chevron-down']"
-			v-mods="{ isOpened, isDisabled, isFlipped: isChevronFlipped }"
+			v-mods="{ isOpen, isDisabled, isFlipped: isChevronFlipped }"
 			)
 
 	//- Options
 	transition(name="fade")
 		div.options(
 			ref="options"
-			v-show="isOpened"
-			v-mods="{ isOpeningDirectionUp: openingDirection == 'above' }"
+			v-show="isOpen"
+			v-mods="{ isOpeningAbove: openingDirection == 'above' }"
 			)
 			div.options__button-close(
-				@click.left="isOpened = false"
+				@click.left="isOpen = false"
 				)
 				fa-icon(:icon="['far', 'arrow-left']")
 			p.options__item(
@@ -93,7 +93,7 @@ export default {
 
 	data() {
 		return {
-			isOpened:         false,
+			isOpen:           false,
 			openingDirection: 'below',
 		}
 	},
@@ -110,8 +110,8 @@ export default {
 		},
 		isChevronFlipped()
 		{
-			return (this.openingDirection == 'below' &&  this.isOpened)
-			    || (this.openingDirection == 'above' && !this.isOpened)
+			return (this.openingDirection == 'below' &&  this.isOpen)
+			    || (this.openingDirection == 'above' && !this.isOpen)
 		},
 		...get([
 			'instrument',
@@ -146,15 +146,15 @@ export default {
 		{
 			if (!this.isDisabled)
 			{
-				if (!this.isOpened)
+				if (!this.isOpen)
 					this.updateOpeningDirection();
 
-				this.isOpened = !this.isOpened;
+				this.isOpen = !this.isOpen;
 			}
 		},
 		close()
 		{
-			this.isOpened = false;
+			this.isOpen = false;
 		},
 		updateOpeningDirection()
 		{
@@ -169,7 +169,7 @@ export default {
 		},
 		jumpToOption(key)
 		{
-			if (!this.isOpened) return;
+			if (!this.isOpen) return;
 
 			// Ignore non-alphabetic keys
 			if (!/^[a-zA-z]$/.test(key)) return;
@@ -208,14 +208,6 @@ export default {
 	}
 }
 
-.bar,
-.options {
-	@include mq($from: desktop)
-	{
-		border: 1px solid var(--color--select--border);
-	}
-}
-
 .bar {
 	display: flex;
 	align-items: center;
@@ -242,11 +234,17 @@ export default {
 	{
 		padding: 8px;
 
-		background-color: var(--color--select--bg);
-		transition: background-color 0.2s;
+		border: 1px solid var(--color--border);
 
-		&:not(.is-disabled):hover {
-			background-color: var(--color--select-bar--bg--hover);
+		background-color: var(--color--bg--accent);
+
+		transition: border-color 0.2s, background-color 0.2s;
+
+		&:not(.is-disabled) {
+			&:hover, &.is-open {
+				border-color: var(--color--hover);
+				background-color: var(--color--bg--highlight);
+			}
 		}
 	}
 }
@@ -257,7 +255,7 @@ export default {
 .options__button-close {
 	cursor: pointer;
 
-	color: var(--color--select--text);
+	color: var(--color--text);
 
 	transition: color 0.2s;
 
@@ -269,13 +267,13 @@ export default {
 }
 
 .bar__chevron {
-	font-size: 0.8em;
+	font-size: 0.6em;
 
-	color: var(--color--select--chevron);
+	color: var(--color--text--secondary);
 
 	@include mq($from: desktop)
 	{
-		@include flip;
+		transition: transform 0.2s;
 
 		&.is-flipped {
 			transform: rotate(180deg);
@@ -286,7 +284,7 @@ export default {
 .options {
 	overflow-y: auto;
 
-	background-color: var(--color--select--bg);
+	background-color: var(--color--bg--accent);
 
 	/**
 	 * On mobile: modal
@@ -299,8 +297,6 @@ export default {
 		left: 0;
 		right: 0;
 		bottom: 0;
-
-		border: none;
 	}
 
 	/**
@@ -308,22 +304,24 @@ export default {
 	 */
 	@include mq($from: desktop)
 	{
-		&.is-opening-direction-up {
-			bottom: 100%;
-			border-bottom: none;
-		}
-
-		&:not(.is-opening-direction-up) {
-			top: 100%;
-			border-top: none;
-		}
-
 		position: absolute;
 		z-index: 1000;
 		left: 0;
 		right: 0;
 
+		border: 1px solid var(--color--hover);
+
 		max-height: 300px;
+
+		&.is-opening-above {
+			bottom: 100%;
+			border-bottom: none;
+		}
+
+		&:not(.is-opening-above) {
+			top: 100%;
+			border-top: none;
+		}
 	}
 }
 
@@ -332,11 +330,11 @@ export default {
 	padding: 20px;
 
 	&:not(:last-child) {
-		border-bottom: 1px solid var(--color--separator);
+		border-bottom: 1px solid var(--color--border);
 	}
 
 	&:hover {
-		background-color: var(--color--select-item--bg--hover);
+		background-color: var(--color--bg--highlight);
 	}
 
 	@include mq($from: desktop)

@@ -100,7 +100,7 @@ export default {
 	methods: {
 		createPopper()
 		{
-			if (this.isOpen)
+			if (this.isOpen && this.targetElement !== false)
 			{
 				if (this.popper !== null) this.destroyPopper();
 
@@ -160,8 +160,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use '@/styles/colors' as *;
-
 .VTooltip {
 	z-index: 1000;
 
@@ -171,7 +169,7 @@ export default {
 	font-size: 1.4rem;
 
 	color: white;
-	background-color: $color--slate-gray;;
+	background-color: var(--color--bg--tooltip);
 
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 
@@ -199,7 +197,7 @@ export default {
 .VTooltip__arrow::before {
 	content: "";
 
-	background-color: $color--slate-gray;
+	background-color: var(--color--bg--tooltip);
 
 	transform: rotate(45deg);
 }

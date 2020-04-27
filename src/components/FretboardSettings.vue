@@ -90,10 +90,12 @@ div.FretboardSettings
 			p.export-menu__text
 				strong Choose a format to export in
 			p.export-menu__text
-				em If you want to print this  fretboard, choose PDF. The SVG format is useful for embedding in web pages as it will scale perfectly when resized.
+				em
+					| If you want to print this  fretboard, choose PNG or JPG.
+					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
 			div.export-menu__buttons
 				VButtonText.export-menu__buttons__item(
-					v-for="format in ['png', 'jpg', 'svg', 'pdf']"
+					v-for="format in ['png', 'jpg', 'svg']"
 					:key="`export-button--${format}`"
 
 					:text="format.toUpperCase()"
@@ -109,12 +111,11 @@ div.FretboardSettings
 <!--{{{ JavaScript -->
 <script>
 
-import { get, sync }        from 'vuex-pathify'
-import { saveAs }           from 'file-saver'
+import { get, sync }       from 'vuex-pathify'
 
-import data                 from '@/modules/data'
-import { objectMap }        from '@/modules/object'
-import * as exportFretboard from '@/modules/export'
+import data                from '@/modules/data'
+import { objectMap }       from '@/modules/object'
+import { exportFretboard } from '@/modules/export'
 
 export default {
 	name: 'FretboardSettings',
@@ -174,10 +175,12 @@ export default {
 		},
 		exportFretboardToFile(format)
 		{
-			// Close the export menu tootlip
+			// Close the export menu tooltip
 			this.isExportMenuOpened = false;
 
-			const svg = exportFretboard.exportFretboardToSVG(
+			// Export the fretboard to the select format and trigger a download of the resulting file
+			exportFretboard(
+				format,
 				data.instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
@@ -187,22 +190,6 @@ export default {
 				this.isDisplayingNotesName,
 				format != 'svg',
 			);
-
-			switch (format)
-			{
-				case 'png':
-				case 'jpg':
-					exportFretboard.exportSVGToImage(svg, format);
-					break;
-
-				case 'svg':
-					saveAs(svg.blob, 'fretboard.svg');
-					break;
-
-				case 'pdf':
-					exportFretboard.exportSVGToPDF(svg);
-					break;
-			}
 		},
 		closeExportMenu(event)
 		{
@@ -218,8 +205,6 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
-
-@use '@/styles/colors' as *;
 
 .wrapper {
 	display: flex;
@@ -266,7 +251,7 @@ export default {
 	background-color: white;
 
 	&:hover {
-		color: $color--slate-gray;
+		color: var(--color--bg--tooltip);
 	}
 }
 

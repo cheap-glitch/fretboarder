@@ -90,7 +90,7 @@ const helpTourMessages = [
 	     <li>Toggle fret numbers</li>
 	     <li>Toggle note names</li>
 	     <li>Switch between left- and right-handed fretting and flip the fretboard accordingly</li>
-	     <li>Export the fretboard image in various formats (PNG, JPG, PDF, …)</li>
+	     <li>Export the fretboard image in various formats (PNG, JPG or SVG)</li>
 	 </ul>
 	`,
 
@@ -142,11 +142,11 @@ const helpTourMessages = [
 
 const helpTourTargets = [
 	...[...Array(5).keys()].map(n => `#help-tour-step--${n}`),
-	'.ScalesListItem .scale-props',
-	'.ScalesListItem .select-position',
-	'.ScalesListItem .intervals',
-	'.ScalesListItem .scale-tools .VButtonIcon:nth-of-type(2)',
-	'.ScalesListItem .scale-tools .VButtonIcon:nth-last-of-type(2)',
+	'#help-tour--scales .scale-props',
+	'#help-tour--scales .select-position',
+	'#help-tour--scales .intervals',
+	'#help-tour--scales .scale-tools > .VButtonIcon',
+	'#help-tour--scales .scale-tools > .VButtonIcon:nth-last-child(2)',
 	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 11}`),
 ];
 
@@ -228,8 +228,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use '@/styles/colors' as *;
-
 .help-tour__step {
 	z-index: 100;
 }
@@ -261,7 +259,7 @@ export default {
 	background-color: white;
 
 	&.is-filled:hover {
-		color: $color--slate-gray;
+		color: var(--color--bg--tooltip);
 	}
 }
 
@@ -281,8 +279,6 @@ export default {
 
 	text-align: left;
 	line-height: 1.4;
-
-	font-family: $fonts-text;
 
 	user-select: none;
 

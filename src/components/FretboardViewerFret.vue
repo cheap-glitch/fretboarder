@@ -184,7 +184,7 @@ export default {
 	position: relative;
 	z-index: 10;
 
-	border: 0 solid var(--color--fret--border);
+	border: 0 solid var(--color--fret);
 
 	transition: border-color 0.2s;
 
@@ -203,7 +203,7 @@ export default {
 		// String
 		&:not(.is-open-string) {
 			border-top-width: 2px;
-			border-top-color: var(--color--string--border);
+			border-top-color: var(--color--string);
 		}
 
 		// Fret
@@ -374,7 +374,7 @@ export default {
 	@include center-position;
 	@include circle(15px);
 
-	background-color: var(--color--bg--accent);
+	background-color: var(--color--bg--highlight);
 
 	transition: background-color 0.2s;
 }
