@@ -11,7 +11,7 @@
     "test": "test"
   },
   "scripts": {
-    "analyze": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
+    "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
     "build": "vue-cli-service build --modern",
     "coverage": "nyc npm test",
     "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
