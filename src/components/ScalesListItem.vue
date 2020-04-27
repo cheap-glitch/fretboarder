@@ -71,7 +71,7 @@ div.ScalesListItem
 			div.scale-tools__separator
 
 			//- Show/hide
-			VButtonIcon(
+			VButton(
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				size="small"
 				:tooltip="isVisible ? 'Hide' : 'Show'"
@@ -80,7 +80,7 @@ div.ScalesListItem
 				@click="update('isVisible', !isVisible)"
 				)
 			//- Focus
-			VButtonIcon(
+			VButton(
 				v-show="nbScales > 1"
 
 				icon="bullseye"
@@ -92,7 +92,7 @@ div.ScalesListItem
 				@click="toggleFocusScale(id)"
 				)
 			//- Show intersections only
-			VButtonIcon(
+			VButton(
 				v-show="nbScales > 1"
 
 				:icon="['fas', 'intersection']"
@@ -107,7 +107,7 @@ div.ScalesListItem
 			div.scale-tools__separator
 
 			//- Duplicate
-			VButtonIcon(
+			VButton(
 				icon="copy"
 				size="small"
 				tooltip="Duplicate"
@@ -117,7 +117,7 @@ div.ScalesListItem
 				@click="addScale(id)"
 				)
 			//- Remove
-			VButtonIcon(
+			VButton(
 				icon="times-circle"
 				size="small"
 				tooltip="Remove"
@@ -402,8 +402,6 @@ export default {
 	color: var(--color--text);
 
 	cursor: pointer;
-
-	transition: color 0.2s, background-color 0.2s;
 
 	&:not(:last-child) {
 		border-right: none;

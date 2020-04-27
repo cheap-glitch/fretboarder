@@ -95,15 +95,11 @@
 .vue-slider-rail {
 	border-radius: 15px;
 	background-color: var(--color--bg--highlight);
-
-	transition: background-color 0.2s;
 }
 
 .vue-slider-process {
 	border-radius: 15px;
 	background-color: var(--color--text--secondary);
-
-	transition: background-color 0.2s;
 }
 
 .vue-slider:hover .vue-slider-process {
@@ -119,8 +115,6 @@
 	background-color: var(--color--border);
 
 	cursor: grab;
-
-	transition: border-color 0.2s, background-color 0.2s;
 
 	&:hover {
 		background-color: var(--color--hover);

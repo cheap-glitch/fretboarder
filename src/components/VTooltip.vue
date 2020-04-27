@@ -94,7 +94,11 @@ export default {
 
 	mounted()
 	{
-		this.$refs.tooltip.addEventListener('transitionend', ()  => { if (!this.isOpen) this.destroyPopper(); });
+		this.$refs.tooltip.addEventListener('transitionend', event =>
+		{
+			if (event.propertyName == 'opacity' && !this.isOpen)
+				this.destroyPopper();
+		});
 	},
 
 	methods: {

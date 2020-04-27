@@ -46,21 +46,21 @@ div.FretboardSettings
 
 		div.toolbar
 			//- Toggle fret numbers
-			VButtonIcon(
+			VButton(
 				:icon="['fal', 'list-ol']"
 				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
 				:is-active="isDisplayingFretNbs"
 				@click="$store.commit('toggleIsDisplayingFretNbs')"
 				)
 			//- Toggle note names
-			VButtonIcon#help-tour-step--3(
+			VButton#help-tour-step--3(
 				icon="info-circle"
 				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
 				@click="$store.commit('toggleIsDisplayingNotesName')"
 				)
 			//- Switch fretting hand
-			VButtonIcon(
+			VButton(
 				icon="hand-paper"
 				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
 				:is-flipped="!isFretboardFlipped"
@@ -68,7 +68,7 @@ div.FretboardSettings
 				)
 			//- Export the fretboard
 			div#canvas-wrapper
-			VButtonIcon#button-export-menu(
+			VButton#button-export-menu(
 				icon="file-download"
 				:is-active="isExportMenuOpened"
 
@@ -94,15 +94,10 @@ div.FretboardSettings
 					| If you want to print this  fretboard, choose PNG or JPG.
 					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
 			div.export-menu__buttons
-				VButtonText.export-menu__buttons__item(
-					v-for="format in ['png', 'jpg', 'svg']"
-					:key="`export-button--${format}`"
+				each format in ['png', 'jpg', 'svg']
+					button.button.is-filled(@click.left=`exportFretboardToFile('${format}')`)
+						p.button__text= format.toUpperCase()
 
-					:text="format.toUpperCase()"
-					is-filled
-
-					@click.native.left="exportFretboardToFile(format)"
-					)
 
 </template>
 <!--}}}-->
@@ -245,17 +240,42 @@ export default {
 	margin-top: 40px;
 }
 
-.export-menu__buttons__item {
-	color: white;
-	border-color: white;
-	background-color: white;
+.button,
+.button__text {
+	cursor: pointer;
+}
 
-	&:hover {
-		color: var(--color--bg--tooltip);
+.button {
+	padding: 6px;
+
+	appearance: none;
+	background-image: none;
+
+	border: 2px solid var(--color--bg--tooltip);
+	border-radius: 6px;
+
+	background-color: var(--color--bg--tooltip);
+
+	transition: border-color 0.2s, background-color 0.2s;
+
+	&.is-filled,
+	&:not(.is-filled):hover {
+		border-color: white;
+	}
+
+	&.is-filled:hover {
+		background-color: white;
+
+		.button__text {
+			color: var(--color--bg--tooltip);
+		}
 	}
 }
 
-#canvas-export,
+.button__text {
+	color: white;
+}
+
 #canvas-wrapper {
 	display: none;
 }

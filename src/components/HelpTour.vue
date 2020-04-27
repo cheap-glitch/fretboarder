@@ -14,7 +14,7 @@ v-tour(
 
 	//- Tour step
 	template(v-slot="tour"): transition(name="fade")
-		v-step.help-tour__step(
+		v-step.step(
 			v-for="(step, index) of tour.steps"
 			:key="`help-tour-step--${index}`"
 
@@ -32,33 +32,30 @@ v-tour(
 
 			//- Footer
 			template(v-slot:actions)
-				div.help-tour__step__footer
+				div.step__footer
 
 					//- Pagination
-					p.help-tour__step__footer__page {{ index + 1 }} / {{ tour.steps.length }}
+					p.step__pagination {{ index + 1 }} / {{ tour.steps.length }}
 
 					//- Prev/next/finish buttons
-					div.help-tour__actions
-						VButtonText.help-tour__actions__button(
-							text="← Previous"
-
+					div.step__actions
+						button.button(
 							v-show="!tour.isFirst"
-							@click.native.left="tour.previousStep"
+							@click.left="tour.previousStep"
 							)
-						VButtonText.help-tour__actions__button(
-							text="Next →"
-							is-filled
+							p.button__text ← Previous
 
+						button.button.is-filled(
 							v-show="!tour.isLast"
-							@click.native.left="tour.nextStep"
+							@click.left="tour.nextStep"
 							)
-						VButtonText.help-tour__actions__button(
-							is-filled
-							text="Got it!"
+							p.button__text Next →
 
+						button.button.is-filled(
 							v-show="tour.isLast"
-							@click.native.left="tour.stop"
+							@click.left="tour.stop"
 							)
+							p.button__text Got it!
 
 </template>
 <!--}}}-->
@@ -145,8 +142,8 @@ const helpTourTargets = [
 	'#help-tour--scales .scale-props',
 	'#help-tour--scales .select-position',
 	'#help-tour--scales .intervals',
-	'#help-tour--scales .scale-tools > .VButtonIcon',
-	'#help-tour--scales .scale-tools > .VButtonIcon:nth-last-child(2)',
+	'#help-tour--scales .scale-tools > .VButton',
+	'#help-tour--scales .scale-tools > .VButton:nth-last-child(2)',
 	...[...Array(4).keys()].map(n => `#help-tour-step--${n + 11}`),
 ];
 
@@ -191,8 +188,9 @@ export default {
 			const classes = el.classList;
 
 			const ignoredClasses = [
-				'VButtonIcon',
-				'VButtonIcon__icon',
+				'VButton',
+				'VButton__button',
+				'VButton__icon',
 
 				'VSelect',
 				'VSelect__bar',
@@ -228,11 +226,11 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.help-tour__step {
+.step {
 	z-index: 100;
 }
 
-.help-tour__step__footer {
+.step__footer {
 	display: flex;
 	align-items: baseline;
 	justify-content: space-between;
@@ -240,7 +238,7 @@ export default {
 	margin-top: 20px;
 }
 
-.help-tour__step__footer__page {
+.step__pagination {
 	font-size: 1.3rem;
 
 	color: lightgray;
@@ -248,19 +246,45 @@ export default {
 	transform: translateY(4px);
 }
 
-.help-tour__actions {
+.step__actions {
 	display: flex;
 	@include space-children-h(10px);
 }
 
-.help-tour__actions__button {
-	color: white;
-	border-color: white;
-	background-color: white;
+.button,
+.button__text {
+	cursor: pointer;
+}
+
+.button {
+	padding: 6px;
+
+	appearance: none;
+	background-image: none;
+
+	border: 2px solid var(--color--bg--tooltip);
+	border-radius: 6px;
+
+	background-color: var(--color--bg--tooltip);
+
+	transition: border-color 0.2s, background-color 0.2s;
+
+	&.is-filled,
+	&:not(.is-filled):hover {
+		border-color: white;
+	}
 
 	&.is-filled:hover {
-		color: var(--color--bg--tooltip);
+		background-color: white;
+
+		.button__text {
+			color: var(--color--bg--tooltip);
+		}
 	}
+}
+
+.button__text {
+	color: white;
 }
 
 </style>

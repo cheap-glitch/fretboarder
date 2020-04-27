@@ -238,8 +238,6 @@ export default {
 
 		background-color: var(--color--bg--accent);
 
-		transition: border-color 0.2s, background-color 0.2s;
-
 		&:not(.is-disabled) {
 			&:hover, &.is-open {
 				border-color: var(--color--hover);
@@ -256,8 +254,6 @@ export default {
 	cursor: pointer;
 
 	color: var(--color--text);
-
-	transition: color 0.2s;
 
 	&.is-disabled {
 		color: gray;

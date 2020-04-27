@@ -1,13 +1,13 @@
 
 
-<!-- VButtonIcon.vue -->
+<!-- VButton.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VButtonIcon
-	button.button(
+div.VButton
+	button.VButton__button(
 		ref="button"
 		v-mods="{ isDisabled }"
 
@@ -16,7 +16,7 @@ div.VButtonIcon
 		@mouseleave="showTooltip = hasBeenClicked = false"
 		)
 
-		fa-icon.button__icon(
+		fa-icon.VButton__icon(
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
 			:class="`size-${size}`"
 			v-mods="{ isActive, isDisabled, isFlipped }"
@@ -42,7 +42,7 @@ div.VButtonIcon
 import { get } from 'vuex-pathify'
 
 export default {
-	name: 'VButtonIcon',
+	name: 'VButton',
 
 	props: {
 		icon: {
@@ -111,7 +111,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.button {
+.VButton__button {
 	display: block;
 
 	border: none;
@@ -121,10 +121,8 @@ export default {
 	cursor: pointer;
 }
 
-.button__icon {
+.VButton__icon {
 	color: var(--color--text--secondary);
-
-	transition: color 0.2s;
 
 	&:not(.is-active):not(.is-disabled):hover {
 		color: var(--color--hover);

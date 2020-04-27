@@ -186,8 +186,6 @@ export default {
 
 	border: 0 solid var(--color--fret);
 
-	transition: border-color 0.2s;
-
 	&.is-open-string {
 		display: block;
 	}
@@ -265,7 +263,7 @@ export default {
 
 	border: 0 solid gold;
 
-	transition: opacity 0.2s, border-radius 0.2s, border-width 0.08s;
+	transition: border-radius 0.2s, border-width 0.08s;
 
 	&:not(.is-active) {
 		opacity: 0;
@@ -311,8 +309,6 @@ export default {
 
 	border: 2px dashed var(--color--border);
 
-	transition: opacity 0.2s, border-color 0.2s;
-
 	&.is-fretboard-flipped {
 		left: 50%;
 		transform: translate(-50%, -50%);
@@ -322,6 +318,7 @@ export default {
 		background-color: var(--color--bg);
 
 		opacity: 0;
+		transition: opacity 0.2s;
 
 		&:hover {
 			opacity: 1;
@@ -375,8 +372,6 @@ export default {
 	@include circle(15px);
 
 	background-color: var(--color--bg--highlight);
-
-	transition: background-color 0.2s;
 }
 
 </style>

@@ -22,7 +22,7 @@ div.App(:style="colorscheme")
 			div.header__nav
 
 				//- Logo
-				h1.logo
+				div.logo
 					fa-icon.logo__icon(
 						:icon="['far', instrumentIcon]"
 						v-mods="{ isUkulele: instrument == 'ukulele' }"
@@ -74,11 +74,12 @@ div.App(:style="colorscheme")
 
 			//- Light/dark switch
 			div.dark-mode-toggle(
+				v-mods="{ isDarkModeOn }"
 				@click="$store.commit('toggleIsDarkModeOn')"
 				)
-				fa-icon(:icon="['fas', 'sun']")
-				div.dark-mode-toggle__switch(v-mods="{ isDarkModeOn }")
-				fa-icon(:icon="['fas', 'moon']")
+				fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
+				div.dark-mode-toggle__switch
+				fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
 
 		//----------------------------------------------------------------------
 		//- Page content
@@ -88,7 +89,7 @@ div.App(:style="colorscheme")
 		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 		//- Fretboard
-		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice")
+		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice && layoutOrientation == 'portrait'")
 
 		//- Scales & arpeggios
 		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
@@ -174,6 +175,7 @@ export default {
 
 			'isDarkModeOn',
 			'isMobileDevice',
+			'layoutOrientation',
 		]),
 	},
 
@@ -186,17 +188,17 @@ export default {
 	created()
 	{
 		// Register all key presses on the page
-		window.addEventListener('keydown', this.registerKeypress,  { passive: true });
+		window.addEventListener('keydown', this.registerKeypress, { passive: true });
 
 		// Update the width of the window on every resize
-		window.addEventListener('resize',  this.updateClientWidth, { passive: true });
+		window.addEventListener('resize',  this.updateClientSize, { passive: true });
 	},
 
 	destroyed()
 	{
 		// Clear the event listeners
-		window.removeEventListener('keydown', this.registerKeypress,  { passive: true });
-		window.removeEventListener('resize',  this.updateClientWidth, { passive: true });
+		window.removeEventListener('keydown', this.registerKeypress, { passive: true });
+		window.removeEventListener('resize',  this.updateClientSize, { passive: true });
 	},
 
 	methods: {
@@ -204,9 +206,10 @@ export default {
 		{
 			EventBus.$emit('keypress', event.key);
 		},
-		updateClientWidth()
+		updateClientSize()
 		{
-			this.$store.commit('setClientWidth', window.innerWidth);
+			this.$store.commit('setClientWidth',  window.innerWidth);
+			this.$store.commit('setClientHeight', window.innerHeight);
 		},
 		startHelpTour()
 		{
@@ -229,7 +232,15 @@ export default {
 	flex: 1 1 auto;
 
 	background-color: var(--color--bg);
-	transition: background-color 0.2s;
+
+	@include mq($until: desktop)
+	{
+		@media (orientation: landscape)
+		{
+			display: flex;
+			align-items: center;
+		}
+	}
 }
 
 .page {
@@ -272,8 +283,6 @@ export default {
 	color: var(--color--bg);
 	background-color: var(--color--border);
 
-	transition: color 0.2s, background-color 0.2s;
-
 	&:hover {
 		background-color: var(--color--hover);
 	}
@@ -313,8 +322,6 @@ export default {
 
 	cursor: pointer;
 
-	transition: color 0.2s;
-
 	&:hover {
 		color: var(--color--hover);
 	}
@@ -335,6 +342,22 @@ export default {
 	color: var(--color--text--secondary);
 
 	cursor: pointer;
+
+	&.is-dark-mode-on {
+		&:hover .dark-mode-toggle__sun {
+			color: var(--color--hover);
+		}
+
+		.dark-mode-toggle__switch::after {
+			transform: translateX(8px);
+		}
+	}
+
+	&:not(.is-dark-mode-on) {
+		&:hover .dark-mode-toggle__moon {
+			color: var(--color--hover);
+		}
+	}
 }
 
 .dark-mode-toggle__switch {
@@ -359,19 +382,24 @@ export default {
 
 		transition: transform 0.2s;
 	}
-
-	&.is-dark-mode-on::after {
-		transform: translateX(8px);
-	}
 }
 
 .mobile-actions {
-	@include space-children-v(10px);
-
 	position: fixed;
 	z-index: 1000;
 	bottom: 10px;
 	right: 10px;
+
+	@media (orientation: portrait)
+	{
+		@include space-children-v(10px);
+	}
+
+	@media (orientation: landscape)
+	{
+		display: flex;
+		@include space-children-h(10px);
+	}
 }
 
 .mobile-actions__item {

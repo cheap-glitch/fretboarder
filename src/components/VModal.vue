@@ -43,6 +43,8 @@ export default {
 <style lang="scss" scoped>
 
 .modal {
+	overflow-y: auto;
+
 	position: fixed;
 	z-index: 1000;
 	top: 0;
