@@ -10,8 +10,6 @@ div.FretboardViewerFret
 
 	//- Intervals tooltip
 	VTooltip(
-		v-if="!isMobileDevice"
-
 		:target="$refs.note || false"
 		:is-open="isHovered"
 		)
@@ -47,7 +45,7 @@ div.FretboardViewerFret
 
 		//- Note placeholder
 		div.fret__placeholder(
-			v-if="!isMobileDevice || isOpenString"
+			v-if="isOpenString"
 			v-show="!isActive"
 			v-mods="{ isOpenString, isFretboardFlipped }"
 			)
@@ -142,7 +140,6 @@ export default {
 		...get([
 			'fretRange',
 
-			'isMobileDevice',
 			'isFretboardFlipped',
 			'isDisplayingNotesName',
 		]),
