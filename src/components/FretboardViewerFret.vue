@@ -10,6 +10,7 @@ div.FretboardViewerFret
 
 	//- Intervals tooltip
 	VTooltip(
+		v-if="isActive"
 		:target="$refs.note || false"
 		:is-open="isHovered"
 		)
@@ -25,7 +26,7 @@ div.FretboardViewerFret
 					)
 				p {{ interval.name }}
 
-	div.fret(v-mods="{ isVertical, isFretboardFlipped, isOnLastString, isFirstFret, isOpenString, isFretOne }")
+	div.fret(v-mods="{ isFretboardVertical, isFretboardFlipped, isOnLastString, isOpenString, isFirstFret, isFretOne }")
 
 		//- Inlay
 		div.fret__inlay(v-if="isDisplayingInlay")
@@ -34,7 +35,7 @@ div.FretboardViewerFret
 		div.fret__note(
 			ref="note"
 
-			v-mods="{ isVertical, isActive, isHighlightedNote, isOpenString, isFretboardFlipped }"
+			v-mods="{ isFretboardVertical, isFretboardFlipped, isActive, isHighlightedNote, isOpenString }"
 			:style="noteColors"
 
 			@mouseenter="isHovered = true"
@@ -45,9 +46,8 @@ div.FretboardViewerFret
 
 		//- Note placeholder
 		div.fret__placeholder(
-			v-if="isOpenString"
 			v-show="!isActive"
-			v-mods="{ isOpenString, isFretboardFlipped }"
+			v-mods="{ isFretboardVertical, isFretboardFlipped, isOpenString, isOnLastString }"
 			)
 			p.fret__placeholder__name {{ noteName }}
 
@@ -91,15 +91,19 @@ export default {
 			type: Array,
 			required: true,
 		},
-		isVertical: {
-			type: Boolean,
-			default: false,
-		},
 		isHighlightedNote: {
 			type: Boolean,
 			default: false,
 		},
 		isDisplayingInlay: {
+			type: Boolean,
+			default: false,
+		},
+		isFretboardFlipped: {
+			type: Boolean,
+			default: false,
+		},
+		isFretboardVertical: {
 			type: Boolean,
 			default: false,
 		},
@@ -139,8 +143,6 @@ export default {
 		},
 		...get([
 			'fretRange',
-
-			'isFretboardFlipped',
 			'isDisplayingNotesName',
 		]),
 	},
@@ -188,7 +190,7 @@ export default {
 	}
 
 	// Horizontal fretboard
-	&:not(.is-vertical) {
+	&:not(.is-fretboard-vertical) {
 		justify-content: center;
 
 		&:not(.is-on-last-string) {
@@ -220,7 +222,7 @@ export default {
 	}
 
 	// Vertical fretboard
-	&.is-vertical {
+	&.is-fretboard-vertical {
 		height: 100%;
 		align-items: center;
 
@@ -275,12 +277,12 @@ export default {
 	}
 
 	// Horizontal fretboard
-	&:not(.is-vertical) {
+	&:not(.is-fretboard-vertical) {
 		transform: translateY(-50%);
 	}
 
 	// Vertical fretboard
-	&.is-vertical {
+	&.is-fretboard-vertical {
 		transform: translateX(-50%);
 	}
 
@@ -296,37 +298,43 @@ export default {
 }
 
 .fret__placeholder {
-	box-sizing: content-box;
-
 	position: absolute;
-	right: 50%;
-	transform: translate(50%, -50%);
 
 	@include circle(30px);
 
 	border: 2px dashed var(--color--border);
-
-	&.is-fretboard-flipped {
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
 
 	&:not(.is-open-string) {
 		background-color: var(--color--bg);
 
 		opacity: 0;
 		transition: opacity 0.2s;
+		&:hover { opacity: 1; }
 
-		&:hover {
-			opacity: 1;
+		&:not(.is-fretboard-vertical) {
+			right: 50%;
+			transform: translate(50%, -50%);
+		}
+
+		&.is-fretboard-vertical {
+			left: 0;
+			transform: translateX(-50%);
 		}
 	}
 
 	&.is-open-string {
-		right: 100%;
+		&:not(.is-fretboard-vertical) {
+			&:not(.is-fretboard-flipped) {
+				transform: translate(-50%, -50%);
+			}
 
-		&.is-fretboard-flipped {
-			left: 100%;
+			&.is-fretboard-flipped {
+				transform: translate(50%, -50%);
+			}
+		}
+
+		&.is-fretboard-vertical {
+			transform: translate(-50%, -50%);
 		}
 	}
 }

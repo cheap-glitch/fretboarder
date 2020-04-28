@@ -410,12 +410,18 @@ export default {
 
 	color: white;
 
-	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5)) brightness(1);
 
 	cursor: pointer;
 
+	transition: filter 0.2s;
+
 	&:nth-child(1) { background-color: var(--color--hover);       }
 	&:nth-child(2) { background-color: var(--color--bg--tooltip); }
+
+	&:hover {
+		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) brightness(1.2);
+	}
 }
 
 </style>

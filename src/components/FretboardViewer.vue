@@ -7,7 +7,7 @@
 <template lang="pug">
 
 div.FretboardViewer(
-	v-mods="{ isVertical, isFretboardFlipped, isDisplayingFretNbs }"
+	v-mods="{ isVertical, isFlipped, isDisplayingFretNbs }"
 	:style="[minWidth, grid, inlays]"
 	)
 
@@ -17,7 +17,8 @@ div.FretboardViewer(
 		:key="`fret--${fret.fret}-${fret.string+1}`"
 
 		v-bind="fret"
-		:is-vertical="isVertical"
+		:is-fretboard-flipped="isFlipped"
+		:is-fretboard-vertical="isVertical"
 		)
 
 	//- Fret numbers
@@ -83,7 +84,7 @@ export default {
 			const fretSizes  = (this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []).concat(this.fretSizes.map(size => `${size}fr`));
 
 			// Build the grid layout
-			const gridLayout = (this.isFretboardFlipped ? fretSizes.reverse() : fretSizes).join(' ');
+			const gridLayout = (this.isFlipped ? fretSizes.reverse() : fretSizes).join(' ');
 
 			return this.isVertical
 				? { 'grid-template-columns': `repeat(${this.nbStrings - 1}, 42px) 0`, 'grid-template-rows': gridLayout }
@@ -147,7 +148,7 @@ export default {
 			const addFret = (string, _fret) =>
 			{
 				// Invert the order of the frets if the fretboard is flipped
-				const fret = this.isFretboardFlipped ? this.fretMin + this.fretMax - _fret : _fret;
+				const fret = this.isFlipped ? this.fretMin + this.fretMax - _fret : _fret;
 				const note = stringNotes[string][fret];
 
 				// Get the list of scales the note of the fret belongs to
@@ -270,12 +271,16 @@ export default {
 		fretNumbers()
 		{
 			return [...Array(this.nbFrets).keys()]
-				.map(index => this.isFretboardFlipped ? this.fretMax - index : this.fretMin + index)
+				.map(index => this.isFlipped ? this.fretMax - index : this.fretMin + index)
 				.map(fret  => fret == 0 ? '' : fret);
 		},
 		tuningNotes()
 		{
 			return data.tunings[this.instrument][this.tuning] || data.tunings[this.instrument]['standard'];
+		},
+		isFlipped()
+		{
+			return this.isFretboardFlipped && !this.isVertical;
 		},
 		...get([
 			'instrument',
@@ -302,8 +307,8 @@ export default {
 	display: grid;
 
 	&:not(.is-vertical) {
-		&:not(.is-fretboard-flipped) { margin-left:  14px; }
-		&.is-fretboard-flipped       { margin-right: 16px; }
+		&:not(.is-flipped) { margin-left:  14px; }
+		&.is-flipped       { margin-right: 16px; }
 	}
 
 	&.is-vertical {
