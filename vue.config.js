@@ -3,6 +3,9 @@
  * vue.config.js
  */
 
+process.env.VUE_APP_VERSION     = require('./package.json').version;
+process.env.VUE_APP_DESCRIPTION = require('./package.json').description;
+
 module.exports = {
 	productionSourceMap: false,
 
@@ -13,13 +16,13 @@ module.exports = {
 	},
 
 	/**
-	 * CSS-related settings
+	 * SCSS
 	 */
 	css: {
-		// Enable source maps in dev mode
+		// Enable source maps in dev mode only
 		sourceMap: process.env.NODE_ENV === 'development',
 
-		// Import the colorscheme & mixins globally
+		// Import the mixins in every component
 		loaderOptions: {
 			sass: {
 				prependData: [
@@ -33,92 +36,66 @@ module.exports = {
 	},
 
 	pluginOptions: {
-
 		/**
 		 * Font Awesome icons
 		 */
 		fontawesome: {
 			component: 'fa-icon',
-			imports: [
-				{
-					set: 'pro-regular',
-					icons: [
-						// General UI
-						'arrow-left',
-						'chevron-down',
-						'external-link-square-alt',
-						'times-circle',
+			imports: {
+				// General UI
+				'arrow-left':               'pro-regular',
+				'chevron-down':             'pro-regular',
+				'times-circle':             'pro-regular',
 
-						// Header
-						'banjo',
-						'bug',
-						'cog',
-						'guitar',
-						'guitar-electric',
-						'heart',
-						'mandolin',
-						'question-circle',
+				// Header
+				'banjo':                    'pro-regular',
+				'bug':                      'pro-regular',
+				'external-link-square-alt': 'pro-regular',
+				'github':                   'free-brands',
+				'guitar':                   'pro-regular',
+				'guitar-electric':          'pro-regular',
+				'heart':                    'pro-regular',
+				'mandolin':                 'pro-regular',
+				'moon':                     'pro-solid',
+				'question-circle':          'pro-regular',
+				'sun':                      'pro-solid',
+				'twitter':                  'free-brands',
 
-						// Tools & settings
-						'file-download',
-						'hand-paper',
-						'info-circle',
+				// Tools & settings
+				'file-download':            'pro-regular',
+				'hand-paper':               'pro-regular',
+				'info-circle':              'pro-regular',
+				'list-ol':                  'pro-light',
 
-						// Scales
-						'bullseye',
-						'copy',
-						'eye',
-						'eye-slash',
-						'low-vision',
-						'plus-circle',
-						'trash-alt',
-					]
-				},
-				{
-					set: 'pro-solid',
-					icons: [
-						// Light/dark mode switch
-						'moon',
-						'sun',
+				// Scales
+				'bullseye':                 'pro-regular',
+				'copy':                     'pro-regular',
+				'eye':                      'pro-regular',
+				'eye-slash':                'pro-regular',
+				'intersection':             'pro-solid',
+				'low-vision':               'pro-regular',
+				'plus-circle':              'pro-regular',
+				'trash-alt':                'pro-regular',
 
-						// Scales
-						'intersection',
-
-						// Mobile actions
-						'cog',
-						'list-music',
-					]
-				},
-				{
-					set: 'pro-light',
-					icons: [
-						// Tools & settings
-						'list-ol',
-					]
-				},
-				{
-					set: 'free-brands',
-					icons: [
-						'github',
-						'twitter',
-					]
-				},
-			]
+				// Mobile actions
+				'cog':                      'pro-solid',
+				'list-music':               'pro-solid',
+			}
 		},
 
 		/**
 		 * Sitemap
 		 */
 		sitemap: {
+			productionOnly: true,
+
 			urls: [
 				{
-					loc:        'https://fretboarder.app',
+					loc: 'https://fretboarder.app',
 					changefreq: 'always',
 				},
 			],
-
-			productionOnly: true,
-			trailingSlash:  false,
+			trailingSlash: false,
 		},
 	},
 }
