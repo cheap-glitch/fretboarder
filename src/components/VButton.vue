@@ -147,8 +147,15 @@ export default {
 	}
 
 	&.size-big    { @include square(40px); }
-	&.size-normal { @include square(26px); }
-	&.size-small  { @include square(22px); }
+	&.size-normal { @include square(36px); }
+	&.size-small  { @include square(32px); }
+
+	@include mq($from: desktop)
+	{
+		&.size-big    { @include square(30px); }
+		&.size-normal { @include square(26px); }
+		&.size-small  { @include square(22px); }
+	}
 }
 
 </style>
