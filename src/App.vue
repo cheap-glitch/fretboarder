@@ -228,6 +228,11 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
 .App {
 	flex: 1 1 auto;
 
@@ -248,22 +253,34 @@ export default {
 
 	@include mq($from: desktop)
 	{
-		@include space-children-v(40px);
 		padding-bottom: 0;
 	}
-}
-
-.fretboard-settings {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
 }
 
 .header {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
+
+	margin-bottom: 60px;
 }
+
+.fretboard-settings {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	margin-bottom: 30px;
+}
+
+.fretboard-viewer {
+	margin-bottom: 40px;
+}
+
+/**
+ * Header
+ * -----------------------------------------------------------------------------
+ */
 
 .header__nav {
 	display: flex;
@@ -370,7 +387,7 @@ export default {
 	border: 2px solid var(--color--border);
 
 	&::after {
-		content: '';
+		content: "";
 
 		position: absolute;
 		top: 0;
@@ -383,6 +400,11 @@ export default {
 		transition: transform 0.2s;
 	}
 }
+
+/**
+ * Mobile actions
+ * -----------------------------------------------------------------------------
+ */
 
 .mobile-actions {
 	position: fixed;

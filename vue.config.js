@@ -29,7 +29,7 @@ module.exports = {
 					'@cheap-glitch/scss-mixins/_mixins',
 					'@/styles/mq',
 				]
-				.map(stylesheet => `@use '${stylesheet}' as *;`)
+				.map(stylesheet => `@use "${stylesheet}" as *;`)
 				.join('\n')
 			}
 		},
