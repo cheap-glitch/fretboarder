@@ -161,10 +161,8 @@ export default {
 			if (!this.isActive) return;
 
 			// Build a solid gradient with the colors of every active scale the note belongs to
-			//- const blurZoneSize  = Math.ceil
 			const fillingSize   = Math.ceil(100 / this.scales.length);
 			const getColorStops = (scale, index) => `${scale.color} ${index*fillingSize}% ${(index + 1)*fillingSize}%`;
-			//- const getColorStops = (scale, index, scales) => `${scale.color} ${index*fillingSize + (index > 0)*3}% ${(index + 1)*fillingSize - (index < scales.length - 1)*3}%`;
 			this.noteColors     = { background: `linear-gradient(-45deg, ${this.scales.map(getColorStops)})`};
 		},
 	},
@@ -254,34 +252,28 @@ export default {
 }
 
 .fret__note {
-	box-sizing: content-box;
-
 	position: absolute;
 
 	@include square(30px);
 
-	border: 0 solid var(--color--highlight);
-
-	transition: border-radius 0.2s, border-width 0.08s;
+	transition: border-radius 0.2s, filter 0.2s;
 
 	&:not(.is-active) {
 		opacity: 0;
 	}
 
 	&.is-active:hover {
-		border-width: 4px;
+		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));
 	}
 
 	&:not(.is-highlighted-note) {
 		border-radius: 50%;
 	}
 
-	// Horizontal fretboard
 	&:not(.is-fretboard-vertical) {
 		transform: translateY(-50%);
 	}
 
-	// Vertical fretboard
 	&.is-fretboard-vertical {
 		transform: translateX(-50%);
 	}
