@@ -228,6 +228,11 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
 .App {
 	flex: 1 1 auto;
 
@@ -248,22 +253,34 @@ export default {
 
 	@include mq($from: desktop)
 	{
-		@include space-children-v(40px);
 		padding-bottom: 0;
 	}
-}
-
-.fretboard-settings {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
 }
 
 .header {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
+
+	margin-bottom: 60px;
 }
+
+.fretboard-settings {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	margin-bottom: 30px;
+}
+
+.fretboard-viewer {
+	margin-bottom: 40px;
+}
+
+/**
+ * Header
+ * -----------------------------------------------------------------------------
+ */
 
 .header__nav {
 	display: flex;
@@ -370,7 +387,7 @@ export default {
 	border: 2px solid var(--color--border);
 
 	&::after {
-		content: '';
+		content: "";
 
 		position: absolute;
 		top: 0;
@@ -383,6 +400,11 @@ export default {
 		transition: transform 0.2s;
 	}
 }
+
+/**
+ * Mobile actions
+ * -----------------------------------------------------------------------------
+ */
 
 .mobile-actions {
 	position: fixed;
@@ -410,12 +432,18 @@ export default {
 
 	color: white;
 
-	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5)) brightness(1);
 
 	cursor: pointer;
 
+	transition: filter 0.2s;
+
 	&:nth-child(1) { background-color: var(--color--hover);       }
 	&:nth-child(2) { background-color: var(--color--bg--tooltip); }
+
+	&:hover {
+		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) brightness(1.2);
+	}
 }
 
 </style>
@@ -426,16 +454,22 @@ export default {
 <style lang="scss">
 
 // Load reset stylesheet
-@use '@cheap-glitch/scss-reset/_reset';
+@use "@cheap-glitch/scss-reset/_reset";
 
 // Load global styles
-@use '@/styles/global';
+@use "@/styles/global";
 
 // Override styles of the slider component
-@use '@/styles/slider';
+@use "@/styles/slider";
 
 // Load IBM Plex
-@include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
+@include font-face("IBM Plex", "./assets/fonts/ibm-plex/ibm-plex");
+
+// Define the fallback font stack
+@font-face {
+	font-family: "sytem";
+	src: local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
 
 </style>
 <!--}}}-->
