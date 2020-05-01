@@ -37,6 +37,8 @@ div.ScalesListItem
 				:value="model"
 				:options="modelsNames"
 				@change="updateModel"
+
+				:class="{ 'is-arpeggio': type == 'arpeggio' }"
 				)
 			//- Position
 			VSelect.select-position(
@@ -378,6 +380,12 @@ export default {
 
 		.select-type, .select-model {
 			border-right: 1px solid var(--color--border);
+		}
+
+		.select-model.is-arpeggio {
+			grid-column: col 1 / span 5;
+
+			border-right: none;
 		}
 	}
 

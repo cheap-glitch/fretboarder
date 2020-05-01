@@ -20,9 +20,9 @@ export default
 		colors: [
 			colors.azure,
 			colors.malachite,
-			colors.portage,
 			colors.cinnabar,
 			colors.sun,
+			colors.portage,
 		]
 	},
 
