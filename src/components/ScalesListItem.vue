@@ -15,7 +15,7 @@ div.ScalesListItem
 		//----------------------------------------------------------------------
 		//- Scale properties
 		//----------------------------------------------------------------------
-		div.scale-props
+		div.settings
 
 			//- Type
 			VSelect.select-type(
@@ -37,6 +37,8 @@ div.ScalesListItem
 				:value="model"
 				:options="modelsNames"
 				@change="updateModel"
+
+				:class="{ 'is-arpeggio': type == 'arpeggio' }"
 				)
 			//- Position
 			VSelect.select-position(
@@ -51,7 +53,7 @@ div.ScalesListItem
 		//----------------------------------------------------------------------
 		//- Tools
 		//----------------------------------------------------------------------
-		div.scale-tools(v-if="!isMobileDevice")
+		div.tools
 
 			//- Intervals
 			div.intervals
@@ -68,63 +70,65 @@ div.ScalesListItem
 					)
 					p.intervals__item__text {{ interval.name }}
 
-			div.scale-tools__separator
+			div.tools__separator
 
-			//- Show/hide
-			VButton(
-				:icon="isVisible ? 'eye' : 'eye-slash'"
-				size="small"
-				:tooltip="isVisible ? 'Hide' : 'Show'"
-				tooltip-placement="bottom"
+			div.toolbar
 
-				@click="update('isVisible', !isVisible)"
-				)
-			//- Focus
-			VButton(
-				v-show="nbScales > 1"
+				//- Show/hide
+				VButton.toolbar__item(
+					:icon="isVisible ? 'eye' : 'eye-slash'"
+					size="small"
+					:tooltip="isVisible ? 'Hide' : 'Show'"
+					tooltip-placement="bottom"
 
-				icon="bullseye"
-				size="small"
-				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
-				tooltip-placement="bottom"
+					@click="update('isVisible', !isVisible)"
+					)
+				//- Focus
+				VButton.toolbar__item(
+					v-show="nbScales > 1"
 
-				:is-active="isFocused"
-				@click="toggleFocusScale(id)"
-				)
-			//- Show intersections only
-			VButton(
-				v-show="nbScales > 1"
+					icon="bullseye"
+					size="small"
+					:tooltip="isFocused ? 'Unfocus' : 'Focus'"
+					tooltip-placement="bottom"
 
-				:icon="['fas', 'intersection']"
-				size="small"
-				tooltip="Show only intersections with other scales"
-				tooltip-placement="bottom"
+					:is-active="isFocused"
+					@click="toggleFocusScale(id)"
+					)
+				//- Show intersections only
+				VButton.toolbar__item(
+					v-show="nbScales > 1"
 
-				:is-active="isShowingIntersections"
-				@click="update('isShowingIntersections', !isShowingIntersections)"
-				)
+					:icon="['fas', 'intersection']"
+					size="small"
+					tooltip="Show only intersections with other scales"
+					tooltip-placement="bottom"
 
-			div.scale-tools__separator
+					:is-active="isShowingIntersections"
+					@click="update('isShowingIntersections', !isShowingIntersections)"
+					)
 
-			//- Duplicate
-			VButton(
-				icon="copy"
-				size="small"
-				tooltip="Duplicate"
-				tooltip-placement="bottom"
+				div.tools__separator
 
-				:is-disabled="nbScales == MAX_NB_SCALES"
-				@click="addScale(id)"
-				)
-			//- Remove
-			VButton(
-				icon="times-circle"
-				size="small"
-				tooltip="Remove"
-				tooltip-placement="bottom"
+				//- Duplicate
+				VButton.toolbar__item(
+					icon="copy"
+					size="small"
+					tooltip="Duplicate"
+					tooltip-placement="bottom"
 
-				@click="removeScale(id)"
-				)
+					:is-disabled="nbScales == MAX_NB_SCALES"
+					@click="addScale(id)"
+					)
+				//- Remove
+				VButton.toolbar__item(
+					icon="times-circle"
+					size="small"
+					tooltip="Remove"
+					tooltip-placement="bottom"
+
+					@click="removeScale(id)"
+					)
 
 	//- Interval tooltips
 	template(v-if="!isMobileDevice")
@@ -332,13 +336,35 @@ export default {
 	}
 }
 
-.scale-props {
+.settings {
 	flex: 1 1 100%;
 
 	@include mq($until: desktop)
 	{
 		display: grid;
 		grid-template-columns: repeat(5, [col] 1fr);
+
+		.select-type     { grid-column: col 1 / span 4; }
+		.select-tonality { grid-column: col 5 / span 1; }
+		.select-model    { grid-column: col 1 / span 3; }
+		.select-position { grid-column: col 4 / span 2; }
+
+		.select-type,
+		.select-tonality,
+		.select-model,
+		.select-position {
+			border-bottom: 1px solid var(--color--border);
+		}
+
+		.select-type, .select-model {
+			border-right: 1px solid var(--color--border);
+		}
+
+		.select-model.is-arpeggio {
+			grid-column: col 1 / span 5;
+
+			border-right: none;
+		}
 	}
 
 	@include mq($from: desktop)
@@ -348,41 +374,7 @@ export default {
 		@include space-children-h(10px);
 
 		margin-right: 30px;
-	}
-}
 
-.scale-tools {
-	display: flex;
-	align-items: center;
-	@include space-children-h(10px);
-}
-
-.scale-tools__separator {
-	@include circle(4px);
-	flex: 0 0 auto;
-
-	background-color: var(--color--border);
-}
-
-.scale-props {
-	@include mq($until: desktop)
-	{
-		.select-type     { grid-column: col 1 / span 4; }
-		.select-tonality { grid-column: col 5 / span 1; }
-		.select-model    { grid-column: col 1 / span 3; }
-		.select-position { grid-column: col 4 / span 2; }
-
-		.select-type, .select-tonality {
-			border-bottom: 1px solid var(--color--border);
-		}
-
-		.select-type, .select-model {
-			border-right: 1px solid var(--color--border);
-		}
-	}
-
-	@include mq($from: desktop)
-	{
 		.select-type     { max-width: 120px; min-width: 120px; }
 		.select-tonality { max-width: 60px;  min-width: 60px;  }
 		.select-model    { max-width: 220px; min-width: 220px; }
@@ -390,48 +382,108 @@ export default {
 	}
 }
 
+.tools {
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: center;
+		@include space-children-h(10px);
+	}
+}
+
+.tools__separator {
+	display: none;
+
+	@include mq($from: desktop)
+	{
+		display: block;
+
+		@include circle(4px);
+		flex: 0 0 auto;
+
+		background-color: var(--color--border);
+	}
+}
+
 .intervals {
 	display: flex;
+
+	@include mq($until: desktop)
+	{
+		border-bottom: 1px solid var(--color--border);
+	}
 }
 
 .intervals__item {
-	padding: 2px 8px;
-
-	border: 1px solid var(--color--border);
+	padding: 10px 0;
 
 	color: var(--color--text);
 
 	cursor: pointer;
 
 	&:not(:last-child) {
-		border-right: none;
-	}
-
-	&:first-child {
-		padding-left: 10px;
-
-		border-radius: 1e3px 0 0 1e3px;
-	}
-
-	&:last-child {
-		padding-right: 10px;
-
-		border-radius: 0 1e3px 1e3px 0;
-	}
-
-	&:hover {
-		color: var(--color--hover);
-		background-color: var(--color--bg--highlight);
+		border-right: 1px solid var(--color--border);
 	}
 
 	&.is-selected {
 		color: var(--color--highlight);
 		background-color: var(--color--bg--highlight);
 	}
+
+	@include mq($until: desktop)
+	{
+		flex: 1 1 100%;
+		text-align: center;
+	}
+
+	@include mq($from: desktop)
+	{
+		padding: 2px 8px;
+
+		border: 1px solid var(--color--border);
+
+		&:not(:last-child) {
+			border-right: none;
+		}
+
+		&:first-child {
+			padding-left: 10px;
+
+			border-radius: 1e3px 0 0 1e3px;
+		}
+
+		&:last-child {
+			padding-right: 10px;
+
+			border-radius: 0 1e3px 1e3px 0;
+		}
+
+		&:not(.is-selected):hover {
+			color: var(--color--hover);
+			background-color: var(--color--bg--highlight);
+		}
+	}
 }
 
 .intervals__item__text {
 	cursor: pointer;
+}
+
+.toolbar {
+	display: flex;
+}
+
+.toolbar__item {
+	@include mq($until: desktop)
+	{
+		flex: 1 1 100%;
+
+		padding: 10px;
+
+		&:not(:last-child) {
+			border-right: 1px solid var(--color--border);
+		}
+	}
 }
 
 </style>
