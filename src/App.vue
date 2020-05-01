@@ -432,16 +432,22 @@ export default {
 <style lang="scss">
 
 // Load reset stylesheet
-@use '@cheap-glitch/scss-reset/_reset';
+@use "@cheap-glitch/scss-reset/_reset";
 
 // Load global styles
-@use '@/styles/global';
+@use "@/styles/global";
 
 // Override styles of the slider component
-@use '@/styles/slider';
+@use "@/styles/slider";
 
 // Load IBM Plex
-@include font-face('IBM Plex', './assets/fonts/ibm-plex/ibm-plex');
+@include font-face("IBM Plex", "./assets/fonts/ibm-plex/ibm-plex");
+
+// Define the fallback font stack
+@font-face {
+	font-family: "sytem";
+	src: local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
 
 </style>
 <!--}}}-->
