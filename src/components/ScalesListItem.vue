@@ -72,61 +72,63 @@ div.ScalesListItem
 
 			div.tools__separator
 
-			//- Show/hide
-			VButton(
-				:icon="isVisible ? 'eye' : 'eye-slash'"
-				size="small"
-				:tooltip="isVisible ? 'Hide' : 'Show'"
-				tooltip-placement="bottom"
+			div.toolbar
 
-				@click="update('isVisible', !isVisible)"
-				)
-			//- Focus
-			VButton(
-				v-show="nbScales > 1"
+				//- Show/hide
+				VButton.toolbar__item(
+					:icon="isVisible ? 'eye' : 'eye-slash'"
+					size="small"
+					:tooltip="isVisible ? 'Hide' : 'Show'"
+					tooltip-placement="bottom"
 
-				icon="bullseye"
-				size="small"
-				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
-				tooltip-placement="bottom"
+					@click="update('isVisible', !isVisible)"
+					)
+				//- Focus
+				VButton.toolbar__item(
+					v-show="nbScales > 1"
 
-				:is-active="isFocused"
-				@click="toggleFocusScale(id)"
-				)
-			//- Show intersections only
-			VButton(
-				v-show="nbScales > 1"
+					icon="bullseye"
+					size="small"
+					:tooltip="isFocused ? 'Unfocus' : 'Focus'"
+					tooltip-placement="bottom"
 
-				:icon="['fas', 'intersection']"
-				size="small"
-				tooltip="Show only intersections with other scales"
-				tooltip-placement="bottom"
+					:is-active="isFocused"
+					@click="toggleFocusScale(id)"
+					)
+				//- Show intersections only
+				VButton.toolbar__item(
+					v-show="nbScales > 1"
 
-				:is-active="isShowingIntersections"
-				@click="update('isShowingIntersections', !isShowingIntersections)"
-				)
+					:icon="['fas', 'intersection']"
+					size="small"
+					tooltip="Show only intersections with other scales"
+					tooltip-placement="bottom"
 
-			div.tools__separator
+					:is-active="isShowingIntersections"
+					@click="update('isShowingIntersections', !isShowingIntersections)"
+					)
 
-			//- Duplicate
-			VButton(
-				icon="copy"
-				size="small"
-				tooltip="Duplicate"
-				tooltip-placement="bottom"
+				div.tools__separator
 
-				:is-disabled="nbScales == MAX_NB_SCALES"
-				@click="addScale(id)"
-				)
-			//- Remove
-			VButton(
-				icon="times-circle"
-				size="small"
-				tooltip="Remove"
-				tooltip-placement="bottom"
+				//- Duplicate
+				VButton.toolbar__item(
+					icon="copy"
+					size="small"
+					tooltip="Duplicate"
+					tooltip-placement="bottom"
 
-				@click="removeScale(id)"
-				)
+					:is-disabled="nbScales == MAX_NB_SCALES"
+					@click="addScale(id)"
+					)
+				//- Remove
+				VButton.toolbar__item(
+					icon="times-circle"
+					size="small"
+					tooltip="Remove"
+					tooltip-placement="bottom"
+
+					@click="removeScale(id)"
+					)
 
 	//- Interval tooltips
 	template(v-if="!isMobileDevice")
@@ -465,6 +467,23 @@ export default {
 
 .intervals__item__text {
 	cursor: pointer;
+}
+
+.toolbar {
+	display: flex;
+}
+
+.toolbar__item {
+	@include mq($until: desktop)
+	{
+		flex: 1 1 100%;
+
+		padding: 10px;
+
+		&:not(:last-child) {
+			border-right: 1px solid var(--color--border);
+		}
+	}
 }
 
 </style>

@@ -6,7 +6,10 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VButton
+div.VButton(
+	ref="wrapper"
+	@click.left="click"
+	)
 	button.VButton__button(
 		ref="button"
 		v-mods="{ isDisabled }"
@@ -52,7 +55,7 @@ export default {
 		size: {
 			type: String,
 			default: 'normal',
-			validator: v => ['big', 'normal', 'small'].includes(v)
+			validator: v => ['normal', 'small'].includes(v)
 		},
 		tooltip: {
 			type: String,
@@ -93,13 +96,18 @@ export default {
 	},
 
 	methods: {
-		click()
+		click(event)
 		{
-			if (!this.isDisabled)
-			{
-				this.hasBeenClicked = true;
-				this.$emit('click');
-			}
+			// Prevent the button from registering the click twice
+			event.stopPropagation();
+
+			if (this.isDisabled
+			// Disable the wider click zone on desktop
+			|| (event.target === this.$refs.wrapper && !this.isMobileDevice))
+				return;
+
+			this.hasBeenClicked = true;
+			this.$emit('click');
 		}
 	},
 }
@@ -110,6 +118,10 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
+
+.VButton {
+	@include center-content;
+}
 
 .VButton__button {
 	display: block;
@@ -146,13 +158,11 @@ export default {
 		cursor: not-allowed;
 	}
 
-	&.size-big    { @include square(34px); }
-	&.size-normal { @include square(30px); }
+	&.size-normal { @include square(36px); }
 	&.size-small  { @include square(26px); }
 
 	@include mq($from: desktop)
 	{
-		&.size-big    { @include square(30px); }
 		&.size-normal { @include square(26px); }
 		&.size-small  { @include square(22px); }
 	}
