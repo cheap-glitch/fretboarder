@@ -260,7 +260,7 @@ export default {
 
 	@include square(30px);
 
-	border: 0 solid gold;
+	border: 0 solid var(--color--highlight);
 
 	transition: border-radius 0.2s, border-width 0.08s;
 

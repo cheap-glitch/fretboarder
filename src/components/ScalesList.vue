@@ -34,7 +34,7 @@ div.ScalesList
 			)
 
 		//- Scales & arpeggios
-		ScalesListItem(
+		ScalesListItem.scales__item(
 			v-for="scale in scales"
 			:key="`scale--${scale.id}`"
 
@@ -47,7 +47,7 @@ div.ScalesList
 		) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 
 	//- Add a new scale
-	VButton.button-add-scale#help-tour-step--4(
+	VButton#help-tour-step--4(
 		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"
@@ -97,16 +97,17 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesList {
+	@include center-column;
 	@include space-children-v(20px);
-
-	@include mq($from: desktop)
-	{
-		@include center-column;
-	}
 }
 
 .scales {
 	@include space-children-v(20px);
+
+	@include mq($until: desktop)
+	{
+		align-self: stretch;
+	}
 }
 
 .scale__tools {
@@ -117,21 +118,15 @@ export default {
 .scale__tools__hide-all {
 	/**
 	 * Place the "Hide all" tool above the "Hide" button of the scales
-	 *
-	 *                 three icons       separator
+	 *                 ↓ three icons     ↓ separator
 	 */
 	margin-right: calc(3*(22px + 10px) + 24px);
 }
 
 .text-no-scales {
-	color: var(--color--text);
-}
+	text-align: center;
 
-.button-add-scale {
-	@include mq($until: desktop)
-	{
-		margin: auto;
-	}
+	color: var(--color--text);
 }
 
 </style>
