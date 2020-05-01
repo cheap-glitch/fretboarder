@@ -42,6 +42,7 @@ div.VSelect(ref="vselectbar")
 				v-html="option.name"
 
 				@click.left="select(option)"
+				@touchstart.prevent
 				)
 
 </template>
@@ -51,14 +52,13 @@ div.VSelect(ref="vselectbar")
 <!--{{{ JavaScript -->
 <script>
 
-import { get }       from 'vuex-pathify'
+import { get }                     from 'vuex-pathify'
+import { disableBodyScroll       } from 'body-scroll-lock'
+import { enableBodyScroll        } from 'body-scroll-lock'
+import { clearAllBodyScrollLocks } from 'body-scroll-lock'
 
-import { EventBus  } from '@/modules/bus'
-import { objectMap } from '@/modules/object'
-
-// Store the timestamp and value of the last alphabetic keypress
-let lastKeypressTime  = 0;
-let lastKeypressValue = '';
+import { EventBus  }               from '@/modules/bus'
+import { objectMap }               from '@/modules/object'
 
 export default {
 	name: 'VSelect',
@@ -113,9 +113,8 @@ export default {
 			return (this.openingDirection == 'below' &&  this.isOpen)
 			    || (this.openingDirection == 'above' && !this.isOpen)
 		},
-		...get([
-			'instrument',
-		]),
+		instrument:     get('instrument'),
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	watch: {
@@ -125,6 +124,10 @@ export default {
 	created()
 	{
 		EventBus.$on('keypress', key => this.jumpToOption(key));
+
+		// Store the timestamp and value of the last alphabetic keypress
+		this.lastKeypressTime  = 0;
+		this.lastKeypressValue = '';
 	},
 
 	mounted()
@@ -135,6 +138,7 @@ export default {
 	destroyed()
 	{
 		EventBus.$off('keypress');
+		clearAllBodyScrollLocks();
 	},
 
 	methods: {
@@ -144,13 +148,22 @@ export default {
 		},
 		toggleOpen()
 		{
-			if (!this.isDisabled)
-			{
-				if (!this.isOpen)
-					this.updateOpeningDirection();
+			if (this.isDisabled) return;
 
-				this.isOpen = !this.isOpen;
+			// Desktop: update the opening direction before opening
+			if (!this.isMobileDevice && !this.isOpen)
+				this.updateOpeningDirection();
+
+			// Mobile: lock the scrolling on the body
+			if (this.isMobileDevice)
+			{
+				if (this.isOpen)
+					enableBodyScroll(this.$refs.options);
+				else
+					disableBodyScroll(this.$refs.options);
 			}
+
+			this.isOpen = !this.isOpen;
 		},
 		close()
 		{
@@ -176,11 +189,11 @@ export default {
 
 			// If the keypress followed the last one quickly, append to the search string instead of replacing it
 			const now = Date.now();
-			lastKeypressValue = (now - lastKeypressTime < 500) ? lastKeypressValue + key : key;
-			lastKeypressTime  = now;
+			this.lastKeypressValue = (now - this.lastKeypressTime < 500) ? this.lastKeypressValue + key : key;
+			this.lastKeypressTime  = now;
 
 			// Search for an option whose name starts with the given key and scroll to it
-			const index = this.optionsList.findIndex(option => option.name.toLowerCase().startsWith(lastKeypressValue.toLowerCase()));
+			const index = this.optionsList.findIndex(option => option.name.toLowerCase().startsWith(this.lastKeypressValue.toLowerCase()));
 			if (index !== -1)
 			{
 				const optionBoxHeight = this.$refs.options.children.item(0).offsetHeight || 35;
@@ -293,6 +306,8 @@ export default {
 		left: 0;
 		right: 0;
 		bottom: 0;
+
+		-webkit-overflow-scrolling: touch;
 	}
 
 	/**
