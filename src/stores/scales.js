@@ -9,7 +9,7 @@ import storage      from '@/modules/storage'
 import { isObject } from '@/modules/object'
 import { colors }   from '@/modules/colorscheme'
 
-export const MAX_NB_SCALES = 4;
+export const MAX_NB_SCALES = 5;
 
 export default
 {
@@ -20,6 +20,7 @@ export default
 		colors: [
 			colors.azure,
 			colors.malachite,
+			colors.portage,
 			colors.cinnabar,
 			colors.sun,
 		]
