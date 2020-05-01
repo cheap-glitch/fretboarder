@@ -146,9 +146,9 @@ export default {
 		cursor: not-allowed;
 	}
 
-	&.size-big    { @include square(40px); }
-	&.size-normal { @include square(36px); }
-	&.size-small  { @include square(32px); }
+	&.size-big    { @include square(34px); }
+	&.size-normal { @include square(30px); }
+	&.size-small  { @include square(26px); }
 
 	@include mq($from: desktop)
 	{

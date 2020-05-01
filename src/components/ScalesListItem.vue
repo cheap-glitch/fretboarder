@@ -70,12 +70,10 @@ div.ScalesListItem
 					)
 					p.intervals__item__text {{ interval.name }}
 
-			div.tools__separator(v-if="!isMobileDevice")
+			div.tools__separator
 
 			//- Show/hide
 			VButton(
-				v-if="!isMobileDevice"
-
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				size="small"
 				:tooltip="isVisible ? 'Hide' : 'Show'"
@@ -85,8 +83,6 @@ div.ScalesListItem
 				)
 			//- Focus
 			VButton(
-				v-if="!isMobileDevice"
-
 				v-show="nbScales > 1"
 
 				icon="bullseye"
@@ -99,8 +95,6 @@ div.ScalesListItem
 				)
 			//- Show intersections only
 			VButton(
-				v-if="!isMobileDevice"
-
 				v-show="nbScales > 1"
 
 				:icon="['fas', 'intersection']"
@@ -112,12 +106,10 @@ div.ScalesListItem
 				@click="update('isShowingIntersections', !isShowingIntersections)"
 				)
 
-			div.tools__separator(v-if="!isMobileDevice")
+			div.tools__separator
 
 			//- Duplicate
 			VButton(
-				v-if="!isMobileDevice"
-
 				icon="copy"
 				size="small"
 				tooltip="Duplicate"
@@ -128,8 +120,6 @@ div.ScalesListItem
 				)
 			//- Remove
 			VButton(
-				v-if="!isMobileDevice"
-
 				icon="times-circle"
 				size="small"
 				tooltip="Remove"
@@ -400,14 +390,26 @@ export default {
 }
 
 .tools__separator {
-	@include circle(4px);
-	flex: 0 0 auto;
+	display: none;
 
-	background-color: var(--color--border);
+	@include mq($from: desktop)
+	{
+		display: block;
+
+		@include circle(4px);
+		flex: 0 0 auto;
+
+		background-color: var(--color--border);
+	}
 }
 
 .intervals {
 	display: flex;
+
+	@include mq($until: desktop)
+	{
+		border-bottom: 1px solid var(--color--border);
+	}
 }
 
 .intervals__item {
