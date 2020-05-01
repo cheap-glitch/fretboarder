@@ -257,30 +257,20 @@ export default {
 	}
 }
 
-.header {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-
-	margin-bottom: 60px;
-}
-
-.fretboard-settings {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-
-	margin-bottom: 30px;
-}
-
-.fretboard-viewer {
-	margin-bottom: 40px;
-}
+.header             { margin-bottom: 80px;  }
+.fretboard-settings { margin-bottom: 30px;  }
+.fretboard-viewer   { margin-bottom: 100px; }
 
 /**
  * Header
  * -----------------------------------------------------------------------------
  */
+
+.header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+}
 
 .header__nav {
 	display: flex;

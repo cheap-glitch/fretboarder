@@ -471,6 +471,12 @@ export default {
 
 .toolbar {
 	display: flex;
+
+	@include mq($from: desktop)
+	{
+		align-items: center;
+		@include space-children-h(10px);
+	}
 }
 
 .toolbar__item {
