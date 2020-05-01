@@ -32,7 +32,7 @@ div.VSelect(ref="vselectbar")
 			v-mods="{ isOpeningAbove: openingDirection == 'above' }"
 			)
 			div.options__button-close(
-				@click.left="isOpen = false"
+				@click.left.stop="isOpen = false"
 				)
 				fa-icon(:icon="['far', 'arrow-left']")
 			p.options__item(
@@ -226,7 +226,7 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 
-	padding: 20px 10px 20px 20px;
+	padding: 14px;
 
 	cursor: pointer;
 

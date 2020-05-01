@@ -15,7 +15,7 @@ div.ScalesListItem
 		//----------------------------------------------------------------------
 		//- Scale properties
 		//----------------------------------------------------------------------
-		div.scale-props
+		div.settings
 
 			//- Type
 			VSelect.select-type(
@@ -53,7 +53,7 @@ div.ScalesListItem
 		//----------------------------------------------------------------------
 		//- Tools
 		//----------------------------------------------------------------------
-		div.scale-tools(v-if="!isMobileDevice")
+		div.tools
 
 			//- Intervals
 			div.intervals
@@ -70,10 +70,12 @@ div.ScalesListItem
 					)
 					p.intervals__item__text {{ interval.name }}
 
-			div.scale-tools__separator
+			div.tools__separator(v-if="!isMobileDevice")
 
 			//- Show/hide
 			VButton(
+				v-if="!isMobileDevice"
+
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				size="small"
 				:tooltip="isVisible ? 'Hide' : 'Show'"
@@ -83,6 +85,8 @@ div.ScalesListItem
 				)
 			//- Focus
 			VButton(
+				v-if="!isMobileDevice"
+
 				v-show="nbScales > 1"
 
 				icon="bullseye"
@@ -95,6 +99,8 @@ div.ScalesListItem
 				)
 			//- Show intersections only
 			VButton(
+				v-if="!isMobileDevice"
+
 				v-show="nbScales > 1"
 
 				:icon="['fas', 'intersection']"
@@ -106,10 +112,12 @@ div.ScalesListItem
 				@click="update('isShowingIntersections', !isShowingIntersections)"
 				)
 
-			div.scale-tools__separator
+			div.tools__separator(v-if="!isMobileDevice")
 
 			//- Duplicate
 			VButton(
+				v-if="!isMobileDevice"
+
 				icon="copy"
 				size="small"
 				tooltip="Duplicate"
@@ -120,6 +128,8 @@ div.ScalesListItem
 				)
 			//- Remove
 			VButton(
+				v-if="!isMobileDevice"
+
 				icon="times-circle"
 				size="small"
 				tooltip="Remove"
@@ -334,47 +344,23 @@ export default {
 	}
 }
 
-.scale-props {
+.settings {
 	flex: 1 1 100%;
 
 	@include mq($until: desktop)
 	{
 		display: grid;
 		grid-template-columns: repeat(5, [col] 1fr);
-	}
 
-	@include mq($from: desktop)
-	{
-		display: flex;
-		align-items: center;
-		@include space-children-h(10px);
-
-		margin-right: 30px;
-	}
-}
-
-.scale-tools {
-	display: flex;
-	align-items: center;
-	@include space-children-h(10px);
-}
-
-.scale-tools__separator {
-	@include circle(4px);
-	flex: 0 0 auto;
-
-	background-color: var(--color--border);
-}
-
-.scale-props {
-	@include mq($until: desktop)
-	{
 		.select-type     { grid-column: col 1 / span 4; }
 		.select-tonality { grid-column: col 5 / span 1; }
 		.select-model    { grid-column: col 1 / span 3; }
 		.select-position { grid-column: col 4 / span 2; }
 
-		.select-type, .select-tonality {
+		.select-type,
+		.select-tonality,
+		.select-model,
+		.select-position {
 			border-bottom: 1px solid var(--color--border);
 		}
 
@@ -391,6 +377,12 @@ export default {
 
 	@include mq($from: desktop)
 	{
+		display: flex;
+		align-items: center;
+		@include space-children-h(10px);
+
+		margin-right: 30px;
+
 		.select-type     { max-width: 120px; min-width: 120px; }
 		.select-tonality { max-width: 60px;  min-width: 60px;  }
 		.select-model    { max-width: 220px; min-width: 220px; }
@@ -398,43 +390,74 @@ export default {
 	}
 }
 
+.tools {
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: center;
+		@include space-children-h(10px);
+	}
+}
+
+.tools__separator {
+	@include circle(4px);
+	flex: 0 0 auto;
+
+	background-color: var(--color--border);
+}
+
 .intervals {
 	display: flex;
 }
 
 .intervals__item {
-	padding: 2px 8px;
-
-	border: 1px solid var(--color--border);
+	padding: 10px 0;
 
 	color: var(--color--text);
 
 	cursor: pointer;
 
 	&:not(:last-child) {
-		border-right: none;
-	}
-
-	&:first-child {
-		padding-left: 10px;
-
-		border-radius: 1e3px 0 0 1e3px;
-	}
-
-	&:last-child {
-		padding-right: 10px;
-
-		border-radius: 0 1e3px 1e3px 0;
-	}
-
-	&:hover {
-		color: var(--color--hover);
-		background-color: var(--color--bg--highlight);
+		border-right: 1px solid var(--color--border);
 	}
 
 	&.is-selected {
 		color: var(--color--highlight);
 		background-color: var(--color--bg--highlight);
+	}
+
+	@include mq($until: desktop)
+	{
+		flex: 1 1 100%;
+		text-align: center;
+	}
+
+	@include mq($from: desktop)
+	{
+		padding: 2px 8px;
+
+		border: 1px solid var(--color--border);
+
+		&:not(:last-child) {
+			border-right: none;
+		}
+
+		&:first-child {
+			padding-left: 10px;
+
+			border-radius: 1e3px 0 0 1e3px;
+		}
+
+		&:last-child {
+			padding-right: 10px;
+
+			border-radius: 0 1e3px 1e3px 0;
+		}
+
+		&:not(.is-selected):hover {
+			color: var(--color--hover);
+			background-color: var(--color--bg--highlight);
+		}
 	}
 }
 
