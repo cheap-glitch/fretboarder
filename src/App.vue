@@ -89,7 +89,7 @@ div.App(:style="colorscheme")
 		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 		//- Fretboard
-		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice && layoutOrientation == 'portrait'")
+		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 		//- Scales & arpeggios
 		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
@@ -176,17 +176,17 @@ export default {
 
 			'isDarkModeOn',
 			'isMobileDevice',
-			'layoutOrientation',
+			'isLayoutLandscape',
 		]),
 	},
 
-	mounted()
+	created()
 	{
 		if (this.scales.length == 0)
 			this.$store.commit('scales/addScale');
 	},
 
-	created()
+	mounted()
 	{
 		// Register all key presses on the page
 		window.addEventListener('keydown', this.registerKeypress, { passive: true });
@@ -207,11 +207,11 @@ export default {
 	methods: {
 		updateDeviceType(event)
 		{
-			this.$store.commit('layoutOrientation', event.matches);
+			this.$store.commit('isMobileDevice', event.matches);
 		},
 		updateLayoutOrientation(event)
 		{
-			this.$store.commit('deviceType', event.matches);
+			this.$store.commit('isLayoutLandscape', event.matches);
 		},
 		registerKeypress(event)
 		{
