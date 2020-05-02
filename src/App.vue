@@ -89,7 +89,7 @@ div.App(:style="colorscheme")
 		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 		//- Fretboard
-		FretboardViewer.fretboard-viewer#help-tour-step--11(:is-vertical="isMobileDevice && !isLayoutLandscape")
+		FretboardViewer#help-tour-step--11(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 		//- Scales & arpeggios
 		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
@@ -260,7 +260,7 @@ export default {
 
 .header             { margin-bottom: 80px;  }
 .fretboard-settings { margin-bottom: 30px;  }
-.fretboard-viewer   { margin-bottom: 100px; }
+.fretboard-scales   { margin-top:    100px; }
 
 /**
  * Header
