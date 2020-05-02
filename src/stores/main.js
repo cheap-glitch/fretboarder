@@ -50,9 +50,9 @@ const mutations = {
 	...make.mutations(state),
 	...makeTogglers(state),
 
-	setInstrument(state, value)
+	// Reset the tuning to default when switching between different instruments
+	instrument(state, value)
 	{
-		// Reset the tuning to default when switching between different instruments
 		state.tuning     = 'standard';
 		state.instrument = value;
 	},
