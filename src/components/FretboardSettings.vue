@@ -41,7 +41,7 @@ div.FretboardSettings
 				:tooltip-formatter="tooltipFormatter"
 
 				v-model="fretRange"
-				@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
+				@mousedown.left.native="$store.commit('isFretRangeSliderClicked', true)"
 				)
 
 		div.toolbar

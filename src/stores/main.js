@@ -14,12 +14,17 @@ import { isObject, objectForEach } from '@/modules/object'
 
 import scales                      from '@/stores/scales'
 
+export const mediaQueries = {
+	isMobileDevice:    window.matchMedia('(max-width:   50em)'     ),
+	isLayoutLandscape: window.matchMedia('(orientation: landscape)'),
+}
+
 /**
  * State
  */
 const state = {
-	clientWidth:              window.innerWidth,
-	clientHeight:             window.innerHeight,
+	isMobileDevice:           mediaQueries.isMobileDevice.matches,
+	isLayoutLandscape:        mediaQueries.isLayoutLandscape.matches,
 
 	instrument:               storage.get('instrument',            'guitar',   v => (v in data.instruments)),
 	tuning:                   storage.get('tuning',                'standard', v => (v in data.tuningsNames)),
@@ -36,14 +41,6 @@ const state = {
 	 * events on the fret slider during the help tour
 	 */
 	isFretRangeSliderClicked: false,
-};
-
-/**
- * Getters
- */
-const getters = {
-	isMobileDevice:    state => state.clientWidth < 800,
-	layoutOrientation: state => state.clientWidth > state.clientHeight ? 'landscape' : 'portrait',
 };
 
 /**
@@ -68,22 +65,20 @@ const mutations = {
 const storeOnMutation = store => store.subscribe(function(mutation, state)
 {
 	const saveUponMutations = {
-		// Fretboard settings
-		'setTuning':     'tuning',
-		'setFretRange':  'fretRange',
-		'setInstrument': ['instrument', 'tuning'],
-
-		// Various settings
-		'toggleIs.+':    mutation => `is${mutation.slice(8)}`,
+		// Settings
+		'^toggleIs':    mutation => `is${mutation.slice(8)}`,
+		'^tuning$':     'tuning',
+		'^fretRange$':  'fretRange',
+		'^instrument$': ['instrument', 'tuning'],
 
 		// Scales
-		'scales/.+':     () => ({ name: 'scales', value: state.scales.scales }),
+		'^scales/':     () => ({ name: 'scales', value: state.scales.scales }),
 	};
 
 	objectForEach(saveUponMutations, function(key, value)
 	{
 		// Check that the name of the mutation matches the key
-		const rx = new RegExp(`^${key}$`);
+		const rx = new RegExp(key);
 		if (!rx.test(mutation.type)) return;
 
 		(Array.isArray(value) ? value : [value]).forEach(function(setting)
@@ -113,7 +108,6 @@ export default new Vuex.Store({
 	},
 
 	state,
-	getters,
 	mutations,
 
 	// Activate strict mode during development only

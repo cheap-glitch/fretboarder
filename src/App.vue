@@ -120,9 +120,10 @@ div.App(:style="colorscheme")
 
 import { get }            from 'vuex-pathify'
 
-import { colorscheme }    from '@/modules/colorscheme'
+import { colorscheme    } from '@/modules/colorscheme'
 import { objectMapToObj } from '@/modules/object'
-import { EventBus }       from '@/modules/bus'
+import { EventBus       } from '@/modules/bus'
+import { mediaQueries   } from '@/stores/main'
 
 import FretboardSettings  from '@/components/FretboardSettings'
 import FretboardViewer    from '@/components/FretboardViewer'
@@ -190,26 +191,31 @@ export default {
 		// Register all key presses on the page
 		window.addEventListener('keydown', this.registerKeypress, { passive: true });
 
-		// Update the width of the window on every resize
-		window.addEventListener('resize',  this.updateClientSize, { passive: true });
+		// Listen to any changes on the device type and layout orientation
+		mediaQueries.isMobileDevice.addListener(this.updateDeviceType);
+		mediaQueries.isLayoutLandscape.addListener(this.updateLayoutOrientation);
 	},
 
 	destroyed()
 	{
-		// Clear the event listeners
+		// Clear event listeners
 		window.removeEventListener('keydown', this.registerKeypress, { passive: true });
-		window.removeEventListener('resize',  this.updateClientSize, { passive: true });
+		mediaQueries.isMobileDevice.removeListener(this.updateDeviceType);
+		mediaQueries.isLayoutLandscape.removeListener(this.updateLayoutOrientation);
 	},
 
 	methods: {
+		updateDeviceType(event)
+		{
+			this.$store.commit('layoutOrientation', event.matches);
+		},
+		updateLayoutOrientation(event)
+		{
+			this.$store.commit('deviceType', event.matches);
+		},
 		registerKeypress(event)
 		{
 			EventBus.$emit('keypress', event.key);
-		},
-		updateClientSize()
-		{
-			this.$store.commit('setClientWidth',  window.innerWidth);
-			this.$store.commit('setClientHeight', window.innerHeight);
 		},
 		startHelpTour()
 		{
