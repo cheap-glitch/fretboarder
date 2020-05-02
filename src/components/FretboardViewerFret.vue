@@ -230,7 +230,7 @@ export default {
 		// String
 		&:not(.is-open-string) {
 			border-left-width: 2px;
-			border-left-color: var(--color--string--border);
+			border-left-color: var(--color--string);
 		}
 
 		// Fret
