@@ -95,7 +95,13 @@ div.App(:style="colorscheme")
 			)
 
 		//- Scales & arpeggios
-		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
+		component(
+			:is="isMobileDevice ? 'VModal' : 'div'"
+
+			:is-open="isModalScalesOpen"
+			@close="isModalScalesOpen = false"
+			)
+			ScalesList.fretboard-scales#help-tour--scales
 
 	//----------------------------------------------------------------------
 	//- Mobile actions & modals
@@ -104,15 +110,6 @@ div.App(:style="colorscheme")
 	div.mobile-actions(v-if="isMobileDevice")
 		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
 		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
-
-	//- Scales & arpeggios
-	VModal(
-		v-if="isMobileDevice"
-
-		:is-open="isModalScalesOpen"
-		@close="isModalScalesOpen = false"
-		)
-		ScalesList
 
 </template>
 <!--}}}-->
@@ -263,9 +260,12 @@ export default {
 	}
 }
 
-.header             { margin-bottom: 80px;  }
-.fretboard-settings { margin-bottom: 30px;  }
-.fretboard-scales   { margin-top:    100px; }
+@include mq($from: desktop)
+{
+	.header             { margin-bottom: 80px;  }
+	.fretboard-settings { margin-bottom: 30px;  }
+	.fretboard-scales   { margin-top:    100px; }
+}
 
 /**
  * Header
@@ -404,7 +404,7 @@ export default {
 
 .mobile-actions {
 	position: fixed;
-	z-index: 1000;
+	z-index: 100;
 	bottom: 10px;
 	right: 10px;
 
