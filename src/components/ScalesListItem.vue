@@ -118,7 +118,7 @@ div.ScalesListItem
 					tooltip-placement="bottom"
 
 					:is-disabled="nbScales == MAX_NB_SCALES"
-					@click="$store.commit('scales/addScale, id)"
+					@click="$store.commit('scales/addScale', id)"
 					)
 				//- Remove
 				VButton.toolbar__item(

@@ -95,6 +95,8 @@
 .vue-slider-rail {
 	border-radius: 15px;
 	background-color: var(--color--bg--highlight);
+
+	transition: background-color 0.2s;
 }
 
 .vue-slider-process {

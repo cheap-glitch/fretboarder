@@ -23,9 +23,6 @@ export const mediaQueries = {
  * State
  */
 const state = {
-	isMobileDevice:           mediaQueries.isMobileDevice.matches,
-	isLayoutLandscape:        mediaQueries.isLayoutLandscape.matches,
-
 	instrument:               storage.get('instrument',            'guitar',   v => (v in data.instruments)),
 	tuning:                   storage.get('tuning',                'standard', v => (v in data.tuningsNames)),
 	fretRange:                storage.get('fretRange',             [0, 22],    v => Array.isArray(v) && v.length == 2),
@@ -35,6 +32,8 @@ const state = {
 	isFretboardFlipped:       storage.get('isFretboardFlipped',    false,      v => typeof v == 'boolean'),
 
 	isDarkModeOn:             storage.get('isDarkModeOn', window.matchMedia('(prefers-color-scheme: dark)').matches, v => typeof v == 'boolean'),
+	isMobileDevice:           mediaQueries.isMobileDevice.matches,
+	isLayoutLandscape:        mediaQueries.isLayoutLandscape.matches,
 
 	/**
 	 * Allows v-click-outside to ignore mouseup

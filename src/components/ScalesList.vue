@@ -34,7 +34,7 @@ div.ScalesList
 			)
 
 		//- Scales & arpeggios
-		ScalesListItem.scales__item(
+		ScalesListItem(
 			v-for="scale in scales"
 			:key="`scale--${scale.id}`"
 
