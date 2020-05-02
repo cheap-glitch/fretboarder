@@ -93,7 +93,7 @@ div.ScalesListItem
 					tooltip-placement="bottom"
 
 					:is-active="isFocused"
-					@click="toggleFocusScale(id)"
+					@click="$store.commit('scales/toggleFocusScale', id)"
 					)
 				//- Show intersections only
 				VButton.toolbar__item(
@@ -118,7 +118,7 @@ div.ScalesListItem
 					tooltip-placement="bottom"
 
 					:is-disabled="nbScales == MAX_NB_SCALES"
-					@click="addScale(id)"
+					@click="$store.commit('scales/addScale, id)"
 					)
 				//- Remove
 				VButton.toolbar__item(
@@ -127,7 +127,7 @@ div.ScalesListItem
 					tooltip="Remove"
 					tooltip-placement="bottom"
 
-					@click="removeScale(id)"
+					@click="$store.commit('scales/removeScale', id)"
 					)
 
 	//- Interval tooltips
@@ -151,7 +151,6 @@ div.ScalesListItem
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }  from 'vuex'
 import { get }           from 'vuex-pathify'
 
 import data              from '@/modules/data'
@@ -290,14 +289,8 @@ export default {
 		},
 		update(prop, value)
 		{
-			this.updateScale({ id: this.id, prop: prop, value: value });
+			this.$store.commit('scales/updateScale', { id: this.id, prop: prop, value: value });
 		},
-		...mapMutations('scales', [
-			'addScale',
-			'updateScale',
-			'toggleFocusScale',
-			'removeScale',
-		]),
 	}
 }
 
