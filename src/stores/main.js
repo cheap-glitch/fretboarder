@@ -57,13 +57,15 @@ const storeOnMutation = store => store.subscribe(function(mutation, state)
 {
 	const saveUponMutations = {
 		// Settings
-		'^toggleIs':    mutation => `is${mutation.slice(8)}`,
-		'^tuning$':     'tuning',
-		'^fretRange$':  'fretRange',
-		'^instrument$': ['instrument', 'tuning'],
+		'^toggleIs': mutation => `is${mutation.slice(8)}`,
+
+		// Fretboard settings
+		'^fretboard/tuning$':     'tuning',
+		'^fretboard/fretRange$':  'fretRange',
+		'^fretboard/instrument$': ['instrument', 'tuning'],
 
 		// Scales
-		'^scales/':     () => ({ name: 'scales', value: state.scales.scales }),
+		'^scales/': () => ({ name: 'scales', value: state.scales.scales }),
 	};
 
 	objectForEach(saveUponMutations, function(key, value)

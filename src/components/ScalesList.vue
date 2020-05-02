@@ -9,9 +9,7 @@
 div.ScalesList
 
 	div.scales
-		div.scale__tools(
-			v-if="!isMobileDevice"
-			)
+		div.scale__tools
 			//- Hide all scales
 			VButton.scale__tools__hide-all(
 				v-show="scales.length >= 2"
@@ -77,10 +75,7 @@ export default {
 	},
 
 	computed: {
-		...get([
-			'scales/scales',
-			'isMobileDevice',
-		])
+		scales: get('scales/scales'),
 	},
 
 	created()
@@ -111,8 +106,13 @@ export default {
 }
 
 .scale__tools {
-	display: flex;
-	justify-content: flex-end;
+	display: none;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		justify-content: flex-end;
+	}
 }
 
 .scale__tools__hide-all {

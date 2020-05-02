@@ -50,21 +50,21 @@ div.FretboardSettings
 				:icon="['fal', 'list-ol']"
 				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
 				:is-active="isDisplayingFretNbs"
-				@click="$store.commit('toggleIsDisplayingFretNbs')"
+				@click="$store.commit('fretboard/toggleIsDisplayingFretNbs')"
 				)
 			//- Toggle note names
 			VButton#help-tour-step--3(
 				icon="info-circle"
 				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
-				@click="$store.commit('toggleIsDisplayingNotesName')"
+				@click="$store.commit('fretboard/toggleIsDisplayingNotesName')"
 				)
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
 				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
 				:is-flipped="!isFretboardFlipped"
-				@click="$store.commit('toggleIsFretboardFlipped')"
+				@click="$store.commit('fretboard/toggleIsFretboardFlipped')"
 				)
 			//- Export the fretboard
 			div#canvas-wrapper
@@ -126,17 +126,14 @@ export default {
 		{
 			return objectMap(data.tunings[this.instrument], key => ({ name: data.tuningsNames[key], value: key }));
 		},
-		...sync([
+		...sync('fretboard', [
 			'instrument',
 			'tuning',
 			'fretRange',
 		]),
-		...get([
-			'scales/activeScales',
-
-			'isDarkModeOn',
-			'isDisplayingNotesName',
+		...get('fretboard', [
 			'isDisplayingFretNbs',
+			'isDisplayingNotesName',
 			'isFretboardFlipped',
 		]),
 	},
@@ -180,7 +177,7 @@ export default {
 				this.fretRange[0],
 				this.fretRange[1],
 				data.tunings[this.instrument][this.tuning],
-				this.activeScales,
+				this.$store.scales.activeScales,
 				this.isFretboardFlipped,
 				this.isDisplayingNotesName,
 				format != 'svg',

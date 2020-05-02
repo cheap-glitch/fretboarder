@@ -151,7 +151,7 @@ export default {
 	name: 'HelpTour',
 
 	computed: {
-		...get('scales', ['scales'])
+		scales: get('scales/scales'),
 	},
 
 	created()

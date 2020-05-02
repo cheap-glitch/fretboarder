@@ -112,12 +112,11 @@ export default {
 			return (this.openingDirection == 'below' &&  this.isOpen)
 			    || (this.openingDirection == 'above' && !this.isOpen)
 		},
-		instrument:     get('instrument'),
 		isMobileDevice: get('isMobileDevice'),
 	},
 
 	watch: {
-		instrument: 'updateOpeningDirection',
+		'$store.fretboard.instrument': 'updateOpeningDirection',
 	},
 
 	created()

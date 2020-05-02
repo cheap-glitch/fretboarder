@@ -89,7 +89,10 @@ div.App(:style="colorscheme")
 		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
 
 		//- Fretboard
-		FretboardViewer#help-tour-step--11(:is-vertical="isMobileDevice && !isLayoutLandscape")
+		FretboardViewer#help-tour-step--11(
+			:is-flipped="isFretboardFlipped && !isMobileDevice"
+			:is-vertical="isMobileDevice && !isLayoutLandscape"
+			)
 
 		//- Scales & arpeggios
 		ScalesList.fretboard-scales#help-tour--scales(v-if="!isMobileDevice")
@@ -171,18 +174,18 @@ export default {
 			}
 		},
 		...get([
-			'instrument',
-			'scales/scales',
-
 			'isDarkModeOn',
 			'isMobileDevice',
 			'isLayoutLandscape',
+
+			'fretboard/instrument',
+			'fretboard/isFretboardFlipped',
 		]),
 	},
 
 	created()
 	{
-		if (this.scales.length == 0)
+		if (this.$store.state.scales.scales.length == 0)
 			this.$store.commit('scales/addScale');
 	},
 
@@ -240,6 +243,8 @@ export default {
  */
 
 .App {
+	flex: 1 1 auto;
+
 	background-color: var(--color--bg);
 
 	@include mq($until: desktop, $and: '(orientation: landscape)')

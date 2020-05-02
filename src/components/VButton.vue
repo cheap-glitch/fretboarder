@@ -92,7 +92,7 @@ export default {
 	},
 
 	computed: {
-		...get(['isMobileDevice']),
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	methods: {

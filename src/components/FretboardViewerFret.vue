@@ -42,7 +42,7 @@ div.FretboardViewerFret
 			@mouseleave="isHovered = false"
 			)
 			transition(name="fade")
-				p.fret__note__name(v-show="isDisplayingNotesName || isOpenString") {{ noteName }}
+				p.fret__note__name(v-show="isDisplayingNoteName || isOpenString") {{ noteName }}
 
 		//- Note placeholder
 		div.fret__placeholder(
@@ -58,9 +58,7 @@ div.FretboardViewerFret
 <!--{{{ JavaScript -->
 <script>
 
-import { get }       from 'vuex-pathify'
-
-import data          from '@/modules/data'
+import data from '@/modules/data'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -77,6 +75,11 @@ export default {
 		fret: {
 			type: Number,
 			required: true,
+		},
+		fretRange: {
+			type: Array,
+			required: true,
+			validator: v => Array.isArray(v) && v.length == 2 && v.every(n => typeof n == 'number')
 		},
 		note: {
 			type: String,
@@ -96,6 +99,10 @@ export default {
 			default: false,
 		},
 		isDisplayingInlay: {
+			type: Boolean,
+			default: false,
+		},
+		isDisplayingNoteName: {
 			type: Boolean,
 			default: false,
 		},
@@ -141,10 +148,6 @@ export default {
 		{
 			return this.fretRange[0] == 0 ? (this.fret == 1) : (this.fret == this.fretRange[0]);
 		},
-		...get([
-			'fretRange',
-			'isDisplayingNotesName',
-		]),
 	},
 
 	watch: {

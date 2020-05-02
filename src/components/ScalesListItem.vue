@@ -131,18 +131,17 @@ div.ScalesListItem
 					)
 
 	//- Interval tooltips
-	template(v-if="!isMobileDevice")
-		VTooltip(
-			v-for="(interval, index) in intervals"
-			:key="`scale-${id}-interval--${index}--tooltip`"
+	VTooltip.intervals-tooltip(
+		v-for="(interval, index) in intervals"
+		:key="`scale-${id}-interval--${index}--tooltip`"
 
-			:is-open="hoveredInterval === index"
+		:is-open="hoveredInterval === index"
 
-			:target="$refs.interval ? $refs.interval[index] : false"
-			placement="bottom"
-			:delay="500"
-			)
-			p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
+		:target="$refs.interval ? $refs.interval[index] : false"
+		placement="bottom"
+		:delay="500"
+		)
+		p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
 
 </template>
 <!--}}}-->
@@ -250,10 +249,7 @@ export default {
 				})
 			];
 		},
-		...get([
-			'scales/scales',
-			'isMobileDevice',
-		]),
+		scales: get('scales/scales'),
 	},
 
 	created()
@@ -482,6 +478,13 @@ export default {
 		&:not(:last-child) {
 			border-right: 1px solid var(--color--border);
 		}
+	}
+}
+
+.intervals-tooltip {
+	@include mq($until: desktop)
+	{
+		display: none;
 	}
 }
 

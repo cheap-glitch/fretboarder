@@ -17,6 +17,8 @@ div.FretboardViewer(
 		:key="`fret--${fret.fret}-${fret.string+1}`"
 
 		v-bind="fret"
+		:fret-range="fretRange"
+		:is-displaying-note-name="isDisplayingNotesName"
 		:is-fretboard-flipped="isFlipped"
 		:is-fretboard-vertical="isVertical"
 		)
@@ -54,6 +56,10 @@ export default {
 	},
 
 	props: {
+		isFlipped: {
+			type: Boolean,
+			default: false,
+		},
 		isVertical: {
 			type: Boolean,
 			default: false,
@@ -238,7 +244,7 @@ export default {
 		},
 		scales()
 		{
-			return this.activeScales.map(scale =>
+			return this.$store.getters['scales/activeScales'].map(scale =>
 			{
 				const notes          = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality);
 				const posCoordinates = scale.type == 'arpeggio'
@@ -281,20 +287,14 @@ export default {
 		{
 			return data.tunings[this.instrument][this.tuning] || data.tunings[this.instrument]['standard'];
 		},
-		isFlipped()
-		{
-			return this.isFretboardFlipped && !this.isVertical;
-		},
-		...get([
+
+		...get('fretboard', [
 			'instrument',
 			'tuning',
 			'fretRange',
 
-			'scales/activeScales',
-
-			'isMobileDevice',
 			'isDisplayingFretNbs',
-			'isFretboardFlipped',
+			'isDisplayingNotesName',
 		]),
 	},
 }
