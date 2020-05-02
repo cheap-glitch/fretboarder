@@ -238,13 +238,10 @@ export default {
 
 	background-color: var(--color--bg);
 
-	@include mq($until: desktop)
+	@include mq($until: desktop, $and: '(orientation: landscape)')
 	{
-		@media (orientation: landscape)
-		{
-			display: flex;
-			align-items: center;
-		}
+		display: flex;
+		align-items: center;
 	}
 }
 
