@@ -240,8 +240,6 @@ export default {
  */
 
 .App {
-	flex: 1 1 auto;
-
 	background-color: var(--color--bg);
 
 	@include mq($until: desktop, $and: '(orientation: landscape)')
@@ -446,23 +444,14 @@ export default {
 <!--{{{ Global styles -->
 <style lang="scss">
 
-// Load reset stylesheet
+// Load the reset stylesheet
 @use "@cheap-glitch/scss-reset/_reset";
 
-// Load global styles
+// Load the global styles
 @use "@/styles/global";
 
-// Override styles of the slider component
+// Override the styles of the slider component
 @use "@/styles/slider";
-
-// Load IBM Plex
-@include font-face("IBM Plex", "./assets/fonts/ibm-plex/ibm-plex");
-
-// Define the fallback font stack
-@font-face {
-	font-family: "sytem";
-	src: local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
-}
 
 </style>
 <!--}}}-->
