@@ -8,8 +8,7 @@
 
 div.VModal(ref="modal")
 	transition(name="fade"): div.modal(v-if="isModalOpen")
-		div.modal__button-close(@click.left="$emit('close')")
-			fa-icon(:icon="['far', 'arrow-left']")
+		div.modal__button-close(@click.left="$emit('close')"): fa-icon(:icon="['far', 'arrow-left']")
 		slot
 
 </template>
@@ -75,7 +74,7 @@ export default {
 
 	padding: 0 20px 20px 20px;
 
-	background-color: var(--color--bg);
+	background-color: var(--color--bg--accent);
 
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
@@ -84,6 +83,8 @@ export default {
 .modal__button-close {
 	margin-bottom: 10px;
 	padding: 20px 0;
+
+	color: var(--color--text);
 
 	cursor: pointer;
 }
