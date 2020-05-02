@@ -42,7 +42,6 @@ div.VSelect(ref="vselectbar")
 				v-html="option.name"
 
 				@click.left="select(option)"
-				@touchstart.prevent
 				)
 
 </template>

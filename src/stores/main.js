@@ -8,11 +8,11 @@ import Vuex                        from 'vuex'
 import { make }                    from 'vuex-pathify'
 import pathify, { makeTogglers }   from '@/modules/pathify'
 
-import data                        from '@/modules/data'
 import storage                     from '@/modules/storage'
 import { isObject, objectForEach } from '@/modules/object'
 
 import scales                      from '@/stores/scales'
+import fretboard                   from '@/stores/fretboard'
 
 export const mediaQueries = {
 	isMobileDevice:    window.matchMedia('(max-width:   50em)'     ),
@@ -23,17 +23,9 @@ export const mediaQueries = {
  * State
  */
 const state = {
-	instrument:               storage.get('instrument',            'guitar',   v => (v in data.instruments)),
-	tuning:                   storage.get('tuning',                'standard', v => (v in data.tuningsNames)),
-	fretRange:                storage.get('fretRange',             [0, 22],    v => Array.isArray(v) && v.length == 2),
-
-	isDisplayingFretNbs:      storage.get('isDisplayingFretNbs',   false,      v => typeof v == 'boolean'),
-	isDisplayingNotesName:    storage.get('isDisplayingNotesName', true,       v => typeof v == 'boolean'),
-	isFretboardFlipped:       storage.get('isFretboardFlipped',    false,      v => typeof v == 'boolean'),
-
-	isDarkModeOn:             storage.get('isDarkModeOn', window.matchMedia('(prefers-color-scheme: dark)').matches, v => typeof v == 'boolean'),
-	isMobileDevice:           mediaQueries.isMobileDevice.matches,
-	isLayoutLandscape:        mediaQueries.isLayoutLandscape.matches,
+	isDarkModeOn:      storage.get('isDarkModeOn', window.matchMedia('(prefers-color-scheme: dark)').matches, v => typeof v == 'boolean'),
+	isMobileDevice:    mediaQueries.isMobileDevice.matches,
+	isLayoutLandscape: mediaQueries.isLayoutLandscape.matches,
 
 	/**
 	 * Allows v-click-outside to ignore mouseup
@@ -104,10 +96,10 @@ export default new Vuex.Store({
 
 	modules: {
 		scales,
+		fretboard,
 	},
 
-	state,
-	mutations,
+	state, mutations,
 
 	// Activate strict mode during development only
 	strict: process.env.NODE_ENV !== 'production'
