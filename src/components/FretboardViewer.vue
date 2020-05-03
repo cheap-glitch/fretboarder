@@ -7,7 +7,7 @@
 <template lang="pug">
 
 div.FretboardViewer(
-	v-mods="{ isFretboardVertical, isFretboardFlipped, isDisplayingFretNbs }"
+	v-mods="{ isFretboardVertical, isDisplayingFretNbs }"
 	:style="[minWidth, grid, inlays]"
 	)
 
@@ -301,17 +301,8 @@ export default {
 .FretboardViewer {
 	display: grid;
 
-	&.is-fretboard-vertical {
-		margin: 20px 0;
-
-		&.is-displaying-fret-nbs {
-			transform: translateX(-25px);
-		}
-	}
-
-	&:not(.is-fretboard-vertical) {
-		&.is-fretboard-flipped       { margin-right: 16px; }
-		&:not(.is-fretboard-flipped) { margin-left:  14px; }
+	&.is-fretboard-vertical.is-displaying-fret-nbs {
+		transform: translateX(-25px);
 	}
 
 	@include mq($until: desktop)

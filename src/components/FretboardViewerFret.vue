@@ -179,25 +179,11 @@ export default {
 <style lang="scss" scoped>
 
 .fret {
-	display: flex;
-
 	position: relative;
 	z-index: 10;
 
-	&.is-open-string {
-		display: block;
-	}
-
-	&.is-fretboard-vertical {
-		height: 100%;
-		align-items: center;
-	}
-
-	&:not(.is-fretboard-vertical) {
-		justify-content: center;
-
-		&:not(.is-last-string) { height: 42px; }
-	}
+	&.is-fretboard-vertical                            { height: 100%; }
+	&:not(.is-fretboard-vertical):not(.is-last-string) { height: 42px; }
 
 	$width--string: 2px;
 	$width--fret:   3px;
@@ -225,13 +211,15 @@ export default {
 
 		&.is-fretboard-vertical{
 			&::before {
-				top: 0;
 				left: 0;
 				right: 0;
 				height: $width--fret;
 			}
 
 			&.is-fret-one::before { height: $width--nut; }
+
+			&.is-fretboard-flipped::before       { bottom: 0; }
+			&:not(.is-fretboard-flipped)::before { top:    0; }
 		}
 
 		&:not(.is-fretboard-vertical) {
@@ -243,8 +231,8 @@ export default {
 
 			&.is-fret-one::before { width: $width--nut; }
 
-			&.is-fretboard-flipped::before       { right: 0; }
-			&:not(.is-fretboard-flipped)::before { left:  0; }
+			&.is-fretboard-flipped::before       { right:  0; }
+			&:not(.is-fretboard-flipped)::before { left:   0; }
 		}
 	}
 
@@ -259,11 +247,15 @@ export default {
 			transition: background-color 0.2s;
 		}
 
-		&.is-fretboard-vertical::after {
-			bottom: 0;
-			left: 0;
-			right: 0;
-			height: $width--fret;
+		&.is-fretboard-vertical {
+			&::after {
+				left: 0;
+				right: 0;
+				height: $width--fret;
+			}
+
+			&.is-fretboard-flipped::after       { top:     0; }
+			&:not(.is-fretboard-flipped)::after { bottom:  0; }
 		}
 
 		&:not(.is-fretboard-vertical) {
@@ -273,66 +265,45 @@ export default {
 				width: $width--fret;
 			}
 
-			&.is-fretboard-flipped::after       { left:  0; }
-			&:not(.is-fretboard-flipped)::after { right: 0; }
+			&.is-fretboard-flipped::after       { left:    0; }
+			&:not(.is-fretboard-flipped)::after { right:   0; }
 		}
 	}
 }
 
-.fret__note {
+.fret__note,
+.fret__placeholder {
 	position: absolute;
 	z-index: 20;
 
+	transform: translate(-50%, -50%);
+
+	&.is-fretboard-vertical       { top: 50%; left:   0; }
+	&:not(.is-fretboard-vertical) { top:   0; left: 50%; }
+}
+
+.fret__note {
 	@include square(30px);
 
 	transition: border-radius 0.2s, filter 0.2s;
-
-	&:not(.is-active) {
-		opacity: 0;
-	}
 
 	&.is-active:hover {
 		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));
 	}
 
-	&:not(.is-highlighted-note) {
-		border-radius: 50%;
+	&:not(.is-active) {
+		opacity: 0;
 	}
 
-	&.is-fretboard-vertical       { transform: translateX(-50%); }
-	&:not(.is-fretboard-vertical) { transform: translateY(-50%); }
-
-	&.is-open-string {
-		&.is-fretboard-flipped {
-			left: 100%;
-			transform: translate(-50%, -50%);
-		}
-
-		&:not(.is-fretboard-flipped) {
-			right: 100%;
-			transform: translate(50%, -50%);
-		}
+	&:not(.is-highlighted-note) {
+		border-radius: 50%;
 	}
 }
 
 .fret__placeholder {
-	position: absolute;
-	z-index: 20;
-
 	@include circle(30px);
 
 	border: 2px dashed var(--color--border);
-
-	&.is-open-string {
-		&.is-fretboard-vertical {
-			transform: translate(-50%, -50%);
-		}
-
-		&:not(.is-fretboard-vertical) {
-			&.is-fretboard-flipped       { transform: translate( 50%, -50%); }
-			&:not(.is-fretboard-flipped) { transform: translate(-50%, -50%); }
-		}
-	}
 
 	&:not(.is-open-string) {
 		background-color: var(--color--bg);
@@ -340,16 +311,6 @@ export default {
 		opacity: 0;
 		transition: opacity 0.2s;
 		&:hover { opacity: 1; }
-
-		&.is-fretboard-vertical {
-			left: 0;
-			transform: translateX(-50%);
-		}
-
-		&:not(.is-fretboard-vertical) {
-			right: 50%;
-			transform: translate(50%, -50%);
-		}
 	}
 }
 
