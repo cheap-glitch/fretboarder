@@ -25,7 +25,7 @@ const COLORS = [
  * State
  */
 const state = {
-	scales: storage.get('scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
+	scales: storage.get('scales/scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
 };
 
 /**
