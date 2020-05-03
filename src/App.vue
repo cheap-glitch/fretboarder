@@ -83,10 +83,7 @@ div.App(:style="colorscheme")
 		FretboardSettings.fretboard-settings
 
 	//- Fretboard
-	FretboardViewer(
-		:is-flipped="isFretboardFlipped && !isMobileDevice"
-		:is-vertical="isMobileDevice && !isLayoutLandscape"
-		)
+	FretboardViewer(:is-fretboard-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- Scales & arpeggios
 	component(

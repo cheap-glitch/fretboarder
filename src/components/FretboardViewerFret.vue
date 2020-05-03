@@ -42,7 +42,7 @@ div.FretboardViewerFret
 			@mouseleave="isHovered = false"
 			)
 			transition(name="fade")
-				p.fret__note__name(v-show="isDisplayingNoteName || isOpenString") {{ noteName }}
+				p.fret__note__name(v-show="isDisplayingNotesName || isOpenString") {{ noteName }}
 
 		//- Note placeholder
 		div.fret__placeholder(
@@ -102,7 +102,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isDisplayingNoteName: {
+		isFretboardVertical: {
 			type: Boolean,
 			default: false,
 		},
@@ -110,7 +110,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isFretboardVertical: {
+		isDisplayingNotesName: {
 			type: Boolean,
 			default: false,
 		},
