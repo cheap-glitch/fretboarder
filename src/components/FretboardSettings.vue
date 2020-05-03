@@ -8,78 +8,78 @@
 
 div.FretboardSettings
 
-	div.wrapper
+	div.toolbar
 
-		div.toolbar
-			//- Instrument & tuning
-			div.toolbar#help-tour-step--1
-				VSelect.select-instrument(
-					id="instrument"
-					:options="instrumentOptions"
-					v-model="instrument"
-					)
-				VSelect.select-tuning(
-					id="tuning"
-					:options="tuningsOptions"
-					v-model="tuning"
-					)
+		//- Instrument & tuning
+		VSelect.select-instrument(
+			id="instrument"
+			:options="instrumentOptions"
+			v-model="instrument"
+			)
+		VSelect.select-tuning(
+			id="tuning"
+			:options="tuningsOptions"
+			v-model="tuning"
+			)
 
-			//- Frets range
-			div.fret-range-slider#help-tour-step--2: vue-slider(
-				:min="0"
-				:max="24"
-				:interval="1"
+		//- Frets range
+		div.slider-frets-range: vue-slider(
+			:min="0"
+			:max="24"
+			:interval="1"
 
-				:min-range="4"
-				:enable-cross="false"
+			:min-range="4"
+			:enable-cross="false"
 
-				:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
-				adsorb lazy
+			:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
+			adsorb lazy
 
-				tooltip="hover"
-				tooltip-placement="top"
-				:tooltip-formatter="tooltipFormatter"
+			:tooltip="isMobileDevice ? 'none' : 'hover'"
+			tooltip-placement="top"
+			:tooltip-formatter="tooltipFormatter"
 
-				v-model="fretRange"
-				@mousedown.left.native="$store.commit('isFretRangeSliderClicked', true)"
-				)
+			v-model="fretRange"
+			)
 
-		div.toolbar
-			//- Toggle fret numbers
-			VButton(
-				:icon="['fal', 'list-ol']"
-				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
-				:is-active="isDisplayingFretNbs"
-				@click="$store.commit('fretboard/toggleIsDisplayingFretNbs')"
-				)
-			//- Toggle note names
-			VButton#help-tour-step--3(
-				icon="info-circle"
-				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
-				:is-active="isDisplayingNotesName"
-				@click="$store.commit('fretboard/toggleIsDisplayingNotesName')"
-				)
-			//- Switch fretting hand
-			VButton(
-				icon="hand-paper"
-				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
-				:is-flipped="!isFretboardFlipped"
-				@click="$store.commit('fretboard/toggleIsFretboardFlipped')"
-				)
-			//- Export the fretboard
-			div#canvas-wrapper
-			VButton#button-export-menu(
-				icon="file-download"
-				:is-active="isExportMenuOpened"
+		//- Toggle fret numbers
+		VButton.button-fret-numbers(
+			:icon="['fal', 'list-ol']"
+			:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
+			:is-active="isDisplayingFretNbs"
+			@click="$store.commit('fretboard/toggleIsDisplayingFretNbs')"
+			)
+		//- Toggle note names
+		VButton.button-note-names(
+			icon="info-circle"
+			:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
+			:is-active="isDisplayingNotesName"
+			@click="$store.commit('fretboard/toggleIsDisplayingNotesName')"
+			)
+		//- Switch fretting hand
+		VButton.button-hand(
+			icon="hand-paper"
+			:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
+			:is-flipped="!isFretboardFlipped"
+			@click="$store.commit('fretboard/toggleIsFretboardFlipped')"
+			)
+		//- Export the fretboard
+		div#canvas-wrapper
+		VButton#button-export-menu(
+			v-if="!isMobileDevice"
 
-				tooltip="Export the fretboard image"
-				:is-tooltip-disabled="isExportMenuOpened"
+			icon="file-download"
+			:is-active="isExportMenuOpened"
 
-				@click="isExportMenuOpened = !isExportMenuOpened"
-				)
+			tooltip="Export the fretboard image"
+			:is-tooltip-disabled="isExportMenuOpened"
+
+			@click="isExportMenuOpened = !isExportMenuOpened"
+			)
 
 	//- Export menu
 	VTooltip(
+		v-if="!isMobileDevice"
+
 		target="button-export-menu"
 		placement="bottom"
 		:is-open="isExportMenuOpened"
@@ -136,6 +136,7 @@ export default {
 			'isDisplayingNotesName',
 			'isFretboardFlipped',
 		]),
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	created()
@@ -198,26 +199,48 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.wrapper {
-	display: flex;
-	align-items: flex-end;
-	justify-content: space-between;
-}
-
 .toolbar {
-	display: flex;
-	align-items: center;
-	@include space-children-h(10px);
+	display: grid;
+	grid-template-areas: "instrument  instrument  instrument  tuning      tuning  tuning"
+	                     "slider      slider      slider      slider      slider  slider"
+	                     "fret-nbs    fret-nbs    note-names  note-names  hand    hand";
 }
 
-.select-instrument { min-width: 180px; }
-.select-tuning     { min-width: 260px; }
+/**
+ * Settings
+ * -----------------------------------------------------------------------------
+ */
 
-.fret-range-slider {
-	width: 300px;
+.select-instrument {
+	grid-area: instrument;
 
-	margin-left: 10px;
+	@include mq($from: desktop)
+	{
+		min-width: 180px;
+	}
 }
+
+.select-tuning {
+	grid-area: tuning;
+
+	@include mq($from: desktop)
+	{
+		min-width: 260px;
+	}
+}
+
+.slider-frets-range {
+	grid-area: slider;
+}
+
+.button-fret-numbers { grid-area: fret-nbs;   }
+.button-note-names   { grid-area: note-names; }
+.button-hand         { grid-area: hand;       }
+
+/**
+ * Export menu
+ * -----------------------------------------------------------------------------
+ */
 
 .export-menu__text {
 	max-width: 300px;

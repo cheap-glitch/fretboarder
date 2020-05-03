@@ -45,7 +45,7 @@ div.ScalesList
 		) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 
 	//- Add a new scale
-	VButton#help-tour-step--4(
+	VButton(
 		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"

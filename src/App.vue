@@ -8,106 +8,92 @@
 
 div.App(:style="colorscheme")
 
-	//- Help tour
-	HelpTour(v-if="!isMobileDevice")
+	//----------------------------------------------------------------------
+	//- Header
+	//----------------------------------------------------------------------
+	header.header(v-if="!isMobileDevice")
 
+		div.header__nav
+
+			//- Logo
+			div.logo
+				fa-icon.logo__icon(
+					:icon="['far', instrumentIcon]"
+					v-mods="{ isUkulele: instrument == 'ukulele' }"
+					)
+				h1.logo__text Fretboarder
+
+			//- Links
+			nav.nav
+
+				//- GitHub & Twitter links
+				a.nav__link(
+					href="https://github.com/cheap-glitch/fretboarder"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'github']")
+				a.nav__link(
+					href="https://twitter.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'twitter']")
+
+				//- Patreon page
+				a.nav__link.link-support(
+					href="https://www.patreon.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['far', 'heart']")
+					p.nav__link__text Support the app!
+
+				//- TGLD
+				a.nav__link.link-tgld(
+					href="https://www.theguitarlickdatabase.com"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					p.nav__link__text The Guitar Lick Database
+					fa-icon(:icon="['far', 'external-link-square-alt']")
+
+		//- Light/dark switch
+		div.dark-mode-toggle(
+			v-mods="{ isDarkModeOn }"
+			@click="$store.commit('toggleIsDarkModeOn')"
+			)
+			fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
+			div.dark-mode-toggle__switch
+			fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
+
+	//----------------------------------------------------------------------
 	//- Page content
-	section.page
+	//----------------------------------------------------------------------
 
-		//----------------------------------------------------------------------
-		//- Header
-		//----------------------------------------------------------------------
-		header.header(v-if="!isMobileDevice")
+	//- Tools & settings
+	component(
+		:is="isMobileDevice ? 'VModal' : 'div'"
 
-			div.header__nav
+		:is-open="isModalSettingsOpen"
+		@close="isModalSettingsOpen = false"
+		)
+		FretboardSettings.fretboard-settings
 
-				//- Logo
-				div.logo
-					fa-icon.logo__icon(
-						:icon="['far', instrumentIcon]"
-						v-mods="{ isUkulele: instrument == 'ukulele' }"
-						)
-					h1.logo__text Fretboarder
+	//- Fretboard
+	FretboardViewer(
+		:is-flipped="isFretboardFlipped && !isMobileDevice"
+		:is-vertical="isMobileDevice && !isLayoutLandscape"
+		)
 
-				//- Links
-				nav.nav
+	//- Scales & arpeggios
+	component(
+		:is="isMobileDevice ? 'VModal' : 'div'"
 
-					//- GitHub & Twitter
-					div.nav__social#help-tour-step--12
-						a.nav__link(
-							href="https://github.com/cheap-glitch/fretboarder"
-							target="_blank"
-							rel="external nofollow noopener noreferrer"
-							)
-							fa-icon(:icon="['fab', 'github']")
-						a.nav__link(
-							href="https://twitter.com/cheap_glitch"
-							target="_blank"
-							rel="external nofollow noopener noreferrer"
-							)
-							fa-icon(:icon="['fab', 'twitter']")
-
-					//- Quick help
-					div.nav__link#help-tour-step--0(
-						@click.left="startHelpTour"
-						)
-						fa-icon(:icon="['far', 'question-circle']")
-						p.nav__link__text Help
-
-					//- Patreon page
-					a.nav__link.link-support#help-tour-step--13(
-						href="https://www.patreon.com/cheap_glitch"
-						target="_blank"
-						rel="external nofollow noopener noreferrer"
-						)
-						fa-icon(:icon="['far', 'heart']")
-						p.nav__link__text Support the app!
-
-					//- TGLD
-					a.nav__link.link-tgld#help-tour-step--14(
-						href="https://www.theguitarlickdatabase.com"
-						target="_blank"
-						rel="external nofollow noopener noreferrer"
-						)
-						p.nav__link__text The Guitar Lick Database
-						fa-icon(:icon="['far', 'external-link-square-alt']")
-
-			//- Light/dark switch
-			div.dark-mode-toggle(
-				v-mods="{ isDarkModeOn }"
-				@click="$store.commit('toggleIsDarkModeOn')"
-				)
-				fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
-				div.dark-mode-toggle__switch
-				fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
-
-		//----------------------------------------------------------------------
-		//- Page content
-		//----------------------------------------------------------------------
-
-		//- Tools & settings
-		component(
-			:is="isMobileDevice ? 'VModal' : 'div'"
-
-			:is-open="isModalSettingsOpen"
-			@close="isModalSettingsOpen = false"
-			)
-			FretboardSettings.fretboard-settings
-
-		//- Fretboard
-		FretboardViewer#help-tour-step--11(
-			:is-flipped="isFretboardFlipped && !isMobileDevice"
-			:is-vertical="isMobileDevice && !isLayoutLandscape"
-			)
-
-		//- Scales & arpeggios
-		component(
-			:is="isMobileDevice ? 'VModal' : 'div'"
-
-			:is-open="isModalScalesOpen"
-			@close="isModalScalesOpen = false"
-			)
-			ScalesList.fretboard-scales#help-tour--scales
+		:is-open="isModalScalesOpen"
+		@close="isModalScalesOpen = false"
+		)
+		ScalesList.fretboard-scales
 
 	//----------------------------------------------------------------------
 	//- Mobile actions & modals
@@ -134,7 +120,6 @@ import { mediaQueries   } from '@/stores/main'
 import FretboardSettings  from '@/components/FretboardSettings'
 import FretboardViewer    from '@/components/FretboardViewer'
 import ScalesList         from '@/components/ScalesList'
-import HelpTour           from '@/components/HelpTour'
 
 export default {
 	name: 'App',
@@ -143,7 +128,6 @@ export default {
 		FretboardSettings,
 		FretboardViewer,
 		ScalesList,
-		HelpTour,
 	},
 
 	data() {
@@ -223,13 +207,6 @@ export default {
 		{
 			EventBus.$emit('keypress', event.key);
 		},
-		startHelpTour()
-		{
-			const helpTour = this.$tours['help'];
-
-			if (helpTour.currentStep == -1)
-				helpTour.start();
-		},
 	},
 }
 
@@ -248,6 +225,8 @@ export default {
 .App {
 	flex: 1 1 auto;
 
+	padding: 20px;
+
 	background-color: var(--color--bg);
 
 	@include mq($until: desktop, $and: '(orientation: landscape)')
@@ -255,12 +234,8 @@ export default {
 		display: flex;
 		align-items: center;
 	}
-}
 
-.page {
-	padding: 20px;
-
-	@include mq($from: desktop)
+	@include mq($until: desktop)
 	{
 		padding-bottom: 0;
 	}
@@ -287,7 +262,7 @@ export default {
 .header__nav {
 	display: flex;
 	align-items: baseline;
-	@include space-children-h(26px);
+	@include space-children-h(20px);
 }
 
 .logo {
@@ -327,15 +302,10 @@ export default {
 	@include space-children-h(20px);
 }
 
-.nav__social {
-	display: flex;
-	@include space-children-h(10px);
-}
-
 .nav__link {
 	display: flex;
 	align-items: center;
-	@include space-children-h(4px);
+	@include space-children-h(6px);
 
 	font-size: 1.4rem;
 

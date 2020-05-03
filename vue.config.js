@@ -57,7 +57,6 @@ module.exports = {
 				'heart':                    'pro-regular',
 				'mandolin':                 'pro-regular',
 				'moon':                     'pro-solid',
-				'question-circle':          'pro-regular',
 				'sun':                      'pro-solid',
 				'twitter':                  'free-brands',
 

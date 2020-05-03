@@ -26,12 +26,6 @@ const state = {
 	isDarkModeOn:      storage.get('isDarkModeOn', window.matchMedia('(prefers-color-scheme: dark)').matches, v => typeof v == 'boolean'),
 	isMobileDevice:    mediaQueries.isMobileDevice.matches,
 	isLayoutLandscape: mediaQueries.isLayoutLandscape.matches,
-
-	/**
-	 * Allows v-click-outside to ignore mouseup
-	 * events on the fret slider during the help tour
-	 */
-	isFretRangeSliderClicked: false,
 };
 
 /**
@@ -50,7 +44,7 @@ const mutations = {
 };
 
 /**
- * Automatically save some state properties
+ * Automatically save some properties
  * in the local storage upon certain mutations
  */
 const storeOnMutation = store => store.subscribe(function(mutation, state)
