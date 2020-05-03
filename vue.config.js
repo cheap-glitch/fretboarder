@@ -56,7 +56,7 @@ module.exports = {
 				'guitar-electric':          'pro-regular',
 				'heart':                    'pro-regular',
 				'mandolin':                 'pro-regular',
-				'moon':                     'pro-solid',
+				'moon':                    ['pro-solid', 'pro-regular'],
 				'sun':                      'pro-solid',
 				'twitter':                  'free-brands',
 
