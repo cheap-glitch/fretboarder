@@ -199,9 +199,9 @@ export default {
 		&:not(.is-last-string) { height: 42px; }
 	}
 
-	$width--string:  1px;
-	$width--fret:    4px;
-	$width--nut:    10px;
+	$width--string: 2px;
+	$width--fret:   3px;
+	$width--nut:    8px;
 
 	// String
 	&:not(.is-open-string) {
