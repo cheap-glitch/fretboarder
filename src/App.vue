@@ -235,11 +235,6 @@ export default {
 		display: flex;
 		align-items: center;
 	}
-
-	@include mq($from: desktop)
-	{
-		padding-bottom: 0;
-	}
 }
 
 @include mq($from: desktop)
