@@ -314,16 +314,11 @@ export default {
 		transform: translateX(-25px);
 	}
 
-	&:not(.is-fretboard-vertical) {
-		@media (orientation: landscape)
-		{
-			padding-right: 20px;
-		}
-	}
-
 	@include mq($until: desktop)
 	{
 		justify-content: center;
+
+		&:not(.is-fretboard-vertical) { padding-right: 20px; }
 	}
 }
 
