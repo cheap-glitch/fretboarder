@@ -205,6 +205,8 @@ export default {
 
 	// String
 	&:not(.is-open-string) {
+		transition: border-color 0.2s;
+
 		&.is-fretboard-vertical       { border-left: $width--string solid var(--color--string); }
 		&:not(.is-fretboard-vertical) { border-top:  $width--string solid var(--color--string); }
 	}
@@ -217,6 +219,8 @@ export default {
 			position: absolute;
 
 			background-color: var(--color--fret);
+
+			transition: background-color 0.2s;
 		}
 
 		&.is-fretboard-vertical{
@@ -251,6 +255,8 @@ export default {
 			position: absolute;
 
 			background-color: var(--color--fret);
+
+			transition: background-color 0.2s;
 		}
 
 		&.is-fretboard-vertical::after {

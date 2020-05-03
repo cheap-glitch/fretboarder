@@ -86,7 +86,13 @@ div.App(:style="colorscheme")
 		//----------------------------------------------------------------------
 
 		//- Tools & settings
-		FretboardSettings.fretboard-settings(v-if="!isMobileDevice")
+		component(
+			:is="isMobileDevice ? 'VModal' : 'div'"
+
+			:is-open="isModalSettingsOpen"
+			@close="isModalSettingsOpen = false"
+			)
+			FretboardSettings.fretboard-settings
 
 		//- Fretboard
 		FretboardViewer#help-tour-step--11(
@@ -312,6 +318,8 @@ export default {
 .logo__text {
 	font-size: 24px;
 	font-weight: bold;
+
+	transition: color 0.2s;
 }
 
 .nav {
