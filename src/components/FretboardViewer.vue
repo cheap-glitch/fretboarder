@@ -302,7 +302,11 @@ export default {
 	display: grid;
 
 	&.is-fretboard-vertical {
-		margin-top: 20px;
+		margin: 20px 0;
+
+		&.is-displaying-fret-nbs {
+			transform: translateX(-25px);
+		}
 	}
 
 	&:not(.is-fretboard-vertical) {
