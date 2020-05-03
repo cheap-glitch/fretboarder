@@ -7,9 +7,15 @@
 <template lang="pug">
 
 div.VModal(ref="modal")
+
 	transition(name="fade"): div.modal(v-if="isModalOpen")
-		div.modal__button-close(@click.left="$emit('close')"): fa-icon(:icon="['far', 'arrow-left']")
-		slot
+
+		div.modal__header
+			div.modal__close(@click.left="$emit('close')"): fa-icon(:icon="['far', 'arrow-left']")
+			h1.modal__title {{ title }}
+
+		div.modal__content
+			slot
 
 </template>
 <!--}}}-->
@@ -26,6 +32,10 @@ export default {
 	name: 'VModal',
 
 	props: {
+		title: {
+			type: String,
+			required: true,
+		},
 		isOpen: {
 			type: Boolean,
 			default: false,
@@ -41,12 +51,7 @@ export default {
 	watch: {
 		isOpen()
 		{
-			// Lock the scrolling on the body
-			if (this.isModalOpen)
-				enableBodyScroll(this.$refs.modal);
-			else
-				disableBodyScroll(this.$refs.modal);
-
+			(this.isModalOpen ? enableBodyScroll : disableBodyScroll)(this.$refs.modal);
 			this.isModalOpen = !this.isModalOpen;
 		}
 	},
@@ -72,21 +77,33 @@ export default {
 	right: 0;
 	bottom: 0;
 
-	padding: 0 20px 20px 20px;
-
 	background-color: var(--color--bg--accent);
 
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
 
-.modal__button-close {
-	margin-bottom: 10px;
-	padding: 20px 0;
+.modal__header {
+	position: relative;
+
+	margin-bottom: 20px;
 
 	color: var(--color--text);
+}
 
-	cursor: pointer;
+.modal__title {
+	position: absolute;
+	top: 50%;
+	right: 50%;
+	transform: translate(50%, -50%);
+
+	font-weight: bold;
+}
+
+.modal__close {
+	padding: 20px;
+
+	width: 60px;
 }
 
 </style>

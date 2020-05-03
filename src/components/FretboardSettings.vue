@@ -217,51 +217,42 @@ export default {
  * -----------------------------------------------------------------------------
  */
 
-.wrapper {
-	@include mq($until: desktop)
-	{
-		border: 1px solid var(--color--border);
-	}
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-		justify-content: space-between;
-	}
-}
-
 .settings {
-	@include mq($from: 400px)
-	{
-		display: grid;
-		grid-template-areas: "instrument tuning"
-		                     "slider     slider";
-	}
+	border-top: 1px solid var(--color--border);
 }
 
 .toolbar {
 	display: grid;
+	grid-template: 1fr 1fr / 1fr 1fr;
+}
 
-	@include mq($until: 400px)
-	{
-		grid-template: 1fr 1fr / 1fr 1fr;
-
-		.VButton:nth-child(1),
-		.VButton:nth-child(2) {
-			border-bottom: 1px solid var(--color--border);
-		}
+@include mq($from: 400px)
+{
+	.settings {
+		display: grid;
+		grid-template-areas: "instrument tuning"
+		                     "slider     slider";
 	}
 
-	grid-template: 1fr / repeat(4, 1fr);
+	.toolbar {
+		grid-template: 1fr / repeat(4, 1fr);
+	}
 }
 
 @include mq($from: desktop)
 {
+	.wrapper {
+		display: flex;
+		justify-content: space-between;
+	}
+
 	.toolbar,
 	.settings {
 		display: flex;
 		align-items: center;
 		@include space-children-h(10px);
+
+		border: none;
 	}
 }
 
@@ -276,20 +267,30 @@ export default {
 	.select-tuning      { grid-area: tuning;     }
 	.slider-frets-range { grid-area: slider;     }
 
+	.VButton            { padding: 20px;         }
+	.slider-frets-range { padding: 20px 40px;    }
+
+	.VButton,
 	.select-tuning,
 	.select-instrument,
 	.slider-frets-range {
 		border-bottom: 1px solid var(--color--border);
 	}
 
-	.select-tuning,
-	.VButton:not(:first-child) {
-		border-left: 1px solid var(--color--border);
+	@include mq($until: 400px)
+	{
+		.VButton:nth-child(2),
+		.VButton:nth-child(4) {
+			border-left: 1px solid var(--color--border);
+		}
 	}
 
-	.VButton,
-	.slider-frets-range {
-		padding: 20px;
+	@include mq($from: 400px)
+	{
+		.select-tuning,
+		.VButton:not(:first-child) {
+			border-left: 1px solid var(--color--border);
+		}
 	}
 }
 

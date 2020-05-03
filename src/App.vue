@@ -75,7 +75,9 @@ div.App(:style="colorscheme")
 	component(
 		:is="isMobileDevice ? 'VModal' : 'div'"
 
+		title="Settings"
 		:is-open="isModalSettingsOpen"
+
 		@close="isModalSettingsOpen = false"
 		)
 		FretboardSettings.fretboard-settings
@@ -90,7 +92,9 @@ div.App(:style="colorscheme")
 	component(
 		:is="isMobileDevice ? 'VModal' : 'div'"
 
+		title="Scales"
 		:is-open="isModalScalesOpen"
+
 		@close="isModalScalesOpen = false"
 		)
 		ScalesList.fretboard-scales

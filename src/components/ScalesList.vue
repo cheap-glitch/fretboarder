@@ -94,6 +94,11 @@ export default {
 .ScalesList {
 	@include center-column;
 	@include space-children-v(20px);
+
+	@include mq($until: desktop)
+	{
+		padding: 0 20px 20px 20px;
+	}
 }
 
 .scales {
