@@ -7,7 +7,7 @@
 <template lang="pug">
 
 div.FretboardViewer(
-	v-mods="{ isVertical, isFlipped, isDisplayingFretNbs }"
+	v-mods="{ isFretboardVertical, isDisplayingFretNbs }"
 	:style="[minWidth, grid, inlays]"
 	)
 
@@ -16,10 +16,7 @@ div.FretboardViewer(
 		v-for="fret in frets"
 		:key="`fret--${fret.fret}-${fret.string+1}`"
 
-		v-bind="fret"
-		:is-fretboard-flipped="isFlipped"
-		:is-fretboard-vertical="isVertical"
-		)
+		v-bind="{ ...fret, nbStrings, fretRange, isFretboardVertical, isFretboardFlipped, isDisplayingNotesName }")
 
 	//- Fret numbers
 	template(v-if="isDisplayingFretNbs")
@@ -27,8 +24,8 @@ div.FretboardViewer(
 			v-for="(fret, index) in fretNumbers"
 			:key="`fret-number--${fret}`"
 
-			:style="isVertical ? { 'grid-column-start': 1, 'grid-row-start': index + 1 } : {}"
-			v-mods="{ isVertical }"
+			:style="isFretboardVertical ? { 'grid-column-start': 1, 'grid-row-start': index + 1 } : {}"
+			v-mods="{ isFretboardVertical }"
 			)
 			p.fret-number__text {{ fret }}
 
@@ -54,7 +51,7 @@ export default {
 	},
 
 	props: {
-		isVertical: {
+		isFretboardVertical: {
 			type: Boolean,
 			default: false,
 		},
@@ -65,7 +62,7 @@ export default {
 			fretMinWidth:        25,
 			fretMinHeight:       40,
 
-			openStringFretsSize: 30,
+			openStringFretsSize: 40,
 		}
 	},
 
@@ -76,20 +73,20 @@ export default {
 			 * The width of the fretboard must be so that the width
 			 * of the smallest fret is equal or greater than a set width
 			 */
-			const fbWidth = (this.isVertical ? this.fretMinHeight : this.fretMinWidth) * (this.nbFrets / this.fretsSizes.slice(-1)[0])
+			const fbWidth = (this.isFretboardVertical ? this.fretMinHeight : this.fretMinWidth) * (this.nbFrets / this.fretsSizes.slice(-1)[0])
 			              + (this.fretMin == 0 ? this.openStringFretsSize : 0);
 
-			return { [this.isVertical ? 'min-height': 'min-width']: `${Math.ceil(fbWidth)}px` };
+			return { [this.isFretboardVertical ? 'min-height': 'min-width']: `${Math.ceil(fbWidth)}px` };
 		},
 		grid()
 		{
 			// Add the open-string fret to the list of frets if needed
-			const fretsList = (this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []).concat(this.fretsSizes.map(size => `${size}fr`));
+			const fretsList = [...(this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []), ...this.fretsSizes.map(size => `${size}fr`)];
 
 			// Build the grid layout
-			const fretsGrid = (this.isFlipped ? fretsList.reverse() : fretsList).join(' ');
+			const fretsGrid = ((this.isFretboardFlipped && !this.isFretboardVertical) ? fretsList.reverse() : fretsList).join(' ');
 
-			return this.isVertical
+			return this.isFretboardVertical
 				? { 'grid-template-columns': `${this.isDisplayingFretNbs ? 'auto' : ''} repeat(${this.nbStrings - 1}, 42px) 0`, 'grid-template-rows': fretsGrid }
 				: { 'grid-template-columns': fretsGrid };
 		},
@@ -151,7 +148,7 @@ export default {
 			const addFret = (string, _fret) =>
 			{
 				// Invert the order of the frets if the fretboard is flipped
-				const fret = this.isFlipped ? this.fretMin + this.fretMax - _fret : _fret;
+				const fret = (this.isFretboardFlipped && !this.isFretboardVertical) ? this.fretMin + this.fretMax - _fret : _fret;
 				const note = stringNotes[string][fret];
 
 				// Get the list of scales the note of the fret belongs to
@@ -221,16 +218,25 @@ export default {
 				});
 			}
 
-			if (this.isVertical)
+			if (this.isFretboardVertical)
 			{
-				for (let fret=this.fretMin;         fret<=this.fretMax; fret++)
-				for (let string=this.nbStrings - 1; string>=0;          string--)
-					addFret(string, fret);
+				if (this.isFretboardFlipped)
+				{
+					for (let fret   = this.fretMin;       fret   <= this.fretMax; fret++)
+					for (let string = this.nbStrings - 1; string >= 0;            string--)
+						addFret(string, fret);
+				}
+				else
+				{
+					for (let fret   = this.fretMin; fret   <= this.fretMax;   fret++)
+					for (let string = 0;            string <  this.nbStrings; string++)
+						addFret(string, fret);
+				}
 			}
 			else
 			{
-				for (let string=this.nbStrings - 1; string>=0;          string--)
-				for (let fret=this.fretMin;         fret<=this.fretMax; fret++)
+				for (let string = this.nbStrings - 1; string >= 0;            string--)
+				for (let fret   = this.fretMin;       fret   <= this.fretMax; fret++)
 					addFret(string, fret);
 			}
 
@@ -238,7 +244,7 @@ export default {
 		},
 		scales()
 		{
-			return this.activeScales.map(scale =>
+			return this.$store.getters['scales/activeScales'].map(scale =>
 			{
 				const notes          = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality);
 				const posCoordinates = scale.type == 'arpeggio'
@@ -274,27 +280,22 @@ export default {
 		fretNumbers()
 		{
 			return [...Array(this.nbFrets).keys()]
-				.map(index => this.isFlipped ? this.fretMax - index : this.fretMin + index)
+				.map(index => (this.isFretboardFlipped && !this.isFretboardVertical) ? this.fretMax - index : this.fretMin + index)
 				.map(fret  => fret == 0 ? '' : fret);
 		},
 		tuningNotes()
 		{
 			return data.tunings[this.instrument][this.tuning] || data.tunings[this.instrument]['standard'];
 		},
-		isFlipped()
-		{
-			return this.isFretboardFlipped && !this.isVertical;
-		},
-		...get([
+
+		...get('fretboard', [
 			'instrument',
 			'tuning',
 			'fretRange',
 
-			'scales/activeScales',
-
-			'isMobileDevice',
-			'isDisplayingFretNbs',
 			'isFretboardFlipped',
+			'isDisplayingFretNbs',
+			'isDisplayingNotesName',
 		]),
 	},
 }
@@ -309,36 +310,33 @@ export default {
 .FretboardViewer {
 	display: grid;
 
-	&:not(.is-vertical) {
-		&:not(.is-flipped) { margin-left:  14px; }
-		&.is-flipped       { margin-right: 16px; }
-	}
-
-	&.is-vertical {
-		margin-top: 20px;
+	&.is-fretboard-vertical.is-displaying-fret-nbs {
+		transform: translateX(-25px);
 	}
 
 	@include mq($until: desktop)
 	{
 		justify-content: center;
+
+		&:not(.is-fretboard-vertical) { padding-right: 20px; }
 	}
 }
 
 .fret-number {
 	display: flex;
 
-	&:not(.is-vertical) {
-		justify-content: center;
-		align-items: flex-end;
-
-		height: 50px;
-	}
-
-	&.is-vertical {
+	&.is-fretboard-vertical {
 		justify-content: flex-start;
 		align-items: center;
 
 		width: 50px;
+	}
+
+	&:not(.is-fretboard-vertical) {
+		justify-content: center;
+		align-items: flex-end;
+
+		height: 50px;
 	}
 }
 

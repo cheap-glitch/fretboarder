@@ -31,8 +31,9 @@ p,
 a,
 h1,
 h2,
-li {
-	font-family: "IBM Plex", "system";
+li,
+.vue-slider-dot-tooltip-inner {
+	font-family: "IBM Plex Sans", "Fira Sans", "San Francisco", "Segoe UI", "Roboto", "Cantarell", "Helvetica Neue", ui-sans-serif, sans-serif;
 
 	cursor: default;
 	user-select: none;

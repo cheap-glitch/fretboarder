@@ -93,7 +93,7 @@ div.ScalesListItem
 					tooltip-placement="bottom"
 
 					:is-active="isFocused"
-					@click="toggleFocusScale(id)"
+					@click="$store.commit('scales/toggleFocusScale', id)"
 					)
 				//- Show intersections only
 				VButton.toolbar__item(
@@ -118,7 +118,7 @@ div.ScalesListItem
 					tooltip-placement="bottom"
 
 					:is-disabled="nbScales == MAX_NB_SCALES"
-					@click="addScale(id)"
+					@click="$store.commit('scales/addScale', id)"
 					)
 				//- Remove
 				VButton.toolbar__item(
@@ -127,22 +127,21 @@ div.ScalesListItem
 					tooltip="Remove"
 					tooltip-placement="bottom"
 
-					@click="removeScale(id)"
+					@click="$store.commit('scales/removeScale', id)"
 					)
 
 	//- Interval tooltips
-	template(v-if="!isMobileDevice")
-		VTooltip(
-			v-for="(interval, index) in intervals"
-			:key="`scale-${id}-interval--${index}--tooltip`"
+	VTooltip.intervals-tooltip(
+		v-for="(interval, index) in intervals"
+		:key="`scale-${id}-interval--${index}--tooltip`"
 
-			:is-open="hoveredInterval === index"
+		:is-open="hoveredInterval === index"
 
-			:target="$refs.interval ? $refs.interval[index] : false"
-			placement="bottom"
-			:delay="500"
-			)
-			p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
+		:target="$refs.interval ? $refs.interval[index] : false"
+		placement="bottom"
+		:delay="500"
+		)
+		p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
 
 </template>
 <!--}}}-->
@@ -151,7 +150,6 @@ div.ScalesListItem
 <!--{{{ JavaScript -->
 <script>
 
-import { mapMutations }  from 'vuex'
 import { get }           from 'vuex-pathify'
 
 import data              from '@/modules/data'
@@ -251,10 +249,7 @@ export default {
 				})
 			];
 		},
-		...get([
-			'scales/scales',
-			'isMobileDevice',
-		]),
+		scales: get('scales/scales'),
 	},
 
 	created()
@@ -290,14 +285,8 @@ export default {
 		},
 		update(prop, value)
 		{
-			this.updateScale({ id: this.id, prop: prop, value: value });
+			this.$store.commit('scales/updateScale', { id: this.id, prop: prop, value: value });
 		},
-		...mapMutations('scales', [
-			'addScale',
-			'updateScale',
-			'toggleFocusScale',
-			'removeScale',
-		]),
 	}
 }
 
@@ -489,6 +478,13 @@ export default {
 		&:not(:last-child) {
 			border-right: 1px solid var(--color--border);
 		}
+	}
+}
+
+.intervals-tooltip {
+	@include mq($until: desktop)
+	{
+		display: none;
 	}
 }
 

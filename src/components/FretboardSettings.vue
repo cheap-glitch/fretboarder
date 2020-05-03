@@ -10,22 +10,21 @@ div.FretboardSettings
 
 	div.wrapper
 
-		div.toolbar
+		div.settings
 			//- Instrument & tuning
-			div.toolbar#help-tour-step--1
-				VSelect.select-instrument(
-					id="instrument"
-					:options="instrumentOptions"
-					v-model="instrument"
-					)
-				VSelect.select-tuning(
-					id="tuning"
-					:options="tuningsOptions"
-					v-model="tuning"
-					)
+			VSelect.select-instrument(
+				id="instrument"
+				:options="instrumentOptions"
+				v-model="instrument"
+				)
+			VSelect.select-tuning(
+				id="tuning"
+				:options="tuningsOptions"
+				v-model="tuning"
+				)
 
 			//- Frets range
-			div.fret-range-slider#help-tour-step--2: vue-slider(
+			div.slider-frets-range: vue-slider(
 				:min="0"
 				:max="24"
 				:interval="1"
@@ -36,12 +35,11 @@ div.FretboardSettings
 				:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
 				adsorb lazy
 
-				tooltip="hover"
+				:tooltip="isMobileDevice ? 'none' : 'hover'"
 				tooltip-placement="top"
 				:tooltip-formatter="tooltipFormatter"
 
 				v-model="fretRange"
-				@mousedown.left.native="$store.commit('setIsFretRangeSliderClicked', true)"
 				)
 
 		div.toolbar
@@ -50,25 +48,36 @@ div.FretboardSettings
 				:icon="['fal', 'list-ol']"
 				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
 				:is-active="isDisplayingFretNbs"
-				@click="$store.commit('toggleIsDisplayingFretNbs')"
+				@click="$store.commit('fretboard/toggleIsDisplayingFretNbs')"
 				)
 			//- Toggle note names
-			VButton#help-tour-step--3(
+			VButton(
 				icon="info-circle"
 				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
 				:is-active="isDisplayingNotesName"
-				@click="$store.commit('toggleIsDisplayingNotesName')"
+				@click="$store.commit('fretboard/toggleIsDisplayingNotesName')"
 				)
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
 				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
 				:is-flipped="!isFretboardFlipped"
-				@click="$store.commit('toggleIsFretboardFlipped')"
+				@click="$store.commit('fretboard/toggleIsFretboardFlipped')"
+				)
+			//- Toggle dark mode (mobile only)
+			VButton(
+				v-if="isMobileDevice"
+
+				icon="moon"
+				tooltip="Toggle dark mode"
+				:is-active="isDarkModeOn"
+				@click="$store.commit('toggleIsDarkModeOn')"
 				)
 			//- Export the fretboard
 			div#canvas-wrapper
 			VButton#button-export-menu(
+				v-if="!isMobileDevice"
+
 				icon="file-download"
 				:is-active="isExportMenuOpened"
 
@@ -80,6 +89,8 @@ div.FretboardSettings
 
 	//- Export menu
 	VTooltip(
+		v-if="!isMobileDevice"
+
 		target="button-export-menu"
 		placement="bottom"
 		:is-open="isExportMenuOpened"
@@ -97,7 +108,6 @@ div.FretboardSettings
 				each format in ['png', 'jpg', 'svg']
 					button.button.is-filled(@click.left=`exportFretboardToFile('${format}')`)
 						p.button__text= format.toUpperCase()
-
 
 </template>
 <!--}}}-->
@@ -126,18 +136,19 @@ export default {
 		{
 			return objectMap(data.tunings[this.instrument], key => ({ name: data.tuningsNames[key], value: key }));
 		},
-		...sync([
+		...sync('fretboard', [
 			'instrument',
 			'tuning',
 			'fretRange',
 		]),
-		...get([
-			'scales/activeScales',
-
-			'isDarkModeOn',
-			'isDisplayingNotesName',
+		...get('fretboard', [
 			'isDisplayingFretNbs',
+			'isDisplayingNotesName',
 			'isFretboardFlipped',
+		]),
+		...get([
+			'isDarkModeOn',
+			'isMobileDevice',
 		]),
 	},
 
@@ -180,7 +191,7 @@ export default {
 				this.fretRange[0],
 				this.fretRange[1],
 				data.tunings[this.instrument][this.tuning],
-				this.activeScales,
+				this.$store.getters['scales/activeScales'],
 				this.isFretboardFlipped,
 				this.isDisplayingNotesName,
 				format != 'svg',
@@ -201,26 +212,109 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.wrapper {
-	display: flex;
-	align-items: flex-end;
-	justify-content: space-between;
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
+.settings {
+	border-top: 1px solid var(--color--border);
 }
 
 .toolbar {
-	display: flex;
-	align-items: center;
-	@include space-children-h(10px);
+	display: grid;
+	grid-template: 1fr 1fr / 1fr 1fr;
 }
 
-.select-instrument { min-width: 180px; }
-.select-tuning     { min-width: 260px; }
+@include mq($from: 400px)
+{
+	.settings {
+		display: grid;
+		grid-template-areas: "instrument tuning"
+		                     "slider     slider";
+	}
 
-.fret-range-slider {
-	width: 300px;
-
-	margin-left: 10px;
+	.toolbar {
+		grid-template: 1fr / repeat(4, 1fr);
+	}
 }
+
+@include mq($from: desktop)
+{
+	.wrapper {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.toolbar,
+	.settings {
+		display: flex;
+		align-items: center;
+		@include space-children-h(10px);
+
+		border: none;
+	}
+}
+
+/**
+ * Tools & settings
+ * -----------------------------------------------------------------------------
+ */
+
+@include mq($until: desktop)
+{
+	.select-instrument  { grid-area: instrument; }
+	.select-tuning      { grid-area: tuning;     }
+	.slider-frets-range { grid-area: slider;     }
+
+	.VButton            { padding: 20px;         }
+	.slider-frets-range { padding: 20px 40px;    }
+
+	.VButton,
+	.select-tuning,
+	.select-instrument,
+	.slider-frets-range {
+		border-bottom: 1px solid var(--color--border);
+	}
+
+	@include mq($until: 400px)
+	{
+		.VButton:nth-child(2),
+		.VButton:nth-child(4) {
+			border-left: 1px solid var(--color--border);
+		}
+	}
+
+	@include mq($from: 400px)
+	{
+		.select-tuning,
+		.VButton:not(:first-child) {
+			border-left: 1px solid var(--color--border);
+		}
+	}
+}
+
+@include mq($from: desktop)
+{
+	.select-instrument {
+		min-width: 180px;
+	}
+
+	.select-tuning {
+		min-width: 260px;
+	}
+
+	.slider-frets-range {
+		width: 300px;
+
+		margin-left: 10px;
+	}
+}
+
+/**
+ * Export menu
+ * -----------------------------------------------------------------------------
+ */
 
 .export-menu__text {
 	max-width: 300px;

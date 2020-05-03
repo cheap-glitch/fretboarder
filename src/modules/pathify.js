@@ -4,27 +4,14 @@
  */
 
 import pathify           from 'vuex-pathify'
-
 import { objectForEach } from '@/modules/object'
 
 /**
- * Set custom mappings for Vuex Pathify:
- *
- * getters    foo
- * mutations  setFoo
- * actions    setFooAsync
+ * Configure vuex-pathify
  */
-pathify.options.mapping = function(type, name, format)
-{
-	switch(type)
-	{
-		case 'getters':   return name;
-		case 'mutations': return format.camel('set', name);
-		case 'actions':   return format.camel('set', name, 'async');
-	}
+pathify.options.deep    = false;
+pathify.options.mapping = 'simple';
 
-	return name;
-}
 export default pathify;
 
 /**

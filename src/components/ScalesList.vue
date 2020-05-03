@@ -9,9 +9,7 @@
 div.ScalesList
 
 	div.scales
-		div.scale__tools(
-			v-if="!isMobileDevice"
-			)
+		div.scale__tools
 			//- Hide all scales
 			VButton.scale__tools__hide-all(
 				v-show="scales.length >= 2"
@@ -34,7 +32,7 @@ div.ScalesList
 			)
 
 		//- Scales & arpeggios
-		ScalesListItem.scales__item(
+		ScalesListItem(
 			v-for="scale in scales"
 			:key="`scale--${scale.id}`"
 
@@ -47,7 +45,7 @@ div.ScalesList
 		) Click on the #[fa-icon(:icon="['far', 'plus-circle']")] button to add a new scale or arpeggio.
 
 	//- Add a new scale
-	VButton#help-tour-step--4(
+	VButton(
 		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"
@@ -77,10 +75,7 @@ export default {
 	},
 
 	computed: {
-		...get([
-			'scales/scales',
-			'isMobileDevice',
-		])
+		scales: get('scales/scales'),
 	},
 
 	created()
@@ -99,6 +94,11 @@ export default {
 .ScalesList {
 	@include center-column;
 	@include space-children-v(20px);
+
+	@include mq($until: desktop)
+	{
+		padding: 0 20px 20px 20px;
+	}
 }
 
 .scales {
@@ -111,8 +111,13 @@ export default {
 }
 
 .scale__tools {
-	display: flex;
-	justify-content: flex-end;
+	display: none;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		justify-content: flex-end;
+	}
 }
 
 .scale__tools__hide-all {

@@ -26,7 +26,7 @@ div.FretboardViewerFret
 					)
 				p {{ interval.name }}
 
-	div.fret(v-mods="{ isFretboardVertical, isFretboardFlipped, isOnLastString, isOpenString, isFirstFret, isFretOne }")
+	div.fret(v-mods="{ isFretboardVertical, isFretboardFlipped, isLastString, isOpenString, isFirstFret, isFretOne }")
 
 		//- Inlay
 		div.fret__inlay(v-if="isDisplayingInlay")
@@ -47,7 +47,7 @@ div.FretboardViewerFret
 		//- Note placeholder
 		div.fret__placeholder(
 			v-show="!isActive"
-			v-mods="{ isFretboardVertical, isFretboardFlipped, isOpenString, isOnLastString }"
+			v-mods="{ isFretboardVertical, isFretboardFlipped, isOpenString, isLastString }"
 			)
 			p.fret__placeholder__name {{ noteName }}
 
@@ -58,9 +58,7 @@ div.FretboardViewerFret
 <!--{{{ JavaScript -->
 <script>
 
-import { get }       from 'vuex-pathify'
-
-import data          from '@/modules/data'
+import data from '@/modules/data'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -91,6 +89,15 @@ export default {
 			type: Array,
 			required: true,
 		},
+		nbStrings: {
+			type: Number,
+			required: true,
+		},
+		fretRange: {
+			type: Array,
+			required: true,
+			validator: v => Array.isArray(v) && v.length == 2 && v.every(n => typeof n == 'number')
+		},
 		isHighlightedNote: {
 			type: Boolean,
 			default: false,
@@ -99,11 +106,15 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isFretboardVertical: {
+			type: Boolean,
+			default: false,
+		},
 		isFretboardFlipped: {
 			type: Boolean,
 			default: false,
 		},
-		isFretboardVertical: {
+		isDisplayingNotesName: {
 			type: Boolean,
 			default: false,
 		},
@@ -125,9 +136,9 @@ export default {
 		{
 			return this.scales.length > 0;
 		},
-		isOnLastString()
+		isLastString()
 		{
-			return this.string == 0;
+			return (this.isFretboardVertical && !this.isFretboardFlipped) ? this.string == this.nbStrings - 1 : this.string == 0;
 		},
 		isOpenString()
 		{
@@ -141,10 +152,6 @@ export default {
 		{
 			return this.fretRange[0] == 0 ? (this.fret == 1) : (this.fret == this.fretRange[0]);
 		},
-		...get([
-			'fretRange',
-			'isDisplayingNotesName',
-		]),
 	},
 
 	watch: {
@@ -176,122 +183,139 @@ export default {
 <style lang="scss" scoped>
 
 .fret {
-	display: flex;
-
 	position: relative;
 	z-index: 10;
 
-	border: 0 solid var(--color--fret);
+	&.is-fretboard-vertical                            { height: 100%; }
+	&:not(.is-fretboard-vertical):not(.is-last-string) { height: 42px; }
 
-	&.is-open-string {
-		display: block;
+	$width--nut:    8px;
+	$width--fret:   3px;
+	$width--string: 2px;
+
+	// String
+	&:not(.is-open-string) {
+		transition: border-color 0.2s;
+
+		&.is-fretboard-vertical       { border-left: $width--string solid var(--color--string); }
+		&:not(.is-fretboard-vertical) { border-top:  $width--string solid var(--color--string); }
 	}
 
-	// Horizontal fretboard
-	&:not(.is-fretboard-vertical) {
-		justify-content: center;
+	// Nut & first fret
+	&.is-fret-one,
+	&.is-first-fret {
+		&::before {
+			content: "";
+			position: absolute;
 
-		&:not(.is-on-last-string) {
-			height: 42px;
+			background-color: var(--color--fret);
+
+			transition: background-color 0.2s;
 		}
 
-		// String
-		&:not(.is-open-string) {
-			border-top-width: 2px;
-			border-top-color: var(--color--string);
+		&.is-fretboard-vertical{
+			&::before {
+				left: 0;
+				right: 0;
+				height: $width--fret;
+			}
+
+			&.is-fret-one::before { height: $width--nut; }
 		}
 
-		// Fret
-		&:not(.is-open-string):not(.is-on-last-string) {
-			&.is-fretboard-flipped        { border-left-width:  2px; }
-			&:not(.is-fretboard-flipped)  { border-right-width: 2px; }
-		}
+		&:not(.is-fretboard-vertical) {
+			&::before {
+				top: 0;
+				bottom: 0;
+				width: $width--fret;
+			}
 
-		// Nut
-		&.is-first-fret {
-			&.is-fretboard-flipped        { border-right-width: 2px; }
-			&:not(.is-fretboard-flipped)  { border-left-width:  2px; }
-		}
+			&.is-fret-one::before { width: $width--nut; }
 
-		&.is-fret-one {
-			&.is-fretboard-flipped        { border-right-width: 5px; }
-			&:not(.is-fretboard-flipped)  { border-left-width:  5px; }
+			&.is-fretboard-flipped::before       { right:  0; }
+			&:not(.is-fretboard-flipped)::before { left:   0; }
 		}
 	}
 
-	// Vertical fretboard
-	&.is-fretboard-vertical {
-		height: 100%;
-		align-items: center;
+	// Fret
+	&:not(.is-last-string):not(.is-open-string) {
+		&::after {
+			content: "";
+			position: absolute;
 
-		// String
-		&:not(.is-open-string) {
-			border-left-width: 2px;
-			border-left-color: var(--color--string--border);
+			background-color: var(--color--fret);
+
+			transition: background-color 0.2s;
 		}
 
-		// Fret
-		&:not(.is-open-string):not(.is-on-last-string) {
-			&.is-fretboard-flipped                { border-top-width:    2px; }
-			&:not(.is-fretboard-flipped)          { border-bottom-width: 2px; }
+		&.is-fretboard-vertical::after {
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: $width--fret;
 		}
 
-		// Nut
-		&:not(.is-on-last-string) {
-			&.is-first-fret {
-				&.is-fretboard-flipped        { border-bottom-width: 2px; }
-				&:not(.is-fretboard-flipped)  { border-top-width:    2px; }
+		&:not(.is-fretboard-vertical) {
+			&::after {
+				top: 0;
+				bottom: 0;
+				width: $width--fret;
 			}
 
-			&.is-fret-one {
-				&.is-fretboard-flipped        { border-bottom-width: 5px; }
-				&:not(.is-fretboard-flipped)  { border-top-width:    5px; }
-			}
+			&.is-fretboard-flipped::after       { left:    0; }
+			&:not(.is-fretboard-flipped)::after { right:   0; }
 		}
 	}
 }
 
-.fret__note {
+.fret__note,
+.fret__placeholder {
 	position: absolute;
+	z-index: 20;
 
+	&.is-open-string {
+		&.is-fretboard-vertical {
+			top: 0;
+			left: 0;
+			transform: translateX(-50%);
+		}
+
+		&:not(.is-fretboard-vertical) {
+			top: 0;
+			transform: translateY(-50%);
+
+			&.is-fretboard-flipped       { right: 0; }
+			&:not(.is-fretboard-flipped) { left:  0; }
+		}
+	}
+
+	&:not(.is-open-string) {
+		transform: translate(-50%, -50%);
+
+		&.is-fretboard-vertical       { top: 50%; left:   0; }
+		&:not(.is-fretboard-vertical) { top:   0; left: 50%; }
+	}
+}
+
+.fret__note {
 	@include square(30px);
 
-	transition: border-radius 0.2s, filter 0.2s;
-
-	&:not(.is-active) {
-		opacity: 0;
-	}
+	transition: opacity 0.2s, border-radius 0.2s, filter 0.2s;
 
 	&.is-active:hover {
 		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));
 	}
 
+	&:not(.is-active) {
+		opacity: 0;
+	}
+
 	&:not(.is-highlighted-note) {
 		border-radius: 50%;
-	}
-
-	&:not(.is-fretboard-vertical) {
-		transform: translateY(-50%);
-	}
-
-	&.is-fretboard-vertical {
-		transform: translateX(-50%);
-	}
-
-	&.is-open-string {
-		right: 100%;
-		transform: translate(50%, -50%);
-	}
-
-	&.is-open-string.is-fretboard-flipped {
-		left: 100%;
-		transform: translate(-50%, -50%);
 	}
 }
 
 .fret__placeholder {
-	position: absolute;
-
 	@include circle(30px);
 
 	border: 2px dashed var(--color--border);
@@ -302,32 +326,6 @@ export default {
 		opacity: 0;
 		transition: opacity 0.2s;
 		&:hover { opacity: 1; }
-
-		&:not(.is-fretboard-vertical) {
-			right: 50%;
-			transform: translate(50%, -50%);
-		}
-
-		&.is-fretboard-vertical {
-			left: 0;
-			transform: translateX(-50%);
-		}
-	}
-
-	&.is-open-string {
-		&:not(.is-fretboard-vertical) {
-			&:not(.is-fretboard-flipped) {
-				transform: translate(-50%, -50%);
-			}
-
-			&.is-fretboard-flipped {
-				transform: translate(50%, -50%);
-			}
-		}
-
-		&.is-fretboard-vertical {
-			transform: translate(-50%, -50%);
-		}
 	}
 }
 
