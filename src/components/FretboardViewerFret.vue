@@ -300,7 +300,7 @@ export default {
 .fret__note {
 	@include square(30px);
 
-	transition: border-radius 0.2s, filter 0.2s;
+	transition: opacity 0.2s, border-radius 0.2s, filter 0.2s;
 
 	&.is-active:hover {
 		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));

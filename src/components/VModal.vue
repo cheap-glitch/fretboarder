@@ -12,7 +12,7 @@ div.VModal(ref="modal")
 
 		div.modal__header
 			div.modal__close(@click.left="$emit('close')"): fa-icon(:icon="['far', 'arrow-left']")
-			h1.modal__title {{ title }}
+			h1.modal__title {{ modalTitle }}
 
 		div.modal__content
 			slot
@@ -32,7 +32,7 @@ export default {
 	name: 'VModal',
 
 	props: {
-		title: {
+		modalTitle: {
 			type: String,
 			required: true,
 		},

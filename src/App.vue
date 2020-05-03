@@ -75,7 +75,7 @@ div.App(:style="colorscheme")
 	component(
 		:is="isMobileDevice ? 'VModal' : 'div'"
 
-		title="Settings"
+		modal-title="Settings"
 		:is-open="isModalSettingsOpen"
 
 		@close="isModalSettingsOpen = false"
@@ -89,7 +89,7 @@ div.App(:style="colorscheme")
 	component(
 		:is="isMobileDevice ? 'VModal' : 'div'"
 
-		title="Scales"
+		modal-title="Scales"
 		:is-open="isModalScalesOpen"
 
 		@close="isModalScalesOpen = false"

@@ -191,7 +191,7 @@ export default {
 				this.fretRange[0],
 				this.fretRange[1],
 				data.tunings[this.instrument][this.tuning],
-				this.$store.scales.activeScales,
+				this.$store.getters['scales/activeScales'],
 				this.isFretboardFlipped,
 				this.isDisplayingNotesName,
 				format != 'svg',
