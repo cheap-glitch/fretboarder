@@ -236,7 +236,7 @@ export default {
 		align-items: center;
 	}
 
-	@include mq($until: desktop)
+	@include mq($from: desktop)
 	{
 		padding-bottom: 0;
 	}

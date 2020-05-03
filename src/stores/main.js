@@ -46,7 +46,7 @@ const storageMap = {
 		'^(toggleIs|is)DarkModeOn$': 'isDarkModeOn',
 	},
 	scales: {
-		'*': 'scales',
+		'.*': 'scales',
 	},
 	fretboard: {
 		'^tuning$':     'tuning',

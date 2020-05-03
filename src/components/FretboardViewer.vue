@@ -16,7 +16,7 @@ div.FretboardViewer(
 		v-for="fret in frets"
 		:key="`fret--${fret.fret}-${fret.string+1}`"
 
-		v-bind="{ ...fret, fretRange, isFretboardVertical, isFretboardFlipped, isDisplayingNotesName }")
+		v-bind="{ ...fret, nbStrings, fretRange, isFretboardVertical, isFretboardFlipped, isDisplayingNotesName }")
 
 	//- Fret numbers
 	template(v-if="isDisplayingFretNbs")
@@ -62,7 +62,7 @@ export default {
 			fretMinWidth:        25,
 			fretMinHeight:       40,
 
-			openStringFretsSize: 30,
+			openStringFretsSize: 40,
 		}
 	},
 
@@ -81,10 +81,10 @@ export default {
 		grid()
 		{
 			// Add the open-string fret to the list of frets if needed
-			const fretsList = (this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []).concat(this.fretsSizes.map(size => `${size}fr`));
+			const fretsList = [...(this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []), ...this.fretsSizes.map(size => `${size}fr`)];
 
 			// Build the grid layout
-			const fretsGrid = (this.isFretboardFlipped ? fretsList.reverse() : fretsList).join(' ');
+			const fretsGrid = ((this.isFretboardFlipped && !this.isFretboardVertical) ? fretsList.reverse() : fretsList).join(' ');
 
 			return this.isFretboardVertical
 				? { 'grid-template-columns': `${this.isDisplayingFretNbs ? 'auto' : ''} repeat(${this.nbStrings - 1}, 42px) 0`, 'grid-template-rows': fretsGrid }
@@ -148,7 +148,7 @@ export default {
 			const addFret = (string, _fret) =>
 			{
 				// Invert the order of the frets if the fretboard is flipped
-				const fret = this.isFretboardFlipped ? this.fretMin + this.fretMax - _fret : _fret;
+				const fret = (this.isFretboardFlipped && !this.isFretboardVertical) ? this.fretMin + this.fretMax - _fret : _fret;
 				const note = stringNotes[string][fret];
 
 				// Get the list of scales the note of the fret belongs to
@@ -220,14 +220,23 @@ export default {
 
 			if (this.isFretboardVertical)
 			{
-				for (let fret=this.fretMin;         fret<=this.fretMax; fret++)
-				for (let string=this.nbStrings - 1; string>=0;          string--)
-					addFret(string, fret);
+				if (this.isFretboardFlipped)
+				{
+					for (let fret   = this.fretMin;       fret   <= this.fretMax; fret++)
+					for (let string = this.nbStrings - 1; string >= 0;            string--)
+						addFret(string, fret);
+				}
+				else
+				{
+					for (let fret   = this.fretMin; fret   <= this.fretMax;   fret++)
+					for (let string = 0;            string <  this.nbStrings; string++)
+						addFret(string, fret);
+				}
 			}
 			else
 			{
-				for (let string=this.nbStrings - 1; string>=0;          string--)
-				for (let fret=this.fretMin;         fret<=this.fretMax; fret++)
+				for (let string = this.nbStrings - 1; string >= 0;            string--)
+				for (let fret   = this.fretMin;       fret   <= this.fretMax; fret++)
 					addFret(string, fret);
 			}
 
@@ -271,7 +280,7 @@ export default {
 		fretNumbers()
 		{
 			return [...Array(this.nbFrets).keys()]
-				.map(index => this.isFretboardFlipped ? this.fretMax - index : this.fretMin + index)
+				.map(index => (this.isFretboardFlipped && !this.isFretboardVertical) ? this.fretMax - index : this.fretMin + index)
 				.map(fret  => fret == 0 ? '' : fret);
 		},
 		tuningNotes()
@@ -303,6 +312,13 @@ export default {
 
 	&.is-fretboard-vertical.is-displaying-fret-nbs {
 		transform: translateX(-25px);
+	}
+
+	&:not(.is-fretboard-vertical) {
+		@media (orientation: landscape)
+		{
+			padding-right: 20px;
+		}
 	}
 
 	@include mq($until: desktop)
