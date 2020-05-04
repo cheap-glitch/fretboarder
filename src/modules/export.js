@@ -39,7 +39,8 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	let gradients         = [];
 
 	// Helper functions to generate XML
-	const getAttrsString  = attrs                        => Object.keys(attrs).reduce((str, attr) => attrs[attr] ? `${str} ${attr}="${attrs[attr]}"` : str, '');
+	const camel2Kebab     = str                          => str.replace(/[A-Z]/g, character => `-${character.toLowerCase()}`);
+	const getAttrsString  = attrs                        => Object.keys(attrs).reduce((str, attr) => attrs[attr] ? `${str} ${camel2Kebab(attr)}="${attrs[attr]}"` : str, '');
 	const openTag         = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)}>`);
 	const closeTag        = (xml, tag)                   => xml.push(`</${tag}>`);
 	const appendSingleTag = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)} />`);
@@ -63,6 +64,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	// Colorscheme
 	const palette = objectMapToObj(colorscheme, (key, colors) => colors[isDarkModeOn ? 1 : 0]);
 	const colors  = {
+		bg:         palette['--color--bg'],
 		inlay:      palette['--color--bg--accent'],
 		string:     palette['--color--string'],
 		fret:       palette['--color--fret'],
@@ -80,6 +82,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 		width:   isSizeFixed ? svgWidth  : '',
 		height:  isSizeFixed ? svgHeight : '',
 		viewBox: `0 0 ${svgWidth} ${svgHeight}`,
+		style:   `background-color: ${colors.bg}`,
 	});
 
 	// Embed some basic styles for text
@@ -91,7 +94,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	appendFullTag(svg, 'style', textStyles.join(' '), {});
 
 	// Apply a transformation to flip the whole SVG if needed
-	if (isFretboardFlipped) openTag(svg, 'g', { 'transform': `scale(-1, 1) translate(-${svgWidth}, 0)` });
+	if (isFretboardFlipped) openTag(svg, 'g', { transform: `scale(-1, 1) translate(-${svgWidth}, 0)` });
 
 	// Return the y position of a fret
 	const getFretY = fret => !fret ? 0 : fretWidth*((3*nbFrets - 1)/(2*nbFrets - 2) - fret/(nbFrets - 1));
@@ -105,14 +108,14 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 			let x = offset - getFretY(fret)/2 + marginRight;
 
 			// Flip the fret numbers if needed
-			if (isFretboardFlipped) openTag(svg, 'g', { 'transform': `translate(${svgWidth}, 0) scale(-1, 1)` });
+			if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 			appendFullTag(svg, 'text', fret, {
-				'x':           isFretboardFlipped ? (svgWidth - x) : x,
-				'y':           fretboardHeight + marginTop + 4,
-				'fill':        colors.fretNumber,
-				'class':       fretsWithInlays.includes(fret) ? 'bold' : 'normal',
-				'text-anchor': 'middle',
+				x:          isFretboardFlipped ? (svgWidth - x) : x,
+				y:          fretboardHeight + marginTop + 4,
+				fill:       colors.fretNumber,
+				class:      fretsWithInlays.includes(fret) ? 'bold' : 'normal',
+				textAnchor: 'middle',
 			});
 
 			if (isFretboardFlipped) closeTag(svg, 'g');
@@ -121,22 +124,22 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 		// Draw the next fret bar
 		offset += getFretY(fret + 1);
 		appendSingleTag(svg, 'line', {
-			'x1':              offset + marginRight,
-			'x2':              offset + marginRight,
-			'y1':              marginTop,
-			'y2':              fretboardHeight + marginTop,
-			'stroke':          colors.fret,
-			'stroke-width':    2,
-			'vector-effect':   'non-scaling-stroke',
-			'shape-rendering': 'crispEdges',
+			x1:             offset + marginRight,
+			x2:             offset + marginRight,
+			y1:             marginTop,
+			y2:             fretboardHeight + marginTop,
+			stroke:         colors.fret,
+			strokeWidth:    2,
+			vectorEffect:   'non-scaling-stroke',
+			shapeRendering: 'crispEdges',
 		});
 
 		// Function to draw the inlays
 		const drawInlay = y => appendSingleTag(svg, 'circle', {
-			'r':     inlaySize,
-			'cx':    offset - getFretY(fret)/2 + marginRight,
-			'cy':    y + marginTop,
-			'fill':  colors.inlay,
+			r:    inlaySize,
+			cx:   offset - getFretY(fret)/2 + marginRight,
+			cy:   y + marginTop,
+			fill: colors.inlay,
 		});
 
 		// Draw the inlays
@@ -208,26 +211,26 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	for (let string=0; string<nbStrings; string++)
 	{
 		appendSingleTag(svg, 'line', {
-			'x1':              marginRight,
-			'x2':              fretboardWidth + marginRight,
-			'y1':              string*fretHeight + marginTop,
-			'y2':              string*fretHeight + marginTop,
-			'stroke-width':    2,
-			'stroke':          colors.string,
-			'shape-rendering': 'crispEdges',
-			'vector-effect':   'non-scaling-stroke',
+			x1:             marginRight,
+			x2:             fretboardWidth + marginRight,
+			y1:             string*fretHeight + marginTop,
+			y2:             string*fretHeight + marginTop,
+			stroke:         colors.string,
+			strokeWidth:    2,
+			shapeRendering: 'crispEdges',
+			vectorEffect:   'non-scaling-stroke',
 		});
 	}
 
 	// Draw the nut
 	appendSingleTag(svg, 'line', {
-		'x1':              marginRight + .5,
-		'x2':              marginRight + .5,
-		'y1':              marginTop,
-		'y2':              fretboardHeight + marginTop,
-		'stroke-width':    1,
-		'stroke':          colors.fret,
-		'shape-rendering': 'crispEdges',
+		x1:             marginRight + .5,
+		x2:             marginRight + .5,
+		y1:             marginTop,
+		y2:             fretboardHeight + marginTop,
+		strokeWidth:    1,
+		stroke:         colors.fret,
+		shapeRendering: 'crispEdges',
 	});
 
 	// Draw the highlighted notes
@@ -256,12 +259,12 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 
 				// Draw the note
 				appendSingleTag(svg, 'circle', {
-					'r':  r,
-					'cx': x,
-					'cy': y,
+					r:  r,
+					cx: x,
+					cy: y,
 
 					// If the note belongs to more than one scale, fill it with a gradient
-					'fill': (notes.length > 1) ? `url(#lg-${notes.join('-')})` : scales[notes[0]].color,
+					fill: (notes.length > 1) ? `url(#lg-${notes.join('-')})` : scales[notes[0]].color,
 				});
 
 				// Draw the note name
@@ -271,11 +274,11 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 					if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 					appendFullTag(svg, 'text', data.tonalities[stringNotes[fret]], {
-						'x':           isFretboardFlipped ? (svgWidth - x) :  x,
-						'y':           y + r/3,
-						'fill':        colors.noteName,
-						'class':       'note',
-						'text-anchor': 'middle',
+						x:          isFretboardFlipped ? (svgWidth - x) :  x,
+						y:          y + r/3,
+						fill:       colors.noteName,
+						class:      'note',
+						textAnchor: 'middle',
 					});
 
 					if (isFretboardFlipped) closeTag(svg, 'g');
@@ -308,8 +311,8 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 		openTag(svg, 'linearGradient', { id: `lg-${lg.join('-')}` });
 
 		lg.forEach(scaleIndex => {
-			appendSingleTag(svg, 'stop', { 'offset':     `${index*(100/lg.length)}%`, 'stop-color': scales[scaleIndex].color });
-			appendSingleTag(svg, 'stop', { 'offset': `${(index+1)*(100/lg.length)}%`, 'stop-color': scales[scaleIndex].color });
+			appendSingleTag(svg, 'stop', { offset:     `${index*(100/lg.length)}%`, stopColor: scales[scaleIndex].color });
+			appendSingleTag(svg, 'stop', { offset: `${(index+1)*(100/lg.length)}%`, stopColor: scales[scaleIndex].color });
 		});
 
 		closeTag(svg, 'linearGradient');
