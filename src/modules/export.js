@@ -3,19 +3,12 @@
  * modules/export.js
  */
 
-import { saveAs } from 'file-saver'
+import { saveAs }         from 'file-saver'
 
-import data       from '@/modules/data'
-import * as music from '@/modules/music'
-
-/**
- * Helpers functions to generate XML
- */
-const getAttrsString  = attrs => Object.keys(attrs).reduce((str, attr) => attrs[attr] ? `${str} ${attr}="${attrs[attr]}"` : str, '');
-const openTag         = (xml, tag, attrs) => xml.push(`<${tag}${getAttrsString(attrs)}>`);
-const closeTag        = (xml, tag)        => xml.push(`</${tag}>`);
-const appendSingleTag = (xml, tag, attrs) => xml.push(`<${tag}${getAttrsString(attrs)} />`);
-const appendFullTag   = (xml, tag, innerText, attrs) => { openTag(xml, tag, attrs); xml.push(innerText); closeTag(xml, tag); }
+import data               from '@/modules/data'
+import * as music         from '@/modules/music'
+import { colorscheme }    from '@/modules/colorscheme'
+import { objectMapToObj } from '@/modules/object'
 
 /**
  * Create and save an image of the fretboard
@@ -28,7 +21,7 @@ export function exportFretboard(format, ...fretboardParams)
 	{
 		case 'jpg':
 		case 'png':
-			createCanvasFromSVG(svg.blob, svg.w*10, svg.h*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
+			createCanvasFromSVG(svg.blob, svg.width*10, svg.height*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
 			break;
 
 		case 'svg':
@@ -40,25 +33,42 @@ export function exportFretboard(format, ...fretboardParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFlipped, isDisplayingNotesName, isSizeFixed)
+function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFretboardFlipped, isDisplayingNotesName, isDarkModeOn, isSizeFixed)
 {
-	let svg            = [];
-	let gradients      = [];
+	let svg               = [];
+	let gradients         = [];
 
-	const nbFrets      = fretMax - fretMin;
-	const fbW          = 200;
-	const fbH          = (13/3)*nbStrings;
-	const fretW        = fbW/nbFrets;
-	const fretH        = fbH/(nbStrings - 1);
-	const inlaySize    = 1.10;
-	const fbInlayFrets = [3, 5, 7, 9, 15, 17, 19, 21];
+	// Helper functions to generate XML
+	const getAttrsString  = attrs                        => Object.keys(attrs).reduce((str, attr) => attrs[attr] ? `${str} ${attr}="${attrs[attr]}"` : str, '');
+	const openTag         = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)}>`);
+	const closeTag        = (xml, tag)                   => xml.push(`</${tag}>`);
+	const appendSingleTag = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)} />`);
+	const appendFullTag   = (xml, tag, innerText, attrs) => { openTag(xml, tag, attrs); xml.push(innerText); closeTag(xml, tag); }
 
-	const marginTop    = 2;
-	const marginBottom = 5;
-	const marginLeft   = 1;
-	const marginRight  = 4.5;
-	const svgW         = fbW + marginRight + marginLeft;
-	const svgH         = fbH + marginTop   + marginBottom;
+	// Layout
+	const marginTop       = 2;
+	const marginLeft      = 1;
+	const marginBottom    = 5;
+	const marginRight     = 4.5;
+	const fretboardWidth  = 200;
+	const fretboardHeight = (13/3)*nbStrings;
+	const nbFrets         = fretMax - fretMin;
+	const fretWidth       = fretboardWidth/nbFrets;
+	const fretHeight      = fretboardHeight/(nbStrings - 1);
+	const svgWidth        = fretboardWidth  + marginRight + marginLeft;
+	const svgHeight       = fretboardHeight + marginTop   + marginBottom;
+	const inlaySize       = 1.10;
+	const fretsWithInlays = [3, 5, 7, 9, 15, 17, 19, 21];
+
+	// Colorscheme
+	const palette = objectMapToObj(colorscheme, (key, colors) => colors[isDarkModeOn ? 1 : 0]);
+	const colors  = {
+		inlay:      palette['--color--bg--accent'],
+		string:     palette['--color--string'],
+		fret:       palette['--color--fret'],
+		fretNumber: palette['--color--text--secondary'],
+		noteName:   'white',
+	};
 
 	// Compute the notes of each scale
 	scales.forEach(scale => scale.notes = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality));
@@ -67,24 +77,24 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 	openTag(svg, 'svg', {
 		xmlns:   'http://www.w3.org/2000/svg',
 		version: '1.2',
-		width:   isSizeFixed ? svgW : '',
-		height:  isSizeFixed ? svgH : '',
-		viewBox: `0 0 ${svgW} ${svgH}`,
+		width:   isSizeFixed ? svgWidth  : '',
+		height:  isSizeFixed ? svgHeight : '',
+		viewBox: `0 0 ${svgWidth} ${svgHeight}`,
 	});
 
 	// Embed some basic styles for text
 	let textStyles = [
-		'.normal { font: 0.12em sans-serif;      }',
+		'.normal { font:      0.12em sans-serif; }',
 		'.bold   { font: bold 0.12em sans-serif; }',
 		'.note   { font: bold 0.10em sans-serif; }',
 	];
 	appendFullTag(svg, 'style', textStyles.join(' '), {});
 
 	// Apply a transformation to flip the whole SVG if needed
-	if (isFlipped) openTag(svg, 'g', { 'transform': `scale(-1, 1) translate(-${svgW}, 0)` });
+	if (isFretboardFlipped) openTag(svg, 'g', { 'transform': `scale(-1, 1) translate(-${svgWidth}, 0)` });
 
 	// Return the y position of a fret
-	const getFretY = fret => !fret ? 0 : fretW*((3*nbFrets - 1)/(2*nbFrets - 2) - fret/(nbFrets - 1));
+	const getFretY = fret => !fret ? 0 : fretWidth*((3*nbFrets - 1)/(2*nbFrets - 2) - fret/(nbFrets - 1));
 
 	// Draw the frets
 	for (let fret=fretMin, offset=0; fret<=fretMax; fret++)
@@ -95,17 +105,17 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 			let x = offset - getFretY(fret)/2 + marginRight;
 
 			// Flip the fret numbers if needed
-			if (isFlipped) openTag(svg, 'g', { 'transform': `translate(${svgW}, 0) scale(-1, 1)` });
+			if (isFretboardFlipped) openTag(svg, 'g', { 'transform': `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 			appendFullTag(svg, 'text', fret, {
-				'x':           isFlipped ? (svgW - x) : x,
-				'y':           fbH + marginTop + 4,
-				'fill':        '#aaa',
-				'class':       fbInlayFrets.includes(fret) ? 'bold' : 'normal',
+				'x':           isFretboardFlipped ? (svgWidth - x) : x,
+				'y':           fretboardHeight + marginTop + 4,
+				'fill':        colors.fretNumber,
+				'class':       fretsWithInlays.includes(fret) ? 'bold' : 'normal',
 				'text-anchor': 'middle',
 			});
 
-			if (isFlipped) closeTag(svg, 'g');
+			if (isFretboardFlipped) closeTag(svg, 'g');
 		}
 
 		// Draw the next fret bar
@@ -114,8 +124,8 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 			'x1':              offset + marginRight,
 			'x2':              offset + marginRight,
 			'y1':              marginTop,
-			'y2':              fbH + marginTop,
-			'stroke':          'gray',
+			'y2':              fretboardHeight + marginTop,
+			'stroke':          colors.fret,
 			'stroke-width':    2,
 			'vector-effect':   'non-scaling-stroke',
 			'shape-rendering': 'crispEdges',
@@ -126,37 +136,37 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 			'r':     inlaySize,
 			'cx':    offset - getFretY(fret)/2 + marginRight,
 			'cy':    y + marginTop,
-			'fill': '#ddd',
+			'fill':  colors.inlay,
 		});
 
 		// Draw the inlays
-		if (fbInlayFrets.includes(fret))
+		if (fretsWithInlays.includes(fret))
 		{
 			if (nbStrings <= 6)
 			{
-				drawInlay(fbH/2);
+				drawInlay(fretboardHeight/2);
 			}
 			else if (nbStrings == 7)
 			{
-				drawInlay(fbH/2 - fretH/2);
-				drawInlay(fbH/2 + fretH/2);
+				drawInlay(fretboardHeight/2 - fretHeight/2);
+				drawInlay(fretboardHeight/2 + fretHeight/2);
 			}
 			else if (nbStrings == 8)
 			{
-				drawInlay(fbH/2 - fretH);
-				drawInlay(fbH/2 + fretH);
+				drawInlay(fretboardHeight/2 - fretHeight);
+				drawInlay(fretboardHeight/2 + fretHeight);
 			}
 			else
 			{
 				if (nbStrings % 2 == 0)
 				{
-					drawInlay(fbH/2 - fretH*2);
-					drawInlay(fbH/2 + fretH*2);
+					drawInlay(fretboardHeight/2 - fretHeight*2);
+					drawInlay(fretboardHeight/2 + fretHeight*2);
 				}
 				else
 				{
-					drawInlay(fbH/2 - fretH*3/2);
-					drawInlay(fbH/2 + fretH*3/2);
+					drawInlay(fretboardHeight/2 - fretHeight*3/2);
+					drawInlay(fretboardHeight/2 + fretHeight*3/2);
 				}
 			}
 		}
@@ -164,31 +174,31 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 		{
 			if (nbStrings <= 6)
 			{
-				drawInlay(fbH/2 - fretH);
-				drawInlay(fbH/2 + fretH);
+				drawInlay(fretboardHeight/2 - fretHeight);
+				drawInlay(fretboardHeight/2 + fretHeight);
 			}
 			else if (nbStrings == 7)
 			{
-				drawInlay(fbH/2 - fretH*3/2);
-				drawInlay(fbH/2 + fretH*3/2);
+				drawInlay(fretboardHeight/2 - fretHeight*3/2);
+				drawInlay(fretboardHeight/2 + fretHeight*3/2);
 			}
 			else if (nbStrings == 8)
 			{
-				drawInlay(fbH/2 - fretH*2);
-				drawInlay(fbH/2 + fretH*2);
+				drawInlay(fretboardHeight/2 - fretHeight*2);
+				drawInlay(fretboardHeight/2 + fretHeight*2);
 			}
 			else
 			{
 				if (nbStrings % 2 == 0)
 				{
-					drawInlay(fbH/2);
-					drawInlay(fbH/2 - fretH*3);
-					drawInlay(fbH/2 + fretH*3);
+					drawInlay(fretboardHeight/2);
+					drawInlay(fretboardHeight/2 - fretHeight*3);
+					drawInlay(fretboardHeight/2 + fretHeight*3);
 				}
 				else
 				{
-					drawInlay(fbH/2 - fretH*5/2);
-					drawInlay(fbH/2 + fretH*5/2);
+					drawInlay(fretboardHeight/2 - fretHeight*5/2);
+					drawInlay(fretboardHeight/2 + fretHeight*5/2);
 				}
 			}
 		}
@@ -199,11 +209,11 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 	{
 		appendSingleTag(svg, 'line', {
 			'x1':              marginRight,
-			'x2':              fbW + marginRight,
-			'y1':              string*fretH + marginTop,
-			'y2':              string*fretH + marginTop,
+			'x2':              fretboardWidth + marginRight,
+			'y1':              string*fretHeight + marginTop,
+			'y2':              string*fretHeight + marginTop,
 			'stroke-width':    2,
-			'stroke':          '#222',
+			'stroke':          colors.string,
 			'shape-rendering': 'crispEdges',
 			'vector-effect':   'non-scaling-stroke',
 		});
@@ -214,9 +224,9 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 		'x1':              marginRight + .5,
 		'x2':              marginRight + .5,
 		'y1':              marginTop,
-		'y2':              fbH + marginTop,
+		'y2':              fretboardHeight + marginTop,
 		'stroke-width':    1,
-		'stroke':          '#666',
+		'stroke':          colors.fret,
 		'shape-rendering': 'crispEdges',
 	});
 
@@ -241,7 +251,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 				if (notes.length > 1) gradients.push(notes);
 
 				let x = (fret == 0) ? 1.8 : offset - getFretY(fret)/2 + marginRight;
-				let y = (string - 1)*fretH + marginTop;
+				let y = (string - 1)*fretHeight + marginTop;
 				let r = 1.6;
 
 				// Draw the note
@@ -258,17 +268,17 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 				if (isDisplayingNotesName)
 				{
 					// If the fretboard is flipped, flip the text again to render it properly
-					if (isFlipped) openTag(svg, 'g', { transform: `translate(${svgW}, 0) scale(-1, 1)` });
+					if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 					appendFullTag(svg, 'text', data.tonalities[stringNotes[fret]], {
-						'x':           isFlipped ? (svgW - x) :  x,
+						'x':           isFretboardFlipped ? (svgWidth - x) :  x,
 						'y':           y + r/3,
-						'fill':        'white',
+						'fill':        colors.noteName,
 						'class':       'note',
 						'text-anchor': 'middle',
 					});
 
-					if (isFlipped) closeTag(svg, 'g');
+					if (isFretboardFlipped) closeTag(svg, 'g');
 				}
 			}
 
@@ -276,7 +286,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 		}
 	}
 
-	if (isFlipped) closeTag(svg, 'g');
+	if (isFretboardFlipped) closeTag(svg, 'g');
 
 	// Remove duplicate gradients
 	let hash = {};
@@ -311,7 +321,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFli
 	let blob = new Blob([svg.join('')], { type: 'image/svg+xml;charset=utf-8' });
 
 	// Return an object containing the dimensions of the SVG and the blob itself
-	return { w: svgW, h: svgH, blob, };
+	return { width: svgWidth, height: svgHeight, blob, };
 }
 
 /**

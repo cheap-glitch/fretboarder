@@ -194,6 +194,7 @@ export default {
 				this.$store.getters['scales/activeScales'],
 				this.isFretboardFlipped,
 				this.isDisplayingNotesName,
+				this.isDarkModeOn,
 				format != 'svg',
 			);
 		},

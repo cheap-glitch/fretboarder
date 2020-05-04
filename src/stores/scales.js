@@ -6,14 +6,14 @@
 import Vue          from 'vue'
 
 import storage      from '@/modules/storage'
-import { isObject } from '@/modules/object'
 import { colors }   from '@/modules/colorscheme'
+import { isObject } from '@/modules/object'
 
 /**
  * Constants
  */
 export const MAX_NB_SCALES = 5;
-const COLORS = [
+export const SCALES_COLORS = [
 	colors.azure,
 	colors.malachite,
 	colors.cinnabar,
@@ -59,7 +59,7 @@ const mutations = {
 
 			// Find the first ID & color available
 			id:         [...Array(MAX_NB_SCALES + 1).keys()].find(id => state.scales.every(scale => scale.id != id)),
-			color:      COLORS.filter(color => !state.scales.some(scale => scale.color == color))[0],
+			color:      SCALES_COLORS.filter(color => !state.scales.some(scale => scale.color == color))[0],
 
 			// Always disable focusing to avoid issues
 			isFocused:  false,
