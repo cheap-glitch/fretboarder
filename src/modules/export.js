@@ -65,7 +65,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	const palette = objectMapToObj(colorscheme, (key, colors) => colors[isDarkModeOn ? 1 : 0]);
 	const colors  = {
 		bg:         palette['--color--bg'],
-		inlay:      palette['--color--bg--accent'],
+		inlay:      isDarkModeOn ? palette['--color--bg--accent'] : '#eee',
 		string:     palette['--color--string'],
 		fret:       palette['--color--fret'],
 		fretNumber: palette['--color--text--secondary'],
@@ -308,7 +308,10 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	// Create the gradients to fill the notes
 	gradients.forEach(function(lg, index)
 	{
-		openTag(svg, 'linearGradient', { id: `lg-${lg.join('-')}` });
+		openTag(svg, 'linearGradient', {
+			id: `lg-${lg.join('-')}`,
+			gradientTransform: 'rotate(45deg)',
+		});
 
 		lg.forEach(scaleIndex => {
 			appendSingleTag(svg, 'stop', { offset:     `${index*(100/lg.length)}%`, stopColor: scales[scaleIndex].color });
