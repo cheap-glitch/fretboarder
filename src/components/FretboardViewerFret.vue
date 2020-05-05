@@ -27,6 +27,11 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardViewerFret {
+	position: relative;
+
+	height: layout.$fret-height;
+
+	border-right: layout.$fret-thickness solid var(--color--fret);
 }
 
 </style>

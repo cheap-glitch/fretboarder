@@ -11,7 +11,7 @@ div.FretboardViewer(
 	)
 
 	//- Frets
-	//- FretboardViewerFret(
+	FretboardViewerFret(
 		v-for="fret in frets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 		)
@@ -36,8 +36,14 @@ import scssVars                 from '@/styles/exports.scss'
 import { instruments, tunings } from '@/modules/music'
 import { getFrets }             from '@/modules/fretboard'
 
+import FretboardViewerFret      from '@/components/FretboardViewerFret'
+
 export default {
 	name: 'FretboardViewer',
+
+	components: {
+		FretboardViewerFret,
+	},
 
 	// @NOTE: this (↓) is mocking data!
 	data() {
@@ -65,7 +71,7 @@ export default {
 	computed: {
 		grid()
 		{
-			return { 'grid-template-columns': this.fretMin == 0 ? [scssVars.openStringFretsSize, ...this.layout] : this.layout };
+			return { 'grid-template-columns': (this.fretMin == 0 ? [scssVars.openStringFretsSize, ...this.layout] : this.layout).join(' ') };
 		},
 		layout()
 		{
@@ -154,10 +160,10 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@use "@/styles/layout";
-
 .FretboardViewer {
 	position: relative;
+
+	display: grid;
 }
 
 .string {

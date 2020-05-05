@@ -3,8 +3,6 @@
  * styles/exports.scss
  */
 
-@use "@/styles/layout";
-
 :export {
 	openStringFretsSize: layout.$open-string-fret-size;
 	stringThickness:     layout.$string-thickness;

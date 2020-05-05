@@ -6,7 +6,8 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.App
+div.App(:style="colorscheme")
+
 	FretboardViewer
 
 </template>
@@ -16,7 +17,10 @@ div.App
 <!--{{{ JavaScript -->
 <script>
 
-import FretboardViewer from '@/components/FretboardViewer'
+import { colorscheme }       from '@/modules/colorscheme'
+import { objectMapToObject } from '@/modules/object'
+
+import FretboardViewer       from '@/components/FretboardViewer'
 
 export default {
 	name: 'App',
@@ -25,6 +29,13 @@ export default {
 		FretboardViewer,
 	},
 
+	computed: {
+		colorscheme()
+		{
+			//- return objectMapToObject(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
+			return objectMapToObject(colorscheme, (varName, values) => values[0]);
+		},
+	},
 }
 
 </script>
