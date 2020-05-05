@@ -15,7 +15,7 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 	// Get the model of each scale
 	const models = displayedScales.map(scale => [0, ...((scale.type == 'scale' ? scales : arpeggios)[scale.name].model)]);
 
-	return Array(nbStrings*MAX_NB_FRETS).keys().map(function(fretIndex)
+	return [...Array(nbStrings*MAX_NB_FRETS).keys()].map(function(fretIndex)
 	{
 		const fretNumber = fretIndex % MAX_NB_FRETS;
 		const fretString = Math.floor(fretIndex / MAX_NB_FRETS);

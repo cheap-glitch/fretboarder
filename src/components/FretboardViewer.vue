@@ -11,7 +11,7 @@ div.FretboardViewer(
 	)
 
 	//- Frets
-	FretboardViewerFret(
+	//- FretboardViewerFret(
 		v-for="fret in frets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 		)
@@ -21,7 +21,7 @@ div.FretboardViewer(
 		v-for="string in nbStrings"
 		:key="`string--${string + 1}`"
 
-		:style="{ transform: `translateY(${100*(string / this.nbStrings)}%)` }"
+		:style="{ transform: `translateY(${100*(string / nbStrings)}%)` }"
 		)
 
 </template>
@@ -38,6 +38,29 @@ import { getFrets }             from '@/modules/fretboard'
 
 export default {
 	name: 'FretboardViewer',
+
+	// @NOTE: this (↓) is mocking data!
+	data() {
+		return {
+			fretRange:  [0, 22],
+			instrument: 'guitar',
+
+			displayedScales: [
+				{
+					index:    0,
+					type:     'scale',
+					name:     'min5',
+					tonality: 'G',
+				},
+				{
+					index:    1,
+					type:     'arpeggio',
+					name:     'maj',
+					tonality: 'B',
+				},
+			]
+		}
+	},
 
 	computed: {
 		grid()
@@ -58,7 +81,7 @@ export default {
 			const c = (3*n - 1)/(2*n - 2);
 
 			// Don't include the open string fret in the flexible layout
-			return Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys().map(i => `${c - i/(n - 1)}fr`);
+			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => `${c - i/(n - 1)}fr`);
 		},
 		inlays()
 		{

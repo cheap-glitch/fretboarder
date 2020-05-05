@@ -27,7 +27,7 @@ module.exports = {
 			sass: {
 				prependData: [
 					'@cheap-glitch/scss-mixins/_mixins',
-					'@/styles/mq',
+					// '@/styles/mq',
 				]
 				.map(stylesheet => `@use "${stylesheet}" as *;`)
 				.join('\n')
