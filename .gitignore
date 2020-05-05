@@ -12,3 +12,6 @@
 
 # Test coverage
 /.nyc_output/
+
+# Others
+/temp/
