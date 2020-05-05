@@ -26,7 +26,7 @@ export function getFrets(nbStrings, tuning, displayedScales)
 			{
 				const interval = (getInterval(scale.tonality, openStringNote) + fretNumber) % 12;
 
-				if (models[index].includes(intervals[index]))
+				if (models[index].includes(interval))
 					fretScales.push({ index, interval });
 
 				return fretScales;

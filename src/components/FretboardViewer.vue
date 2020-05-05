@@ -21,13 +21,15 @@ div.FretboardViewer
 <!--{{{ JavaScript -->
 <script>
 
+import { instruments } from '@/modules/music'
+
 export default {
 	name: 'FretboardViewer',
 
 	computed: {
 		nbStrings()
 		{
-			return data.instruments[this.instrument].nbStrings;
+			return instruments[this.instrument].nbStrings;
 		},
 	},
 }
