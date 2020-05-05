@@ -6,7 +6,9 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewerFret
+div.FretboardViewerFret(
+	v-mods="{ isOnLastString }"
+	)
 
 </template>
 <!--}}}-->
@@ -17,6 +19,13 @@ div.FretboardViewerFret
 
 export default {
 	name: 'FretboardViewerFret',
+
+	props: {
+		isOnLastString: {
+			type: Boolean,
+			default: false,
+		},
+	},
 }
 
 </script>
@@ -29,9 +38,11 @@ export default {
 .FretboardViewerFret {
 	position: relative;
 
-	height: layout.$fret-height;
-
 	border-right: layout.$fret-thickness solid var(--color--fret);
+
+	&:not(.is-on-last-string) {
+		height: layout.$fret-height;
+	}
 }
 
 </style>

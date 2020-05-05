@@ -12,16 +12,18 @@ div.FretboardViewer(
 
 	//- Frets
 	FretboardViewerFret(
-		v-for="fret in frets"
+		v-for="fret in displayedFrets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
+
+		:is-on-last-string="fret.string + 1 == nbStrings"
 		)
 
 	//- Strings
 	div.string(
 		v-for="string in nbStrings"
-		:key="`string--${string + 1}`"
+		:key="`string--${string}`"
 
-		:style="{ transform: `translateY(${100*(string / nbStrings)}%)` }"
+		:style="(string == nbStrings) ? { bottom: 0 } : { top: `${100*((string - 1) / (nbStrings - 1))}%` }"
 		)
 
 </template>
@@ -168,8 +170,7 @@ export default {
 
 .string {
 	position: absolute;
-	top: 0;
-	left: 0;
+	left: layout.$open-string-fret-size;
 	right: 0;
 
 	height: layout.$string-thickness;
