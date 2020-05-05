@@ -19,8 +19,16 @@ export function getFrets(tuning, displayedScales)
 	return tuning.map(openStringNote =>
 		// Generate an array of frets for each string
 		Array(MAX_NB_FRETS).keys().map(fretNumber =>
-			// Get the indexes of the displayed scales that the fret note belongs to
-			displayedScales.filter((scale, index) => models[index].includes((getInterval(scale.tonality, openStringNote) + fretNumber) % 12)).map(scale => scale.index)
+			// Get the list of scales the fret note belongs to
+			displayedScales.reduce(function(fretScales, scale, index)
+			{
+				const interval = (getInterval(scale.tonality, openStringNote) + fretNumber) % 12;
+
+				if (models[index].includes(intervals[index]))
+					fretScales.push({ index, interval });
+
+				return fretScales;
+			}, [])
 		)
 	);
 }
