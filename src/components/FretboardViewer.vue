@@ -16,12 +16,22 @@ div.FretboardViewer(
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 		)
 
+	//- Strings
+	div.string(
+		v-for="string in nbStrings"
+		:key="`string--${string + 1}`"
+
+		:style="{ transform: `translateY(${100*(string / this.nbStrings)}%)` }"
+		)
+
 </template>
 <!--}}}-->
 
 
 <!--{{{ JavaScript -->
 <script>
+
+import scssVars                 from '@/styles/exports.scss'
 
 import { instruments, tunings } from '@/modules/music'
 import { getFrets }             from '@/modules/fretboard'
@@ -32,7 +42,7 @@ export default {
 	computed: {
 		grid()
 		{
-			return { 'grid-template-columns': this.fretMin == 0 ? ['40px', ...this.layout] : this.layout };
+			return { 'grid-template-columns': this.fretMin == 0 ? [scssVars.openStringFretsSize, ...this.layout] : this.layout };
 		},
 		layout()
 		{
@@ -121,7 +131,21 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@use "@/styles/layout";
+
 .FretboardViewer {
+	position: relative;
+}
+
+.string {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+
+	height: layout.$string-thickness;
+
+	background-color: var(--color--string);
 }
 
 </style>
