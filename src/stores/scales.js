@@ -3,11 +3,11 @@
  * stores/scales.js
  */
 
-import Vue          from 'vue'
+import Vue              from 'vue'
+import { getVuexState } from '@/modules/vuex-plugin-save-state'
 
-import storage      from '@/modules/storage'
-import { colors }   from '@/modules/colorscheme'
-import { isObject } from '@/modules/object'
+import { colors }       from '@/modules/colorscheme'
+import { isObject }     from '@/modules/object'
 
 /**
  * Constants
@@ -24,9 +24,13 @@ export const SCALES_COLORS = [
 /**
  * State
  */
-const state = {
-	scales: storage.get('scales/scales', [], v => Array.isArray(v) && v.every(item => isObject(item))),
+const model = {
+	scales: {
+		default: [],
+		validator: v => Array.isArray(v) && v.every(item => isObject(item)),
+	},
 };
+const state = getVuexState(model);
 
 /**
  * Getters
@@ -82,4 +86,4 @@ const mutations = {
 	hideAllScales:    state => state.scales.forEach(scale => Vue.set(scale, 'isVisible', false)),
 };
 
-export default { namespaced: true, state, getters, mutations }
+export default { namespaced: true, model, state, getters, mutations }

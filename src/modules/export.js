@@ -3,7 +3,7 @@
  * modules/export.js
  */
 
-import { saveAs }         from 'file-saver'
+// import { saveAs }         from 'file-saver'
 
 import data               from '@/modules/data'
 import * as music         from '@/modules/music'
@@ -15,17 +15,17 @@ import { objectMapToObj } from '@/modules/object'
  */
 export function exportFretboard(format, ...fretboardParams)
 {
-	const svg = exportFretboardToSVG.apply(null, fretboardParams);
+	exportFretboardToSVG.apply(null, fretboardParams);
 
 	switch (format)
 	{
 		case 'jpg':
 		case 'png':
-			createCanvasFromSVG(svg.blob, svg.width*10, svg.height*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
+			// createCanvasFromSVG(svg.blob, svg.width*10, svg.height*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
 			break;
 
 		case 'svg':
-			saveAs(svg.blob, 'fretboard.svg');
+			// saveAs(svg.blob, 'fretboard.svg');
 			break;
 	}
 }
@@ -35,11 +35,12 @@ export function exportFretboard(format, ...fretboardParams)
  */
 function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFretboardFlipped, isDisplayingNotesName, isDarkModeOn, isSizeFixed)
 {
-	let svg               = [];
-	let gradients         = [];
+	const svg             = [];
+	const gradients       = [];
 
 	// Helper functions to generate XML
-	const camel2Kebab     = str                          => str.replace(/[A-Z]/g, character => `-${character.toLowerCase()}`);
+	const camelAttributes = ['viewBox', 'gradientTransform'];
+	const camel2Kebab     = str                          => camelAttributes.includes(str) ? str : str.replace(/[A-Z]/g, character => `-${character.toLowerCase()}`);
 	const getAttrsString  = attrs                        => Object.keys(attrs).reduce((str, attr) => attrs[attr] ? `${str} ${camel2Kebab(attr)}="${attrs[attr]}"` : str, '');
 	const openTag         = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)}>`);
 	const closeTag        = (xml, tag)                   => xml.push(`</${tag}>`);
@@ -73,7 +74,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	};
 
 	// Compute the notes of each scale
-	scales.forEach(scale => scale.notes = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality));
+	const scalesNotes = scales.map(scale => music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality));
 
 	// Start the SVG output
 	openTag(svg, 'svg', {
@@ -86,7 +87,7 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	});
 
 	// Embed some basic styles for text
-	let textStyles = [
+	const textStyles = [
 		'.normal { font:      0.12em sans-serif; }',
 		'.bold   { font: bold 0.12em sans-serif; }',
 		'.note   { font: bold 0.10em sans-serif; }',
@@ -96,16 +97,19 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 	// Apply a transformation to flip the whole SVG if needed
 	if (isFretboardFlipped) openTag(svg, 'g', { transform: `scale(-1, 1) translate(-${svgWidth}, 0)` });
 
-	// Return the y position of a fret
+	// Return the position of a fret on the y-axis
 	const getFretY = fret => !fret ? 0 : fretWidth*((3*nbFrets - 1)/(2*nbFrets - 2) - fret/(nbFrets - 1));
 
-	// Draw the frets
+	/**
+	 * Frets
+	 * ---------------------------------------------------------------------
+	 */
 	for (let fret=fretMin, offset=0; fret<=fretMax; fret++)
 	{
 		// Draw the fret number
 		if (fret > 0)
 		{
-			let x = offset - getFretY(fret)/2 + marginRight;
+			const x = offset - getFretY(fret)/2 + marginRight;
 
 			// Flip the fret numbers if needed
 			if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
@@ -207,21 +211,6 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 		}
 	}
 
-	// Draw the strings
-	for (let string=0; string<nbStrings; string++)
-	{
-		appendSingleTag(svg, 'line', {
-			x1:             marginRight,
-			x2:             fretboardWidth + marginRight,
-			y1:             string*fretHeight + marginTop,
-			y2:             string*fretHeight + marginTop,
-			stroke:         colors.string,
-			strokeWidth:    2,
-			shapeRendering: 'crispEdges',
-			vectorEffect:   'non-scaling-stroke',
-		});
-	}
-
 	// Draw the nut
 	appendSingleTag(svg, 'line', {
 		x1:             marginRight + .5,
@@ -233,56 +222,75 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 		shapeRendering: 'crispEdges',
 	});
 
-	// Draw the highlighted notes
+	/**
+	 * Strings
+	 * ---------------------------------------------------------------------
+	 */
+	for (let string=0; string<nbStrings; string++)
+	{
+		appendSingleTag(svg, 'line', {
+			x1:             marginRight,
+			x2:             fretboardWidth    + marginRight,
+			y1:             string*fretHeight + marginTop,
+			y2:             string*fretHeight + marginTop,
+			stroke:         colors.string,
+			strokeWidth:    2,
+			shapeRendering: 'crispEdges',
+			vectorEffect:   'non-scaling-stroke',
+		});
+	}
+
+	/**
+	 * Notes
+	 * ---------------------------------------------------------------------
+	 */
 	for (let string=1; string<=nbStrings; string++)
 	{
-		let stringNotes = music.getStringNotes(tuning[nbStrings - string]);
+		const stringNotes = music.getStringNotes(tuning[nbStrings - string]);
 
 		for (let fret=fretMin, offset=0; fret<=fretMax; fret++)
 		{
-			let notes = [];
+			// Get all the scales containing the fret note
+			const noteScales = scales.filter((scale, index) => scalesNotes[index].includes(stringNotes[fret])).map((_, index) => index);
+			console.info(noteScales);
 
-			// Get all the scales to which the note belongs
-			scales.forEach((scale, index) => {
-				if (scale.notes.includes(stringNotes[fret]))
-					notes.push(index);
+			// Ignore inactive frets
+			if (!noteScales.length) return;
+
+			const x = (fret == 0) ? 1.8 : offset - getFretY(fret)/2 + marginRight;
+			const y = (string - 1)*fretHeight + marginTop;
+			const r = 1.6;
+			const gradientColors = noteScales.map(index => scales[index].color).join('-');
+
+			// Add a new gradient to the list if needed
+			if (noteScales.length > 1 && !gradients.includes(gradientColors))
+				gradients.push(gradientColors);
+
+			// Draw the note
+			appendSingleTag(svg, 'circle', {
+				r:  r,
+				cx: x,
+				cy: y,
+
+				// If the note belongs to more than one scale, fill it with a gradient
+				fill: (noteScales.length > 1) ? `url(#lg-${gradientColors})` : scales[noteScales[0]].color,
 			});
 
-			if (notes.length)
+			// Draw the note name
+			if (isDisplayingNotesName)
 			{
-				// Add a gradient to the list
-				if (notes.length > 1) gradients.push(notes);
+				// If the fretboard is flipped, flip the text again to render it properly
+				if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
-				let x = (fret == 0) ? 1.8 : offset - getFretY(fret)/2 + marginRight;
-				let y = (string - 1)*fretHeight + marginTop;
-				let r = 1.6;
-
-				// Draw the note
-				appendSingleTag(svg, 'circle', {
-					r:  r,
-					cx: x,
-					cy: y,
-
-					// If the note belongs to more than one scale, fill it with a gradient
-					fill: (notes.length > 1) ? `url(#lg-${notes.join('-')})` : scales[notes[0]].color,
+				appendFullTag(svg, 'text', data.tonalities[stringNotes[fret]], {
+					x:          isFretboardFlipped ? (svgWidth - x) :  x,
+					y:          y + r/3,
+					fill:       colors.noteName,
+					class:      'note',
+					textAnchor: 'middle',
 				});
 
-				// Draw the note name
-				if (isDisplayingNotesName)
-				{
-					// If the fretboard is flipped, flip the text again to render it properly
-					if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
-
-					appendFullTag(svg, 'text', data.tonalities[stringNotes[fret]], {
-						x:          isFretboardFlipped ? (svgWidth - x) :  x,
-						y:          y + r/3,
-						fill:       colors.noteName,
-						class:      'note',
-						textAnchor: 'middle',
-					});
-
-					if (isFretboardFlipped) closeTag(svg, 'g');
-				}
+				if (isFretboardFlipped) closeTag(svg, 'g');
 			}
 
 			offset += getFretY(fret + 1);
@@ -291,31 +299,22 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 
 	if (isFretboardFlipped) closeTag(svg, 'g');
 
-	// Remove duplicate gradients
-	let hash = {};
-	let list = [];
+	/**
+	 * Gradients
+	 * ---------------------------------------------------------------------
+	 */
+	console.info(gradients);
 	gradients.forEach(function(gradient)
 	{
-		let key = gradient.join('|');
-		if (!hash[key])
-		{
-			list.push(gradient);
-			hash[key] = true;
-		}
-	});
-	gradients = list;
-
-	// Create the gradients to fill the notes
-	gradients.forEach(function(lg, index)
-	{
 		openTag(svg, 'linearGradient', {
-			id: `lg-${lg.join('-')}`,
-			gradientTransform: 'rotate(45deg)',
+			id: `lg-${gradient}`,
+			// gradientTransform: 'rotate(45)',
 		});
 
-		lg.forEach(scaleIndex => {
-			appendSingleTag(svg, 'stop', { offset:     `${index*(100/lg.length)}%`, stopColor: scales[scaleIndex].color });
-			appendSingleTag(svg, 'stop', { offset: `${(index+1)*(100/lg.length)}%`, stopColor: scales[scaleIndex].color });
+		gradient.split('-').forEach(function(stopColor, stopIndex, colors)
+		{
+			appendSingleTag(svg, 'stop', { offset:     `${stopIndex*(100/colors.length)}%`, stopColor });
+			appendSingleTag(svg, 'stop', { offset: `${(stopIndex+1)*(100/colors.length)}%`, stopColor });
 		});
 
 		closeTag(svg, 'linearGradient');
@@ -323,8 +322,10 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 
 	closeTag(svg, 'svg');
 
+	console.info(svg);
+
 	// Create the blob containing the SVG text
-	let blob = new Blob([svg.join('')], { type: 'image/svg+xml;charset=utf-8' });
+	const blob = new Blob([svg.join('')], { type: 'image/svg+xml;charset=utf-8' });
 
 	// Return an object containing the dimensions of the SVG and the blob itself
 	return { width: svgWidth, height: svgHeight, blob, };
@@ -333,17 +334,17 @@ function exportFretboardToSVG(nbStrings, fretMin, fretMax, tuning, scales, isFre
 /**
  * Create a canvas from a SVG and apply a callback on the result
  */
-function createCanvasFromSVG(svg, width, height, callback)
+export function createCanvasFromSVG(svg, width, height, callback)
 {
 	// Create a canvas the size of the SVG
-	let canvasWrapper = document.getElementById('canvas-wrapper');
+	const canvasWrapper     = document.getElementById('canvas-wrapper');
 	canvasWrapper.innerHTML = `<canvas width="${width}" height="${height}" id="canvas-export"><canvas>`;
 
-	let canvas  = document.getElementById('canvas-export');
-	let context = canvas.getContext('2d');
-	let domURL  = window.URL || window.webkitURL || window;
-	let url     = domURL.createObjectURL(svg);
-	let img     = new Image();
+	const  canvas  = document.getElementById('canvas-export');
+	const  context = canvas.getContext('2d');
+	const  domURL  = window.URL || window.webkitURL || window;
+	const  url     = domURL.createObjectURL(svg);
+	const  img     = new Image();
 
 	img.onload = function ()
 	{
