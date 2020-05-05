@@ -43,7 +43,7 @@ export const intervalsNames = [
 /**
  * Instruments
  */
-const instruments = {
+export const instruments = {
 	'guitar':    { name: 'Guitar',             nbStrings:  6 },
 	'bass':      { name: 'Bass',               nbStrings:  4 },
 	'ukulele':   { name: 'Ukulele',            nbStrings:  4 },
@@ -220,7 +220,7 @@ export const tunings = {
 	},
 };
 
-const export tuningsNames = {
+export const tuningsNames = {
 	// Guitar
 	'standard':     'Standard tuning',
 	'hstep-down':   'Half-step down',
