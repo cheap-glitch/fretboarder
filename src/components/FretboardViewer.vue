@@ -25,7 +25,7 @@ div.FretboardViewer(
 		:is-fretboard-flipped="isFlipped"
 		:is-fretboard-vertical="isVertical"
 
-		:style="isFlipped ? { 'grid-area': `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : {}"
+		:style="(isFlipped && !isVertical) ? { 'grid-area': `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : {}"
 		)
 
 	//- Strings
@@ -64,7 +64,7 @@ export default {
 			instrument: 'guitar',
 			tuning:     'standard',
 
-			isFlipped:  false,
+			isFlipped:  true,
 			isVertical: true,
 
 			displayedScales: [
@@ -91,7 +91,8 @@ export default {
 		{
 			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
-			if (this.isFlipped) template.reverse();
+			// Invert the grid layout for horizontal fretboards only
+			if (this.isFlipped && !this.isVertical) template.reverse();
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
@@ -191,7 +192,12 @@ export default {
 		},
 		tuningNotes()
 		{
-			return [...tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']].reverse();
+			const notes = [...tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']];
+
+			if (!this.isVertical || this.isFlipped)
+				notes.reverse();
+
+			return notes;
 		},
 		nbStrings()
 		{
