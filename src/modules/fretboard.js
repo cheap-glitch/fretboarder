@@ -13,7 +13,7 @@ export const MAX_NB_FRETS = 25;
 export function getFrets(nbStrings, tuningNotes, displayedScales)
 {
 	// Get the model of each scale
-	const models = displayedScales.map(scale => [0, ...((scale.type == 'scale' ? scales : arpeggios)[scale.name].model)]);
+	const models = displayedScales.map(scale => [0, ...((scale.type == 'scale' ? scales : arpeggios)[scale.model].model)]);
 
 	return [...Array(nbStrings*MAX_NB_FRETS).keys()].map(function(fretIndex)
 	{
@@ -43,7 +43,8 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
  */
 function getInterval(note1, note2)
 {
-	return notes.indexOf(note1) <= notes.indexOf(note2)
-		? notes.indexOf(note2) - notes.indexOf(note1)
-		: notes.indexOf(note1) - notes.indexOf(note2) + notes.length;
+	const index1 = notes.indexOf(note1);
+	const index2 = notes.indexOf(note2);
+
+	return index1 <= index2 ? index2 - index1 : notes.length - (index1 - index2);
 }

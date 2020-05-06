@@ -242,7 +242,7 @@ export default {
 	 * Display
 	 */
 	&.is-active {
-		transition: opacity 0.2s, border-radius 0.2s, filter 0.2s;
+		transition: border-radius 0.2s, filter 0.2s;
 
 		&:hover {
 			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
@@ -252,11 +252,11 @@ export default {
 	&:not(.is-active) {
 		border: 2px dashed var(--color--border);
 
-		opacity: 0;
-		transition: opacity 0.2s;
+		&:not(.is-open-string) {
+			opacity: 0;
+			transition: opacity 0.2s;
 
-		&:hover {
-			opacity: 1;
+			&:hover { opacity: 1; }
 		}
 	}
 

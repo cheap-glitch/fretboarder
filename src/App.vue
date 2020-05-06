@@ -36,6 +36,12 @@ export default {
 			return objectMapToObject(colorscheme, (varName, values) => values[0]);
 		},
 	},
+
+	created()
+	{
+		if (this.$store.state.scales.scales.length == 0)
+			this.$store.commit('scales/addScale');
+	},
 }
 
 </script>

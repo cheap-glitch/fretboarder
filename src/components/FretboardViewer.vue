@@ -54,8 +54,9 @@ div.FretboardViewer(
 <!--{{{ JavaScript -->
 <script>
 
-import { layout }               from '@/modules/layout'
+import { get }                  from 'vuex-pathify'
 
+import { layout }               from '@/modules/layout'
 import { instruments, tunings } from '@/modules/music'
 import { getFrets }             from '@/modules/fretboard'
 
@@ -77,22 +78,6 @@ export default {
 			isFlipped:        false,
 			isVertical:       false,
 			isShowingFretNbs: false,
-			displayedScales:  [
-				{
-					index:    0,
-					type:     'scale',
-					name:     'min5',
-					tonality: 'G',
-					color:    'steelblue',
-				},
-				{
-					index:    1,
-					type:     'arpeggio',
-					name:     'maj',
-					tonality: 'B',
-					color:    'limegreen',
-				},
-			],
 		}
 	},
 
@@ -188,6 +173,14 @@ export default {
 
 			return [];
 		},
+		displayedFrets()
+		{
+			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
+		},
+		frets()
+		{
+			return getFrets(this.nbStrings, this.tuningNotes, this.displayedScales);
+		},
 		fretNumbers()
 		{
 			return [...Array(this.nbFrets).keys()]
@@ -198,26 +191,15 @@ export default {
 		{
 			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
 		},
+		tuningNotes()
+		{
+			const notes = Array.from(tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']);
+
+			return (!this.isVertical || this.isFlipped) ? notes.reverse() : notes;
+		},
 		scalesColors()
 		{
 			return this.displayedScales.map(scale => scale.color);
-		},
-		displayedFrets()
-		{
-			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
-		},
-		frets()
-		{
-			return getFrets(this.nbStrings, this.tuningNotes, this.displayedScales);
-		},
-		tuningNotes()
-		{
-			const notes = [...tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']];
-
-			if (!this.isVertical || this.isFlipped)
-				notes.reverse();
-
-			return notes;
 		},
 		nbStrings()
 		{
@@ -235,6 +217,7 @@ export default {
 		{
 			return this.fretRange[1];
 		},
+		displayedScales: get('scales/displayedScales'),
 	},
 }
 
