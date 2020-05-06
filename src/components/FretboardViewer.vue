@@ -36,6 +36,17 @@ div.FretboardViewer(
 		:style="string"
 		)
 
+	//- Fret numbers
+	template(v-if="isShowingFretNbs")
+		div.fret-number(
+			v-for="(fret, index) in fretNumbers"
+			:key="`fret-number--${index}`"
+
+			:style="isVertical ? { 'grid-area': `${index + 1} / 1 / span 1 / span 1` } : {}"
+			v-mods="{ isVertical }"
+			)
+			p.fret-number__text {{ fret }}
+
 </template>
 <!--}}}-->
 
@@ -57,17 +68,16 @@ export default {
 		FretboardViewerFret,
 	},
 
-	// @NOTE: this (↓) is mock data!
 	data() {
+		// @NOTE: this (↓) is mock data!
 		return {
-			fretRange:  [0, 22],
-			instrument: 'guitar',
-			tuning:     'standard',
-
-			isFlipped:  true,
-			isVertical: true,
-
-			displayedScales: [
+			fretRange:        [0, 22],
+			instrument:       'guitar',
+			tuning:           'standard',
+			isFlipped:        false,
+			isVertical:       true,
+			isShowingFretNbs: false,
+			displayedScales:  [
 				{
 					index:    0,
 					type:     'scale',
@@ -102,7 +112,7 @@ export default {
 		maxWidth()
 		{
 			// Limit the width of the fretboard in vertical mode
-			return this.isVertical ? { width: `${(this.nbStrings - 1)*layout.fretWidth.int}px` } : {};
+			return this.isVertical ? { width: `${(this.nbStrings - 1)*layout.fretWidth.int + this.fretNumbersPadding.int}px` } : {};
 		},
 		minLength()
 		{
@@ -138,8 +148,8 @@ export default {
 				[this.isVertical ? 'bottom' : this.isFlipped ? 'left'  : 'right']: 0,
 
 				// Position
-				[this.isVertical ? 'left': 'top']: `${100*(index / (this.nbStrings - 1))}%`,
-				transform: `translate${this.isVertical ? 'X' : 'Y'}(-50%)`,
+				[this.isVertical ? 'left': 'top']: `calc(calc(100% - ${this.fretNumbersPadding.px})*${index / (this.nbStrings - 1)})`,
+				transform: this.isVertical ? `translateX(calc(${this.fretNumbersPadding.px} - 50%))` : 'translateY(-50%)',
 
 				// Width
 				[this.isVertical ? 'width' : 'height']: layout.stringThickness.px,
@@ -177,6 +187,16 @@ export default {
 			}
 
 			return [];
+		},
+		fretNumbers()
+		{
+			return [...Array(this.nbFrets).keys()]
+				.map(index => (this.isFlipped && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
+				.map(fret  => fret == 0 ? '' : fret);
+		},
+		fretNumbersPadding()
+		{
+			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
 		},
 		scalesColors()
 		{
@@ -234,6 +254,28 @@ export default {
 	position: absolute;
 
 	background-color: var(--color--string);
+}
+
+.fret-number {
+	display: flex;
+
+	&.is-vertical {
+		justify-content: flex-start;
+		align-items: center;
+
+		width: layout.$fret-number-wrapper-size;
+	}
+
+	&:not(.is-vertical) {
+		justify-content: center;
+		align-items: flex-end;
+
+		height: layout.$fret-number-wrapper-size;
+	}
+}
+
+.fret-number__text {
+	color: var(--color--text--secondary);
 }
 
 </style>

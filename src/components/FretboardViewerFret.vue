@@ -120,13 +120,13 @@ export default {
 	/**
 	 * Size
 	 */
-	&.is-on-last-string.is-fretboard-vertical {
-		width: 0;
+	&.is-fretboard-vertical {
+		&.is-on-last-string       { width: 0; }
+		&:not(.is-on-last-string) { width: layout.$fret-width; }
 	}
 
-	&:not(.is-on-last-string) {
-		&.is-fretboard-vertical        { width:  layout.$fret-width; }
-		&:not(.is-fretboard-vertical)  { height: layout.$fret-width; }
+	&:not(.is-fretboard-vertical):not(.is-on-last-string) {
+		height: layout.$fret-width;
 	}
 
 	/**
@@ -134,21 +134,21 @@ export default {
 	 */
 	&.is-fretboard-vertical {
 		&:not(.is-open-string)         { border-bottom-width: layout.$fretbar-thickness; }
-		&.is-starting-fret             { border-top-width:  layout.$fretbar-thickness; }
-		&.is-first-fret                { border-top-width:  layout.$nut-thickness;     }
+		&.is-starting-fret             { border-top-width:    layout.$fretbar-thickness; }
+		&.is-first-fret                { border-top-width:    layout.$nut-thickness;     }
 	}
 
 	&:not(.is-fretboard-vertical) {
 		&.is-fretboard-flipped {
-			&:not(.is-open-string) { border-left-width:  layout.$fretbar-thickness; }
-			&.is-starting-fret     { border-right-width: layout.$fretbar-thickness; }
-			&.is-first-fret        { border-right-width: layout.$nut-thickness;     }
+			&:not(.is-open-string) { border-left-width:   layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
+			&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
 		}
 
 		&:not(.is-fretboard-flipped) {
-			&:not(.is-open-string) { border-right-width: layout.$fretbar-thickness; }
-			&.is-starting-fret     { border-left-width:  layout.$fretbar-thickness; }
-			&.is-first-fret        { border-left-width:  layout.$nut-thickness;     }
+			&:not(.is-open-string) { border-right-width:  layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-left-width:   layout.$fretbar-thickness; }
+			&.is-first-fret        { border-left-width:   layout.$nut-thickness;     }
 		}
 	}
 }
