@@ -135,7 +135,7 @@ export default {
 	z-index: 10;
 	@include center-content;
 
-	@include circle(32px);
+	@include circle(layout.$note-size);
 
 	&.is-open-string {
 		top: 0;

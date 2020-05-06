@@ -7,11 +7,11 @@
 <template lang="pug">
 
 div.FretboardViewer(
-	:style="grid"
+	:style="[minLength, grid]"
 	)
 
 	//- Frets
-	FretboardViewerFret(
+	//- FretboardViewerFret(
 		v-for="fret in displayedFrets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 
@@ -23,6 +23,7 @@ div.FretboardViewer(
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
 		:is-fretboard-flipped="isFlipped"
+		:is-fretboard-vertical="isVertical"
 
 		:style="isFlipped ? { 'grid-area': `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : {}"
 		)
@@ -61,6 +62,10 @@ export default {
 		return {
 			fretRange:  [0, 22],
 			instrument: 'guitar',
+			tuning:     'standard',
+
+			isFlipped:  false,
+			isVertical: true,
 
 			displayedScales: [
 				{
@@ -78,19 +83,33 @@ export default {
 					color:    'limegreen',
 				},
 			],
-
-			isFlipped: false,
 		}
 	},
 
 	computed: {
 		grid()
 		{
-			let template = [...(this.fretMin == 0 ? [scssVars.openStringFretLength] : []), ...this.layout];
+			let template = [...(this.fretMin == 0 ? [scssVars.openStringFretLength] : []), ...this.layout.map(track => `${track}fr`)];
 
 			if (this.isFlipped) template.reverse();
 
-			return { 'grid-template-columns': template.join(' ') };
+			return {
+				'grid-auto-flow': this.isVertical ? 'column' : 'row',
+				[`grid-template-${this.isVertical ? 'row': 'column'}`]: template.join(' '),
+			};
+		},
+		minLength()
+		{
+			const minFretLength        = parseInt(scssVars.minFretLength.replace('px', ''),        10);
+			const openStringFretLength = parseInt(scssVars.openStringFretLength.replace('px', ''), 10);
+
+			/**
+			 * The length of the fretboard must be so that the length
+			 * of the smallest fret is equal or greater than a fixed minimum length
+			 */
+			const length = minFretLength*(this.nbFrets / this.layout.slice(-1)[0]) + (this.fretMin == 0 ? openStringFretLength : 0);
+
+			return { [`min-${this.isVertical ? 'height': 'width'}`]: `${Math.ceil(length)}px` };
 		},
 		layout()
 		{
@@ -106,7 +125,7 @@ export default {
 			const c = (3*n - 1)/(2*n - 2);
 
 			// Don't include the open string fret in the flexible layout
-			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => `${c - i/(n - 1)}fr`);
+			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => c - i/(n - 1));
 		},
 		inlays()
 		{
