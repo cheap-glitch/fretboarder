@@ -18,7 +18,7 @@ div.FretboardViewer(
 		v-bind="fret"
 		:scales-colors="scalesColors"
 
-		:is-starting-fret="fret.string == fretMin"
+		:is-starting-fret="fret.number == fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
@@ -56,7 +56,7 @@ export default {
 		FretboardViewerFret,
 	},
 
-	// @NOTE: this (↓) is mocking data!
+	// @NOTE: this (↓) is mock data!
 	data() {
 		return {
 			fretRange:  [0, 22],
@@ -168,7 +168,7 @@ export default {
 		},
 		tuningNotes()
 		{
-			return tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard'];
+			return [...tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']].reverse();
 		},
 		nbStrings()
 		{

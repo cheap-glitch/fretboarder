@@ -118,9 +118,9 @@ export default {
 	}
 
 	&.is-fretboard-flipped {
-		&:not(.is-open-string) { border-left-width: layout.$fretbar-thickness; }
-		&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
-		&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
+		&:not(.is-open-string) { border-left-width:  layout.$fretbar-thickness; }
+		&.is-starting-fret     { border-right-width: layout.$fretbar-thickness; }
+		&.is-first-fret        { border-right-width: layout.$nut-thickness;     }
 	}
 
 	&:not(.is-fretboard-flipped) {
