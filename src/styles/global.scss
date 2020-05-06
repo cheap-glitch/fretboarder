@@ -1,0 +1,89 @@
+
+/**
+ * styles/global.scss
+ */
+
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
+html, body {
+	display: flex;
+	flex-direction: column;
+}
+
+html {
+	min-height: 100%;
+}
+
+body {
+	flex: 1 1 auto;
+}
+
+/**
+ * Text
+ * -----------------------------------------------------------------------------
+ */
+
+p,
+a,
+h1,
+h2,
+li,
+.vue-slider-dot-tooltip-inner {
+	font-family:
+		"IBM Plex Sans",
+		"Fira Sans",
+		"San Francisco",
+		"Segoe UI",
+		"Roboto",
+		"Cantarell",
+		"Helvetica Neue",
+		"Arimo",
+		"DejaVu Sans",
+		"Droid Sans",
+		ui-sans-serif,
+		sans-serif;
+
+	cursor: default;
+	user-select: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+sup {
+	vertical-align: 0.25rem;
+}
+
+/**
+ * Transitions
+ * -----------------------------------------------------------------------------
+ */
+
+div {
+	transition: border-color 0.2s, background-color 0.2s;
+}
+
+p,
+a,
+.svg-inline--fa {
+	transition: color 0.2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
+
+.fade-leave,
+.fade-enter-to {
+	opacity: 1;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.2s;
+}

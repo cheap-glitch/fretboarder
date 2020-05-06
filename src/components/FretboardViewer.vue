@@ -15,6 +15,9 @@ div.FretboardViewer(
 		v-for="fret in displayedFrets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 
+		v-bind="fret"
+		:scales-colors="scalesColors"
+		:is-open-string="fret.number == 0"
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		)
 
@@ -59,12 +62,14 @@ export default {
 					type:     'scale',
 					name:     'min5',
 					tonality: 'G',
+					color:    'steelblue',
 				},
 				{
 					index:    1,
 					type:     'arpeggio',
 					name:     'maj',
 					tonality: 'B',
+					color:    'limegreen',
 				},
 			]
 		}
@@ -73,7 +78,7 @@ export default {
 	computed: {
 		grid()
 		{
-			return { 'grid-template-columns': (this.fretMin == 0 ? [scssVars.openStringFretsSize, ...this.layout] : this.layout).join(' ') };
+			return { 'grid-template-columns': (this.fretMin == 0 ? [scssVars.openStringFretLength, ...this.layout] : this.layout).join(' ') };
 		},
 		layout()
 		{
@@ -124,6 +129,10 @@ export default {
 
 			return [];
 		},
+		scalesColors()
+		{
+			return this.displayedScales.map(scale => scale.color);
+		},
 		displayedFrets()
 		{
 			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
@@ -170,7 +179,7 @@ export default {
 
 .string {
 	position: absolute;
-	left: layout.$open-string-fret-size;
+	left: layout.$open-string-fret-length;
 	right: 0;
 
 	height: layout.$string-thickness;

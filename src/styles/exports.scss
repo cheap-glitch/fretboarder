@@ -4,7 +4,9 @@
  */
 
 :export {
-	openStringFretsSize: layout.$open-string-fret-size;
-	stringThickness:     layout.$string-thickness;
-	fretThickness:       layout.$fret-thickness;
+	fretWidth:            layout.$fret-width;
+	openStringFretLength: layout.$open-string-fret-length;
+
+	stringThickness:      layout.$string-thickness;
+	fretbarThickness:     layout.$fretbar-thickness;
 }

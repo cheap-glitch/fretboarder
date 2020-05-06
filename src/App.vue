@@ -46,6 +46,7 @@ export default {
 <style lang="scss" scoped>
 
 .App {
+	padding: 40px;
 }
 
 </style>
@@ -58,7 +59,7 @@ export default {
 @use "@cheap-glitch/scss-reset/_reset";
 
 // Load the global styles
-//- @use "@/styles/global";
+@use "@/styles/global";
 
 // Override the styles of the slider component
 //- @use "@/styles/slider";
