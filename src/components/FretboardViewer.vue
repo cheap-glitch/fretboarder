@@ -21,6 +21,10 @@ div.FretboardViewer(
 		:is-starting-fret="fret.string == fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
+
+		:is-fretboard-flipped="isFlipped"
+
+		:style="isFlipped ? { 'grid-area': `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : {}"
 		)
 
 	//- Strings
@@ -82,7 +86,11 @@ export default {
 	computed: {
 		grid()
 		{
-			return { 'grid-template-columns': (this.fretMin == 0 ? [scssVars.openStringFretLength, ...this.layout] : this.layout).join(' ') };
+			let template = [...(this.fretMin == 0 ? [scssVars.openStringFretLength] : []), ...this.layout];
+
+			if (this.isFlipped) template.reverse();
+
+			return { 'grid-template-columns': template.join(' ') };
 		},
 		layout()
 		{

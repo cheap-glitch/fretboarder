@@ -7,10 +7,10 @@
 <template lang="pug">
 
 div.FretboardViewerFret(
-	v-mods="{ isOpenString, isFirstFret, isOnLastString }"
+	v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped }"
 	)
 	div.note(
-		v-mods="{ isActive, isOpenString }"
+		v-mods="{ isActive, isOpenString, isFretboardFlipped }"
 		:style="noteBg"
 		)
 		p.note__name {{ noteName }}
@@ -60,6 +60,10 @@ export default {
 			default: false,
 		},
 		isShowingInlay: {
+			type: Boolean,
+			default: false,
+		},
+		isFretboardFlipped: {
 			type: Boolean,
 			default: false,
 		},
@@ -113,9 +117,17 @@ export default {
 		height: layout.$fret-width;
 	}
 
-	&:not(.is-open-string) { border-right-width: layout.$fretbar-thickness; }
-	&.is-starting-fret     { border-left-width:  layout.$fretbar-thickness; }
-	&.is-first-fret        { border-left-width:  layout.$nut-thickness;     }
+	&.is-fretboard-flipped {
+		&:not(.is-open-string) { border-left-width: layout.$fretbar-thickness; }
+		&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
+		&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
+	}
+
+	&:not(.is-fretboard-flipped) {
+		&:not(.is-open-string) { border-right-width: layout.$fretbar-thickness; }
+		&.is-starting-fret     { border-left-width:  layout.$fretbar-thickness; }
+		&.is-first-fret        { border-left-width:  layout.$nut-thickness;     }
+	}
 }
 
 .note {
@@ -127,8 +139,10 @@ export default {
 
 	&.is-open-string {
 		top: 0;
-		left: 0;
 		transform: translateY(-50%);
+
+		&.is-fretboard-flipped       { right: 0; }
+		&:not(.is-fretboard-flipped) { left:  0; }
 	}
 
 	&:not(.is-open-string) {
