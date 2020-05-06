@@ -6,7 +6,10 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VTooltip(ref="tooltip")
+div.VTooltip(
+	ref="tooltip"
+	v-show="isOpen"
+	)
 	slot
 	div.VTooltip__arrow(data-popper-arrow)
 
@@ -23,8 +26,14 @@ import flip             from '@popperjs/core/lib/modifiers/flip';
 import offset           from '@popperjs/core/lib/modifiers/offset';
 import preventOverflow  from '@popperjs/core/lib/modifiers/preventOverflow';
 
+import { Portal }       from '@linusborg/vue-simple-portal'
+
 export default {
 	name: 'VTooltip',
+
+	components: {
+		Portal,
+	},
 
 	props: {
 		target: {
@@ -43,6 +52,13 @@ export default {
 		isOpen: {
 			type: Boolean,
 			default: false,
+		}
+	},
+
+	watch: {
+		isOpen()
+		{
+			if (this.isOpen) this.createPopper(); else this.destroyPopper();
 		},
 	},
 
@@ -59,10 +75,10 @@ export default {
 	methods: {
 		createPopper()
 		{
-			if (!this.isOpen || this.popper !== null || this.targetElement === false)
+			if (!this.isOpen || this.popper !== null || this.target === false)
 				return;
 
-			this.popper = createPopper(this.targetElement, this.$refs.tooltip, {
+			this.popper = createPopper(this.target, this.$refs.tooltip, {
 				placement: this.placement,
 				modifiers: [
 					{
@@ -72,22 +88,22 @@ export default {
 						}
 					},
 					{
+						...arrow,
+						options: {
+							padding: 8,
+						}
+					},
+					{
 						...preventOverflow,
 						options: {
-							boundary: document.body,
+							boundary: document.getElementById('app'),
 							padding: 8,
 						}
 					},
 					{
 						...flip,
 						options: {
-							boundary: document.body,
-						}
-					},
-					{
-						...arrow,
-						options: {
-							padding: 8,
+							boundary: document.getElementById('app'),
 						}
 					},
 				]

@@ -75,7 +75,7 @@ export default {
 			instrument:       'guitar',
 			tuning:           'standard',
 			isFlipped:        false,
-			isVertical:       true,
+			isVertical:       false,
 			isShowingFretNbs: false,
 			displayedScales:  [
 				{

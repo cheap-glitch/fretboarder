@@ -7,14 +7,13 @@
   "scripts": {
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
     "build": "vue-cli-service build --modern",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit 'test/*.test.js'",
     "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
     "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
     "coverage": "nyc npm test",
     "serve-vue-cli": "vue-cli-service serve",
     "sitemap": "vue-cli-service sitemap",
-    "test": "npm run test:unit -- ",
-    "test:unit": "vue-cli-service test:unit 'test/*.test.js'"
+    "test": "npm run test:unit -- "
   },
   "main": "src/main.js",
   "dependencies": {
@@ -24,6 +23,7 @@
     "@fortawesome/pro-regular-svg-icons": "^5.13.0",
     "@fortawesome/pro-solid-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
+    "@linusborg/vue-simple-portal": "^0.1.4",
     "@popperjs/core": "^2.4.0",
     "body-scroll-lock": "^3.0.2",
     "core-js": "^3.6.5",

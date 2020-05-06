@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.App(:style="colorscheme")
+div.App#app(:style="colorscheme")
 
 	FretboardViewer
 

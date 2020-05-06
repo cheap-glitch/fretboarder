@@ -6,17 +6,26 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewerFret(
-	v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }"
-	)
+div.FretboardViewerFret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
+
+	div.inlay(v-show="isShowingInlay")
+
 	div.note(
+		ref="note"
+
 		v-mods="{ isActive, isOpenString, isFretboardFlipped, isFretboardVertical }"
 		:style="noteBg"
+
+		@mouseenter="mouseenterHandler"
+		@mouseleave="mouseleaveHandler"
 		)
 		p.note__name {{ noteName }}
-	div.inlay(
-		v-show="isShowingInlay"
+
+	VTooltip(
+		:target="$refs.note || false"
+		:is-open="showTooltip"
 		)
+		p Hullo!
 
 </template>
 <!--}}}-->
@@ -73,6 +82,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			showTooltip: false,
+		}
+	},
+
 	computed: {
 		noteBg()
 		{
@@ -99,6 +114,18 @@ export default {
 		isFirstFret()
 		{
 			return this.number == 1;
+		},
+	},
+
+	methods: {
+		mouseenterHandler()
+		{
+			if (this.isActive)
+				this.showTooltip = true;
+		},
+		mouseleaveHandler()
+		{
+			this.showTooltip = false;
 		},
 	},
 }
