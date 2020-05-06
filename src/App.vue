@@ -17,6 +17,8 @@ div.App#app(:style="colorscheme")
 <!--{{{ JavaScript -->
 <script>
 
+import { get }               from 'vuex-pathify'
+
 import { colorscheme }       from '@/modules/colorscheme'
 import { objectMapToObject } from '@/modules/object'
 
@@ -32,9 +34,11 @@ export default {
 	computed: {
 		colorscheme()
 		{
-			//- return objectMapToObject(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
-			return objectMapToObject(colorscheme, (varName, values) => values[0]);
+			return objectMapToObject(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
 		},
+		...get([
+			'isDarkModeOn'
+		]),
 	},
 
 	created()
@@ -52,7 +56,11 @@ export default {
 <style lang="scss" scoped>
 
 .App {
+	flex: 1 1 auto;
+
 	padding: 40px 40px;
+
+	background-color: var(--color--bg);
 }
 
 </style>

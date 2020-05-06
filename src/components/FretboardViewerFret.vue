@@ -183,6 +183,7 @@ export default {
 
 .fret {
 	position: relative;
+	height: 100%;
 
 	border-width: 0;
 	border-style: solid;
@@ -298,8 +299,8 @@ export default {
 .fret__note__name {
 	font-weight: bold;
 
-	@at-root .fret__note.is-active       & { color: white; }
-	@at-root .fret__note:not(.is-active) & { color: var(--color--text--secondary); }
+	@at-root .fret__note.is-active       & { color: white;              }
+	@at-root .fret__note:not(.is-active) & { color: var(--color--text); }
 }
 
 .intervals {
