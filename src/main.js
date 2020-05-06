@@ -18,7 +18,7 @@ import Vue           from 'vue'
 import VCSSModifiers from 'vue-css-modifiers'
 
 import App           from '@/App'
-// import store         from '@/stores/main'
+import store         from '@/stores/main'
 
 /**
  * Register plugins, directives & external components
@@ -42,4 +42,4 @@ baseComponents.keys().forEach(function(filename)
 /**
  * Create the Vue instance
  */
-new Vue({ /*store,*/ render: h => h(App) }).$mount('#app');
+new Vue({ store, render: h => h(App) }).$mount('#app');
