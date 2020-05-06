@@ -14,6 +14,9 @@ div.FretboardViewerFret(
 		:style="noteBg"
 		)
 		p.note__name {{ noteName }}
+	div.inlay(
+		v-show="isShowingInlay"
+		)
 
 </template>
 <!--}}}-->
@@ -53,6 +56,10 @@ export default {
 			default: false,
 		},
 		isOnLastString: {
+			type: Boolean,
+			default: false,
+		},
+		isShowingInlay: {
 			type: Boolean,
 			default: false,
 		},
@@ -156,6 +163,13 @@ export default {
 
 	@at-root .note.is-active       & { color: white; }
 	@at-root .note:not(.is-active) & { color: var(--color--text--secondary); }
+}
+
+.inlay {
+	@include center-position;
+	@include circle(15px);
+
+	background-color: var(--color--bg--highlight);
 }
 
 </style>

@@ -20,6 +20,7 @@ div.FretboardViewer(
 
 		:is-starting-fret="fret.string == fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
+		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 		)
 
 	//- Strings
