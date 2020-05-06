@@ -17,16 +17,17 @@ div.FretboardViewer(
 
 		v-bind="fret"
 		:scales-colors="scalesColors"
-		:is-open-string="fret.number == 0"
+
+		:is-starting-fret="fret.string == fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		)
 
 	//- Strings
 	div.string(
-		v-for="string in nbStrings"
-		:key="`string--${string}`"
+		v-for="(string, index) in strings"
+		:key="`string--${index + 1}`"
 
-		:style="(string == nbStrings) ? { bottom: 0 } : { top: `${100*((string - 1) / (nbStrings - 1))}%` }"
+		:style="string"
 		)
 
 </template>
@@ -71,7 +72,9 @@ export default {
 					tonality: 'B',
 					color:    'limegreen',
 				},
-			]
+			],
+
+			isFlipped: false,
 		}
 	},
 
@@ -129,6 +132,19 @@ export default {
 
 			return [];
 		},
+		strings()
+		{
+			return [...Array(this.nbStrings).keys()].map(index => ({
+				// Start
+				[this.isFlipped ? 'right' : 'left' ]: this.fretMin == 0 ? scssVars.openStringFretLength : '0',
+
+				// End
+				[this.isFlipped ? 'left'  : 'right']: 0,
+
+				// Position
+				[(index + 1 == this.nbStrings) ? 'bottom' : 'top']: (index + 1 == this.nbStrings) ? 0 : `${100*(index / (this.nbStrings - 1))}%`,
+			}));
+		},
 		scalesColors()
 		{
 			return this.displayedScales.map(scale => scale.color);
@@ -179,8 +195,6 @@ export default {
 
 .string {
 	position: absolute;
-	left: layout.$open-string-fret-length;
-	right: 0;
 
 	height: layout.$string-thickness;
 

@@ -5,7 +5,7 @@
 
 import { notes, scales, arpeggios } from '@/modules/music'
 
-export const MAX_NB_FRETS = 24;
+export const MAX_NB_FRETS = 25;
 
 /**
  * Generate a list of frets

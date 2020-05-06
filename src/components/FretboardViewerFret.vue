@@ -7,10 +7,10 @@
 <template lang="pug">
 
 div.FretboardViewerFret(
-	v-mods="{ isOpenString, isOnLastString }"
+	v-mods="{ isOpenString, isFirstFret, isOnLastString }"
 	)
 	div.note(
-		v-mods="{ isActive }"
+		v-mods="{ isActive, isOpenString }"
 		:style="noteBg"
 		)
 		p.note__name {{ noteName }}
@@ -48,7 +48,7 @@ export default {
 			type: Array,
 			required: true,
 		},
-		isOpenString: {
+		isStartingFret: {
 			type: Boolean,
 			default: false,
 		},
@@ -77,6 +77,14 @@ export default {
 		{
 			return this.scales.length > 0;
 		},
+		isOpenString()
+		{
+			return this.number == 0;
+		},
+		isFirstFret()
+		{
+			return this.number == 1;
+		},
 	},
 }
 
@@ -90,13 +98,17 @@ export default {
 .FretboardViewerFret {
 	position: relative;
 
-	&:not(.is-open-string) {
-		border-right: layout.$fretbar-thickness solid var(--color--fret);
-	}
+	border-width: 0;
+	border-style: solid;
+	border-color: var(--color--border);
 
 	&:not(.is-on-last-string) {
 		height: layout.$fret-width;
 	}
+
+	&:not(.is-open-string) { border-right-width: layout.$fretbar-thickness; }
+	&.is-starting-fret     { border-left-width:  layout.$fretbar-thickness; }
+	&.is-first-fret        { border-left-width:  layout.$nut-thickness;     }
 }
 
 .note {
@@ -104,7 +116,13 @@ export default {
 	z-index: 10;
 	@include center-content;
 
-	@include circle(30px);
+	@include circle(32px);
+
+	&.is-open-string {
+		top: 0;
+		left: 0;
+		transform: translateY(-50%);
+	}
 
 	&:not(.is-open-string) {
 		transform: translate(-50%, -50%);
@@ -114,10 +132,22 @@ export default {
 	}
 
 	&.is-active {
+		transition: opacity 0.2s, border-radius 0.2s, filter 0.2s;
+
+		&:hover {
+			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+		}
 	}
 
 	&:not(.is-active) {
+		border: 2px dashed var(--color--border);
+
 		opacity: 0;
+		transition: opacity 0.2s;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }
 
