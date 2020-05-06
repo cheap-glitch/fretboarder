@@ -26,11 +26,11 @@ div.FretboardViewerFret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isF
 		:is-open="showTooltip"
 		)
 		div.intervals(
-			v-for="(interval, index) in intervals"
-			:key="`interval--${string + 1}--${number}--${index}`"
+			v-for="interval in intervals"
+			:key="`interval--${string + 1}--${number}--${interval.value}`"
 			)
 			div.intervals__item
-				div.intervals__item__dot(:style="{ 'background-color': fret.color }")
+				//- div.intervals__item__dot(:style="{ 'background-color': white }")
 				p {{ interval.name }}
 
 </template>
@@ -40,7 +40,7 @@ div.FretboardViewerFret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isF
 <!--{{{ JavaScript -->
 <script>
 
-import { notesNames } from '@/modules/music'
+import { notesNames, intervalsNames } from '@/modules/music'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -97,7 +97,37 @@ export default {
 	computed: {
 		intervals()
 		{
-			return [];
+			// Make a list of intervals, each with the list of scales that contain them
+			const intervals = this.scales.reduce(function(list, scale)
+			{
+				const interval = scale.interval;
+
+				// If the interval is not in the list
+				if (intervals.findIndex(item => item.value == interval) === -1)
+				{
+					list[interval] = {
+						name:   intervalsNames[interval],
+						value:  interval,
+						scales: [scale.index],
+					};
+				}
+				// If the interval is already in the list
+				else
+				{
+					list[interval].scales.push(scale.index);
+				}
+
+				return list;
+			}, {});
+
+			// Sort the intervals to keep the same visual order
+			intervals.sort((a, b) => a.value - b.value);
+
+			// Sort the scales of each interval too
+			Object.keys(intervals).forEach(key => intervals[key].scales.sort());
+
+
+			return intervals;
 		},
 		noteBg()
 		{
