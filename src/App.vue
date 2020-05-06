@@ -46,7 +46,7 @@ export default {
 <style lang="scss" scoped>
 
 .App {
-	padding: 40px 0;
+	padding: 40px 40px;
 }
 
 </style>

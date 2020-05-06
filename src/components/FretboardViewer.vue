@@ -95,13 +95,13 @@ export default {
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
-				[`grid-template-${this.isVertical ? 'row'    : 'column'}`]: template.join(' '),
+				[`grid-template-${this.isVertical ? 'rows'   : 'columns'}`]: template.join(' '),
 			};
 		},
 		maxWidth()
 		{
 			// Limit the width of the fretboard in vertical mode
-			return this.isVertical ? { width: this.nbStrings*layout.fretWidth.px } : {};
+			return this.isVertical ? { width: `${(this.nbStrings - 1)*layout.fretWidth.int}px` } : {};
 		},
 		minLength()
 		{
@@ -137,8 +137,8 @@ export default {
 				[this.isVertical ? 'bottom' : this.isFlipped ? 'left'  : 'right']: 0,
 
 				// Position
-				[(index + 1 == this.nbStrings) ? (this.isVertical ? 'right': 'bottom') : (this.isVertical ? 'left': 'top')]:
-					(index + 1 == this.nbStrings) ? 0 : `${100*(index / (this.nbStrings - 1))}%`,
+				[this.isVertical ? 'left': 'top']: `${100*(index / (this.nbStrings - 1))}%`,
+				transform: `translate${this.isVertical ? 'X' : 'Y'}(-50%)`,
 
 				// Width
 				[this.isVertical ? 'width' : 'height']: layout.stringThickness.px,
