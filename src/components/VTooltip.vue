@@ -150,10 +150,9 @@ export default {
 
 .VTooltip__arrow::before {
 	content: "";
+	background-color: var(--color--bg--tooltip);
 
 	transform: rotate(45deg);
-
-	background-color: var(--color--bg--tooltip);
 }
 
 </style>

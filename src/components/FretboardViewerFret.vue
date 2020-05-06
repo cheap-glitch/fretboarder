@@ -6,32 +6,39 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewerFret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
-
-	div.inlay(v-show="isShowingInlay")
-
-	div.note(
-		ref="note"
-
-		v-mods="{ isActive, isOpenString, isFretboardFlipped, isFretboardVertical }"
-		:style="noteBg"
-
-		@mouseenter="mouseenterHandler"
-		@mouseleave="mouseleaveHandler"
-		)
-		p.note__name {{ noteName }}
+div.FretboardViewerFret
 
 	VTooltip(
 		:target="$refs.note || false"
 		:is-open="showTooltip"
 		)
-		div.intervals(
-			v-for="interval in intervals"
-			:key="`interval--${string + 1}--${number}--${interval.value}`"
-			)
-			div.intervals__item
-				//- div.intervals__item__dot(:style="{ 'background-color': white }")
+		div.intervals
+			div.intervals__item(
+				v-for="interval in intervals"
+				:key="`interval--${string + 1}--${number}--${interval.value}`"
+				)
+				div.intervals__item__dot(
+					v-for="scale in interval.scales"
+					:key="`dot--${scale}`"
+
+					:style="{ 'background-color': scalesColors[scale] }"
+					)
 				p {{ interval.name }}
+
+	div.fret(
+		v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }"
+		)
+		div.fret__inlay(v-show="isShowingInlay")
+		div.fret__note(
+			ref="note"
+
+			v-mods="{ isActive, isOpenString, isFretboardFlipped, isFretboardVertical }"
+			:style="noteBg"
+
+			@mouseenter="mouseenterHandler"
+			@mouseleave="mouseleaveHandler"
+			)
+			p.fret__note__name {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -100,32 +107,29 @@ export default {
 			// Make a list of intervals, each with the list of scales that contain them
 			const intervals = this.scales.reduce(function(list, scale)
 			{
-				const interval = scale.interval;
+				const index = list.findIndex(item => item.value == scale.interval);
 
 				// If the interval is not in the list
-				if (intervals.findIndex(item => item.value == interval) === -1)
+				if (index === -1)
 				{
-					list[interval] = {
-						name:   intervalsNames[interval],
-						value:  interval,
+					list.push({
+						name:   intervalsNames[scale.interval],
+						value:  scale.interval,
 						scales: [scale.index],
-					};
+					});
 				}
 				// If the interval is already in the list
 				else
 				{
-					list[interval].scales.push(scale.index);
+					list[index].scales.push(scale.index);
 				}
 
 				return list;
-			}, {});
+			}, []);
 
-			// Sort the intervals to keep the same visual order
+			// Sort the intervals and their scales to keep the same visual order
 			intervals.sort((a, b) => a.value - b.value);
-
-			// Sort the scales of each interval too
-			Object.keys(intervals).forEach(key => intervals[key].scales.sort());
-
+			intervals.forEach(interval => interval.scales.sort());
 
 			return intervals;
 		},
@@ -177,7 +181,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardViewerFret {
+.fret {
 	position: relative;
 
 	border-width: 0;
@@ -220,7 +224,14 @@ export default {
 	}
 }
 
-.note {
+.fret__inlay {
+	@include center-position;
+	@include circle(15px);
+
+	background-color: var(--color--bg--highlight);
+}
+
+.fret__note {
 	position: absolute;
 	z-index: 10;
 	@include center-content;
@@ -284,18 +295,26 @@ export default {
 	}
 }
 
-.note__name {
+.fret__note__name {
 	font-weight: bold;
 
-	@at-root .note.is-active       & { color: white; }
-	@at-root .note:not(.is-active) & { color: var(--color--text--secondary); }
+	@at-root .fret__note.is-active       & { color: white; }
+	@at-root .fret__note:not(.is-active) & { color: var(--color--text--secondary); }
 }
 
-.inlay {
-	@include center-position;
-	@include circle(15px);
+.intervals {
+	display: flex;
+	@include space-children-h(10px);
+}
 
-	background-color: var(--color--bg--highlight);
+.intervals__item {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+}
+
+.intervals__item__dot {
+	@include circle(10px);
 }
 
 </style>
