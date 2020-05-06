@@ -25,7 +25,13 @@ div.FretboardViewerFret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isF
 		:target="$refs.note || false"
 		:is-open="showTooltip"
 		)
-		p Hullo!
+		div.intervals(
+			v-for="(interval, index) in intervals"
+			:key="`interval--${string + 1}--${number}--${index}`"
+			)
+			div.intervals__item
+				div.intervals__item__dot(:style="{ 'background-color': fret.color }")
+				p {{ interval.name }}
 
 </template>
 <!--}}}-->
@@ -89,9 +95,13 @@ export default {
 	},
 
 	computed: {
+		intervals()
+		{
+			return [];
+		},
 		noteBg()
 		{
-			if (!this.isActive) return { 'background-color': 'var(--color--bg)' };
+			if (!this.isActive) return { 'background-color': 'var(--color--bg--highlight)' };
 
 			// Build a solid gradient with the colors of every scale the fret note belongs to
 			const stripeWidth = Math.ceil(100 / this.scales.length);

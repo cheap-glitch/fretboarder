@@ -26,14 +26,8 @@ import flip             from '@popperjs/core/lib/modifiers/flip';
 import offset           from '@popperjs/core/lib/modifiers/offset';
 import preventOverflow  from '@popperjs/core/lib/modifiers/preventOverflow';
 
-import { Portal }       from '@linusborg/vue-simple-portal'
-
 export default {
 	name: 'VTooltip',
-
-	components: {
-		Portal,
-	},
 
 	props: {
 		target: {
