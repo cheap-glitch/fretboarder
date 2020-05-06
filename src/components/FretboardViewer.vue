@@ -7,11 +7,11 @@
 <template lang="pug">
 
 div.FretboardViewer(
-	:style="[minLength, grid]"
+	:style="[minLength, maxWidth, grid]"
 	)
 
 	//- Frets
-	//- FretboardViewerFret(
+	FretboardViewerFret(
 		v-for="fret in displayedFrets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 
@@ -43,7 +43,7 @@ div.FretboardViewer(
 <!--{{{ JavaScript -->
 <script>
 
-import scssVars                 from '@/styles/exports.scss'
+import { layout }               from '@/modules/layout'
 
 import { instruments, tunings } from '@/modules/music'
 import { getFrets }             from '@/modules/fretboard'
@@ -89,25 +89,27 @@ export default {
 	computed: {
 		grid()
 		{
-			let template = [...(this.fretMin == 0 ? [scssVars.openStringFretLength] : []), ...this.layout.map(track => `${track}fr`)];
+			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
 			if (this.isFlipped) template.reverse();
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
-				[`grid-template-${this.isVertical ? 'row': 'column'}`]: template.join(' '),
+				[`grid-template-${this.isVertical ? 'row'    : 'column'}`]: template.join(' '),
 			};
+		},
+		maxWidth()
+		{
+			// Limit the width of the fretboard in vertical mode
+			return this.isVertical ? { width: this.nbStrings*layout.fretWidth.px } : {};
 		},
 		minLength()
 		{
-			const minFretLength        = parseInt(scssVars.minFretLength.replace('px', ''),        10);
-			const openStringFretLength = parseInt(scssVars.openStringFretLength.replace('px', ''), 10);
-
 			/**
 			 * The length of the fretboard must be so that the length
 			 * of the smallest fret is equal or greater than a fixed minimum length
 			 */
-			const length = minFretLength*(this.nbFrets / this.layout.slice(-1)[0]) + (this.fretMin == 0 ? openStringFretLength : 0);
+			const length = layout.minFretLength.int*(this.nbFrets / this.layout.slice(-1)[0]) + (this.fretMin == 0 ? layout.openStringFretLength.int : 0);
 
 			return { [`min-${this.isVertical ? 'height': 'width'}`]: `${Math.ceil(length)}px` };
 		},
@@ -126,6 +128,21 @@ export default {
 
 			// Don't include the open string fret in the flexible layout
 			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => c - i/(n - 1));
+		},
+		strings()
+		{
+			return [...Array(this.nbStrings).keys()].map(index => ({
+				// Start & end
+				[this.isVertical ? 'top'    : this.isFlipped ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
+				[this.isVertical ? 'bottom' : this.isFlipped ? 'left'  : 'right']: 0,
+
+				// Position
+				[(index + 1 == this.nbStrings) ? (this.isVertical ? 'right': 'bottom') : (this.isVertical ? 'left': 'top')]:
+					(index + 1 == this.nbStrings) ? 0 : `${100*(index / (this.nbStrings - 1))}%`,
+
+				// Width
+				[this.isVertical ? 'width' : 'height']: layout.stringThickness.px,
+			}));
 		},
 		inlays()
 		{
@@ -159,19 +176,6 @@ export default {
 			}
 
 			return [];
-		},
-		strings()
-		{
-			return [...Array(this.nbStrings).keys()].map(index => ({
-				// Start
-				[this.isFlipped ? 'right' : 'left' ]: this.fretMin == 0 ? scssVars.openStringFretLength : '0',
-
-				// End
-				[this.isFlipped ? 'left'  : 'right']: 0,
-
-				// Position
-				[(index + 1 == this.nbStrings) ? 'bottom' : 'top']: (index + 1 == this.nbStrings) ? 0 : `${100*(index / (this.nbStrings - 1))}%`,
-			}));
 		},
 		scalesColors()
 		{
@@ -216,15 +220,12 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardViewer {
-	position: relative;
-
 	display: grid;
+	position: relative;
 }
 
 .string {
 	position: absolute;
-
-	height: layout.$string-thickness;
 
 	background-color: var(--color--string);
 }

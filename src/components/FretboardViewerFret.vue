@@ -7,7 +7,7 @@
 <template lang="pug">
 
 div.FretboardViewerFret(
-	v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped }"
+	v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }"
 	)
 	div.note(
 		v-mods="{ isActive, isOpenString, isFretboardFlipped }"
@@ -114,7 +114,8 @@ export default {
 	border-color: var(--color--border);
 
 	&:not(.is-on-last-string) {
-		height: layout.$fret-width;
+		&.is-fretboard-vertical       { width:  layout.$fret-width; }
+		&:not(.is-fretboard-vertical) { height: layout.$fret-width; }
 	}
 
 	&.is-fretboard-flipped {

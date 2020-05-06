@@ -1,9 +1,11 @@
 
 /**
- * styles/exports.scss
+ * styles/layout.export.scss
  */
 
 :export {
+	stringThickness:      layout.$string-thickness;
+
 	fretWidth:            layout.$fret-width;
 	minFretLength:        layout.$min-fret-length;
 	openStringFretLength: layout.$open-string-fret-length;
