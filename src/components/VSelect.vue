@@ -116,6 +116,7 @@ export default {
 	mounted()
 	{
 		this.updateOpeningDirection();
+
 	},
 
 	destroyed()

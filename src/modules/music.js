@@ -40,6 +40,21 @@ export const intervalsNames = [
 	'Major seventh',
 ];
 
+export const intervalsShortNames = [
+	'R',
+	'2m',
+	'2M',
+	'3m',
+	'3M',
+	'4',
+	'5♭',
+	'5',
+	'6m',
+	'6M',
+	'7m',
+	'7M',
+];
+
 /**
  * Instruments
  */

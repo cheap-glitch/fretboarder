@@ -59,80 +59,78 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 	//----------------------------------------------------------------------
 	//- Tools
 	//----------------------------------------------------------------------
-	//- div.tools
+	div.tools
 
 		//- Intervals
-		div.intervals
-			div.intervals__item(
-				v-for="(interval, intervalIndex) in intervals"
-				:key="`scale--${index}--interval--${intervalIndex}`"
-				ref="interval"
+		div.intervals: p.intervals__item(
+			v-for="(interval, intervalIndex) in intervals"
+			:key="`scale--${index}--interval--${interval.value}`"
+			ref="interval"
 
-				v-mods="{ isSelected: highlightedInterval == interval.value }"
+			v-mods="{ isSelected: highlightedInterval == interval.value }"
 
-				@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
-				@mouseenter="hoveredInterval = intervalIndex"
-				@mouseleave="hoveredInterval = null"
+			@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
+			@mouseenter="hoveredInterval = intervalIndex"
+			@mouseleave="hoveredInterval = null"
+			) {{ interval.name }}
+
+		//- div.tools__separator
+
+			//- Show/hide
+			VButton.toolbar__item(
+				:icon="isVisible ? 'eye' : 'eye-slash'"
+				size="small"
+				:tooltip="isVisible ? 'Hide' : 'Show'"
+				tooltip-placement="bottom"
+
+				@click="updateScale('isVisible', !isVisible)"
 				)
-				p.intervals__item__text {{ interval.name }}
+			//- Focus
+			VButton.toolbar__item(
+				v-show="nbScales > 1"
 
-		div.tools__separator
+				icon="bullseye"
+				size="small"
+				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
+				tooltip-placement="bottom"
 
-		//- Show/hide
-		VButton.toolbar__item(
-			:icon="isVisible ? 'eye' : 'eye-slash'"
-			size="small"
-			:tooltip="isVisible ? 'Hide' : 'Show'"
-			tooltip-placement="bottom"
+				:is-active="isFocused"
+				@click="$store.commit('scales/toggleFocusScale', id)"
+				)
+			//- Show intersections only
+			VButton.toolbar__item(
+				v-show="nbScales > 1"
 
-			@click="updateScale('isVisible', !isVisible)"
-			)
-		//- Focus
-		VButton.toolbar__item(
-			v-show="nbScales > 1"
+				:icon="['fas', 'intersection']"
+				size="small"
+				tooltip="Show only intersections with other scales"
+				tooltip-placement="bottom"
 
-			icon="bullseye"
-			size="small"
-			:tooltip="isFocused ? 'Unfocus' : 'Focus'"
-			tooltip-placement="bottom"
+				:is-active="isIntersected"
+				@click="updateScale('isIntersected', !isIntersected)"
+				)
 
-			:is-active="isFocused"
-			@click="$store.commit('scales/toggleFocusScale', id)"
-			)
-		//- Show intersections only
-		VButton.toolbar__item(
-			v-show="nbScales > 1"
+			div.tools__separator
 
-			:icon="['fas', 'intersection']"
-			size="small"
-			tooltip="Show only intersections with other scales"
-			tooltip-placement="bottom"
+			//- Duplicate
+			VButton.toolbar__item(
+				icon="copy"
+				size="small"
+				tooltip="Duplicate"
+				tooltip-placement="bottom"
 
-			:is-active="isIntersected"
-			@click="updateScale('isIntersected', !isIntersected)"
-			)
+				:is-disabled="nbScales == MAX_NB_SCALES"
+				@click="$store.commit('scales/addScale', id)"
+				)
+			//- Remove
+			VButton.toolbar__item(
+				icon="times-circle"
+				size="small"
+				tooltip="Remove"
+				tooltip-placement="bottom"
 
-		div.tools__separator
-
-		//- Duplicate
-		VButton.toolbar__item(
-			icon="copy"
-			size="small"
-			tooltip="Duplicate"
-			tooltip-placement="bottom"
-
-			:is-disabled="nbScales == MAX_NB_SCALES"
-			@click="$store.commit('scales/addScale', id)"
-			)
-		//- Remove
-		VButton.toolbar__item(
-			icon="times-circle"
-			size="small"
-			tooltip="Remove"
-			tooltip-placement="bottom"
-
-			@click="$store.commit('scales/removeScale', id)"
-			)
+				@click="$store.commit('scales/removeScale', id)"
+				)
 
 </template>
 <!--}}}-->
@@ -141,8 +139,8 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 <!--{{{ JavaScript -->
 <script>
 
-import { MAX_NB_SCALES }                                 from '@/stores/scales'
-import { scales, arpeggios, notesNames, intervalsNames } from '@/modules/music'
+import { MAX_NB_SCALES } from '@/stores/scales'
+import { scales, arpeggios, notesNames, intervalsNames, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'ScalesListItem',
@@ -202,35 +200,10 @@ export default {
 	},
 
 	computed: {
-		/*
 		intervals()
 		{
-			let rootInterval = 0;
-
-			return [
-				{ value: 0, name: 'R' },
-				...this.models[this.model].model.slice(0, -1).map(function(interval)
-				{
-					rootInterval += interval;
-
-					switch(rootInterval)
-					{
-						case 1:  return { value: rootInterval, name: '2m' };
-						case 2:  return { value: rootInterval, name: '2M' };
-						case 3:  return { value: rootInterval, name: '3m' };
-						case 4:  return { value: rootInterval, name: '3M' };
-						case 5:  return { value: rootInterval, name: '4'  };
-						case 6:  return { value: rootInterval, name: '5♭' };
-						case 7:  return { value: rootInterval, name: '5'  };
-						case 8:  return { value: rootInterval, name: '6m' };
-						case 9:  return { value: rootInterval, name: '6M' };
-						case 10: return { value: rootInterval, name: '7m' };
-						case 11: return { value: rootInterval, name: '7M' };
-					}
-				})
-			];
+			return [0, ...this.models[this.model].model].map(interval => ({ value: interval, name: intervalsShortNames[interval] }))
 		},
-		*/
 		modelsNames()
 		{
 			return Object.keys(this.models).map(key => ({ name: this.models[key].name, value: key }));
@@ -301,12 +274,56 @@ export default {
 	}
 }
 
-.color-dot {
-	@include circle(10px);
+.intervals {
+	display: flex;
+}
 
-	@include mq($until: desktop)
+.intervals__item {
+	color: var(--color--text);
+
+	cursor: pointer;
+
+	&:not(:last-child) {
+		border-right: 1px solid var(--color--border);
+	}
+
+	&.is-selected {
+		color: var(--color--highlight);
+		background-color: var(--color--bg--highlight);
+	}
+
+	//- @include mq($until: desktop)
+	//- {
+	//- 	flex: 1 1 100%;
+	//- 	text-align: center;
+
+	//- 	padding: 10px 0;
+	//- }
+
+	@include mq($from: desktop)
 	{
-		display: none;
+		padding: 2px 8px;
+
+		border: 1px solid var(--color--border);
+
+		&:not(:last-child) {
+			border-right: none;
+		}
+
+		&:first-child { padding-left:  12px; border-radius: 1e3px 0 0 1e3px; }
+		&:last-child  { padding-right: 12px; border-radius: 0 1e3px 1e3px 0; }
+
+		&:not(.is-selected):hover {
+			color: var(--color--hover);
+			background-color: var(--color--bg--highlight);
+		}
+	}
+}
+
+.color-dot {
+	@include mq($from: desktop)
+	{
+		@include circle(10px);
 	}
 }
 
@@ -377,70 +394,6 @@ export default {
 
 //- 		background-color: var(--color--border);
 //- 	}
-//- }
-
-//- .intervals {
-//- 	display: flex;
-
-//- 	@include mq($until: desktop)
-//- 	{
-//- 		border-bottom: 1px solid var(--color--border);
-//- 	}
-//- }
-
-//- .intervals__item {
-//- 	padding: 10px 0;
-
-//- 	color: var(--color--text);
-
-//- 	cursor: pointer;
-
-//- 	&:not(:last-child) {
-//- 		border-right: 1px solid var(--color--border);
-//- 	}
-
-//- 	&.is-selected {
-//- 		color: var(--color--highlight);
-//- 		background-color: var(--color--bg--highlight);
-//- 	}
-
-//- 	@include mq($until: desktop)
-//- 	{
-//- 		flex: 1 1 100%;
-//- 		text-align: center;
-//- 	}
-
-//- 	@include mq($from: desktop)
-//- 	{
-//- 		padding: 2px 8px;
-
-//- 		border: 1px solid var(--color--border);
-
-//- 		&:not(:last-child) {
-//- 			border-right: none;
-//- 		}
-
-//- 		&:first-child {
-//- 			padding-left: 10px;
-
-//- 			border-radius: 1e3px 0 0 1e3px;
-//- 		}
-
-//- 		&:last-child {
-//- 			padding-right: 10px;
-
-//- 			border-radius: 0 1e3px 1e3px 0;
-//- 		}
-
-//- 		&:not(.is-selected):hover {
-//- 			color: var(--color--hover);
-//- 			background-color: var(--color--bg--highlight);
-//- 		}
-//- 	}
-//- }
-
-//- .intervals__item__text {
-//- 	cursor: pointer;
 //- }
 
 //- .toolbar {
