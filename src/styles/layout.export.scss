@@ -4,12 +4,15 @@
  */
 
 :export {
-	mqBreakpointDesktop:   layout.$mq-breakpoint-desktop;
+	mqBreakpointDesktop:     layout.$mq-breakpoint-desktop;
 
-	fretWidth:             layout.$fret-width;
-	minFretLength:         layout.$min-fret-length;
-	openStringFretLength:  layout.$open-string-fret-length;
-	fretNumberWrapperSize: layout.$fret-number-wrapper-size;
+	selectOptionsHeight:     layout.$select-options-height;
+	selectOptionsItemHeight: layout.$select-options-item-height;
 
-	stringThickness:       layout.$string-thickness;
+	fretWidth:               layout.$fret-width;
+	minFretLength:           layout.$min-fret-length;
+	openStringFretLength:    layout.$open-string-fret-length;
+	fretNumberWrapperSize:   layout.$fret-number-wrapper-size;
+
+	stringThickness:         layout.$string-thickness;
 }

@@ -49,6 +49,7 @@ import { disableBodyScroll       } from 'body-scroll-lock'
 import { enableBodyScroll        } from 'body-scroll-lock'
 import { clearAllBodyScrollLocks } from 'body-scroll-lock'
 
+import { layout }                  from '@/modules/layout'
 import { EventBus }                from '@/modules/bus'
 
 export default {
@@ -135,7 +136,7 @@ export default {
 			 * If the element is positioned low in the viewport,
 			 * open the options menu upward instead of downward to avoid vertical overflow
 			 */
-			this.openingDirection = (windowHeight - elemYPosition < 380) ? 'above' : 'below';
+			this.openingDirection = (windowHeight - elemYPosition < layout.selectOptionsHeight.int) ? 'above' : 'below';
 		},
 		jumpToOption(key)
 		{
@@ -153,7 +154,7 @@ export default {
 			const index = this.optionsList.findIndex(option => option.name.toLowerCase().startsWith(this.lastKeypressValue.toLowerCase()));
 			if (index !== -1)
 			{
-				const optionBoxHeight = this.$refs.options.children.item(0).offsetHeight || 35;
+				const optionBoxHeight = this.$refs.options.children.item(0).offsetHeight || layout.selectOptionsItemHeight.int;
 				this.$refs.options.scrollTo({ top: index*optionBoxHeight, behavior: 'auto' });
 			}
 		},
@@ -283,7 +284,7 @@ export default {
 
 		border: 1px solid var(--color--hover);
 
-		max-height: 300px;
+		max-height: layout.$select-options-height;
 
 		&.is-opening-above {
 			bottom: 100%;

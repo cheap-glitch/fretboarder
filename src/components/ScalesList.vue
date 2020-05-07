@@ -124,6 +124,8 @@ export default {
 //- 	/**
 //- 	 * Place the "Hide all" tool above the "Hide" button of the scales
 //- 	 *                 ↓ three icons  +  ↓ one separator
+//-	 *
+//-	 * @TODO : put values in layout.scss
 //- 	 */
 //- 	margin-right: calc(3*(22px + 10px) + 24px);
 //- }
