@@ -18,6 +18,7 @@ div.FretboardViewer(
 		v-bind="fret"
 		:is-starting-fret="fret.number == fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
+		:is-showing-note-name="isShowingNotesName"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
 		:scales-colors="scalesColors"
@@ -36,7 +37,7 @@ div.FretboardViewer(
 		)
 
 	//- Fret numbers
-	template(v-if="isShowingFretNbs")
+	template(v-if="isShowingFretsNb")
 		div.fret-number(
 			v-for="(fret, index) in fretNumbers"
 			:key="`fret-number--${index}`"
@@ -68,16 +69,11 @@ export default {
 		FretboardViewerFret,
 	},
 
-	data() {
-		// @NOTE: this (↓) is mock data!
-		return {
-			fretRange:        [0, 22],
-			instrument:       'guitar',
-			tuning:           'standard',
-			isFlipped:        false,
-			isVertical:       false,
-			isShowingFretNbs: false,
-		}
+	props: {
+		isVertical: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
@@ -188,7 +184,7 @@ export default {
 		},
 		fretNumbersPadding()
 		{
-			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
+			return this.isShowingFretsNb ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
 		},
 		tuningNotes()
 		{
@@ -216,7 +212,18 @@ export default {
 		{
 			return this.fretRange[1];
 		},
+
 		displayedScales: get('scales/displayedScales'),
+
+		...get('fretboard', [
+			'instrument',
+			'tuning',
+			'fretRange',
+
+			'isFlipped',
+			'isShowingFretsNb',
+			'isShowingNotesName',
+		]),
 	},
 }
 

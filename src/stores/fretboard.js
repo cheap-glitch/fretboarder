@@ -25,15 +25,15 @@ const model = {
 		default: [0, 22],
 		validator: v => Array.isArray(v) && v.length == 2,
 	},
-	isDisplayingFretNbs: {
+	isShowingFretsNb: {
 		default: false,
 		validator: v => typeof v == 'boolean',
 	},
-	isDisplayingNotesName: {
+	isShowingNotesName: {
 		default: true,
 		validator: v => typeof v == 'boolean',
 	},
-	isFretboardFlipped: {
+	isFlipped: {
 		default: false,
 		validator: v => typeof v == 'boolean',
 	},

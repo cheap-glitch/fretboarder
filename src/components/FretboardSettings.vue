@@ -19,7 +19,7 @@ div.FretboardSettings
 		)
 
 	//- Frets range
-	//- div.slider-frets-range: vue-slider(
+	vue-slider.slider-frets-range(
 		:min="0"
 		:max="24"
 		:interval="1"
@@ -27,7 +27,7 @@ div.FretboardSettings
 		:min-range="4"
 		:enable-cross="false"
 
-		:direction="isFretboardFlipped ? 'rtl' : 'ltr'"
+		:direction="isFlipped ? 'rtl' : 'ltr'"
 		adsorb lazy
 
 		:tooltip="isMobileDevice ? 'none' : 'hover'"
@@ -37,50 +37,41 @@ div.FretboardSettings
 		v-model="fretRange"
 		)
 
-		//- div.toolbar
-			//- Toggle fret numbers
-			VButton(
-				:icon="['fal', 'list-ol']"
-				:tooltip="!isDisplayingFretNbs ? 'Show fret numbers' : 'Hide fret numbers'"
-				:is-active="isDisplayingFretNbs"
-				@click="$store.commit('fretboard/toggleIsDisplayingFretNbs')"
-				)
-			//- Toggle note names
-			VButton(
-				icon="info-circle"
-				:tooltip="!isDisplayingNotesName ? 'Show note names' : 'Hide note names'"
-				:is-active="isDisplayingNotesName"
-				@click="$store.commit('fretboard/toggleIsDisplayingNotesName')"
-				)
-			//- Switch fretting hand
-			VButton(
-				icon="hand-paper"
-				:tooltip="isFretboardFlipped ? 'Switch to left-handed fretting' : 'Switch to right-handed fretting'"
-				:is-flipped="!isFretboardFlipped"
-				@click="$store.commit('fretboard/toggleIsFretboardFlipped')"
-				)
-			//- Toggle dark mode (mobile only)
-			VButton(
-				v-if="isMobileDevice"
+	div.buttons
+		//- Toggle frets number
+		VButton(
+			:icon="['fal', 'list-ol']"
+			tooltip-text="Toggle frets number"
+			:is-active="isShowingFretsNb"
 
-				icon="moon"
-				tooltip="Toggle dark mode"
-				:is-active="isDarkModeOn"
-				@click="$store.commit('toggleIsDarkModeOn')"
-				)
-			//- Export the fretboard
-			div#canvas-wrapper
-			VButton#button-export-menu(
-				v-if="!isMobileDevice"
+			@click="$store.commit('fretboard/toggle.isShowingFretsNb')"
+			)
+		//- Toggle notes name
+		VButton(
+			icon="info-circle"
+			tooltip-text="Toggle notes name"
+			:is-active="isShowingNotesName"
 
-				icon="file-download"
-				:is-active="isExportMenuOpened"
+			@click="$store.commit('fretboard/toggle.isShowingNotesName')"
+			)
+		//- Switch fretting hand
+		VButton(
+			icon="hand-paper"
+			tooltip-text="Switch fretting hand"
+			:is-flipped="!isFlipped"
 
-				tooltip="Export the fretboard image"
-				:is-tooltip-disabled="isExportMenuOpened"
+			@click="$store.commit('fretboard/toggle.isFlipped')"
+			)
+		//- Export the fretboard
+		//- div#canvas-wrapper
+		//- VButton(
+			icon="file-download"
+			:is-active="isExportMenuOpened"
+			tooltip-text="Export the fretboard image"
+			:is-tooltip-disabled="isExportMenuOpened"
 
-				@click="isExportMenuOpened = !isExportMenuOpened"
-				)
+			@click="isExportMenuOpened = !isExportMenuOpened"
+			)
 
 	//- Export menu
 	//- VTooltip(
@@ -136,9 +127,9 @@ export default {
 			'fretRange',
 		]),
 		...get('fretboard', [
-			'isDisplayingFretNbs',
-			'isDisplayingNotesName',
-			'isFretboardFlipped',
+			'isShowingFretsNb',
+			'isShowingNotesName',
+			'isFlipped',
 		]),
 		...get([
 			'isDarkModeOn',
@@ -156,7 +147,6 @@ export default {
 		this.buttonExportMenu  = document.getElementById('button-export-menu');
 	},
 
-	/*
 	methods: {
 		tooltipFormatter(number)
 		{
@@ -174,6 +164,7 @@ export default {
 				default:  return `${number}th fret`;
 			}
 		},
+		/*
 		exportFretboardToFile(format)
 		{
 			// Close the export menu tooltip
@@ -187,8 +178,8 @@ export default {
 				this.fretRange[1],
 				tunings[this.instrument][this.tuning],
 				this.$store.getters['scales/activeScales'],
-				this.isFretboardFlipped,
-				this.isDisplayingNotesName,
+				this.isFlipped,
+				this.isShowingNotesName,
 				this.isDarkModeOn,
 				format != 'svg',
 			);
@@ -198,8 +189,8 @@ export default {
 			if (!this.buttonExportMenu.contains(event.target))
 				this.isExportMenuOpened = false;
 		},
+		*/
 	},
-	*/
 }
 
 </script>
@@ -210,7 +201,26 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSettings {
+	display: grid;
 	@include space-children-h(10px);
+
+	grid-template: 1fr / auto auto 300px 1fr;
+}
+
+.slider-frets-range {
+	align-self: center;
+	margin-left: 10px;
+}
+
+.buttons {
+	display: flex;
+	@include space-children-h(16px);
+
+	justify-self: end;
+
+	.VButton {
+		font-size: 26px;
+	}
 }
 
 //- /**
@@ -222,7 +232,7 @@ export default {
 //- 	border-top: 1px solid var(--color--border);
 //- }
 
-//- .toolbar {
+//- .buttons {
 //- 	display: grid;
 //- 	grid-template: 1fr 1fr / 1fr 1fr;
 //- }
@@ -235,7 +245,7 @@ export default {
 //- 		                     "slider     slider";
 //- 	}
 
-//- 	.toolbar {
+//- 	.buttons {
 //- 		grid-template: 1fr / repeat(4, 1fr);
 //- 	}
 //- }
@@ -247,7 +257,7 @@ export default {
 //- 		justify-content: space-between;
 //- 	}
 
-//- 	.toolbar,
+//- 	.buttons,
 //- 	.settings {
 //- 		display: flex;
 //- 		align-items: center;
@@ -305,11 +315,6 @@ export default {
 //- 		min-width: 260px;
 //- 	}
 
-//- 	.slider-frets-range {
-//- 		width: 300px;
-
-//- 		margin-left: 10px;
-//- 	}
 //- }
 
 //- /**

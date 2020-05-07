@@ -21,7 +21,7 @@ export function makeTogglers(state)
 	return Object.keys(state).reduce(function(togglers, propertyName)
 	{
 		if (/^is[A-Z]/.test(propertyName))
-			togglers[`toggleIs${propertyName.slice(2)}`] = storeState => storeState[propertyName] = !storeState[propertyName];
+			togglers[`toggle.${propertyName}`] = storeState => storeState[propertyName] = !storeState[propertyName];
 
 		return togglers;
 	}, {});

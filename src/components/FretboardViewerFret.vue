@@ -38,7 +38,7 @@ div.FretboardViewerFret
 			@mouseenter="mouseenterHandler"
 			@mouseleave="mouseleaveHandler"
 			)
-			p.fret__note__name {{ noteName }}
+			p.fret__note__name(v-show="isShowingNoteName") {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -86,6 +86,10 @@ export default {
 			default: false,
 		},
 		isShowingInlay: {
+			type: Boolean,
+			default: false,
+		},
+		isShowingNoteName: {
 			type: Boolean,
 			default: false,
 		},

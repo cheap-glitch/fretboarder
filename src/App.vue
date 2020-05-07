@@ -69,7 +69,7 @@ div.App#app(:style="colorscheme")
 		//- Light/dark switch
 		div.dark-mode-toggle(
 			v-mods="{ isDarkModeOn }"
-			@click="$store.commit('toggleIsDarkModeOn')"
+			@click="$store.commit('toggle.isDarkModeOn')"
 			)
 			fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
 			div.dark-mode-toggle__switch
@@ -80,7 +80,7 @@ div.App#app(:style="colorscheme")
 	//----------------------------------------------------------------------
 
 	FretboardSettings
-	FretboardViewer
+	FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 	ScalesList
 
 </template>
@@ -142,11 +142,10 @@ export default {
 		},
 		...get([
 			'isDarkModeOn',
-			//- 'isMobileDevice',
-			//- 'isLayoutLandscape',
+			'isMobileDevice',
+			'isLayoutLandscape',
 
 			'fretboard/instrument',
-			//- 'fretboard/isFretboardFlipped',
 		]),
 	},
 
@@ -354,7 +353,7 @@ export default {
 @use "@/styles/global";
 
 // Override the default styles of the slider component
-//- @use "@/styles/slider";
+@use "@/styles/slider";
 
 </style>
 <!--}}}-->
