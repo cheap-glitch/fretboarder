@@ -46,9 +46,9 @@ export const intervalsShortNames = [
 	'2M',
 	'3m',
 	'3M',
-	'4',
+	'4<sup>th</sup>',
 	'5♭',
-	'5',
+	'5<sup>th</sup>',
 	'6m',
 	'6M',
 	'7m',
@@ -109,11 +109,11 @@ export const arpeggios = {
 	'dim':      { model: [3,  6],                  name: 'Diminished'                },
 
 	// Sixth chords
-	'maj6':     { model: [4,  7,  9],              name: 'Major 6th'                 },
-	'min6':     { model: [3,  7,  9],              name: 'Minor 6th'                 },
+	'maj6':     { model: [4,  7,  9],              name: 'Major 6<sup>th</sup>'                 },
+	'min6':     { model: [3,  7,  9],              name: 'Minor 6<sup>th</sup>'                 },
 
 	// Seventh chords
-	'dom7':     { model: [4,  7, 10],              name: 'Dominant 7th'              },
+	'dom7':     { model: [4,  7, 10],              name: 'Dominant 7<sup>th</sup>'              },
 	'dom7f5':   { model: [4,  6, 10],              name: 'Dominant 7th flat five'    },
 	'maj7':     { model: [4,  7, 11],              name: 'Major 7th'                 },
 	'min7':     { model: [3,  7, 10],              name: 'Minor 7th'                 },

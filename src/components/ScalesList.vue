@@ -50,11 +50,11 @@ div.ScalesList
 		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"
+		tooltip-text="Add a new scale or arpeggio"
+		tooltip-placement="bottom"
 
 		@click="$store.commit('scales/addScale')"
 		)
-		//- tooltip="Add a new scale or arpeggio"
-		//- tooltip-placement="bottom"
 
 </template>
 <!--}}}-->
@@ -93,23 +93,12 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesList {
-	@include center-column;
 	@include space-children-v(20px);
-
-	@include mq($until: desktop)
-	{
-		padding: 0 20px 20px 20px;
-	}
 }
 
-//- .scales {
-//- 	@include space-children-v(20px);
-
-//- 	@include mq($until: desktop)
-//- 	{
-//- 		align-self: stretch;
-//- 	}
-//- }
+.scales {
+	@include space-children-v(20px);
+}
 
 //- .scale__tools {
 //- 	display: none;

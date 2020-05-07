@@ -8,30 +8,28 @@
 
 div.VButton(
 	ref="wrapper"
+
+	@click.left="clickHandler"
+	@mouseenter="showTooltip = true"
+	@mouseleave="showTooltip = clicked = false"
 	)
-	//- @click.left="click"
+
 	button.VButton__button(
 		ref="button"
 		v-mods="{ isDisabled }"
 		)
-		//- @click.left="click"
-		//- @mouseenter="showTooltip = true"
-		//- @mouseleave="showTooltip = hasBeenClicked = false"
-
 		fa-icon.VButton__icon(
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
 			v-mods="{ isActive, isDisabled, isFlipped }"
 			)
 
-	//- VTooltip(
-		v-if="!isMobileDevice && !isTooltipDisabled && !hasBeenClicked"
-
+	VTooltip(
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"
 		:delay="500"
-		:is-open="showTooltip && !isTooltipDisabled"
+		:is-open="!isMobileDevice && !isTooltipDisabled && !clicked && showTooltip"
 		)
-		p {{ tooltip }}
+		p {{ tooltipText }}
 
 </template>
 <!--}}}-->
@@ -50,8 +48,7 @@ export default {
 			type: [Array, String],
 			required: true,
 		},
-		/*
-		tooltip: {
+		tooltipText: {
 			type: String,
 			required: true,
 		},
@@ -60,7 +57,6 @@ export default {
 			default: 'top',
 			validator: v => ['top', 'bottom'].includes(v),
 		},
-		*/
 		isActive: {
 			type: Boolean,
 			default: false,
@@ -73,43 +69,36 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		/*
 		isTooltipDisabled: {
 			type: Boolean,
 			default: false,
 		},
-		*/
 	},
 
-	/*
 	data() {
 		return {
-			showTooltip:    false,
-			hasBeenClicked: false,
+			clicked:     false,
+			showTooltip: false,
 		}
 	},
-	*/
 
 	computed: {
 		isMobileDevice: get('isMobileDevice'),
 	},
 
 	methods: {
-		/*
-		click(event)
+		clickHandler(event)
 		{
-			// Prevent the button from registering the click twice
-			event.stopPropagation();
-
-			if (this.isDisabled
-			// Disable the wider click zone on desktop
-			|| (event.target === this.$refs.wrapper && !this.isMobileDevice))
+			if (this.isDisabled)
 				return;
 
-			this.hasBeenClicked = true;
+			// Disable the wider click zone on desktop
+			if (event.target === this.$refs.wrapper && !this.isMobileDevice)
+				return;
+
+			this.clicked = true;
 			this.$emit('click');
 		}
-		*/
 	},
 }
 
@@ -143,7 +132,6 @@ export default {
 
 	&.is-disabled {
 		color: var(--color--bg--highlight);
-
 		cursor: not-allowed;
 	}
 

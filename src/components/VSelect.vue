@@ -27,7 +27,7 @@ div.VSelect(ref="selectbar")
 		div.options(
 			ref="options"
 			v-show="isOpen"
-			v-mods="{ isOpeningAbove: openingDirection == 'above' }"
+			:class="`is-opening-${openingDirection}`"
 			)
 			div.options__button-close(@click.left.stop="isOpen = false"): fa-icon(:icon="['far', 'arrow-left']")
 			p.options__item(
@@ -208,34 +208,25 @@ export default {
 
 .VSelect {
 	position: relative;
-
-	flex: 1 1 auto;
+	display: inline-block;
 }
 
 .bar {
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 	@include space-children-h(10px);
 
+	padding: 8px;
+
+	border: 1px solid var(--color--border);
+	background-color: var(--color--bg--accent);
+
 	cursor: pointer;
 
-	@include mq($until: desktop)
-	{
-		height: 100%;
-	}
-
-	@include mq($from: desktop)
-	{
-		padding: 8px;
-
-		border: 1px solid var(--color--border);
-
-		background-color: var(--color--bg--accent);
-
-		&:hover, &.is-open {
-			border-color: var(--color--hover);
-			background-color: var(--color--bg--highlight);
-		}
+	&:hover, &.is-open {
+		border-color: var(--color--hover);
+		background-color: var(--color--bg--highlight);
 	}
 }
 
@@ -261,13 +252,10 @@ export default {
 
 	color: var(--color--text--secondary);
 
-	@include mq($from: desktop)
-	{
-		transition: transform 0.2s;
+	transition: transform 0.2s;
 
-		&.is-flipped {
-			transform: rotate(180deg);
-		}
+	&.is-flipped {
+		transform: rotate(180deg);
 	}
 }
 
@@ -310,7 +298,7 @@ export default {
 			border-bottom: none;
 		}
 
-		&:not(.is-opening-above) {
+		&.is-opening-below {
 			top: 100%;
 			border-top: none;
 		}

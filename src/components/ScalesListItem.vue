@@ -62,7 +62,7 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 	div.tools
 
 		//- Intervals
-		div.intervals: p.intervals__item(
+		div.intervals: div.intervals__item(
 			v-for="(interval, intervalIndex) in intervals"
 			:key="`scale--${index}--interval--${interval.value}`"
 			ref="interval"
@@ -72,14 +72,15 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 			@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
 			@mouseenter="hoveredInterval = intervalIndex"
 			@mouseleave="hoveredInterval = null"
-			) {{ interval.name }}
+			)
+			p.interval__item__note {{ interval.note }}
+			p.interval__item__name(v-html="interval.name")
 
 		//- div.tools__separator
 
 			//- Show/hide
 			VButton.toolbar__item(
 				:icon="isVisible ? 'eye' : 'eye-slash'"
-				size="small"
 				:tooltip="isVisible ? 'Hide' : 'Show'"
 				tooltip-placement="bottom"
 
@@ -90,7 +91,6 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 				v-show="nbScales > 1"
 
 				icon="bullseye"
-				size="small"
 				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
 				tooltip-placement="bottom"
 
@@ -102,7 +102,6 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 				v-show="nbScales > 1"
 
 				:icon="['fas', 'intersection']"
-				size="small"
 				tooltip="Show only intersections with other scales"
 				tooltip-placement="bottom"
 
@@ -115,7 +114,6 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 			//- Duplicate
 			VButton.toolbar__item(
 				icon="copy"
-				size="small"
 				tooltip="Duplicate"
 				tooltip-placement="bottom"
 
@@ -125,7 +123,6 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 			//- Remove
 			VButton.toolbar__item(
 				icon="times-circle"
-				size="small"
 				tooltip="Remove"
 				tooltip-placement="bottom"
 
@@ -139,8 +136,9 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 <!--{{{ JavaScript -->
 <script>
 
-import { MAX_NB_SCALES } from '@/stores/scales'
-import { scales, arpeggios, notesNames, intervalsNames, intervalsShortNames } from '@/modules/music'
+import { MAX_NB_SCALES }                                   from '@/stores/scales'
+import { notes, scales, arpeggios }                        from '@/modules/music'
+import { notesNames, intervalsNames, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'ScalesListItem',
@@ -202,7 +200,11 @@ export default {
 	computed: {
 		intervals()
 		{
-			return [0, ...this.models[this.model].model].map(interval => ({ value: interval, name: intervalsShortNames[interval] }))
+			return [0, ...this.models[this.model].model].map(interval => ({
+				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
+				name:  intervalsShortNames[interval],
+				value: interval,
+			}))
 		},
 		modelsNames()
 		{
@@ -279,45 +281,40 @@ export default {
 }
 
 .intervals__item {
-	color: var(--color--text);
+	display: flex;
+	@include space-children-h(10px);
+
+	padding: 2px 8px;
+
+	border: 1px solid var(--color--border);
 
 	cursor: pointer;
 
 	&:not(:last-child) {
-		border-right: 1px solid var(--color--border);
+		border-right: none;
 	}
 
-	&.is-selected {
-		color: var(--color--highlight);
+	&:first-child { padding-left:  12px; border-radius: 1e3px 0 0 1e3px; }
+	&:last-child  { padding-right: 12px; border-radius: 0 1e3px 1e3px 0; }
+
+	&.is-selected, &:hover {
 		background-color: var(--color--bg--highlight);
 	}
+}
 
-	//- @include mq($until: desktop)
-	//- {
-	//- 	flex: 1 1 100%;
-	//- 	text-align: center;
+.interval__item__note {
+	color: var(--color--text);
+	cursor: pointer;
 
-	//- 	padding: 10px 0;
-	//- }
+	.intervals__item.is-selected             & { color: var(--color--highlight); }
+	.intervals__item:not(.is-selected):hover & { color: var(--color--hover);     }
+}
 
-	@include mq($from: desktop)
-	{
-		padding: 2px 8px;
+.interval__item__name {
+	color: var(--color--text--secondary);
+	cursor: pointer;
 
-		border: 1px solid var(--color--border);
-
-		&:not(:last-child) {
-			border-right: none;
-		}
-
-		&:first-child { padding-left:  12px; border-radius: 1e3px 0 0 1e3px; }
-		&:last-child  { padding-right: 12px; border-radius: 0 1e3px 1e3px 0; }
-
-		&:not(.is-selected):hover {
-			color: var(--color--hover);
-			background-color: var(--color--bg--highlight);
-		}
-	}
+	font-size: 1.2rem;
 }
 
 .color-dot {
