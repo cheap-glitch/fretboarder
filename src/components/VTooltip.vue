@@ -8,7 +8,7 @@
 
 div.VTooltip(
 	ref="tooltip"
-	v-show="isOpen"
+	v-show="isPopperActive"
 	)
 	slot
 	div.VTooltip__arrow(data-popper-arrow)
@@ -49,16 +49,37 @@ export default {
 		}
 	},
 
+	data() {
+		return {
+			isPopperActive: false,
+		}
+	},
+
 	watch: {
 		isOpen()
 		{
-			if (this.isOpen) this.createPopper(); else this.destroyPopper();
+			if (this.isOpen)
+			{
+				if (this.delay)
+					this.timeout = window.setTimeout(() => this.createPopper(), this.delay);
+				else
+					this.createPopper();
+			}
+			else
+			{
+				if (this.timeout !== null)
+					window.clearTimeout(this.timeout);
+
+				this.timeout = null;
+				this.destroyPopper();
+			}
 		},
 	},
 
 	created()
 	{
-		this.popper = null;
+		this.popper  = null;
+		this.timeout = null;
 	},
 
 	destroyed()
@@ -72,6 +93,7 @@ export default {
 			if (!this.isOpen || this.popper !== null || this.target === false)
 				return;
 
+			this.isPopperActive = true;
 			this.popper = createPopper(this.target, this.$refs.tooltip, {
 				placement: this.placement,
 				modifiers: [
@@ -105,6 +127,8 @@ export default {
 		},
 		destroyPopper()
 		{
+			this.isPopperActive = false;
+
 			if (this.popper === null)
 				return;
 

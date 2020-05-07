@@ -309,7 +309,7 @@ export default {
 
 		@include circle(8px);
 
-		background-color: var(--color--highlight);
+		background-color: var(--color--hover);
 
 		transition: transform 0.2s;
 
