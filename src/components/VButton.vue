@@ -27,7 +27,7 @@ div.VButton(
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"
 		:delay="500"
-		:is-open="!isMobileDevice && !isTooltipDisabled && !clicked && showTooltip"
+		:is-open="!isTooltipDisabled && !clicked && showTooltip"
 		)
 		p {{ tooltipText }}
 

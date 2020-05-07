@@ -20,11 +20,13 @@ transition(name="fade"): div.VTooltip(
 <!--{{{ JavaScript -->
 <script>
 
-import { createPopper } from '@popperjs/core/lib/popper-lite';
-import arrow            from '@popperjs/core/lib/modifiers/arrow';
-import flip             from '@popperjs/core/lib/modifiers/flip';
-import offset           from '@popperjs/core/lib/modifiers/offset';
-import preventOverflow  from '@popperjs/core/lib/modifiers/preventOverflow';
+import { get }          from 'vuex-pathify'
+
+import { createPopper } from '@popperjs/core/lib/popper-lite'
+import arrow            from '@popperjs/core/lib/modifiers/arrow'
+import flip             from '@popperjs/core/lib/modifiers/flip'
+import offset           from '@popperjs/core/lib/modifiers/offset'
+import preventOverflow  from '@popperjs/core/lib/modifiers/preventOverflow'
 
 export default {
 	name: 'VTooltip',
@@ -55,9 +57,15 @@ export default {
 		}
 	},
 
+	computed: {
+		isMobileDevice: get('isMobileDevice'),
+	},
+
 	watch: {
 		isOpen()
 		{
+			if (this.isMobileDevice) return;
+
 			if (this.isOpen)
 			{
 				if (this.delay)

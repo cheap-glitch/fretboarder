@@ -71,6 +71,7 @@ div.App#app(:style="colorscheme")
 	//- Page content
 	//----------------------------------------------------------------------
 
+	FretboardSettings
 	FretboardViewer
 	ScalesList
 
@@ -91,13 +92,15 @@ import { mediaQueries }      from '@/stores/main'
 
 import ScalesList            from '@/components/ScalesList'
 import FretboardViewer       from '@/components/FretboardViewer'
+import FretboardSettings     from '@/components/FretboardSettings'
 
 export default {
 	name: 'App',
 
 	components: {
-		FretboardViewer,
 		ScalesList,
+		FretboardViewer,
+		FretboardSettings,
 	},
 
 	computed: {
@@ -188,9 +191,9 @@ export default {
 	background-color: var(--color--bg);
 }
 
-.FretboardViewer {
-	margin: 40px 0;
-}
+.FretboardSettings { margin-top: 40px; }
+.FretboardViewer   { margin-top: 40px; }
+.ScalesList        { margin-top: 60px; }
 
 /**
  * Header

@@ -10,31 +10,18 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 
 	div.color-dot(:style="{ 'background-color': color }")
 
-	//- Interval tooltips
-	//- VTooltip.intervals-tooltip(
-		v-for="(interval, intervalIndex) in intervals"
-		:key="`scale--${index}--interval--${intervalIndex}--tooltip`"
-
-		:is-open="hoveredInterval === intervalIndex"
-
-		:target="$refs.interval ? $refs.interval[intervalIndex] : false"
-		placement="bottom"
-		:delay="500"
-		)
-		p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
-
 	//----------------------------------------------------------------------
 	//- Scale properties
 	//----------------------------------------------------------------------
 
 	//- Type
-	VSelect.select-type(
+	VSelect(
 		:value="type"
 		:options="{ scale: 'Scale', arpeggio: 'Arpeggio' }"
 		@change="updateType"
 		)
 	//- Tonality
-	VSelect.select-tonality(
+	VSelect(
 		:value="tonality"
 		:options="tonalities"
 		@change="v => updateScale('tonality', v)"
@@ -65,16 +52,29 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		div.intervals: div.intervals__item(
 			v-for="(interval, intervalIndex) in intervals"
 			:key="`scale--${index}--interval--${interval.value}`"
-			ref="interval"
+			ref="intervals"
 
 			v-mods="{ isSelected: highlightedInterval == interval.value }"
 
 			@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
-			@mouseenter="hoveredInterval = intervalIndex"
-			@mouseleave="hoveredInterval = null"
+			@mouseenter="hoveredIntervalIndex = intervalIndex"
+			@mouseleave="hoveredIntervalIndex = null"
 			)
 			p.interval__item__note {{ interval.note }}
-			p.interval__item__name(v-html="interval.name")
+			p.interval__item__name(v-html="interval.shortName")
+
+		//- Tooltip for the hovered interval
+		VTooltip(
+			v-for="(interval, intervalIndex) in intervals"
+			:key="`interval--${interval.value}--tooltip`"
+
+			:target="$refs.intervals ? ($refs.intervals[hoveredIntervalIndex] || false) : false"
+			:is-open="hoveredIntervalIndex == intervalIndex"
+
+			placement="bottom"
+			:delay="500"
+			)
+			p Highlight {{ intervals[intervalIndex].name.toLowerCase() }} notes
 
 		//- div.tools__separator
 
@@ -193,7 +193,7 @@ export default {
 
 	data() {
 		return {
-			hoveredInterval: null,
+			hoveredIntervalIndex: null,
 		}
 	},
 
@@ -201,9 +201,10 @@ export default {
 		intervals()
 		{
 			return [0, ...this.models[this.model].model].map(interval => ({
-				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
-				name:  intervalsShortNames[interval],
-				value: interval,
+				value:     interval,
+				note:      notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
+				name:      intervalsNames[interval],
+				shortName: intervalsShortNames[interval],
 			}))
 		},
 		modelsNames()
@@ -220,7 +221,6 @@ export default {
 	{
 		this.MAX_NB_SCALES  = MAX_NB_SCALES;
 		this.tonalities     = notesNames;
-		this.intervalsNames = intervalsNames;
 		/*
 		this.positions      = {
 			0: 'Whole',
@@ -276,6 +276,15 @@ export default {
 	}
 }
 
+.select-model {
+	width: 250px;
+}
+
+.tools {
+	// Prevent the tooltip from placing itself in a corner of the page
+	position: relative;
+}
+
 .intervals {
 	display: flex;
 	margin-left: 20px;
@@ -283,9 +292,11 @@ export default {
 
 .intervals__item {
 	display: flex;
-	@include space-children-h(10px);
+	justify-content: space-between;
 
-	padding: 2px 8px;
+	width: 60px;
+
+	padding: 4px 8px;
 
 	border: 1px solid var(--color--border);
 
