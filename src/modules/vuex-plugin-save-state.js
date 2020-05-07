@@ -27,7 +27,6 @@ export function saveStatePlugin(stateModel, options = {})
 		}
 		catch (err) {
 			storedState = {};
-			console.error(err);
 		}
 
 		// Filter it and deep merge it with the default state
