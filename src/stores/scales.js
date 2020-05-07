@@ -67,6 +67,9 @@ const mutations = {
 	{
 		state.scales = state.scales.filter(scale => scale.index != index);
 
+		// Update the indexes
+		state.scales.forEach((scale, index) => Vue.set(scale, 'index', index));
+
 		// Disable showing intersections if there is only one scale left
 		if (state.scales.length == 1)
 			Vue.set(state.scales[0], 'isIntersected', false);
@@ -87,17 +90,21 @@ function addScale(state, params = {})
 		return;
 
 	state.scales.push({
-		index:    state.scales.length,
+		// Merge the provided params with the defaults
 		type:     'scale',
 		model:    'maj',
 		tonality: 'A',
 		position: 0,
 		...params,
 
-		isVisible:       true,
-		isFocused:       false,
-		isIntersected:   false,
-		highlightedNote: null,
+		// Store the current index
+		index: state.scales.length,
+
+		// Always reset the display parameters
+		isVisible:           true,
+		isFocused:           false,
+		isIntersected:       false,
+		highlightedInterval: null,
 
 		// Find the first color available
 		color: SCALES_COLORS.find(color => state.scales.every(scale => scale.color != color)),

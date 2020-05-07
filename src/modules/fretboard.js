@@ -19,21 +19,24 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 	{
 		const fretNumber = fretIndex % MAX_NB_FRETS;
 		const fretString = Math.floor(fretIndex / MAX_NB_FRETS);
+		const fretScales = displayedScales.reduce(function(fretScales, scale, index)
+		{
+			// Compute the interval of the fret note relative to the root note of the scale
+			const interval = (getInterval(scale.tonality, tuningNotes[fretString]) + fretNumber) % notes.length;
+
+			if (models[index].includes(interval))
+				fretScales.push({ index, interval });
+
+			return fretScales;
+		}, []);
 
 		return {
 			note:   notes[(notes.indexOf(tuningNotes[fretString]) + fretNumber) % notes.length],
 			number: fretNumber,
 			string: fretString,
-			scales: displayedScales.reduce(function(fretScales, scale, index)
-			{
-				// Compute the interval of the fret note relative to the root note of the scale
-				const interval = (getInterval(scale.tonality, tuningNotes[fretString]) + fretNumber) % notes.length;
 
-				if (models[index].includes(interval))
-					fretScales.push({ index, interval });
-
-				return fretScales;
-			}, []),
+			// Remove scales that only display their intersections if they are alone on a fret
+			scales: (fretScales.length == 1 && fretScales[0].isIntersected) ? [] : fretScales,
 		};
 	});
 }
