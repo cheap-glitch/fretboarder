@@ -9,14 +9,13 @@
 div.ScalesList
 
 	div.scales
-		//- div.scale__tools
+		div.scale__tools
 			//- Hide all scales
 			VButton.scale__tools__hide-all(
 				v-show="scales.length >= 2"
 
-				icon="low-vision"
-				size="small"
-				tooltip="Hide all"
+				icon="eye-slash"
+				tooltip-text="Hide all"
 
 				@click="$store.commit('scales/hideAllScales')"
 			)
@@ -25,8 +24,7 @@ div.ScalesList
 				v-show="scales.length >= 2"
 
 				icon="trash-alt"
-				size="small"
-				tooltip="Remove all"
+				tooltip-text="Remove all"
 
 				@click="$store.commit('scales/removeAllScales')"
 			)
@@ -93,6 +91,7 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesList {
+	@include center-column;
 	@include space-children-v(20px);
 }
 
@@ -100,33 +99,15 @@ export default {
 	@include space-children-v(20px);
 }
 
-//- .scale__tools {
-//- 	display: none;
-
-//- 	@include mq($from: desktop)
-//- 	{
-//- 		display: flex;
-//- 		justify-content: flex-end;
-//- 	}
-//- }
-
-//- .scale__tools__hide-all {
-//- 	/**
-//- 	 * Place the "Hide all" tool above the "Hide" button of the scales
-//- 	 *                 ↓ three icons  +  ↓ one separator
-//-	 *
-//-	 * @TODO : put values in layout.scss
-//- 	 */
-//- 	margin-right: calc(3*(22px + 10px) + 24px);
-//- }
+.scale__tools {
+	display: flex;
+}
 
 .button-add-scale {
 	font-size: 30px;
 }
 
 .text-no-scales {
-	text-align: center;
-
 	color: var(--color--text);
 }
 

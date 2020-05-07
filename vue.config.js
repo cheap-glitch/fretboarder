@@ -72,7 +72,6 @@ module.exports = {
 				'eye':                      'pro-regular',
 				'eye-slash':                'pro-regular',
 				'intersection':             'pro-solid',
-				'low-vision':               'pro-regular',
 				'plus-circle':              'pro-regular',
 				'trash-alt':                'pro-regular',
 

@@ -278,6 +278,7 @@ export default {
 
 .intervals {
 	display: flex;
+	margin-left: 20px;
 }
 
 .intervals__item {

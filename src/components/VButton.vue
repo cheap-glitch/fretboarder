@@ -89,6 +89,10 @@ export default {
 	methods: {
 		clickHandler(event)
 		{
+			// Unfocus the button
+			this.$refs.button.blur();
+			this.$refs.wrapper.blur();
+
 			if (this.isDisabled)
 				return;
 

@@ -102,11 +102,11 @@ export const scales = {
  */
 export const arpeggios = {
 	// Triads
-	'maj':      { model: [4,  7],                  name: 'Major'                     },
-	'min':      { model: [3,  7],                  name: 'Minor'                     },
-	'pow':      { model: [4],                      name: 'Powerchord (fifth chord)'  },
-	'aug':      { model: [4,  8],                  name: 'Augmented'                 },
-	'dim':      { model: [3,  6],                  name: 'Diminished'                },
+	'maj':      { model: [4,  7],                  name: 'Major'                                },
+	'min':      { model: [3,  7],                  name: 'Minor'                                },
+	'pow':      { model: [4],                      name: 'Powerchord (fifth chord)'             },
+	'aug':      { model: [4,  8],                  name: 'Augmented'                            },
+	'dim':      { model: [3,  6],                  name: 'Diminished'                           },
 
 	// Sixth chords
 	'maj6':     { model: [4,  7,  9],              name: 'Major 6<sup>th</sup>'                 },
@@ -114,43 +114,43 @@ export const arpeggios = {
 
 	// Seventh chords
 	'dom7':     { model: [4,  7, 10],              name: 'Dominant 7<sup>th</sup>'              },
-	'dom7f5':   { model: [4,  6, 10],              name: 'Dominant 7th flat five'    },
-	'maj7':     { model: [4,  7, 11],              name: 'Major 7th'                 },
-	'min7':     { model: [3,  7, 10],              name: 'Minor 7th'                 },
-	'minmaj7':  { model: [3,  7, 11],              name: 'Minor-Major 7th'           },
-	'aug7':     { model: [4,  8, 10],              name: 'Augmented 7th'             },
-	'hdim7':    { model: [3,  6, 10],              name: 'Half-diminished 7th'       },
-	'dim7':     { model: [3,  6,  9],              name: 'Diminished 7th'            },
+	'dom7f5':   { model: [4,  6, 10],              name: 'Dominant 7<sup>th</sup> flat five'    },
+	'maj7':     { model: [4,  7, 11],              name: 'Major 7<sup>th</sup>'                 },
+	'min7':     { model: [3,  7, 10],              name: 'Minor 7<sup>th</sup>'                 },
+	'minmaj7':  { model: [3,  7, 11],              name: 'Minor-Major 7<sup>th</sup>'           },
+	'aug7':     { model: [4,  8, 10],              name: 'Augmented 7<sup>th</sup>'             },
+	'hdim7':    { model: [3,  6, 10],              name: 'Half-diminished 7<sup>th</sup>'       },
+	'dim7':     { model: [3,  6,  9],              name: 'Diminished 7<sup>th</sup>'            },
 
 	// Ninth chords
-	'dom9':     { model: [2,  4,  7, 10],          name: 'Dominant 9th'              },
-	'maj9':     { model: [2,  4,  7, 11],          name: 'Major 9th'                 },
-	'min9':     { model: [2,  3,  7, 10],          name: 'Minor 9th'                 },
-	'minmaj9':  { model: [2,  3,  7, 11],          name: 'Minor-Major 9th'           },
-	'hdim9':    { model: [2,  3,  6, 10],          name: 'Half-diminished 9th'       },
-	'hdimmin9': { model: [1,  3,  6, 10],          name: 'Half-diminished minor 9th' },
-	'dim9':     { model: [2,  3,  6,  9],          name: 'Diminished 9th'            },
-	'dimmin9':  { model: [1,  3,  6,  9],          name: 'Diminished minor 9th'      },
-	'min6-9':   { model: [2,  3,  7,  9],          name: 'Minor 6/9'                 },
+	'dom9':     { model: [2,  4,  7, 10],          name: 'Dominant 9<sup>th</sup>'              },
+	'maj9':     { model: [2,  4,  7, 11],          name: 'Major 9<sup>th</sup>'                 },
+	'min9':     { model: [2,  3,  7, 10],          name: 'Minor 9<sup>th</sup>'                 },
+	'minmaj9':  { model: [2,  3,  7, 11],          name: 'Minor-Major 9<sup>th</sup>'           },
+	'hdim9':    { model: [2,  3,  6, 10],          name: 'Half-diminished 9<sup>th</sup>'       },
+	'hdimmin9': { model: [1,  3,  6, 10],          name: 'Half-diminished minor 9<sup>th</sup>' },
+	'dim9':     { model: [2,  3,  6,  9],          name: 'Diminished 9<sup>th</sup>'            },
+	'dimmin9':  { model: [1,  3,  6,  9],          name: 'Diminished minor 9<sup>th</sup>'      },
+	'min6-9':   { model: [2,  3,  7,  9],          name: 'Minor 6/9'                            },
 
 	// Eleventh chords
-	'dom11':    { model: [2,  4,  5,  7, 10],      name: 'Dominant 11th'             },
-	'maj11':    { model: [2,  4,  5,  7, 11],      name: 'Major 11th'                },
-	'minmaj11': { model: [2,  3,  5,  7, 11],      name: 'Minor-Major 11th'          },
-	'min11':    { model: [2,  3,  5,  7, 10],      name: 'Minor 11th'                },
-	'aug11':    { model: [2,  4,  5,  8, 10],      name: 'Augmented 11th'            },
-	'augmaj11': { model: [2,  4,  5,  8, 11],      name: 'Augmented major 11th'      },
-	'hdim11':   { model: [2,  3,  5,  6, 10],      name: 'Half-diminished 11th'      },
-	'dim11':    { model: [2,  3,  5,  6,  9],      name: 'Diminished 11th'           },
+	'dom11':    { model: [2,  4,  5,  7, 10],      name: 'Dominant 11<sup>th</sup>'             },
+	'maj11':    { model: [2,  4,  5,  7, 11],      name: 'Major 11<sup>th</sup>'                },
+	'minmaj11': { model: [2,  3,  5,  7, 11],      name: 'Minor-Major 11<sup>th</sup>'          },
+	'min11':    { model: [2,  3,  5,  7, 10],      name: 'Minor 11<sup>th</sup>'                },
+	'aug11':    { model: [2,  4,  5,  8, 10],      name: 'Augmented 11<sup>th</sup>'            },
+	'augmaj11': { model: [2,  4,  5,  8, 11],      name: 'Augmented major 11<sup>th</sup>'      },
+	'hdim11':   { model: [2,  3,  5,  6, 10],      name: 'Half-diminished 11<sup>th</sup>'      },
+	'dim11':    { model: [2,  3,  5,  6,  9],      name: 'Diminished 11<sup>th</sup>'           },
 
 	// Thirteenth chords
-	'dom13':    { model: [2,  4,  5,  7,  9, 10],  name: 'Dominant 13th'             },
-	'maj13':    { model: [2,  4,  5,  7,  9, 11],  name: 'Major 13th'                },
-	'min13':    { model: [2,  3,  5,  7,  9, 10],  name: 'Minor 13th'                },
-	'minmaj13': { model: [2,  3,  5,  7,  9, 11],  name: 'Minor-Major 13th'          },
-	'aug13':    { model: [2,  4,  5,  8,  9, 10],  name: 'Augmented 13th'            },
-	'augmaj13': { model: [2,  4,  5,  8,  9, 11],  name: 'Augmented major 13th'      },
-	'hdim13':   { model: [2,  3,  5,  6,  9, 10],  name: 'Half-diminished 13th'      },
+	'dom13':    { model: [2,  4,  5,  7,  9, 10],  name: 'Dominant 13<sup>th</sup>'             },
+	'maj13':    { model: [2,  4,  5,  7,  9, 11],  name: 'Major 13<sup>th</sup>'                },
+	'min13':    { model: [2,  3,  5,  7,  9, 10],  name: 'Minor 13<sup>th</sup>'                },
+	'minmaj13': { model: [2,  3,  5,  7,  9, 11],  name: 'Minor-Major 13<sup>th</sup>'          },
+	'aug13':    { model: [2,  4,  5,  8,  9, 10],  name: 'Augmented 13<sup>th</sup>'            },
+	'augmaj13': { model: [2,  4,  5,  8,  9, 11],  name: 'Augmented major 13<sup>th</sup>'      },
+	'hdim13':   { model: [2,  3,  5,  6,  9, 10],  name: 'Half-diminished 13<sup>th</sup>'      },
 };
 
 export const tunings = {
