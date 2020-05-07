@@ -17,6 +17,8 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 
 	return [...Array(nbStrings*MAX_NB_FRETS).keys()].map(function(fretIndex)
 	{
+		let isFretHighlighted = false;
+
 		const fretNumber = fretIndex % MAX_NB_FRETS;
 		const fretString = Math.floor(fretIndex / MAX_NB_FRETS);
 		const fretScales = displayedScales.reduce(function(fretScales, scale, index)
@@ -25,7 +27,12 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 			const interval = (getInterval(scale.tonality, tuningNotes[fretString]) + fretNumber) % notes.length;
 
 			if (models[index].includes(interval))
+			{
 				fretScales.push({ index, interval });
+
+				if (scale.highlightedInterval === interval)
+					isFretHighlighted = true;
+			}
 
 			return fretScales;
 		}, []);
@@ -34,6 +41,8 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 			note:   notes[(notes.indexOf(tuningNotes[fretString]) + fretNumber) % notes.length],
 			number: fretNumber,
 			string: fretString,
+
+			isHighlighted: isFretHighlighted,
 
 			// Remove scales that only display their intersections if they are alone on a fret
 			scales: (fretScales.length == 1 && fretScales[0].isIntersected) ? [] : fretScales,

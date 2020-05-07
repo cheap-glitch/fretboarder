@@ -91,14 +91,14 @@ function addScale(state, params = {})
 
 	state.scales.push({
 		// Merge the provided params with the defaults
-		type:     'scale',
-		model:    'maj',
-		tonality: 'A',
-		position: 0,
+		type:                'scale',
+		model:               'maj',
+		tonality:            'A',
+		position:            0,
 		...params,
 
 		// Store the current index
-		index: state.scales.length,
+		index:               state.scales.length,
 
 		// Always reset the display parameters
 		isVisible:           true,
@@ -107,7 +107,7 @@ function addScale(state, params = {})
 		highlightedInterval: null,
 
 		// Find the first color available
-		color: SCALES_COLORS.find(color => state.scales.every(scale => scale.color != color)),
+		color:               SCALES_COLORS.find(color => state.scales.every(scale => scale.color != color)),
 	});
 }
 

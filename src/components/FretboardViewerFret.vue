@@ -32,7 +32,7 @@ div.FretboardViewerFret
 		div.fret__note(
 			ref="note"
 
-			v-mods="{ isActive, isOpenString, isFretboardFlipped, isFretboardVertical }"
+			v-mods="{ isActive, isHighlighted, isOpenString, isFretboardFlipped, isFretboardVertical }"
 			:style="noteBg"
 
 			@mouseenter="mouseenterHandler"
@@ -72,6 +72,10 @@ export default {
 		scalesColors: {
 			type: Array,
 			required: true,
+		},
+		isHighlighted: {
+			type: Boolean,
+			default: false,
 		},
 		isStartingFret: {
 			type: Boolean,
@@ -247,6 +251,10 @@ export default {
 
 		&:hover {
 			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+		}
+
+		&.is-highlighted {
+			border-radius: 0;
 		}
 	}
 
