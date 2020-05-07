@@ -14,7 +14,9 @@ div.VSelect(ref="selectbar")
 		v-click-outside="close"
 		@click.left="toggle"
 		)
-		p.bar__text(v-html="selected.name")
+		div
+			p.bar__filler(v-html="longestName")
+			p.bar__text(v-html="selected.name")
 		fa-icon.bar__chevron(
 			:icon="['far', 'chevron-down']"
 			v-mods="{ isOpen, isFlipped: isChevronFlipped }"
@@ -86,6 +88,22 @@ export default {
 		selected()
 		{
 			return this.optionsList.find(option => option.value === this.value) || { name: 'Loading…', value: null };
+		},
+		longestName()
+		{
+			let maxLength        = 0;
+			let longestNameIndex = 0;
+
+			this.optionsList.forEach(function(option, index)
+			{
+				if (option.name.length > maxLength)
+				{
+					maxLength        = option.name.length;
+					longestNameIndex = index;
+				}
+			});
+
+			return this.optionsList[longestNameIndex].name;
 		},
 		optionsList()
 		{
@@ -192,19 +210,12 @@ export default {
 	position: relative;
 
 	flex: 1 1 auto;
-
-	@include mq($from: desktop)
-	{
-		max-width: 200px;
-	}
 }
 
 .bar {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-
-	padding: 14px;
+	@include space-children-h(10px);
 
 	cursor: pointer;
 
@@ -228,13 +239,21 @@ export default {
 	}
 }
 
-.bar__text,
-.bar__chevron,
-.options__item,
-.options__button-close {
+.bar__filler {
+	opacity: 0;
+
 	cursor: pointer;
+}
+
+.bar__text {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	z-index: 10;
 
 	color: var(--color--text);
+
+	cursor: pointer;
 }
 
 .bar__chevron {
@@ -301,6 +320,10 @@ export default {
 .options__item,
 .options__button-close {
 	padding: 20px;
+
+	color: var(--color--text);
+
+	cursor: pointer;
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color--border);
