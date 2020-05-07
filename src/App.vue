@@ -40,6 +40,14 @@ div.App#app(:style="colorscheme")
 					)
 					fa-icon(:icon="['fab', 'twitter']")
 
+				//- Feedback
+				a.nav__link(
+					:href="`mailto:${mailto}`"
+					@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
+					)
+					fa-icon(:icon="['far', 'paper-plane']")
+					p.nav__link__text Send feedback
+
 				//- Patreon page
 				a.nav__link.link-support(
 					href="https://www.patreon.com/cheap_glitch"
@@ -103,6 +111,12 @@ export default {
 		FretboardSettings,
 	},
 
+	data() {
+		return {
+			mailto: '',
+		}
+	},
+
 	computed: {
 		colorscheme()
 		{
@@ -138,6 +152,11 @@ export default {
 
 	created()
 	{
+		this.feedbackMail = {
+			subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
+			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please indicate your OS and browser to help us resolve it faster.\n----------\n\n"),
+		};
+
 		if (this.$store.state.scales.scales.length == 0)
 			this.$store.commit('scales/addScale');
 	},

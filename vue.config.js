@@ -57,6 +57,7 @@ module.exports = {
 				'heart':                    'pro-regular',
 				'mandolin':                 'pro-regular',
 				'moon':                    ['pro-solid', 'pro-regular'],
+				'paper-plane':              'pro-regular',
 				'sun':                      'pro-solid',
 				'twitter':                  'free-brands',
 
