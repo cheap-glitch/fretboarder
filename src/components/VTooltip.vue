@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VTooltip(
+transition(name="fade"): div.VTooltip(
 	ref="tooltip"
 	v-show="isPopperActive"
 	)
@@ -84,56 +84,65 @@ export default {
 
 	destroyed()
 	{
-		this.destroyPopper();
+		if (this.popper !== null)
+			this.popper.destroy();
 	},
 
 	methods: {
 		createPopper()
 		{
-			if (!this.isOpen || this.popper !== null || this.target === false)
-				return;
-
 			this.isPopperActive = true;
-			this.popper = createPopper(this.target, this.$refs.tooltip, {
-				placement: this.placement,
-				modifiers: [
-					{
-						...offset,
-						options: {
-							offset: [0, 10],
-						}
-					},
-					{
-						...arrow,
-						options: {
-							padding: 8,
-						}
-					},
-					{
-						...preventOverflow,
-						options: {
-							boundary: document.getElementById('app'),
-							padding: 8,
-						}
-					},
-					{
-						...flip,
-						options: {
-							boundary: document.getElementById('app'),
-						}
-					},
-				]
-			});
+
+			if (this.isOpen && this.popper === null && this.target !== false)
+			{
+				this.popper = createPopper(this.target, this.$refs.tooltip, {
+					placement: this.placement,
+					modifiers: [
+						{
+							...offset,
+							options: {
+								offset: [0, 10],
+							}
+						},
+						{
+							...arrow,
+							options: {
+								padding: 8,
+							}
+						},
+						{
+							...preventOverflow,
+							options: {
+								boundary: document.getElementById('app'),
+								padding: 8,
+							}
+						},
+						{
+							...flip,
+							options: {
+								boundary: document.getElementById('app'),
+							}
+						},
+					]
+				});
+			}
 		},
 		destroyPopper()
 		{
 			this.isPopperActive = false;
-
-			if (this.popper === null)
-				return;
-
-			this.popper.destroy();
-			this.popper = null;
+			this.$refs.tooltip.addEventListener('transitionend',
+				event => {
+					if (event.propertyName == 'opacity' && !this.isOpen && this.popper !== null)
+					{
+						this.popper.destroy();
+						this.popper = null;
+					}
+				},
+				{
+					once:    true,
+					passive: true,
+				}
+			);
 		},
 	},
 }
@@ -146,6 +155,7 @@ export default {
 <style lang="scss" scoped>
 
 .VTooltip {
+	position: absolute;
 	z-index: 1000;
 
 	padding: 8px;
