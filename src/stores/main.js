@@ -12,11 +12,12 @@ import { saveStatePlugin } from '@/modules/vuex-plugin-save-state'
 import pathify             from '@/modules/pathify'
 import { makeTogglers }    from '@/modules/pathify'
 
+import { layout }          from '@/modules/layout'
 import scales              from '@/stores/scales'
 import fretboard           from '@/stores/fretboard'
 
 export const mediaQueries = {
-	isMobileDevice:    window.matchMedia('(max-width:   50em)'     ),
+	isMobileDevice:    window.matchMedia(`(max-width:   ${layout.mqBreakpointDesktop.em})`),
 	isLayoutLandscape: window.matchMedia('(orientation: landscape)'),
 }
 

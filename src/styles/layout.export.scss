@@ -4,10 +4,12 @@
  */
 
 :export {
-	stringThickness:       layout.$string-thickness;
+	mqBreakpointDesktop:   layout.$mq-breakpoint-desktop;
 
 	fretWidth:             layout.$fret-width;
 	minFretLength:         layout.$min-fret-length;
 	openStringFretLength:  layout.$open-string-fret-length;
 	fretNumberWrapperSize: layout.$fret-number-wrapper-size;
+
+	stringThickness:       layout.$string-thickness;
 }

@@ -24,8 +24,14 @@ module.exports = {
 
 		// Import the mixins in every component
 		loaderOptions: { sass: { prependData: `
+
 			@use "@cheap-glitch/scss-mixins/_mixins" as *;
 			@use "@/styles/layout";
+
+			@use "sass-mq/_mq" as * with (
+				$mq-breakpoints: (desktop: layout.$mq-breakpoint-desktop)
+			);
+
 		`} },
 	},
 

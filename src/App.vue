@@ -19,8 +19,11 @@ div.App#app(:style="colorscheme")
 
 import { get }               from 'vuex-pathify'
 
-import { colorscheme }       from '@/modules/colorscheme'
 import { objectMapToObject } from '@/modules/object'
+import { colorscheme }       from '@/modules/colorscheme'
+
+import { EventBus }          from '@/modules/bus'
+import { mediaQueries }      from '@/stores/main'
 
 import FretboardViewer       from '@/components/FretboardViewer'
 
@@ -45,6 +48,39 @@ export default {
 	{
 		if (this.$store.state.scales.scales.length == 0)
 			this.$store.commit('scales/addScale');
+	},
+
+	mounted()
+	{
+		// Register every keypress on the page
+		window.addEventListener('keydown', this.registerKeypress, { passive: true });
+
+		// Listen to any changes on the device type and layout orientation
+		mediaQueries.isMobileDevice.addListener(this.updateDeviceType);
+		mediaQueries.isLayoutLandscape.addListener(this.updateLayoutOrientation);
+	},
+
+	destroyed()
+	{
+		// Clear event listeners
+		window.removeEventListener('keydown', this.registerKeypress, { passive: true });
+		mediaQueries.isMobileDevice.removeListener(this.updateDeviceType);
+		mediaQueries.isLayoutLandscape.removeListener(this.updateLayoutOrientation);
+	},
+
+	methods: {
+		updateDeviceType(event)
+		{
+			this.$store.commit('isMobileDevice', event.matches);
+		},
+		updateLayoutOrientation(event)
+		{
+			this.$store.commit('isLayoutLandscape', event.matches);
+		},
+		registerKeypress(event)
+		{
+			EventBus.$emit('keypress', event.key);
+		},
 	},
 }
 
