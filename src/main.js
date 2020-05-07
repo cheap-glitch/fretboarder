@@ -14,7 +14,7 @@
 
 import Vue           from 'vue'
 // import VueSlider     from 'vue-slider-component'
-// import VClickOutside from 'v-click-outside'
+import VClickOutside from 'v-click-outside'
 import VCSSModifiers from 'vue-css-modifiers'
 
 import App           from '@/App'
@@ -25,7 +25,7 @@ import store         from '@/stores/main'
  */
 // Vue.component('vue-slider',    VueSlider);
 Vue.directive('mods',          VCSSModifiers);
-// Vue.directive('click-outside', VClickOutside.directive);
+Vue.directive('click-outside', VClickOutside.directive);
 
 /**
  * Register globally the base components

@@ -7,8 +7,8 @@
 <template lang="pug">
 
 div.App#app(:style="colorscheme")
-
 	FretboardViewer
+	ScalesList
 
 </template>
 <!--}}}-->
@@ -25,6 +25,7 @@ import { colorscheme }       from '@/modules/colorscheme'
 import { EventBus }          from '@/modules/bus'
 import { mediaQueries }      from '@/stores/main'
 
+import ScalesList            from '@/components/ScalesList'
 import FretboardViewer       from '@/components/FretboardViewer'
 
 export default {
@@ -32,6 +33,7 @@ export default {
 
 	components: {
 		FretboardViewer,
+		ScalesList,
 	},
 
 	computed: {
@@ -99,6 +101,10 @@ export default {
 	background-color: var(--color--bg);
 }
 
+.FretboardViewer {
+	margin-bottom: 40px;
+}
+
 </style>
 <!--}}}-->
 
@@ -111,7 +117,7 @@ export default {
 // Load the global styles
 @use "@/styles/global";
 
-// Override the styles of the slider component
+// Override the default styles of the slider component
 //- @use "@/styles/slider";
 
 </style>
