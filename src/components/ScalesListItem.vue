@@ -10,6 +10,19 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 
 	div.color-dot(:style="{ 'background-color': color }")
 
+	//- Interval tooltips
+	//- VTooltip.intervals-tooltip(
+		v-for="(interval, intervalIndex) in intervals"
+		:key="`scale--${index}--interval--${intervalIndex}--tooltip`"
+
+		:is-open="hoveredInterval === intervalIndex"
+
+		:target="$refs.interval ? $refs.interval[intervalIndex] : false"
+		placement="bottom"
+		:delay="500"
+		)
+		p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
+
 	//----------------------------------------------------------------------
 	//- Scale properties
 	//----------------------------------------------------------------------
@@ -43,98 +56,83 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		@change="v => updateScale('position', v)"
 		)
 
-		//----------------------------------------------------------------------
-		//- Tools
-		//----------------------------------------------------------------------
-		//- div.tools
+	//----------------------------------------------------------------------
+	//- Tools
+	//----------------------------------------------------------------------
+	//- div.tools
 
-			//- Intervals
-			div.intervals
-				div.intervals__item(
-					v-for="(interval, intervalIndex) in intervals"
-					:key="`scale--${index}--interval--${intervalIndex}`"
-					ref="interval"
+		//- Intervals
+		div.intervals
+			div.intervals__item(
+				v-for="(interval, intervalIndex) in intervals"
+				:key="`scale--${index}--interval--${intervalIndex}`"
+				ref="interval"
 
-					v-mods="{ isSelected: highlightedInterval == interval.value }"
+				v-mods="{ isSelected: highlightedInterval == interval.value }"
 
-					@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
-					@mouseenter="hoveredInterval = intervalIndex"
-					@mouseleave="hoveredInterval = null"
-					)
-					p.intervals__item__text {{ interval.name }}
+				@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
+				@mouseenter="hoveredInterval = intervalIndex"
+				@mouseleave="hoveredInterval = null"
+				)
+				p.intervals__item__text {{ interval.name }}
 
-			div.tools__separator
+		div.tools__separator
 
-			div.toolbar
+		//- Show/hide
+		VButton.toolbar__item(
+			:icon="isVisible ? 'eye' : 'eye-slash'"
+			size="small"
+			:tooltip="isVisible ? 'Hide' : 'Show'"
+			tooltip-placement="bottom"
 
-				//- Show/hide
-				VButton.toolbar__item(
-					:icon="isVisible ? 'eye' : 'eye-slash'"
-					size="small"
-					:tooltip="isVisible ? 'Hide' : 'Show'"
-					tooltip-placement="bottom"
+			@click="updateScale('isVisible', !isVisible)"
+			)
+		//- Focus
+		VButton.toolbar__item(
+			v-show="nbScales > 1"
 
-					@click="updateScale('isVisible', !isVisible)"
-					)
-				//- Focus
-				VButton.toolbar__item(
-					v-show="nbScales > 1"
+			icon="bullseye"
+			size="small"
+			:tooltip="isFocused ? 'Unfocus' : 'Focus'"
+			tooltip-placement="bottom"
 
-					icon="bullseye"
-					size="small"
-					:tooltip="isFocused ? 'Unfocus' : 'Focus'"
-					tooltip-placement="bottom"
+			:is-active="isFocused"
+			@click="$store.commit('scales/toggleFocusScale', id)"
+			)
+		//- Show intersections only
+		VButton.toolbar__item(
+			v-show="nbScales > 1"
 
-					:is-active="isFocused"
-					@click="$store.commit('scales/toggleFocusScale', id)"
-					)
-				//- Show intersections only
-				VButton.toolbar__item(
-					v-show="nbScales > 1"
+			:icon="['fas', 'intersection']"
+			size="small"
+			tooltip="Show only intersections with other scales"
+			tooltip-placement="bottom"
 
-					:icon="['fas', 'intersection']"
-					size="small"
-					tooltip="Show only intersections with other scales"
-					tooltip-placement="bottom"
+			:is-active="isIntersected"
+			@click="updateScale('isIntersected', !isIntersected)"
+			)
 
-					:is-active="isIntersected"
-					@click="updateScale('isIntersected', !isIntersected)"
-					)
+		div.tools__separator
 
-				div.tools__separator
+		//- Duplicate
+		VButton.toolbar__item(
+			icon="copy"
+			size="small"
+			tooltip="Duplicate"
+			tooltip-placement="bottom"
 
-				//- Duplicate
-				VButton.toolbar__item(
-					icon="copy"
-					size="small"
-					tooltip="Duplicate"
-					tooltip-placement="bottom"
+			:is-disabled="nbScales == MAX_NB_SCALES"
+			@click="$store.commit('scales/addScale', id)"
+			)
+		//- Remove
+		VButton.toolbar__item(
+			icon="times-circle"
+			size="small"
+			tooltip="Remove"
+			tooltip-placement="bottom"
 
-					:is-disabled="nbScales == MAX_NB_SCALES"
-					@click="$store.commit('scales/addScale', id)"
-					)
-				//- Remove
-				VButton.toolbar__item(
-					icon="times-circle"
-					size="small"
-					tooltip="Remove"
-					tooltip-placement="bottom"
-
-					@click="$store.commit('scales/removeScale', id)"
-					)
-
-	//- Interval tooltips
-	//- VTooltip.intervals-tooltip(
-		v-for="(interval, intervalIndex) in intervals"
-		:key="`scale--${index}--interval--${intervalIndex}--tooltip`"
-
-		:is-open="hoveredInterval === intervalIndex"
-
-		:target="$refs.interval ? $refs.interval[intervalIndex] : false"
-		placement="bottom"
-		:delay="500"
-		)
-		p Highlight {{ intervalsNames[interval.value].toLowerCase() }} notes
+			@click="$store.commit('scales/removeScale', id)"
+			)
 
 </template>
 <!--}}}-->

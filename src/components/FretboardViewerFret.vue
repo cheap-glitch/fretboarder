@@ -247,7 +247,7 @@ export default {
 	 * Display
 	 */
 	&.is-active {
-		transition: border-radius 0.2s, filter 0.2s;
+		transition: opacity 0.2s, border-radius 0.2s, filter 0.2s;
 
 		&:hover {
 			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
@@ -261,10 +261,10 @@ export default {
 	&:not(.is-active) {
 		border: 2px dashed var(--color--border);
 
+		transition: opacity 0.2s;
+
 		&:not(.is-open-string) {
 			opacity: 0;
-			transition: opacity 0.2s;
-
 			&:hover { opacity: 1; }
 		}
 	}
@@ -307,8 +307,19 @@ export default {
 .fret__note__name {
 	font-weight: bold;
 
-	@at-root .fret__note.is-active       & { color: white;              }
-	@at-root .fret__note:not(.is-active) & { color: var(--color--text); }
+	.fret__note.is-active & {
+		color: white;
+		transition: none;
+	}
+
+	.fret__note:not(.is-active) & {
+		color: var(--color--text);
+		transition: color 0.2s 0.2s;
+	}
+
+	.fret__note.is-open-string & {
+		transition: none;
+	}
 }
 
 .intervals {
