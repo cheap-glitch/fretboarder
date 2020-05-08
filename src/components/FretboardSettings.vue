@@ -172,7 +172,8 @@ export default {
 			exportFretboard(
 				format,
 				this.$store.getters['scales/displayedScales'],
-				instruments[this.instrument].nbStrings,
+				this.instrument,
+				this.tuning,
 				this.fretRange[0],
 				this.fretRange[1],
 				this.isFlipped,

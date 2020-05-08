@@ -56,23 +56,6 @@ export const intervalsShortNames = [
 ];
 
 /**
- * Instruments
- */
-export const instruments = {
-	'guitar':    { name: 'Guitar',             nbStrings:  6 },
-	'bass':      { name: 'Bass',               nbStrings:  4 },
-	'ukulele':   { name: 'Ukulele',            nbStrings:  4 },
-	'banjo-4':   { name: 'Banjo (4 strings)',  nbStrings:  4 },
-	'banjo-5':   { name: 'Banjo (5 strings)',  nbStrings:  5 },
-	'mandolin':  { name: 'Mandolin',           nbStrings:  8 },
-	'7-string':  { name: '7-string guitar',    nbStrings:  7 },
-	'8-string':  { name: '8-string guitar',    nbStrings:  8 },
-	'9-string':  { name: '9-string guitar',    nbStrings:  9 },
-	'10-string': { name: '10-string guitar',   nbStrings: 10 },
-	'11-string': { name: '11-string guitar',   nbStrings: 11 },
-};
-
-/**
  * Scales
  */
 export const scales = {
@@ -156,6 +139,26 @@ export const arpeggios = {
 	'hdim13':   { model: [2,  3,  5,  6,  9, 10],  name: 'Half-diminished 13<sup>th</sup>'      },
 };
 
+/**
+ * Instruments
+ */
+export const instruments = {
+	'guitar':    { name: 'Guitar',             nbStrings:  6 },
+	'bass':      { name: 'Bass',               nbStrings:  4 },
+	'ukulele':   { name: 'Ukulele',            nbStrings:  4 },
+	'banjo-4':   { name: 'Banjo (4 strings)',  nbStrings:  4 },
+	'banjo-5':   { name: 'Banjo (5 strings)',  nbStrings:  5 },
+	'mandolin':  { name: 'Mandolin',           nbStrings:  8 },
+	'7-string':  { name: '7-string guitar',    nbStrings:  7 },
+	'8-string':  { name: '8-string guitar',    nbStrings:  8 },
+	'9-string':  { name: '9-string guitar',    nbStrings:  9 },
+	'10-string': { name: '10-string guitar',   nbStrings: 10 },
+	'11-string': { name: '11-string guitar',   nbStrings: 11 },
+};
+
+/**
+ * Tunings
+ */
 export const tunings = {
 	'guitar': {
 		'standard':     ['E',  'A',  'D',  'G',  'B',  'E' ],

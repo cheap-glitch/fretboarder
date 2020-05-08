@@ -3,14 +3,14 @@
  * modules/export.js
  */
 
-import { saveAs }            from 'file-saver'
+import { saveAs }                           from 'file-saver'
 
-import { getFrets }          from '@/modules/fretboard'
-import { notesNames }        from '@/modules/music'
-import { objectMapToObject } from '@/modules/object'
+import { getFrets }                         from '@/modules/fretboard'
+import { objectMapToObject }                from '@/modules/object'
+import { instruments, tunings, notesNames } from '@/modules/music'
 
-import { colorscheme }       from '@/modules/colorscheme'
-import { SCALES_COLORS }     from '@/stores/scales'
+import { colorscheme }                      from '@/modules/colorscheme'
+import { SCALES_COLORS }                    from '@/stores/scales'
 
 /**
  * Create and save an image of the fretboard
@@ -35,7 +35,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(displayedScales, tuningNotes, nbStrings, fretMin, fretMax, isFretboardFlipped, isDisplayingNotesName, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fretMax, isFretboardFlipped, isDisplayingNotesName, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -50,13 +50,14 @@ function exportFretboardToSVG(displayedScales, tuningNotes, nbStrings, fretMin, 
 	const appendFullTag   = (xml, tag, innerText, attrs) => { openTag(xml, tag, attrs); xml.push(innerText); closeTag(xml, tag); }
 
 	// Layout
+	const nbFrets         = fretMax - fretMin;
+	const nbStrings       = instruments[instrument].nbStrings;
 	const marginTop       = 2;
 	const marginLeft      = 1;
 	const marginBottom    = 5;
 	const marginRight     = 4.5;
 	const fretboardWidth  = 200;
 	const fretboardHeight = (13/3)*nbStrings;
-	const nbFrets         = fretMax - fretMin;
 	const fretWidth       = fretboardWidth/nbFrets;
 	const fretHeight      = fretboardHeight/(nbStrings - 1);
 	const svgWidth        = fretboardWidth  + marginRight + marginLeft;
@@ -245,7 +246,7 @@ function exportFretboardToSVG(displayedScales, tuningNotes, nbStrings, fretMin, 
 	 */
 
 	// Get the list of active frets
-	const displayedFrets = getFrets(nbStrings, tuningNotes, displayedScales)
+	const displayedFrets = getFrets(nbStrings, tunings[instrument][tuning], displayedScales)
 		// Keep only the frets in the selected range
 		.filter(fret => fretMin <= fret.number && fret.number <= fretMax);
 
@@ -257,23 +258,22 @@ function exportFretboardToSVG(displayedScales, tuningNotes, nbStrings, fretMin, 
 		if (!fret.scales) return;
 
 		const x = (fret.number == 0) ? 1.8 : offset - getFretY(fret.number)/2 + marginRight;
-		const y = (fret.string - 1)*fretHeight + marginTop;
-		const r = 1.6;
+		const y = fret.string*fretHeight + marginTop;
+		const size = 1.6;
 
 		// Add the fret gradient to the global list if it's not already in
 		const gradientColors = fret.scales.map(scale => SCALES_COLORS[scale.index]).join('-');
 		if (fret.scales.length > 1 && !gradients.includes(gradientColors))
 			gradients.push(gradientColors);
 
-		// Draw the note
-		appendSingleTag(svg, 'circle', {
-			r:  r,
-			cx: x,
-			cy: y,
+		// If the note belongs to more than one scale, fill it with a gradient
+		const fill = (fret.scales.length > 1) ? `url(#lg-${gradientColors})` : gradientColors;
 
-			// If the note belongs to more than one scale, fill it with a gradient
-			fill: (fret.scales.length > 1) ? `url(#lg-${gradientColors})` : gradientColors,
-		});
+		// Draw the note
+		appendSingleTag(svg,
+			fret.isHighlighted ? 'rect'                              : 'circle',
+			fret.isHighlighted ? { width: size, height: size, fill } : { r: size, cx: x, cy: y, fill }
+		);
 
 		// Draw the note name
 		if (isDisplayingNotesName)
@@ -329,7 +329,7 @@ function exportFretboardToSVG(displayedScales, tuningNotes, nbStrings, fretMin, 
 /**
  * Create a canvas from a SVG and apply a callback on the result
  */
-export function createCanvasFromSVG(svg, width, height, callback)
+function createCanvasFromSVG(svg, width, height, callback)
 {
 	// Create a canvas the size of the SVG
 	const canvasWrapper     = document.getElementById('canvas-wrapper');
