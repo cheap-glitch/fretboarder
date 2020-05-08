@@ -22,7 +22,7 @@ div.VButton(
 			v-mods="{ isActive, isDisabled }"
 
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
-			:fa-flip-horizontal="isFlipped"
+			:flip="isFlipped ? 'horizontal' : null"
 			)
 
 	VTooltip(
