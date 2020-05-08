@@ -41,6 +41,7 @@ div.FretboardSettings
 		//- Toggle frets number
 		VButton(
 			:icon="['fal', 'list-ol']"
+			size="big"
 			tooltip-text="Toggle frets number"
 			:is-active="isShowingFretsNb"
 
@@ -49,6 +50,7 @@ div.FretboardSettings
 		//- Toggle notes name
 		VButton(
 			icon="info-circle"
+			size="big"
 			tooltip-text="Toggle notes name"
 			:is-active="isShowingNotesName"
 
@@ -57,6 +59,7 @@ div.FretboardSettings
 		//- Switch fretting hand
 		VButton(
 			icon="hand-paper"
+			size="big"
 			tooltip-text="Switch fretting hand"
 			:is-flipped="!isFlipped"
 
@@ -110,11 +113,13 @@ import { instruments, tunings, tuningsNames } from '@/modules/music'
 export default {
 	name: 'FretboardSettings',
 
-	//- data() {
-	//- 	return {
-	//- 		isExportMenuOpened: false,
-	//- 	}
-	//- },
+	/*
+	data() {
+		return {
+			isExportMenuOpened: false,
+		}
+	},
+	*/
 
 	computed: {
 		tuningsOptions()
@@ -217,10 +222,6 @@ export default {
 	@include space-children-h(12px);
 
 	justify-self: end;
-
-	.VButton {
-		font-size: 26px;
-	}
 }
 
 //- /**

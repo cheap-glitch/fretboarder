@@ -361,10 +361,6 @@ export default {
 	}
 }
 
-.VButton {
-	font-size: 20px;
-}
-
 .button-toggle-visible {
 	margin-left: auto;
 }

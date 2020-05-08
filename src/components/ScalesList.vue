@@ -49,6 +49,7 @@ div.ScalesList
 		v-show="scales.length < MAX_NB_SCALES"
 
 		icon="plus-circle"
+		size="big"
 		tooltip-text="Add a new scale or arpeggio"
 		tooltip-placement="bottom"
 

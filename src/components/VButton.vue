@@ -23,6 +23,7 @@ div.VButton(
 
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
 			:flip="isFlipped ? 'horizontal' : null"
+			:class="`size-${size}`"
 			)
 
 	VTooltip(
@@ -50,6 +51,11 @@ export default {
 			type: [Array, String],
 			required: true,
 		},
+		size: {
+			type: String,
+			default: 'normal',
+			validator: v => ['normal', 'big'].includes(v)
+		},
 		tooltipText: {
 			type: String,
 			required: true,
@@ -57,7 +63,7 @@ export default {
 		tooltipPlacement: {
 			type: String,
 			default: 'top',
-			validator: v => ['top', 'bottom'].includes(v),
+			validator: v => ['top', 'bottom'].includes(v)
 		},
 		isActive: {
 			type: Boolean,
@@ -144,6 +150,9 @@ export default {
 	&.is-active {
 		color: var(--color--highlight);
 	}
+
+	&.size-normal { font-size: 20px; }
+	&.size-big    { font-size: 30px; }
 }
 
 </style>
