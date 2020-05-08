@@ -93,7 +93,7 @@ export default {
 
 .ScalesList {
 	@include center-column;
-	@include space-children-v(20px);
+	@include space-children-v(30px);
 }
 
 .scales {

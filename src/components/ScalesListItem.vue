@@ -9,7 +9,7 @@
 div.ScalesListItem(:style="{ 'border-color': color }")
 
 	//- Tooltip for the hovered interval
-	VTooltip(
+	div: VTooltip(
 		v-for="(interval, intervalIndex) in intervals"
 		:key="`interval--${interval.value}--tooltip`"
 
@@ -56,9 +56,12 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		@change="v => updateScale('position', v)"
 		)
 
+	div.space
+
 	//----------------------------------------------------------------------
 	//- Intervals
 	//----------------------------------------------------------------------
+
 	div.intervals: div.intervals__item(
 		v-for="(interval, intervalIndex) in intervals"
 		:key="`scale--${index}--interval--${interval.value}`"
@@ -73,14 +76,14 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		p.interval__item__note {{ interval.note }}
 		p.interval__item__name(v-html="interval.shortName")
 
-	//- div.tools__separator
+	div.space
 
 	//----------------------------------------------------------------------
 	//- Tools
 	//----------------------------------------------------------------------
 
 	//- Show/hide
-	VButton(
+	VButton.button-toggle-visible(
 		:icon="isVisible ? 'eye' : 'eye-slash'"
 		is-flipped
 		tooltip-text="Toggle visibility"
@@ -88,49 +91,48 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 
 		@click="updateScale('isVisible', !isVisible)"
 		)
-		//-
-			//- Focus
-			VButton.toolbar__item(
-				v-show="nbScales > 1"
+	//- Focus
+	VButton.toolbar__item(
+		v-show="nbScales > 1"
 
-				icon="bullseye"
-				:tooltip-text="isFocused ? 'Unfocus' : 'Focus'"
-				tooltip-placement="bottom"
+		icon="bullseye"
+		tooltip-text="Toggle focus"
+		tooltip-placement="bottom"
 
-				:is-active="isFocused"
-				@click="$store.commit('scales/toggleFocusScale', id)"
-				)
-			//- Show intersections only
-			VButton.toolbar__item(
-				v-show="nbScales > 1"
+		:is-active="isFocused"
+		@click="$store.commit('scales/toggleFocusScale', index)"
+		)
+	//- Show intersections only
+	VButton.toolbar__item(
+		v-show="nbScales > 1"
 
-				:icon="['fas', 'intersection']"
-				tooltip-text="Show only intersections with other scales"
-				tooltip-placement="bottom"
+		:icon="['fas', 'intersection']"
+		tooltip-text="Show only intersections with other scales"
+		tooltip-placement="bottom"
 
-				:is-active="isIntersected"
-				@click="updateScale('isIntersected', !isIntersected)"
-				)
+		:is-active="isIntersected"
+		@click="updateScale('isIntersected', !isIntersected)"
+		)
 
-			div.tools__separator
+	div.separator
 
-			//- Duplicate
-			VButton.toolbar__item(
-				icon="copy"
-				tooltip-text="Duplicate"
-				tooltip-placement="bottom"
+	//- Duplicate
+	VButton.toolbar__item(
+		icon="copy"
+		tooltip-text="Duplicate"
+		tooltip-placement="bottom"
 
-				:is-disabled="nbScales == MAX_NB_SCALES"
-				@click="$store.commit('scales/addScale', id)"
-				)
-			//- Remove
-			VButton.toolbar__item(
-				icon="times-circle"
-				tooltip-text="Remove"
-				tooltip-placement="bottom"
+		:is-disabled="nbScales == MAX_NB_SCALES"
+		@click="$store.commit('scales/duplicateScale', index)"
+		)
+	//- Remove
+	VButton.toolbar__item(
+		icon="times-circle"
+		tooltip-text="Remove"
+		tooltip-placement="bottom"
 
-				@click="$store.commit('scales/removeScale', id)"
-				)
+		@click="$store.commit('scales/removeScale', index)"
+		)
 
 </template>
 <!--}}}-->
@@ -284,13 +286,23 @@ export default {
 	}
 }
 
+.color-dot {
+	@include mq($from: desktop)
+	{
+		@include circle(10px);
+	}
+}
+
+.space {
+	width: 10px;
+}
+
 .select-model {
 	width: 250px;
 }
 
 .intervals {
 	display: flex;
-	margin-left: 20px;
 }
 
 .intervals__item {
@@ -299,7 +311,7 @@ export default {
 
 	width: 60px;
 
-	padding: 4px 8px;
+	padding: 2px 8px;
 
 	border: 1px solid var(--color--border);
 
@@ -309,8 +321,13 @@ export default {
 		border-right: none;
 	}
 
-	&:first-child { padding-left:  12px; border-radius: 1e3px 0 0 1e3px; }
-	&:last-child  { padding-right: 12px; border-radius: 0 1e3px 1e3px 0; }
+	&:first-child {
+		padding-left: 12px;
+		border-radius: 1e3px 0 0 1e3px;
+	}
+	&:last-child {
+		border-radius: 0 1e3px 1e3px 0;
+	}
 
 	&.is-selected, &:hover {
 		background-color: var(--color--bg--highlight);
@@ -330,18 +347,29 @@ export default {
 	cursor: pointer;
 
 	font-size: 1.2rem;
+
+	.intervals__item.is-selected & { color: var(--color--text); }
 }
 
-.color-dot {
-	@include mq($from: desktop)
+.separator {
+	@include circle(4px);
+	background-color: var(--color--bg--highlight);
+
+	@include mq($until: desktop)
 	{
-		@include circle(10px);
+		display: none;
 	}
 }
 
-//- .settings {
-//- 	flex: 1 1 100%;
+.VButton {
+	font-size: 20px;
+}
 
+.button-toggle-visible {
+	margin-left: auto;
+}
+
+//- .settings {
 //- 	@include mq($until: desktop)
 //- 	{
 //- 		display: grid;
@@ -394,20 +422,6 @@ export default {
 //- 	}
 //- }
 
-//- .tools__separator {
-//- 	display: none;
-
-//- 	@include mq($from: desktop)
-//- 	{
-//- 		display: block;
-
-//- 		@include circle(4px);
-//- 		flex: 0 0 auto;
-
-//- 		background-color: var(--color--border);
-//- 	}
-//- }
-
 //- .toolbar {
 //- 	display: flex;
 
@@ -421,8 +435,6 @@ export default {
 //- .toolbar__item {
 //- 	@include mq($until: desktop)
 //- 	{
-//- 		flex: 1 1 100%;
-
 //- 		padding: 10px;
 
 //- 		&:not(:last-child) {

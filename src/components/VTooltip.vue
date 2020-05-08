@@ -101,7 +101,7 @@ export default {
 		{
 			this.isPopperActive = true;
 
-			if (this.isOpen && this.popper === null && this.target !== false)
+			if (this.isOpen && this.popper === null && this.target !== false && document.body.contains(this.target))
 			{
 				this.popper = createPopper(this.target, this.$refs.tooltip, {
 					placement: this.placement,

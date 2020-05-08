@@ -210,8 +210,8 @@ export default {
 }
 
 .FretboardSettings { margin-top: 40px; }
-.FretboardViewer   { margin-top: 40px; }
-.ScalesList        { margin-top: 60px; }
+.FretboardViewer   { margin-top: 50px; }
+.ScalesList        { margin-top: 80px; }
 
 /**
  * Header
