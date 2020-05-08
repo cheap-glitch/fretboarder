@@ -36,7 +36,7 @@ const state = getVuexState(model);
  * Getters
  */
 const getters = {
-	displayedScales: state => state.scales.filter(scale => scale.isVisible),
+	displayedScales: state => [].concat(state.scales.find(scale => scale.isFocused) || state.scales.filter(scale => scale.isVisible))
 };
 
 /**
