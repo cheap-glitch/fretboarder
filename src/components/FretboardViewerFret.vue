@@ -228,10 +228,15 @@ export default {
 .fret__note {
 	position: absolute;
 	z-index: 10;
+	@include center-content;
 
 	@include circle(layout.$note-size);
 
-	transition: none;
+	color: transparent;
+	opacity: 0;
+	font-weight: bold;
+
+	transition: opacity 0.2s, filter 0.2s;
 
 	/**
 	 * Placement
@@ -271,24 +276,22 @@ export default {
 	 * Display
 	 */
 	&.is-active {
-		color: white;
+		opacity: 1;
 
 		&:hover {
 			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
 		}
 
-		&.is-highlighted {
-			border-radius: 0;
-		}
+		&.is-highlighted       { border-radius: 0; }
+		&.is-showing-note-name { color: white;     }
 	}
 
 	&:not(.is-active) {
-		color: var(--color--text);
 		border: 2px dashed var(--color--border);
 
-		&:not(.is-open-string) {
-			opacity: 0;
-			&:hover { opacity: 1; }
+		&:hover, &.is-open-string {
+			color: var(--color--text);
+			opacity: 1;
 		}
 	}
 }

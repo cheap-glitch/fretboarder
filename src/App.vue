@@ -153,7 +153,7 @@ export default {
 	{
 		this.feedbackMail = {
 			subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
-			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please indicate your OS and browser to help us resolve it faster.\n----------\n\n"),
+			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
 		};
 
 		if (this.$store.state.scales.scales.length == 0)
