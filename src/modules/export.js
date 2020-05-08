@@ -6,11 +6,9 @@
 import { saveAs }                           from 'file-saver'
 
 import { getFrets }                         from '@/modules/fretboard'
+import { colorscheme }                      from '@/modules/colorscheme'
 import { objectMapToObject }                from '@/modules/object'
 import { instruments, tunings, notesNames } from '@/modules/music'
-
-import { colorscheme }                      from '@/modules/colorscheme'
-import { SCALES_COLORS }                    from '@/stores/scales'
 
 /**
  * Create and save an image of the fretboard
@@ -98,7 +96,7 @@ function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fret
 	if (isFretboardFlipped) openTag(svg, 'g', { transform: `scale(-1, 1) translate(-${svgWidth}, 0)` });
 
 	// Return the position of a fret on the y-axis
-	const getFretY = fret => !fret ? 0 : fretWidth*((3*nbFrets - 1)/(2*nbFrets - 2) - fret/(nbFrets - 1));
+	const getFretY = fretNumber => !fretNumber ? 0 : fretWidth*((3*nbFrets - 1)/(2*nbFrets - 2) - fretNumber/(nbFrets - 1));
 
 	/**
 	 * Frets
@@ -246,50 +244,53 @@ function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fret
 	 */
 
 	// Get the list of active frets
-	const displayedFrets = getFrets(nbStrings, tunings[instrument][tuning], displayedScales)
+	const displayedFrets = getFrets(nbStrings, [...tunings[instrument][tuning]].reverse(), displayedScales)
 		// Keep only the frets in the selected range
-		.filter(fret => fretMin <= fret.number && fret.number <= fretMax);
+		.filter(fret => (fretMin <= fret.number && fret.number <= fretMax));
 
 	// Draw the notes
 	let offset = 0;
 	displayedFrets.forEach(function(fret)
 	{
-		// Ignore inactive frets
-		if (!fret.scales) return;
+		// Reset the horizontal offset at the start of every string
+		if (fret.number == 0) offset = 0;
 
-		const x = (fret.number == 0) ? 1.8 : offset - getFretY(fret.number)/2 + marginRight;
-		const y = fret.string*fretHeight + marginTop;
-		const size = 1.6;
-
-		// Add the fret gradient to the global list if it's not already in
-		const gradientColors = fret.scales.map(scale => SCALES_COLORS[scale.index]).join('-');
-		if (fret.scales.length > 1 && !gradients.includes(gradientColors))
-			gradients.push(gradientColors);
-
-		// If the note belongs to more than one scale, fill it with a gradient
-		const fill = (fret.scales.length > 1) ? `url(#lg-${gradientColors})` : gradientColors;
-
-		// Draw the note
-		appendSingleTag(svg,
-			fret.isHighlighted ? 'rect'                              : 'circle',
-			fret.isHighlighted ? { width: size, height: size, fill } : { r: size, cx: x, cy: y, fill }
-		);
-
-		// Draw the note name
-		if (isDisplayingNotesName)
+		if (fret.scales.length)
 		{
-			// If the fretboard is flipped, flip the text again to render it properly
-			if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
+			const x = (fret.number == 0) ? 1.8 : offset - getFretY(fret.number)/2 + marginRight;
+			const y = fret.string*fretHeight + marginTop;
+			const size = 1.6;
 
-			appendFullTag(svg, 'text', notesNames[fret.note], {
-				x:          isFretboardFlipped ? (svgWidth - x) :  x,
-				y:          y + r/3,
-				fill:       colors.noteName,
-				class:      'note',
-				textAnchor: 'middle',
-			});
+			// Add the fret gradient to the global list if it's not already in
+			const gradientColors = fret.scales.map(scale => displayedScales[scale.index].color).join('-');
+			if (fret.scales.length > 1 && !gradients.includes(gradientColors))
+				gradients.push(gradientColors);
 
-			if (isFretboardFlipped) closeTag(svg, 'g');
+			// If the note belongs to more than one scale, fill it with a gradient
+			const fill = (fret.scales.length > 1) ? `url(#lg-${gradientColors})` : gradientColors;
+
+			// Draw the note
+			appendSingleTag(svg,
+				fret.isHighlighted ? 'rect' : 'circle',
+				fret.isHighlighted ? { x: x - size, y: y - size, width: size*2, height: size*2, fill } : { r: size, cx: x, cy: y, fill }
+			);
+
+			// Draw the note name
+			if (isDisplayingNotesName)
+			{
+				// If the fretboard is flipped, flip the text again to render it properly
+				if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
+
+				appendFullTag(svg, 'text', notesNames[fret.note], {
+					x:          isFretboardFlipped ? (svgWidth - x) :  x,
+					y:          y + size/3,
+					fill:       colors.noteName,
+					class:      'note',
+					textAnchor: 'middle',
+				});
+
+				if (isFretboardFlipped) closeTag(svg, 'g');
+			}
 		}
 
 		offset += getFretY(fret.number + 1);
