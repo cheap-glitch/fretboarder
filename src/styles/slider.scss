@@ -3,109 +3,89 @@
  * styles/slider.scss
  */
 
-/**
- * Mixins
- * {{{
- */
 @mixin triangle($size, $color, $direction)
 {
 	width: 0;
 	height: 0;
 
-	@if ($direction==top) or ($direction==bottom) or ($direction==right) or ($direction==left)
-	{
-		border-color: transparent;
-		border-style: solid;
-		border-width: $size / 2;
+	border-color: transparent;
+	border-style: solid;
+	border-width: $size / 2;
 
-		@if $direction == top
-		{
-			border-bottom-color: $color;
-		}
-		@else if $direction == right
-		{
-			border-left-color: $color;
-		}
-		@else if $direction == bottom
-		{
-			border-top-color: $color;
-		}
-		@else if $direction == left
-		{
-			border-right-color: $color;
-		}
+	@if $direction == top
+	{
+		border-bottom-color: $color;
+	}
+	@else if $direction == right
+	{
+		border-left-color: $color;
+	}
+	@else if $direction == bottom
+	{
+		border-top-color: $color;
+	}
+	@else if $direction == left
+	{
+		border-right-color: $color;
 	}
 }
 
 @mixin arrow($size, $color)
 {
 	&::after {
-		content: '';
+		content: "";
 		position: absolute;
 	}
 
-	&-top {
-		&::after {
-			top: 100%;
-			left: 50%;
-			transform: translate(-50%, 0);
-			@include triangle($size, $color, bottom);
-		}
+	&-top::after {
+		top: 100%;
+		left: 50%;
+		transform: translate(-50%, 0);
+		@include triangle($size, $color, bottom);
 	}
 
-	&-bottom {
-		&::after {
-			left: 50%;
-			bottom: 100%;
-			transform: translate(-50%, 0);
-			@include triangle($size, $color, top);
-		}
+	&-bottom::after {
+		left: 50%;
+		bottom: 100%;
+		transform: translate(-50%, 0);
+		@include triangle($size, $color, top);
 	}
 
-	&-left {
-		&::after {
-			top: 50%;
-			left: 100%;
-			transform: translate(0, -50%);
-			@include triangle($size, $color, right);
-		}
+	&-left::after {
+		top: 50%;
+		left: 100%;
+		transform: translate(0, -50%);
+		@include triangle($size, $color, right);
 	}
 
-	&-right {
-		&::after {
-			top: 50%;
-			right: 100%;
-			transform: translate(0, -50%);
-			@include triangle($size, $color, left);
-		}
+	&-right::after {
+		top: 50%;
+		right: 100%;
+		transform: translate(0, -50%);
+		@include triangle($size, $color, left);
 	}
 }
-/**
- * }}}
- */
 
 .vue-slider {
 	cursor: pointer;
 }
 
-.vue-slider-disabled {
-	cursor: not-allowed;
+.vue-slider-rail,
+.vue-slider-process {
+	border-radius: 15px;
 }
 
 .vue-slider-rail {
-	border-radius: 15px;
 	background-color: var(--color--bg--highlight);
-
 	transition: background-color 0.2s;
 }
 
 .vue-slider-process {
-	border-radius: 15px;
 	background-color: var(--color--text--secondary);
-}
 
-.vue-slider:hover .vue-slider-process {
-	background-color: var(--color--hover);
+	.vue-slider:hover & {
+		background-color: var(--color--hover);
+	}
 }
 
 .vue-slider-dot-handle {
@@ -118,17 +98,12 @@
 
 	cursor: grab;
 
-	&:hover {
+	&:hover, &-focus {
 		background-color: var(--color--hover);
 	}
 
-	@at-root &-focus {
+	&-focus {
 		cursor: grabbing;
-		background-color: var(--color--hover);
-	}
-
-	@at-root &-disabled {
-		cursor: not-allowed;
 	}
 }
 
