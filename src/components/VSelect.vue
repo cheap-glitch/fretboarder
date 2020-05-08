@@ -16,7 +16,7 @@ div.VSelect(ref="selectbar")
 		)
 		div
 			p.bar__filler(v-html="longestName")
-			p.bar__text(v-html="selected.name")
+			p.bar__text(v-html="(selectedOptionIndex !== -1) ? optionsList[selectedOptionIndex].name : 'Loading…'")
 		fa-icon.bar__chevron(
 			:icon="['far', 'chevron-down']"
 			v-mods="{ isOpen, isFlipped: isChevronFlipped }"
@@ -25,7 +25,7 @@ div.VSelect(ref="selectbar")
 	//- Options
 	transition(name="fade")
 		div.options(
-			ref="options"
+			ref="optionList"
 			v-show="isOpen"
 			:class="`is-opening-${openingDirection}`"
 			)
@@ -34,6 +34,7 @@ div.VSelect(ref="selectbar")
 				v-for="option in optionsList"
 				:key="`option--${option.name}`"
 
+				ref="options"
 				v-html="option.name"
 
 				@click.left="select(option)"
@@ -46,6 +47,7 @@ div.VSelect(ref="selectbar")
 <!--{{{ JavaScript -->
 <script>
 
+import Vue                         from 'vue'
 import { get }                     from 'vuex-pathify'
 import { disableBodyScroll       } from 'body-scroll-lock'
 import { enableBodyScroll        } from 'body-scroll-lock'
@@ -85,10 +87,6 @@ export default {
 	},
 
 	computed: {
-		selected()
-		{
-			return this.optionsList.find(option => option.value === this.value) || { name: 'Loading…', value: null };
-		},
 		longestName()
 		{
 			let maxLength        = 0;
@@ -104,6 +102,10 @@ export default {
 			});
 
 			return this.optionsList[longestNameIndex].name;
+		},
+		selectedOptionIndex()
+		{
+			return this.optionsList.findIndex(option => option.value === this.value);
 		},
 		optionsList()
 		{
@@ -127,7 +129,7 @@ export default {
 	{
 		EventBus.$on('keypress', key => this.jumpToOption(key));
 
-		// Store the timestamp and value of the last alphabetic keypress
+		// Store the timestamp and value of the last alphanumeric key press
 		this.lastKeypressTime  = 0;
 		this.lastKeypressValue = '';
 	},
@@ -135,7 +137,6 @@ export default {
 	mounted()
 	{
 		this.updateOpeningDirection();
-
 	},
 
 	destroyed()
@@ -145,6 +146,45 @@ export default {
 	},
 
 	methods: {
+		jumpToOption(key)
+		{
+			if (!this.isOpen) return;
+
+			// Ignore non-alphanumeric key presses
+			if (!/^[a-zA-Z0-9]$/.test(key)) return;
+
+			// If the keypress followed the last one in less than 500 ms, append to the search string instead of replacing it
+			const now = Date.now();
+			this.lastKeypressValue = (now - this.lastKeypressTime < 500) ? this.lastKeypressValue + key : key;
+			this.lastKeypressTime  = now;
+
+			// Search for an option whose name starts with the given key and scroll to it
+			const index = this.optionsList.findIndex(option => option.name.toLowerCase().startsWith(this.lastKeypressValue.toLowerCase()));
+			if (index !== -1) this.$refs.options[index].scrollIntoView(true);
+		},
+		toggle()
+		{
+			// Desktop: update the opening direction before opening
+			if (!this.isMobileDevice && !this.isOpen)
+				this.updateOpeningDirection();
+
+			// Mobile: lock the scrolling on the body
+			if (this.isMobileDevice)
+				(this.isOpen ? enableBodyScroll : disableBodyScroll)(this.$refs.optionList);
+
+			this.isOpen = !this.isOpen;
+
+			// Jump to the selected option
+			Vue.nextTick(() => { if (this.isOpen) this.$refs.options[this.selectedOptionIndex].scrollIntoView(true) });
+		},
+		select(option)
+		{
+			this.$emit('change', this.isValueNumber ? Number.parseInt(option.value, 10) : option.value);
+		},
+		close()
+		{
+			this.isOpen = false;
+		},
 		updateOpeningDirection()
 		{
 			const windowHeight  = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -155,46 +195,6 @@ export default {
 			 * open the options menu upward instead of downward to avoid vertical overflow
 			 */
 			this.openingDirection = ((windowHeight - elemYPosition) < (layout.selectBarHeight.int + layout.selectOptionsHeight.int)) ? 'above' : 'below';
-		},
-		jumpToOption(key)
-		{
-			if (!this.isOpen) return;
-
-			// Ignore non-alphabetic keys
-			if (!/^[a-zA-z]$/.test(key)) return;
-
-			// If the keypress followed the last one in less than 500 ms, append to the search string instead of replacing it
-			const now = Date.now();
-			this.lastKeypressValue = (now - this.lastKeypressTime < 500) ? this.lastKeypressValue + key : key;
-			this.lastKeypressTime  = now;
-
-			// Search for an option whose name starts with the given key and scroll to it
-			const index = this.optionsList.findIndex(option => option.name.toLowerCase().startsWith(this.lastKeypressValue.toLowerCase()));
-			if (index !== -1)
-			{
-				const optionBoxHeight = this.$refs.options.children.item(0).offsetHeight || layout.selectOptionsItemHeight.int;
-				this.$refs.options.scrollTo({ top: index*optionBoxHeight, behavior: 'auto' });
-			}
-		},
-		toggle()
-		{
-			// Desktop: update the opening direction before opening
-			if (!this.isMobileDevice && !this.isOpen)
-				this.updateOpeningDirection();
-
-			// Mobile: lock the scrolling on the body
-			if (this.isMobileDevice)
-				(this.isOpen ? enableBodyScroll : disableBodyScroll)(this.$refs.options);
-
-			this.isOpen = !this.isOpen;
-		},
-		select(option)
-		{
-			this.$emit('change', this.isValueNumber ? Number.parseInt(option.value, 10) : option.value);
-		},
-		close()
-		{
-			this.isOpen = false;
 		},
 	},
 }

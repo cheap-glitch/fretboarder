@@ -4,21 +4,20 @@
  */
 
 // Breakpoints
-$mq-breakpoint-desktop:      800px;
+$mq-breakpoint-desktop:    800px;
 
 // UI
-$select-bar-height:          40px;
-$select-options-height:      300px;
-$select-options-item-height: 300px;
+$select-bar-height:        40px;
+$select-options-height:    300px;
 
 // Fretboard decorations
-$nut-thickness:              6px;
-$string-thickness:           2px;
-$fretbar-thickness:          3px;
+$nut-thickness:            6px;
+$string-thickness:         2px;
+$fretbar-thickness:        3px;
 
 // Fretboard layout
-$note-size:                  32px;
-$fret-width:                 42px;
-$min-fret-length:            $note-size + $fretbar-thickness;
-$open-string-fret-length:    44px;
-$fret-number-wrapper-size:   50px;
+$note-size:                32px;
+$fret-width:               42px;
+$min-fret-length:          $note-size + $fretbar-thickness;
+$open-string-fret-length:  44px;
+$fret-number-wrapper-size: 50px;
