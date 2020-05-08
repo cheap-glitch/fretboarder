@@ -107,7 +107,7 @@ div.FretboardSettings
 
 import { get, sync }                          from 'vuex-pathify'
 
-//- import { exportFretboard }                    from '@/modules/export'
+import { exportFretboard }                    from '@/modules/export'
 import { instruments, tunings, tuningsNames } from '@/modules/music'
 
 export default {
@@ -147,11 +147,6 @@ export default {
 		this.instrumentOptions = Object.keys(instruments).map(key => ({ name: instruments[key].name, value: key }));
 	},
 
-	mounted()
-	{
-		this.buttonExportMenu  = document.getElementById('button-export-menu');
-	},
-
 	methods: {
 		tooltipFormatter(number)
 		{
@@ -169,7 +164,6 @@ export default {
 				default:  return `${number}th fret`;
 			}
 		},
-		/*
 		exportFretboardToFile(format)
 		{
 			// Close the export menu tooltip
@@ -178,23 +172,16 @@ export default {
 			// Export the fretboard to the select format and trigger a download of the resulting file
 			exportFretboard(
 				format,
+				this.$store.getters['scales/displayedScales'],
 				instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
-				tunings[this.instrument][this.tuning],
-				this.$store.getters['scales/activeScales'],
 				this.isFlipped,
 				this.isShowingNotesName,
 				this.isDarkModeOn,
 				format != 'svg',
 			);
 		},
-		closeExportMenu(event)
-		{
-			if (!this.buttonExportMenu.contains(event.target))
-				this.isExportMenuOpened = false;
-		},
-		*/
 	},
 }
 

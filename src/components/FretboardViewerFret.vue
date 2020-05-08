@@ -19,7 +19,7 @@ div.FretboardViewerFret
 				)
 				div.intervals__item__dot(
 					v-for="scale in interval.scales"
-					:key="`dot--${scale}`"
+					:key="`dot--${scale.index}`"
 
 					:style="{ 'background-color': scalesColors[scale] }"
 					)
