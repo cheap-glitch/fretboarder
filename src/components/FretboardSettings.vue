@@ -66,9 +66,12 @@ div.FretboardSettings
 			@click="$store.commit('fretboard/toggle.isFlipped')"
 			)
 		//- Export the fretboard
-		//- div#canvas-wrapper
-		//- VButton(
+		div#canvas-wrapper
+		VButton(
+			ref="buttonExport"
+
 			icon="file-download"
+			size="big"
 			:is-active="isExportMenuOpened"
 			tooltip-text="Export the fretboard image"
 			:is-tooltip-disabled="isExportMenuOpened"
@@ -76,27 +79,25 @@ div.FretboardSettings
 			@click="isExportMenuOpened = !isExportMenuOpened"
 			)
 
-	//- Export menu
-	//- VTooltip(
-		v-if="!isMobileDevice"
+		//- Export menu
+		VTooltip(
+			:target="!!$refs.buttonExport ? $refs.buttonExport.$refs.button || false : false"
+			placement="bottom"
+			:is-open="!isMobileDevice && isExportMenuOpened"
 
-		target="button-export-menu"
-		placement="bottom"
-		:is-open="isExportMenuOpened"
-
-		v-click-outside="closeExportMenu"
-		)
-		div
-			p.export-menu__text
-				strong Choose a format to export in
-			p.export-menu__text
-				em
-					| If you want to print this  fretboard, choose PNG or JPG.
-					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
-			div.export-menu__buttons
-				each format in ['png', 'jpg', 'svg']
-					button.button.is-filled(@click.left=`exportFretboardToFile('${format}')`)
-						p.button__text= format.toUpperCase()
+			v-click-outside="closeExportMenu"
+			)
+			div
+				p.export-menu__text
+					strong Choose a format to export in
+				p.export-menu__text
+					em
+						| If you want to print this  fretboard, choose PNG or JPG.
+						| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
+				div.export-menu__buttons
+					each format in ['png', 'jpg', 'svg']
+						button.button.is-filled(@click.left=`exportFretboardToFile('${format}')`)
+							p.button__text= format.toUpperCase()
 
 </template>
 <!--}}}-->
@@ -113,13 +114,11 @@ import { instruments, tunings, tuningsNames } from '@/modules/music'
 export default {
 	name: 'FretboardSettings',
 
-	/*
 	data() {
 		return {
 			isExportMenuOpened: false,
 		}
 	},
-	*/
 
 	computed: {
 		tuningsOptions()
@@ -182,6 +181,11 @@ export default {
 				format != 'svg',
 			);
 		},
+		closeExportMenu(event)
+		{
+			if (!this.$refs.buttonExport.$refs.button.contains(event.target))
+				this.isExportMenuOpened = false;
+		},
 	},
 }
 
@@ -209,6 +213,55 @@ export default {
 	@include space-children-h(12px);
 
 	justify-self: end;
+}
+
+.export-menu__text {
+	max-width: 300px;
+
+	font-size: 1.6rem;
+
+	&:first-of-type {
+		margin-bottom: 10px;
+	}
+}
+
+.export-menu__buttons {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
+
+	margin-top: 40px;
+}
+
+.button {
+	padding: 6px;
+
+	appearance: none;
+	background-image: none;
+
+	border: 2px solid white;
+	border-radius: 6px;
+
+	background-color: var(--color--bg--tooltip);
+
+	transition: border-color 0.2s, background-color 0.2s;
+
+	cursor: pointer;
+
+	&:hover {
+		background-color: white;
+	}
+}
+
+.button__text {
+	color: white;
+	cursor: pointer;
+
+	.button:hover & { color: var(--color--bg--tooltip); }
+}
+
+#canvas-wrapper {
+	display: none;
 }
 
 //- /**
@@ -309,64 +362,6 @@ export default {
 //-  * Export menu
 //-  * -----------------------------------------------------------------------------
 //-  */
-
-//- .export-menu__text {
-//- 	max-width: 300px;
-
-//- 	font-size: 1.6rem;
-
-//- 	&:first-of-type {
-//- 		margin-bottom: 10px;
-//- 	}
-//- }
-
-//- .export-menu__buttons {
-//- 	display: flex;
-//- 	justify-content: center;
-//- 	@include space-children-h(10px);
-
-//- 	margin-top: 40px;
-//- }
-
-//- .button,
-//- .button__text {
-//- 	cursor: pointer;
-//- }
-
-//- .button {
-//- 	padding: 6px;
-
-//- 	appearance: none;
-//- 	background-image: none;
-
-//- 	border: 2px solid var(--color--bg--tooltip);
-//- 	border-radius: 6px;
-
-//- 	background-color: var(--color--bg--tooltip);
-
-//- 	transition: border-color 0.2s, background-color 0.2s;
-
-//- 	&.is-filled,
-//- 	&:not(.is-filled):hover {
-//- 		border-color: white;
-//- 	}
-
-//- 	&.is-filled:hover {
-//- 		background-color: white;
-
-//- 		.button__text {
-//- 			color: var(--color--bg--tooltip);
-//- 		}
-//- 	}
-//- }
-
-//- .button__text {
-//- 	color: white;
-//- }
-
-//- #canvas-wrapper {
-//- 	display: none;
-//- }
 
 </style>
 <!--}}}-->

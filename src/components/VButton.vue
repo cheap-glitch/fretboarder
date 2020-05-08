@@ -6,17 +6,15 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VButton(
-	ref="wrapper"
-
-	@click.left="clickHandler"
-	@mouseenter="showTooltip = true"
-	@mouseleave="showTooltip = clicked = false"
-	)
+div.VButton
 
 	button.VButton__button(
 		ref="button"
 		v-mods="{ isDisabled }"
+
+		@click.left="clickHandler"
+		@mouseenter="showTooltip = true"
+		@mouseleave="showTooltip = clicked = false"
 		)
 		fa-icon.VButton__icon(
 			v-mods="{ isActive, isDisabled }"
@@ -95,17 +93,12 @@ export default {
 	},
 
 	methods: {
-		clickHandler(event)
+		clickHandler()
 		{
 			// Unfocus the button
 			this.$refs.button.blur();
-			this.$refs.wrapper.blur();
 
 			if (this.isDisabled)
-				return;
-
-			// Disable the wider click zone on desktop
-			if (event.target === this.$refs.wrapper && !this.isMobileDevice)
 				return;
 
 			this.clicked = true;
