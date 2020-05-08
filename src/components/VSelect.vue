@@ -154,7 +154,7 @@ export default {
 			 * If the element is positioned low in the viewport,
 			 * open the options menu upward instead of downward to avoid vertical overflow
 			 */
-			this.openingDirection = (windowHeight - elemYPosition < layout.selectOptionsHeight.int) ? 'above' : 'below';
+			this.openingDirection = ((windowHeight - elemYPosition) < (layout.selectBarHeight.int + layout.selectOptionsHeight.int)) ? 'above' : 'below';
 		},
 		jumpToOption(key)
 		{

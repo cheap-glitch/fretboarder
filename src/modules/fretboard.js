@@ -3,9 +3,8 @@
  * modules/fretboard.js
  */
 
+import { MAX_NB_FRETS }             from '@/modules/consts'
 import { notes, scales, arpeggios } from '@/modules/music'
-
-export const MAX_NB_FRETS = 25;
 
 /**
  * Generate a list of frets

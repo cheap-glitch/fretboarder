@@ -16,7 +16,6 @@ div.FretboardViewer(
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 
 		v-bind="fret"
-		:is-starting-fret="fret.number == fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-note-name="isShowingNotesName"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"

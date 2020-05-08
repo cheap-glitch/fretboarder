@@ -136,7 +136,7 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 <!--{{{ JavaScript -->
 <script>
 
-import { MAX_NB_SCALES }                                   from '@/stores/scales'
+import { MAX_NB_SCALES }                                   from '@/modules/consts'
 import { notes, scales, arpeggios }                        from '@/modules/music'
 import { notesNames, intervalsNames, intervalsShortNames } from '@/modules/music'
 

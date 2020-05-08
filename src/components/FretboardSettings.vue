@@ -214,7 +214,7 @@ export default {
 
 .buttons {
 	display: flex;
-	@include space-children-h(16px);
+	@include space-children-h(12px);
 
 	justify-self: end;
 

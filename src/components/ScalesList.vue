@@ -63,7 +63,7 @@ div.ScalesList
 
 import { get }           from 'vuex-pathify'
 
-import { MAX_NB_SCALES } from '@/stores/scales'
+import { MAX_NB_SCALES } from '@/modules/consts'
 import ScalesListItem    from '@/components/ScalesListItem'
 
 export default {

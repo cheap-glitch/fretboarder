@@ -25,20 +25,19 @@ div.FretboardViewerFret
 					)
 				p {{ interval.name }}
 
-	div.fret(
-		v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }"
-		)
+	div.fret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
+
 		div.fret__inlay(v-show="isShowingInlay")
-		div.fret__note(
+
+		p.fret__note(
 			ref="note"
 
-			v-mods="{ isActive, isHighlighted, isOpenString, isFretboardFlipped, isFretboardVertical }"
+			v-mods="{ isActive, isHighlighted, isShowingNoteName, isOpenString, isFretboardFlipped, isFretboardVertical }"
 			:style="noteBg"
 
 			@mouseenter="mouseenterHandler"
 			@mouseleave="mouseleaveHandler"
-			)
-			p.fret__note__name(v-show="isShowingNoteName") {{ noteName }}
+			) {{ noteName }}
 
 </template>
 <!--}}}-->
@@ -74,10 +73,6 @@ export default {
 			required: true,
 		},
 		isHighlighted: {
-			type: Boolean,
-			default: false,
-		},
-		isStartingFret: {
 			type: Boolean,
 			default: false,
 		},
@@ -214,64 +209,29 @@ export default {
 	 */
 	&.is-fretboard-vertical {
 		&:not(.is-open-string)         { border-bottom-width: layout.$fretbar-thickness; }
-		&.is-starting-fret             { border-top-width:    layout.$fretbar-thickness; }
 		&.is-first-fret                { border-top-width:    layout.$nut-thickness;     }
 	}
 
 	&:not(.is-fretboard-vertical) {
 		&.is-fretboard-flipped {
 			&:not(.is-open-string) { border-left-width:   layout.$fretbar-thickness; }
-			&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
 			&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
 		}
 
 		&:not(.is-fretboard-flipped) {
 			&:not(.is-open-string) { border-right-width:  layout.$fretbar-thickness; }
-			&.is-starting-fret     { border-left-width:   layout.$fretbar-thickness; }
 			&.is-first-fret        { border-left-width:   layout.$nut-thickness;     }
 		}
 	}
 }
 
-.fret__inlay {
-	@include center-position;
-	@include circle(15px);
-
-	background-color: var(--color--bg--highlight);
-}
-
 .fret__note {
 	position: absolute;
 	z-index: 10;
-	@include center-content;
 
 	@include circle(layout.$note-size);
 
-	/**
-	 * Display
-	 */
-	&.is-active {
-		transition: opacity 0.2s, border-radius 0.2s, filter 0.2s;
-
-		&:hover {
-			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
-		}
-
-		&.is-highlighted {
-			border-radius: 0;
-		}
-	}
-
-	&:not(.is-active) {
-		border: 2px dashed var(--color--border);
-
-		transition: opacity 0.2s;
-
-		&:not(.is-open-string) {
-			opacity: 0;
-			&:hover { opacity: 1; }
-		}
-	}
+	transition: none;
 
 	/**
 	 * Placement
@@ -295,8 +255,8 @@ export default {
 			top: 0;
 			transform: translateY(-50%);
 
-			&.is-fretboard-flipped       { right: 0; }
-			&:not(.is-fretboard-flipped) { left:  0; }
+			&.is-fretboard-flipped        { right: 0; }
+			&:not(.is-fretboard-flipped)  { left:  0; }
 		}
 
 		&:not(.is-open-string) {
@@ -306,24 +266,38 @@ export default {
 			&:not(.is-fretboard-vertical) { top:   0; left: 50%; }
 		}
 	}
+
+	/**
+	 * Display
+	 */
+	&.is-active {
+		color: white;
+
+		&:hover {
+			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+		}
+
+		&.is-highlighted {
+			border-radius: 0;
+		}
+	}
+
+	&:not(.is-active) {
+		color: var(--color--text);
+		border: 2px dashed var(--color--border);
+
+		&:not(.is-open-string) {
+			opacity: 0;
+			&:hover { opacity: 1; }
+		}
+	}
 }
 
-.fret__note__name {
-	font-weight: bold;
+.fret__inlay {
+	@include center-position;
+	@include circle(15px);
 
-	.fret__note.is-active & {
-		color: white;
-		transition: none;
-	}
-
-	.fret__note:not(.is-active) & {
-		color: var(--color--text);
-		transition: color 0.2s 0.2s;
-	}
-
-	.fret__note.is-open-string & {
-		transition: none;
-	}
+	background-color: var(--color--bg--highlight);
 }
 
 .intervals {

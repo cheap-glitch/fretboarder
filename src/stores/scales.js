@@ -3,16 +3,16 @@
  * stores/scales.js
  */
 
-import Vue              from 'vue'
-import { getVuexState } from '@/modules/vuex-plugin-save-state'
+import Vue               from 'vue'
+import { getVuexState }  from '@/modules/vuex-plugin-save-state'
 
-import { colors }       from '@/modules/colorscheme'
-import { isObject }     from '@/modules/object'
+import { MAX_NB_SCALES } from '@/modules/consts'
+import { colors }        from '@/modules/colorscheme'
+import { isObject }      from '@/modules/object'
 
 /**
- * Constants
+ * Colors
  */
-export const MAX_NB_SCALES = 5;
 export const SCALES_COLORS = [
 	colors.azure,
 	colors.malachite,
@@ -86,7 +86,7 @@ const mutations = {
 function addScale(state, params = {})
 {
 	// Limit the total number of scales
-	if (state.scales.length == MAX_NB_SCALES)
+	if (state.scales.length >= MAX_NB_SCALES)
 		return;
 
 	state.scales.push({
