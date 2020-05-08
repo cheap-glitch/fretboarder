@@ -8,6 +8,19 @@
 
 div.ScalesListItem(:style="{ 'border-color': color }")
 
+	//- Tooltip for the hovered interval
+	VTooltip(
+		v-for="(interval, intervalIndex) in intervals"
+		:key="`interval--${interval.value}--tooltip`"
+
+		:target="$refs.intervals ? ($refs.intervals[hoveredIntervalIndex] || false) : false"
+		:is-open="hoveredIntervalIndex == intervalIndex"
+
+		placement="bottom"
+		:delay="500"
+		)
+		p Highlight {{ intervals[intervalIndex].name.toLowerCase() }} notes
+
 	div.color-dot(:style="{ 'background-color': color }")
 
 	//----------------------------------------------------------------------
@@ -44,54 +57,44 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		)
 
 	//----------------------------------------------------------------------
+	//- Intervals
+	//----------------------------------------------------------------------
+	div.intervals: div.intervals__item(
+		v-for="(interval, intervalIndex) in intervals"
+		:key="`scale--${index}--interval--${interval.value}`"
+		ref="intervals"
+
+		v-mods="{ isSelected: highlightedInterval == interval.value }"
+
+		@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
+		@mouseenter="hoveredIntervalIndex = intervalIndex"
+		@mouseleave="hoveredIntervalIndex = null"
+		)
+		p.interval__item__note {{ interval.note }}
+		p.interval__item__name(v-html="interval.shortName")
+
+	//- div.tools__separator
+
+	//----------------------------------------------------------------------
 	//- Tools
 	//----------------------------------------------------------------------
-	div.tools
 
-		//- Intervals
-		div.intervals: div.intervals__item(
-			v-for="(interval, intervalIndex) in intervals"
-			:key="`scale--${index}--interval--${interval.value}`"
-			ref="intervals"
+	//- Show/hide
+	VButton(
+		:icon="isVisible ? 'eye' : 'eye-slash'"
+		is-flipped
+		tooltip-text="Toggle visibility"
+		tooltip-placement="bottom"
 
-			v-mods="{ isSelected: highlightedInterval == interval.value }"
-
-			@click.left="updateScale('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
-			@mouseenter="hoveredIntervalIndex = intervalIndex"
-			@mouseleave="hoveredIntervalIndex = null"
-			)
-			p.interval__item__note {{ interval.note }}
-			p.interval__item__name(v-html="interval.shortName")
-
-		//- Tooltip for the hovered interval
-		VTooltip(
-			v-for="(interval, intervalIndex) in intervals"
-			:key="`interval--${interval.value}--tooltip`"
-
-			:target="$refs.intervals ? ($refs.intervals[hoveredIntervalIndex] || false) : false"
-			:is-open="hoveredIntervalIndex == intervalIndex"
-
-			placement="bottom"
-			:delay="500"
-			)
-			p Highlight {{ intervals[intervalIndex].name.toLowerCase() }} notes
-
-		//- div.tools__separator
-
-			//- Show/hide
-			VButton.toolbar__item(
-				:icon="isVisible ? 'eye' : 'eye-slash'"
-				:tooltip="isVisible ? 'Hide' : 'Show'"
-				tooltip-placement="bottom"
-
-				@click="updateScale('isVisible', !isVisible)"
-				)
+		@click="updateScale('isVisible', !isVisible)"
+		)
+		//-
 			//- Focus
 			VButton.toolbar__item(
 				v-show="nbScales > 1"
 
 				icon="bullseye"
-				:tooltip="isFocused ? 'Unfocus' : 'Focus'"
+				:tooltip-text="isFocused ? 'Unfocus' : 'Focus'"
 				tooltip-placement="bottom"
 
 				:is-active="isFocused"
@@ -102,7 +105,7 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 				v-show="nbScales > 1"
 
 				:icon="['fas', 'intersection']"
-				tooltip="Show only intersections with other scales"
+				tooltip-text="Show only intersections with other scales"
 				tooltip-placement="bottom"
 
 				:is-active="isIntersected"
@@ -114,7 +117,7 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 			//- Duplicate
 			VButton.toolbar__item(
 				icon="copy"
-				tooltip="Duplicate"
+				tooltip-text="Duplicate"
 				tooltip-placement="bottom"
 
 				:is-disabled="nbScales == MAX_NB_SCALES"
@@ -123,7 +126,7 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 			//- Remove
 			VButton.toolbar__item(
 				icon="times-circle"
-				tooltip="Remove"
+				tooltip-text="Remove"
 				tooltip-placement="bottom"
 
 				@click="$store.commit('scales/removeScale', id)"
@@ -261,6 +264,11 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesListItem {
+
+	// Prevent the tooltips from placing
+	// themselves in a corner of the page
+	position: relative;
+
 	@include mq($until: desktop)
 	{
 		border-width: 2px;
@@ -278,11 +286,6 @@ export default {
 
 .select-model {
 	width: 250px;
-}
-
-.tools {
-	// Prevent the tooltip from placing itself in a corner of the page
-	position: relative;
 }
 
 .intervals {

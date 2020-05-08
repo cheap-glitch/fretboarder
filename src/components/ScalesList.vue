@@ -15,6 +15,7 @@ div.ScalesList
 				v-show="scales.length >= 2"
 
 				icon="eye-slash"
+				is-flipped
 				tooltip-text="Hide all"
 
 				@click="$store.commit('scales/hideAllScales')"

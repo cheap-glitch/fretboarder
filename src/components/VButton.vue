@@ -19,8 +19,10 @@ div.VButton(
 		v-mods="{ isDisabled }"
 		)
 		fa-icon.VButton__icon(
+			v-mods="{ isActive, isDisabled }"
+
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
-			v-mods="{ isActive, isDisabled, isFlipped }"
+			:fa-flip-horizontal="isFlipped"
 			)
 
 	VTooltip(
@@ -141,10 +143,6 @@ export default {
 
 	&.is-active {
 		color: var(--color--highlight);
-	}
-
-	&.is-flipped {
-		transform: scaleX(-1);
 	}
 }
 
