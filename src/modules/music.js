@@ -127,10 +127,13 @@ export const arpeggios = {
 	'maj9':     { model: [2,  4,  7, 11],          name: 'Major 9<sup>th</sup>'                 },
 	'min9':     { model: [2,  3,  7, 10],          name: 'Minor 9<sup>th</sup>'                 },
 	'minmaj9':  { model: [2,  3,  7, 11],          name: 'Minor-Major 9<sup>th</sup>'           },
+	'aug9':     { model: [2,  4,  8, 10],          name: 'Augmented 9<sup>th</sup>'             },
+	'augmaj9':  { model: [2,  4,  8, 11],          name: 'Augmented major 9<sup>th</sup>'       },
 	'hdim9':    { model: [2,  3,  6, 10],          name: 'Half-diminished 9<sup>th</sup>'       },
 	'hdimmin9': { model: [1,  3,  6, 10],          name: 'Half-diminished minor 9<sup>th</sup>' },
 	'dim9':     { model: [2,  3,  6,  9],          name: 'Diminished 9<sup>th</sup>'            },
 	'dimmin9':  { model: [1,  3,  6,  9],          name: 'Diminished minor 9<sup>th</sup>'      },
+	'6-9':      { model: [2,  4,  7,  9],          name: '6/9'                                  },
 	'min6-9':   { model: [2,  3,  7,  9],          name: 'Minor 6/9'                            },
 
 	// Eleventh chords
