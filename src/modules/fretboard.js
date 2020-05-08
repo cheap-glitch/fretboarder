@@ -44,7 +44,7 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 			isHighlighted: isFretHighlighted,
 
 			// Remove scales that only display their intersections if they are alone on a fret
-			scales: (fretScales.length == 1 && fretScales[0].isIntersected) ? [] : fretScales,
+			scales: (fretScales.length == 1 && displayedScales[fretScales[0].index].isIntersected) ? [] : fretScales,
 		};
 	});
 }
