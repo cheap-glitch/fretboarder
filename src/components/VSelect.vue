@@ -176,7 +176,8 @@ export default {
 			this.isOpen = !this.isOpen;
 
 			// Jump to the selected option
-			Vue.nextTick(() => { if (this.isOpen) this.$refs.options[this.selectedOptionIndex].scrollIntoView(true) });
+			if (this.isOpen && this.optionsList.length > 1)
+				Vue.nextTick(() => this.$refs.options[this.selectedOptionIndex].scrollIntoView(true));
 		},
 		select(option)
 		{
