@@ -144,8 +144,8 @@ export default {
 		color: var(--color--highlight);
 	}
 
-	&.size-normal { font-size: 20px; }
-	&.size-big    { font-size: 30px; }
+	&.size-normal { font-size: layout.$button-size-normal; }
+	&.size-big    { font-size: layout.$button-size-big;    }
 }
 
 </style>

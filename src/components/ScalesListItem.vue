@@ -23,6 +23,8 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 
 	div.color-dot(:style="{ 'background-color': color }")
 
+	div.empty-space
+
 	//----------------------------------------------------------------------
 	//- Scale properties
 	//----------------------------------------------------------------------
@@ -40,27 +42,29 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		@change="v => updateScale('tonality', v)"
 		)
 	//- Model
-	VSelect.select-model(
+	VSelect(
 		:value="model"
 		:options="modelsNames"
 		@change="updateModel"
 
 		v-mods="{ isArpeggio: type == 'arpeggio' }"
+		:style="{ width: '250px' }"
 		)
 	//- Position
-	//- VSelect.select-position(
-		v-show="type == 'scale'"
+	VSelect(
 		:value="position"
 		:options="positions"
 		is-value-number
 		@change="v => updateScale('position', v)"
-		)
 
-	div.space
+		:style="type == 'arpeggio' ? { opacity: 0, 'z-index': -1 } : {}"
+		)
 
 	//----------------------------------------------------------------------
 	//- Intervals
 	//----------------------------------------------------------------------
+
+	div.empty-space
 
 	div.intervals: div.intervals__item(
 		v-for="(interval, intervalIndex) in intervals"
@@ -76,20 +80,22 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		p.interval__item__note {{ interval.note }}
 		p.interval__item__name(v-html="interval.shortName")
 
-	div.space
+	div.empty-space
 
 	//----------------------------------------------------------------------
 	//- Tools
 	//----------------------------------------------------------------------
 
 	//- Show/hide
-	VButton.button-toggle-visible(
+	VButton(
 		:icon="isVisible ? 'eye' : 'eye-slash'"
 		is-flipped
 		tooltip-text="Toggle visibility"
 		tooltip-placement="bottom"
 
 		@click="updateScale('isVisible', !isVisible)"
+
+		:style="{ 'margin-left': 'auto' }"
 		)
 	//- Focus
 	VButton.toolbar__item(
@@ -226,7 +232,6 @@ export default {
 	{
 		this.MAX_NB_SCALES  = MAX_NB_SCALES;
 		this.tonalities     = notesNames;
-		/*
 		this.positions      = {
 			0: 'Whole',
 			1: '1<sup>st</sup> pos',
@@ -235,7 +240,6 @@ export default {
 			4: '4<sup>th</sup> pos',
 			5: '5<sup>th</sup> pos',
 		}
-		*/
 	},
 
 	methods: {
@@ -291,14 +295,6 @@ export default {
 	{
 		@include circle(10px);
 	}
-}
-
-.space {
-	width: 10px;
-}
-
-.select-model {
-	width: 250px;
 }
 
 .intervals {
@@ -359,10 +355,6 @@ export default {
 	{
 		display: none;
 	}
-}
-
-.button-toggle-visible {
-	margin-left: auto;
 }
 
 //- .settings {

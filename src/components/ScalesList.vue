@@ -11,7 +11,7 @@ div.ScalesList
 	div.scales
 		div.scale__tools
 			//- Hide all scales
-			VButton.scale__tools__hide-all(
+			VButton.button-hide-all(
 				v-show="scales.length >= 2"
 
 				icon="eye-slash"
@@ -103,6 +103,14 @@ export default {
 
 .scale__tools {
 	display: flex;
+	justify-content: flex-end;
+
+	padding-right: 2px;
+}
+
+.button-hide-all {
+	// Align with the 'Hide' button of each scale
+	margin-right: (layout.$button-size-normal + 10px)*3 + 16px;
 }
 
 .button-add-scale {

@@ -14,37 +14,54 @@ export function getFrets(nbStrings, tuningNotes, displayedScales)
 	// Get the model of each scale
 	const models = displayedScales.map(scale => [0, ...((scale.type == 'scale' ? scales : arpeggios)[scale.model].model)]);
 
+	// Get the index of the fret of the root note on the lowest string for each scale
+	const rootFrets = displayedScales.map(scale => getInterval(tuningNotes[0], scale.tonality));
+
 	return [...Array(nbStrings*MAX_NB_FRETS).keys()].map(function(fretIndex)
 	{
 		let isFretHighlighted = false;
 
 		const fretNumber = fretIndex % MAX_NB_FRETS;
 		const fretString = Math.floor(fretIndex / MAX_NB_FRETS);
-		const fretScales = displayedScales.reduce(function(fretScales, scale, index)
-		{
-			// Compute the interval of the fret note relative to the root note of the scale
-			const interval = (getInterval(scale.tonality, tuningNotes[fretString]) + fretNumber) % notes.length;
-
-			if (models[index].includes(interval))
+		const fretScales = displayedScales
+			.filter(function(scale)
 			{
-				fretScales.push({ index, interval });
+				if (scale.position == 0)
+					return true;
 
-				if (scale.highlightedInterval === interval)
-					isFretHighlighted = true;
-			}
+				const posStart  = (rootFrets[scale.index] - 1 + 15*(scale.position - 1)) % MAX_NB_FRETS;
+				const posStop   = (posStart   +  5) %  MAX_NB_FRETS;
+				const otherFret = (fretNumber + 12) % (MAX_NB_FRETS - 1);
 
-			return fretScales;
-		}, []);
+				return posStart < posStop
+					? (posStart <= fretNumber && fretNumber < posStop) || (posStart <= otherFret && otherFret < posStop)
+					: (posStart <= fretNumber || fretNumber < posStop) || (posStart <= otherFret || otherFret < posStop);
+
+			})
+			.reduce(function(fretScales, scale)
+			{
+				// Compute the interval of the fret note relative to the root note of the scale
+				const interval = (getInterval(scale.tonality, tuningNotes[fretString]) + fretNumber) % notes.length;
+
+				if (models[scale.index].includes(interval))
+				{
+					fretScales.push({ index: scale.index, interval });
+
+					if (scale.highlightedInterval === interval)
+						isFretHighlighted = true;
+				}
+
+				return fretScales;
+			}, []);
 
 		return {
-			note:   notes[(notes.indexOf(tuningNotes[fretString]) + fretNumber) % notes.length],
-			number: fretNumber,
-			string: fretString,
-
+			note:          notes[(notes.indexOf(tuningNotes[fretString]) + fretNumber) % notes.length],
+			number:        fretNumber,
+			string:        fretString,
 			isHighlighted: isFretHighlighted,
 
-			// Remove scales that only display their intersections if they are alone on a fret
-			scales: (fretScales.length == 1 && displayedScales[fretScales[0].index].isIntersected) ? [] : fretScales,
+			// Disable frets that only show intersected scales
+			scales: fretScales.every(scale => scale.isIntersected) ? [] : fretScales,
 		};
 	});
 }

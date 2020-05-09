@@ -19,7 +19,7 @@ div.FretboardViewerFret
 				)
 				div.intervals__item__dot(
 					v-for="scale in interval.scales"
-					:key="`dot--${scale.index}`"
+					:key="`dot--${scale}`"
 
 					:style="{ 'background-color': scalesColors[scale] }"
 					)
@@ -142,7 +142,7 @@ export default {
 
 			// Build a solid gradient with the colors of every scale the fret note belongs to
 			const stripeWidth = Math.ceil(100 / this.scales.length);
-			const gradient    = this.scales.map((scale, index) => `${this.scalesColors[scale.index]} ${index*stripeWidth}% ${(index + 1)*stripeWidth}%`);
+			const gradient    = [...this.scales].reverse().map((scale, index) => `${this.scalesColors[scale.index]} ${index*stripeWidth}% ${(index + 1)*stripeWidth}%`);
 
 			return { background: `linear-gradient(-45deg, ${gradient})` };
 		},

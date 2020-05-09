@@ -105,7 +105,7 @@ export default {
 		},
 		selectedOptionIndex()
 		{
-			return this.optionsList.findIndex(option => option.value === this.value);
+			return this.optionsList.findIndex(option => option.value == this.value);
 		},
 		optionsList()
 		{
@@ -122,7 +122,8 @@ export default {
 	},
 
 	watch: {
-		'$store.state.fretboard.instrument': 'updateOpeningDirection',
+		'$store.state.fretboard.instrument':       'updateOpeningDirection',
+		'$store.state.fretboard.isShowingFretsNb': 'updateOpeningDirection',
 	},
 
 	created()
