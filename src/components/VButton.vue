@@ -114,10 +114,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VButton {
-	display: inline-block;
-}
-
 .VButton__button {
 	@include center-content;
 
@@ -126,6 +122,12 @@ export default {
 	background-color: transparent;
 
 	cursor: pointer;
+
+	@include mq($until: desktop)
+	{
+		border: 1px solid var(--color--border);
+		border-radius: 50%;
+	}
 }
 
 .VButton__icon {
@@ -144,8 +146,11 @@ export default {
 		color: var(--color--highlight);
 	}
 
-	&.size-normal { font-size: layout.$button-size-normal; }
-	&.size-big    { font-size: layout.$button-size-big;    }
+	//- @include mq($from: desktop)
+	//- {
+		&.size-normal { font-size: layout.$button-size-normal; }
+		&.size-big    { font-size: layout.$button-size-big;    }
+	//- }
 }
 
 </style>

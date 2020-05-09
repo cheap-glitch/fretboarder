@@ -103,7 +103,7 @@ div.App#app(:style="colorscheme")
 	//- Mobile actions
 	//----------------------------------------------------------------------
 
-	div.mobile-actions(v-if="isMobileDevice")
+	div.mobile-actions
 		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
 		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
 
@@ -395,6 +395,11 @@ export default {
 	{
 		display: flex;
 		@include space-children-h(10px);
+	}
+
+	@include mq($from: desktop)
+	{
+		display: none;
 	}
 }
 

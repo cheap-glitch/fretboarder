@@ -198,10 +198,18 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSettings {
-	display: grid;
-	@include space-children-h(10px);
+	@include mq($until: desktop)
+	{
+		@include space-children-v(40px);
+	}
 
-	grid-template: 1fr / auto auto 300px 1fr;
+	@include mq($from: desktop)
+	{
+		display: grid;
+		grid-template: 1fr / auto auto 300px 1fr;
+
+		@include space-children-h(10px);
+	}
 }
 
 .slider-frets-range {
@@ -211,9 +219,13 @@ export default {
 
 .buttons {
 	display: flex;
-	@include space-children-h(12px);
+	justify-content: space-around;
 
-	justify-self: end;
+	@include mq($from: desktop)
+	{
+		@include space-children-h(12px);
+		justify-self: end;
+	}
 }
 
 .export-menu__text {

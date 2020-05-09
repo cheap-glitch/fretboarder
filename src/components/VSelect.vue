@@ -151,6 +151,13 @@ export default {
 		{
 			if (!this.isOpen) return;
 
+			// Close the menu on pressing <Esc>
+			if (key == 'Escape')
+			{
+				this.close();
+				return;
+			}
+
 			// Ignore non-alphanumeric key presses
 			if (!/^[a-zA-Z0-9]$/.test(key)) return;
 
@@ -210,16 +217,20 @@ export default {
 
 .VSelect {
 	position: relative;
-	display: inline-block;
+
+	@include mq($from: desktop)
+	{
+		display: inline-block;
+	}
 }
 
 .bar {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
+	justify-content: space-between;
 	@include space-children-h(10px);
 
-	padding: 8px;
+	padding: 20px;
 
 	border: 1px solid var(--color--border);
 	background-color: var(--color--bg--accent);
@@ -229,6 +240,11 @@ export default {
 	&:hover, &.is-open {
 		border-color: var(--color--hover);
 		background-color: var(--color--bg--highlight);
+	}
+
+	@include mq($from: desktop)
+	{
+		padding: 8px;
 	}
 }
 
@@ -240,8 +256,8 @@ export default {
 
 .bar__text {
 	position: absolute;
-	top: 8px;
-	left: 8px;
+	top: 50%;
+	transform: translateY(-50%);
 	z-index: 10;
 
 	color: var(--color--text);
