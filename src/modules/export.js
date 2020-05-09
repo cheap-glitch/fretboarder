@@ -33,7 +33,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fretMax, isFretboardFlipped, isDisplayingNotesName, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fretMax, isFretboardFlipped, isShowingNotesName, isShowingFretsNb, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -52,7 +52,7 @@ function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fret
 	const nbStrings       = instruments[instrument].nbStrings;
 	const marginTop       = 2;
 	const marginLeft      = 1;
-	const marginBottom    = 5;
+	const marginBottom    = isShowingFretsNb ? 5 : marginTop;
 	const marginRight     = 4.5;
 	const fretboardWidth  = 200;
 	const fretboardHeight = (13/3)*nbStrings;
@@ -105,7 +105,7 @@ function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fret
 	for (let fret=fretMin, offset=0; fret<=fretMax; fret++)
 	{
 		// Draw the fret number
-		if (fret > 0)
+		if (isShowingFretsNb && fret > 0)
 		{
 			const x = offset - getFretY(fret)/2 + marginRight;
 
@@ -276,7 +276,7 @@ function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fret
 			);
 
 			// Draw the note name
-			if (isDisplayingNotesName)
+			if (isShowingNotesName)
 			{
 				// If the fretboard is flipped, flip the text again to render it properly
 				if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });

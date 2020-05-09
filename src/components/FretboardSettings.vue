@@ -96,8 +96,7 @@ div.FretboardSettings
 						| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
 				div.export-menu__buttons
 					each format in ['png', 'jpg', 'svg']
-						button.button.is-filled(@click.left=`exportFretboardToFile('${format}')`)
-							p.button__text= format.toUpperCase()
+						button.button.is-filled(@click.left=`exportFretboardToFile('${format}')`): p.button__text= format.toUpperCase()
 
 </template>
 <!--}}}-->
@@ -178,6 +177,7 @@ export default {
 				this.fretRange[1],
 				this.isFlipped,
 				this.isShowingNotesName,
+				this.isShowingFretsNb,
 				this.isDarkModeOn,
 				format != 'svg',
 			);
@@ -220,6 +220,7 @@ export default {
 	max-width: 300px;
 
 	font-size: 1.6rem;
+	text-align: justify;
 
 	&:first-of-type {
 		margin-bottom: 10px;
@@ -358,11 +359,6 @@ export default {
 //- 	}
 
 //- }
-
-//- /**
-//-  * Export menu
-//-  * -----------------------------------------------------------------------------
-//-  */
 
 </style>
 <!--}}}-->
