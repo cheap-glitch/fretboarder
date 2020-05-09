@@ -79,9 +79,33 @@ div.App#app(:style="colorscheme")
 	//- Page content
 	//----------------------------------------------------------------------
 
-	FretboardSettings
+	component(
+		:is="isMobileDevice ? 'VModal' : 'div'"
+		modal-title="Settings"
+		:is-open="isModalSettingsOpen"
+
+		@close="isModalSettingsOpen = false"
+		)
+		FretboardSettings
+
 	FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
-	ScalesList
+
+	component(
+		:is="isMobileDevice ? 'VModal' : 'div'"
+		modal-title="Scales"
+		:is-open="isModalScalesOpen"
+
+		@close="isModalScalesOpen = false"
+		)
+		ScalesList
+
+	//----------------------------------------------------------------------
+	//- Mobile actions
+	//----------------------------------------------------------------------
+
+	div.mobile-actions(v-if="isMobileDevice")
+		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
+		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
 
 </template>
 <!--}}}-->
@@ -114,6 +138,9 @@ export default {
 	data() {
 		return {
 			mailto: '',
+
+			isModalScalesOpen:   false,
+			isModalSettingsOpen: false,
 		}
 	},
 
@@ -209,9 +236,12 @@ export default {
 	background-color: var(--color--bg);
 }
 
-.FretboardSettings { margin-top: 40px; }
-.FretboardViewer   { margin-top: 50px; }
-.ScalesList        { margin-top: 80px; }
+@include mq($from: desktop)
+{
+	.FretboardSettings { margin-top: 40px; }
+	.FretboardViewer   { margin-top: 50px; }
+	.ScalesList        { margin-top: 80px; }
+}
 
 /**
  * Header
@@ -219,11 +249,16 @@ export default {
  */
 
 .header {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
+	display: none;
 
-	padding-bottom: 60px;
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+
+		padding-bottom: 60px;
+	}
 }
 
 .header__nav {
@@ -337,6 +372,50 @@ export default {
 		.dark-mode-toggle.is-dark-mode-on & {
 			transform: translateX(8px);
 		}
+	}
+}
+
+/**
+ * Mobile actions
+ * -----------------------------------------------------------------------------
+ */
+
+.mobile-actions {
+	position: fixed;
+	z-index: 100;
+	bottom: 10px;
+	right: 10px;
+
+	@media (orientation: portrait)
+	{
+		@include space-children-v(10px);
+	}
+
+	@media (orientation: landscape)
+	{
+		display: flex;
+		@include space-children-h(10px);
+	}
+}
+
+.mobile-actions__item {
+	@include center-content;
+	@include circle(48px);
+
+	font-size: 22px;
+
+	color: white;
+	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5)) brightness(1);
+
+	cursor: pointer;
+
+	transition: filter 0.2s;
+
+	&:nth-child(1) { background-color: var(--color--hover);       }
+	&:nth-child(2) { background-color: var(--color--bg--tooltip); }
+
+	&:hover {
+		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) brightness(1.2);
 	}
 }
 

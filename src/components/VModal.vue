@@ -6,16 +6,15 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VModal(ref="modal")
-
-	transition(name="fade"): div.modal(v-if="isModalOpen")
-
-		div.modal__header
-			div.modal__close(@click.left="$emit('close')"): fa-icon(:icon="['far', 'arrow-left']")
-			h1.modal__title {{ modalTitle }}
-
-		div.modal__content
-			slot
+transition(name="fade"): div.VModal(
+	ref="modal"
+	v-if="isModalOpen"
+	)
+	div.VModal__header
+		div.VModal__header__close(@click.left="$emit('close')"): fa-icon(:icon="['far', 'arrow-left']")
+		h1.VModal__header__title {{ modalTitle }}
+	div.VModal__content
+		slot
 
 </template>
 <!--}}}-->
@@ -69,7 +68,9 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.modal {
+.VModal {
+	@include space-children-v(20px);
+
 	position: fixed;
 	z-index: 1000;
 	top: 0;
@@ -83,27 +84,26 @@ export default {
 	-webkit-overflow-scrolling: touch;
 }
 
-.modal__header {
+.VModal__header {
 	position: relative;
-
-	margin-bottom: 20px;
 
 	color: var(--color--text);
 }
 
-.modal__title {
-	position: absolute;
-	top: 50%;
-	right: 50%;
-	transform: translate(50%, -50%);
+.VModal__header__title {
+	@include center-position;
 
 	font-weight: bold;
 }
 
-.modal__close {
+.VModal__header__close {
 	padding: 20px;
 
 	width: 60px;
+}
+
+.VModal__content {
+	padding: 20px;
 }
 
 </style>

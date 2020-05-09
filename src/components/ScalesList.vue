@@ -102,10 +102,15 @@ export default {
 }
 
 .scale__tools {
-	display: flex;
-	justify-content: flex-end;
+	display: none;
 
-	padding-right: 2px;
+	@include mq($from: desktop)
+	{
+		display: flex;
+		justify-content: flex-end;
+
+		padding-right: 2px;
+	}
 }
 
 .button-hide-all {
