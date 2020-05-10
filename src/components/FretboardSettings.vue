@@ -88,7 +88,7 @@ div.FretboardSettings
 
 		//- Export menu
 		VTooltip(
-			:target="!!$refs.buttonExport ? $refs.buttonExport.$refs.button || false : false"
+			:target="$refs.buttonExport ? ($refs.buttonExport.$refs.button || false) : false"
 			placement="bottom"
 			:is-open="!isMobileDevice && isExportMenuOpened"
 

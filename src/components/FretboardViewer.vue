@@ -7,6 +7,7 @@
 <template lang="pug">
 
 div.FretboardViewer(
+	v-mods="{ isShowingFretNbs }"
 	:style="[minLength, maxWidth, grid]"
 	)
 
@@ -36,7 +37,7 @@ div.FretboardViewer(
 		)
 
 	//- Fret numbers
-	template(v-if="isShowingFretsNb")
+	template(v-if="isShowingFretNbs")
 		div.fret-number(
 			v-for="(fret, index) in fretNumbers"
 			:key="`fret-number--${index}`"
@@ -183,7 +184,7 @@ export default {
 		},
 		fretNumbersPadding()
 		{
-			return this.isShowingFretsNb ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
+			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
 		},
 		tuningNotes()
 		{
@@ -220,7 +221,7 @@ export default {
 			'fretRange',
 
 			'isFlipped',
-			'isShowingFretsNb',
+			'isShowingFretNbs',
 			'isShowingNoteNames',
 		]),
 	},
@@ -236,6 +237,13 @@ export default {
 .FretboardViewer {
 	display: grid;
 	position: relative;
+
+	&.is-showing-fret-nbs {
+		@include mq($until: desktop, $and: '(orientation: portrait)')
+		{
+			transform: translateX(layout.$fret-number-wrapper-size / -2);
+		}
+	}
 }
 
 .string {

@@ -236,6 +236,14 @@ export default {
 	padding: 20px;
 
 	background-color: var(--color--bg);
+
+	@include mq($until: desktop)
+	{
+		display: flex;
+
+		@media (orientation: portrait)  { justify-content: center; }
+		@media (orientation: landscape) { align-items:     center; }
+	}
 }
 
 @include mq($from: desktop)
