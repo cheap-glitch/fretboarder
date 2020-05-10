@@ -24,6 +24,9 @@ div.VButton
 			:class="`size-${size}`"
 			)
 
+	p.VButton__title(
+		) {{ tooltipText }}
+
 	VTooltip(
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"
@@ -151,6 +154,15 @@ export default {
 		&.size-normal { font-size: layout.$button-size-normal; }
 		&.size-big    { font-size: layout.$button-size-big;    }
 	//- }
+}
+
+.VButton__title {
+	color: var(--color--text--secondary);
+
+	@include mq($from: desktop)
+	{
+		display: none;
+	}
 }
 
 </style>

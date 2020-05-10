@@ -209,10 +209,12 @@ export default {
 		updateDeviceType(event)
 		{
 			this.$store.commit('isMobileDevice', event.matches);
+			this.isModalScalesOpen = this.isModalSettingsOpen = false;
 		},
 		updateLayoutOrientation(event)
 		{
 			this.$store.commit('isLayoutLandscape', event.matches);
+			this.isModalScalesOpen = this.isModalSettingsOpen = false;
 		},
 		registerKeypress(event)
 		{

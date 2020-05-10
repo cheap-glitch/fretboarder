@@ -18,7 +18,7 @@ export function saveStatePlugin(stateModel, options = {})
 	return function(store)
 	{
 		// Declare a function to check that a prop has been stored and that the stored value passes validation
-		const checkProp = (prop, storedValue) => storedValue && (prop.saved || options.savedByDefault) && (!prop.validator || prop.validator(storedValue));
+		const checkProp = (prop, storedValue) => storedValue && (prop.saved === undefined ? options.savedByDefault : prop.saved) && (!prop.validator || prop.validator(storedValue));
 
 		// Get the stored state
 		let storedState = {};

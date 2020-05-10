@@ -68,6 +68,7 @@ div.FretboardSettings
 		//- Export the fretboard
 		div#canvas-wrapper
 		VButton(
+			v-if="!isMobileDevice"
 			ref="buttonExport"
 
 			icon="file-download"
