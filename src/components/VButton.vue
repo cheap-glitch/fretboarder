@@ -24,7 +24,7 @@ div.VButton(
 			:class="`size-${size}`"
 			)
 
-	p.VButton__title {{ title }}
+	p.VButton__title(v-show="title.length") {{ title }}
 
 	VTooltip(
 		:target="$refs.button || false"
@@ -124,6 +124,8 @@ export default {
 	@include mq($until: desktop)
 	{
 		@include center-column;
+
+		flex: 1 1 100%;
 	}
 
 	@include mq($from: desktop)

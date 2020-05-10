@@ -12,7 +12,7 @@ export const colors = {
 	portage:                    '#ab7ef6',
 
 	athensGray:                 '#fafbfc',
-	snow:                       '#f2f2f2',
+	snow:                       '#f0f0f0',
 	regentStBlue:               '#a9c7df',
 	nepal:                      '#8eacc5',
 

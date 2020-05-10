@@ -227,10 +227,6 @@ export default {
 .buttons {
 	display: flex;
 
-	.VButton {
-		flex: 1 1 100%;
-	}
-
 	@include mq($from: desktop)
 	{
 		@include space-children-h(12px);

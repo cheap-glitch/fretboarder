@@ -86,59 +86,64 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 	//- Tools
 	//----------------------------------------------------------------------
 
-	//- Show/hide
-	VButton(
-		:icon="isVisible ? 'eye' : 'eye-slash'"
-		is-flipped
-		tooltip-text="Toggle visibility"
-		tooltip-placement="bottom"
+	div.tools
 
-		@click="updateScale('isVisible', !isVisible)"
+		//- Show/hide
+		VButton(
+			:icon="isVisible ? 'eye' : 'eye-slash'"
+			is-flipped
+			title="Hide"
+			tooltip-text="Toggle visibility"
+			tooltip-placement="bottom"
 
-		:style="{ 'margin-left': 'auto' }"
-		)
-	//- Focus
-	VButton.toolbar__item(
-		v-show="nbScales > 1"
+			@click="updateScale('isVisible', !isVisible)"
+			)
+		//- Focus
+		VButton.toolbar__item(
+			v-show="nbScales > 1"
 
-		icon="bullseye"
-		tooltip-text="Toggle focus"
-		tooltip-placement="bottom"
+			icon="bullseye"
+			title="Focus"
+			tooltip-text="Toggle focus"
+			tooltip-placement="bottom"
 
-		:is-active="isFocused"
-		@click="$store.commit('scales/toggleFocusScale', index)"
-		)
-	//- Show intersections only
-	VButton.toolbar__item(
-		v-show="nbScales > 1"
+			:is-active="isFocused"
+			@click="$store.commit('scales/toggleFocusScale', index)"
+			)
+		//- Show intersections only
+		VButton.toolbar__item(
+			v-show="nbScales > 1"
 
-		:icon="['fas', 'intersection']"
-		tooltip-text="Show only intersections with other scales"
-		tooltip-placement="bottom"
+			:icon="['fas', 'intersection']"
+			title="Intersect"
+			tooltip-text="Show only intersections with other scales"
+			tooltip-placement="bottom"
 
-		:is-active="isIntersected"
-		@click="updateScale('isIntersected', !isIntersected)"
-		)
+			:is-active="isIntersected"
+			@click="updateScale('isIntersected', !isIntersected)"
+			)
 
-	div.separator
+		div.separator
 
-	//- Duplicate
-	VButton.toolbar__item(
-		icon="copy"
-		tooltip-text="Duplicate"
-		tooltip-placement="bottom"
+		//- Duplicate
+		VButton.toolbar__item(
+			icon="copy"
+			title="Duplicate"
+			tooltip-text="Duplicate"
+			tooltip-placement="bottom"
 
-		:is-disabled="nbScales == MAX_NB_SCALES"
-		@click="$store.commit('scales/duplicateScale', index)"
-		)
-	//- Remove
-	VButton.toolbar__item(
-		icon="times-circle"
-		tooltip-text="Remove"
-		tooltip-placement="bottom"
+			:is-disabled="nbScales == MAX_NB_SCALES"
+			@click="$store.commit('scales/duplicateScale', index)"
+			)
+		//- Remove
+		VButton.toolbar__item(
+			icon="times-circle"
+			title="Delete"
+			tooltip-text="Delete"
+			tooltip-placement="bottom"
 
-		@click="$store.commit('scales/removeScale', index)"
-		)
+			@click="$store.commit('scales/removeScale', index)"
+			)
 
 </template>
 <!--}}}-->
@@ -277,6 +282,10 @@ export default {
 
 	@include mq($until: desktop)
 	{
+		@include space-children-v(10px);
+
+		padding: 10px;
+
 		border-width: 2px;
 		border-style: solid;
 		border-radius: 10px;
@@ -298,7 +307,12 @@ export default {
 }
 
 .intervals {
-	display: flex;
+	display: none;
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+	}
 }
 
 .intervals__item {
@@ -345,6 +359,23 @@ export default {
 	font-size: 1.2rem;
 
 	.intervals__item.is-selected & { color: var(--color--text); }
+}
+
+.tools {
+	display: flex;
+	align-items: center;
+
+	@include mq($until: desktop)
+	{
+		margin-top: 20px;
+	}
+
+	@include mq($from: desktop)
+	{
+		@include space-children-h(10px);
+
+		margin-left: auto;
+	}
 }
 
 .separator {

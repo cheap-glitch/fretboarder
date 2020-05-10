@@ -93,8 +93,12 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesList {
-	@include center-column;
 	@include space-children-v(30px);
+
+	@include mq($from: desktop)
+	{
+		@include center-column;
+	}
 }
 
 .scales {
