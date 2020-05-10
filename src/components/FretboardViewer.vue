@@ -17,7 +17,7 @@ div.FretboardViewer(
 
 		v-bind="fret"
 		:is-on-last-string="fret.string + 1 == nbStrings"
-		:is-showing-note-name="isShowingNotesName"
+		:is-showing-note-name="isShowingNoteNames"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
 		:scales-colors="scalesColors"
@@ -221,7 +221,7 @@ export default {
 
 			'isFlipped',
 			'isShowingFretsNb',
-			'isShowingNotesName',
+			'isShowingNoteNames',
 		]),
 	},
 }

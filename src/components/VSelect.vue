@@ -123,7 +123,7 @@ export default {
 
 	watch: {
 		'$store.state.fretboard.instrument':       'updateOpeningDirection',
-		'$store.state.fretboard.isShowingFretsNb': 'updateOpeningDirection',
+		'$store.state.fretboard.isShowingFretNbs': 'updateOpeningDirection',
 	},
 
 	created()

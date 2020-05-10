@@ -6,15 +6,15 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VButton
+div.VButton(
+	@click.left="clickHandler"
+	@mouseenter="showTooltip = true"
+	@mouseleave="showTooltip = clicked = false"
+	)
 
 	button.VButton__button(
 		ref="button"
 		v-mods="{ isDisabled }"
-
-		@click.left="clickHandler"
-		@mouseenter="showTooltip = true"
-		@mouseleave="showTooltip = clicked = false"
 		)
 		fa-icon.VButton__icon(
 			v-mods="{ isActive, isDisabled }"
@@ -24,8 +24,7 @@ div.VButton
 			:class="`size-${size}`"
 			)
 
-	p.VButton__title(
-		) {{ tooltipText }}
+	p.VButton__title {{ title }}
 
 	VTooltip(
 		:target="$refs.button || false"
@@ -56,6 +55,10 @@ export default {
 			type: String,
 			default: 'normal',
 			validator: v => ['normal', 'big'].includes(v)
+		},
+		title: {
+			type: String,
+			default: '',
 		},
 		tooltipText: {
 			type: String,
@@ -117,20 +120,24 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VButton__button {
-	@include center-content;
+.VButton {
+	@include mq($until: desktop)
+	{
+		@include center-column;
+	}
 
+	@include mq($from: desktop)
+	{
+		@include center-content;
+	}
+}
+
+.VButton__button {
 	border: none;
 	appearance: none;
 	background-color: transparent;
 
 	cursor: pointer;
-
-	@include mq($until: desktop)
-	{
-		border: 1px solid var(--color--border);
-		border-radius: 50%;
-	}
 }
 
 .VButton__icon {
@@ -156,7 +163,9 @@ export default {
 	//- }
 }
 
-.VButton__title {
+.VButton__title{
+	margin-top: 10px;
+
 	color: var(--color--text--secondary);
 
 	@include mq($from: desktop)

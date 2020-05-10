@@ -38,30 +38,36 @@ div.FretboardSettings
 		)
 
 	div.buttons
-		//- Toggle frets number
+		//- Toggle fret numbers
 		VButton(
 			:icon="['fal', 'list-ol']"
 			size="big"
-			tooltip-text="Toggle frets number"
-			:is-active="isShowingFretsNb"
+			:is-active="isShowingFretNbs"
 
-			@click="$store.commit('fretboard/toggle.isShowingFretsNb')"
+			tooltip-text="Toggle fret numbers"
+			title="Frets"
+
+			@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
 			)
-		//- Toggle notes name
+		//- Toggle note names
 		VButton(
 			icon="info-circle"
 			size="big"
-			tooltip-text="Toggle notes name"
-			:is-active="isShowingNotesName"
+			:is-active="isShowingNoteNames"
 
-			@click="$store.commit('fretboard/toggle.isShowingNotesName')"
+			tooltip-text="Toggle note names"
+			title="Notes"
+
+			@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
 			)
 		//- Switch fretting hand
 		VButton(
 			icon="hand-paper"
 			size="big"
-			tooltip-text="Switch fretting hand"
 			:is-flipped="!isFlipped"
+
+			tooltip-text="Switch fretting hand"
+			title="Flip"
 
 			@click="$store.commit('fretboard/toggle.isFlipped')"
 			)
@@ -131,8 +137,8 @@ export default {
 			'fretRange',
 		]),
 		...get('fretboard', [
-			'isShowingFretsNb',
-			'isShowingNotesName',
+			'isShowingFretNbs',
+			'isShowingNoteNames',
 			'isFlipped',
 		]),
 		...get([
@@ -177,8 +183,8 @@ export default {
 				this.fretRange[0],
 				this.fretRange[1],
 				this.isFlipped,
-				this.isShowingNotesName,
-				this.isShowingFretsNb,
+				this.isShowingNoteNames,
+				this.isShowingFretNbs,
 				this.isDarkModeOn,
 				format != 'svg',
 			);
@@ -220,7 +226,10 @@ export default {
 
 .buttons {
 	display: flex;
-	justify-content: space-around;
+
+	.VButton {
+		flex: 1 1 100%;
+	}
 
 	@include mq($from: desktop)
 	{

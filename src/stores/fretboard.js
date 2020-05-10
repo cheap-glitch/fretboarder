@@ -25,11 +25,11 @@ const model = {
 		default: [0, 22],
 		validator: v => Array.isArray(v) && v.length == 2,
 	},
-	isShowingFretsNb: {
+	isShowingFretNbs: {
 		default: false,
 		validator: v => typeof v == 'boolean',
 	},
-	isShowingNotesName: {
+	isShowingNoteNames: {
 		default: true,
 		validator: v => typeof v == 'boolean',
 	},
