@@ -21,44 +21,45 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 		)
 		p Highlight {{ intervals[intervalIndex].name.toLowerCase() }} notes
 
-	div.color-dot(:style="{ 'background-color': color }")
-
-	div.empty-space
-
 	//----------------------------------------------------------------------
 	//- Scale properties
 	//----------------------------------------------------------------------
+	div.properties
 
-	//- Type
-	VSelect(
-		:value="type"
-		:options="{ scale: 'Scale', arpeggio: 'Arpeggio' }"
-		@change="updateType"
-		)
-	//- Tonality
-	VSelect(
-		:value="tonality"
-		:options="tonalities"
-		@change="v => updateScale('tonality', v)"
-		)
-	//- Model
-	VSelect(
-		:value="model"
-		:options="modelsNames"
-		@change="updateModel"
+		div.color-dot(:style="{ 'background-color': color }")
 
-		v-mods="{ isArpeggio: type == 'arpeggio' }"
-		:style="{ width: '250px' }"
-		)
-	//- Position
-	VSelect(
-		:value="position"
-		:options="positions"
-		is-value-number
-		@change="v => updateScale('position', v)"
+		div.empty-space
 
-		:style="type == 'arpeggio' ? { opacity: 0, 'z-index': -1 } : {}"
-		)
+		//- Type
+		VSelect(
+			:value="type"
+			:options="{ scale: 'Scale', arpeggio: 'Arpeggio' }"
+			@change="updateType"
+			)
+		//- Tonality
+		VSelect(
+			:value="tonality"
+			:options="tonalities"
+			@change="v => updateScale('tonality', v)"
+			)
+		//- Model
+		VSelect(
+			:value="model"
+			:options="modelsNames"
+			@change="updateModel"
+
+			v-mods="{ isArpeggio: type == 'arpeggio' }"
+			:style="{ width: '250px' }"
+			)
+		//- Position
+		VSelect(
+			:value="position"
+			:options="positions"
+			is-value-number
+			@change="v => updateScale('position', v)"
+
+			:style="type == 'arpeggio' ? { opacity: 0, 'z-index': -1 } : {}"
+			)
 
 	//----------------------------------------------------------------------
 	//- Intervals
@@ -275,7 +276,6 @@ export default {
 <style lang="scss" scoped>
 
 .ScalesListItem {
-
 	// Prevent the tooltips from placing
 	// themselves in a corner of the page
 	position: relative;
@@ -291,6 +291,22 @@ export default {
 		border-radius: 10px;
 	}
 
+	@include mq($from: desktop, $until: scale-item-h)
+	{
+		@include center-column;
+		@include space-children-v(10px);
+	}
+
+	@include mq($from: scale-item-h)
+	{
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		@include space-children-h(10px);
+	}
+}
+
+.properties {
 	@include mq($from: desktop)
 	{
 		display: flex;
@@ -373,7 +389,10 @@ export default {
 	@include mq($from: desktop)
 	{
 		@include space-children-h(10px);
+	}
 
+	@include mq($from: scale-item-h)
+	{
 		margin-left: auto;
 	}
 }

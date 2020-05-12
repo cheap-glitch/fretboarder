@@ -41,7 +41,7 @@ export default {
 			default: 'top',
 			validator: v => ['top', 'bottom'].includes(v),
 		},
-		boudary: {
+		boundary: {
 			type: String,
 			default: 'app',
 		},

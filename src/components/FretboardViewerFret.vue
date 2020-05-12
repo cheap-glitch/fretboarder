@@ -8,8 +8,10 @@
 
 div.FretboardViewerFret
 
+	//- Tooltip to show the intervals of the hovered fret
 	VTooltip(
 		:target="$refs.note || false"
+		boundary="fretboard"
 		:is-open="showTooltip"
 		)
 		div.intervals

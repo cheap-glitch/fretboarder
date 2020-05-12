@@ -107,15 +107,28 @@ export default {
 	@include mq($from: desktop)
 	{
 		display: flex;
-		justify-content: flex-end;
+		justify-content: center;
+	}
 
+	@include mq($from: scale-item-h)
+	{
+		justify-content: flex-end;
 		padding-right: 2px;
 	}
+
 }
 
 .button-hide-all {
-	// Align with the 'Hide' button of each scale
-	margin-right: (layout.$button-size-normal + 10px)*3 + 16px;
+	@include mq($from: desktop)
+	{
+		margin-right: 10px;
+	}
+
+	@include mq($from: scale-item-h)
+	{
+		// Align with the 'Hide' button of each scale
+		margin-right: (layout.$button-size-normal + 10px)*3 + 16px;
+	}
 }
 
 .button-add-scale {
