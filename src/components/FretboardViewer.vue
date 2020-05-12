@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer(
+div.FretboardViewer: div.fretboard#fretboard(
 	v-mods="{ isShowingFretNbs }"
 	:style="[minLength, maxWidth, grid]"
 	)
@@ -235,6 +235,14 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardViewer {
+	@include mq($from: desktop)
+	{
+		padding: 20px 0 40px 0;
+		overflow-x: auto;
+	}
+}
+
+.fretboard {
 	display: grid;
 	position: relative;
 

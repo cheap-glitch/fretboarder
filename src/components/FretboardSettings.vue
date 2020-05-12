@@ -19,7 +19,7 @@ div.FretboardSettings
 		)
 
 	//- Frets range
-	vue-slider.slider-frets-range(
+	//- vue-slider.slider-frets-range(
 		:min="0"
 		:max="24"
 		:interval="1"
@@ -213,15 +213,10 @@ export default {
 	@include mq($from: desktop)
 	{
 		display: grid;
-		grid-template: 1fr / auto auto 300px 1fr;
+		grid-template: 1fr / auto auto 1fr;
 
 		@include space-children-h(10px);
 	}
-}
-
-.slider-frets-range {
-	align-self: center;
-	margin-left: 10px;
 }
 
 .buttons {
@@ -230,7 +225,7 @@ export default {
 	@include mq($from: desktop)
 	{
 		@include space-children-h(12px);
-		justify-self: end;
+		justify-content: end;
 	}
 }
 

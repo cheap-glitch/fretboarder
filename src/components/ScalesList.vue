@@ -9,11 +9,9 @@
 div.ScalesList
 
 	div.scales
-		div.scale__tools
+		div.scale__tools(v-show="scales.length >= 2")
 			//- Hide all scales
 			VButton.button-hide-all(
-				v-show="scales.length >= 2"
-
 				icon="eye-slash"
 				is-flipped
 				tooltip-text="Hide all"
@@ -22,8 +20,6 @@ div.ScalesList
 			)
 			//- Remove all scales
 			VButton(
-				v-show="scales.length >= 2"
-
 				icon="trash-alt"
 				tooltip-text="Remove all"
 
