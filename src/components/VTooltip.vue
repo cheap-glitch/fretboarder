@@ -41,6 +41,10 @@ export default {
 			default: 'top',
 			validator: v => ['top', 'bottom'].includes(v),
 		},
+		boudary: {
+			type: String,
+			default: 'app',
+		},
 		delay: {
 			type: Number,
 			default: 0,
@@ -121,14 +125,14 @@ export default {
 						{
 							...preventOverflow,
 							options: {
-								boundary: document.getElementById('app'),
+								boundary: document.getElementById(this.boundary),
 								padding: 8,
 							}
 						},
 						{
 							...flip,
 							options: {
-								boundary: document.getElementById('app'),
+								boundary: document.getElementById(this.boundary),
 							}
 						},
 					]
