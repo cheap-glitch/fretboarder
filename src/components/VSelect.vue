@@ -38,8 +38,10 @@ div.VSelect(ref="selectbar")
 				ref="options"
 				v-html="option.name"
 
-				@click.left="select(option)"
-				@touchmove.prevent
+				@click.left="click(option)"
+				@touchstart="touchmove = false"
+				@touchmove.passive="touchmove = true"
+				@touchend="touchend(option)"
 				)
 
 </template>
@@ -83,8 +85,9 @@ export default {
 
 	data() {
 		return {
-			touch:            false,
-			isOpen:           false,
+			touchmove: false,
+
+			isOpen: false,
 			openingDirection: 'below',
 		}
 	},
@@ -150,6 +153,18 @@ export default {
 	},
 
 	methods: {
+		clickOutside()
+		{
+			if (!this.isMobileDevice) this.close();
+		},
+		touchend(option)
+		{
+			if (!this.touchmove) this.select(option);
+		},
+		click(option)
+		{
+			if (!this.isMobileDevice) this.select(option);
+		},
 		jumpToOption(key)
 		{
 			if (!this.isOpen) return;
@@ -194,10 +209,6 @@ export default {
 			this.$emit('change', this.isValueNumber ? Number.parseInt(option.value, 10) : option.value);
 
 			if (this.isMobileDevice) this.close();
-		},
-		clickOutside()
-		{
-			if (!this.isMobileDevice) this.close();
 		},
 		close()
 		{
