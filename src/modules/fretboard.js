@@ -58,7 +58,7 @@ export function getFrets(nbStrings, tuningNotes, scales, models, displayedScales
 			isHighlighted: isFretHighlighted,
 
 			// Disable frets that only show intersected scales
-			scales: fretScales.every(scale => scale.isIntersected) ? [] : fretScales,
+			scales: fretScales.every(scale => scales[scale.index].isIntersected) ? [] : fretScales,
 		};
 	});
 }
