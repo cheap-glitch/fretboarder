@@ -209,7 +209,7 @@ export default {
 .FretboardSettings {
 	@include mq($until: desktop)
 	{
-		@include space-children-v(40px);
+		@include space-children-v(20px);
 	}
 
 	@include mq($from: desktop)

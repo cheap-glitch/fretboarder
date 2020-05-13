@@ -11,7 +11,7 @@ div.FretboardViewerFret
 	//- Tooltip to show the intervals of the hovered fret
 	VTooltip(
 		:target="$refs.note || false"
-		boundary="fretboard-wrapper"
+		:boundary="isMobileDevice ? 'app' : 'fretboard-wrapper'"
 		:is-open="showTooltip"
 		)
 		div.intervals
@@ -47,6 +47,8 @@ div.FretboardViewerFret
 
 <!--{{{ JavaScript -->
 <script>
+
+import { get } from 'vuex-pathify'
 
 import { notesNames, intervalsNames } from '@/modules/music'
 
@@ -164,6 +166,7 @@ export default {
 		{
 			return this.number == 1;
 		},
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	methods: {

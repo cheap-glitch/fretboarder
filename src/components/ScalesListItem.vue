@@ -9,7 +9,7 @@
 div.ScalesListItem(:style="{ 'border-color': color }")
 
 	//- Tooltip for the hovered interval
-	div: VTooltip(
+	div(v-if="!isMobileDevice"): VTooltip(
 		v-for="(interval, intervalIndex) in intervals"
 		:key="`interval--${interval.value}--tooltip`"
 
@@ -153,6 +153,8 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 <!--{{{ JavaScript -->
 <script>
 
+import { get }                                             from 'vuex-pathify'
+
 import { MAX_NB_SCALES }                                   from '@/modules/consts'
 import { notes, scales, arpeggios }                        from '@/modules/music'
 import { notesNames, intervalsNames, intervalsShortNames } from '@/modules/music'
@@ -232,6 +234,7 @@ export default {
 		{
 			return (this.type == 'scale') ? scales : arpeggios;
 		},
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	created()
@@ -282,9 +285,9 @@ export default {
 
 	@include mq($until: desktop)
 	{
-		@include space-children-v(10px);
+		@include space-children-v(40px);
 
-		padding: 10px;
+		padding: 20px;
 
 		border-width: 2px;
 		border-style: solid;
@@ -307,6 +310,11 @@ export default {
 }
 
 .properties {
+	@include mq($until: desktop)
+	{
+		@include space-children-v(20px);
+	}
+
 	@include mq($from: desktop)
 	{
 		display: flex;
@@ -316,9 +324,20 @@ export default {
 }
 
 .color-dot {
+	display: none;
+
 	@include mq($from: desktop)
 	{
+		display: block;
+
 		@include circle(10px);
+	}
+}
+
+.empty-space {
+	@include mq($until: desktop)
+	{
+		display: none;
 	}
 }
 

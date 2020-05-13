@@ -27,6 +27,8 @@ div.VButton(
 	p.VButton__title(v-show="title.length") {{ title }}
 
 	VTooltip(
+		v-if="!isMobileDevice"
+
 		:target="$refs.button || false"
 		:placement="tooltipPlacement"
 		:delay="500"
