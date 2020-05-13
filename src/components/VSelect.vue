@@ -39,8 +39,7 @@ div.VSelect(ref="selectbar")
 				v-html="option.name"
 
 				@click.left="select(option)"
-				@touchstart.prevent
-				@touchmove.prevent="touchmove"
+				@touchmove.prevent
 				)
 
 </template>
@@ -151,10 +150,6 @@ export default {
 	},
 
 	methods: {
-		touchmove()
-		{
-			console.count('touchmove');
-		},
 		jumpToOption(key)
 		{
 			if (!this.isOpen) return;
@@ -194,19 +189,15 @@ export default {
 			if (this.isOpen && this.optionsList.length > 1)
 				Vue.nextTick(() => this.$refs.options[this.selectedOptionIndex].scrollIntoView(true));
 		},
-		touchend(option)
-		{
-			if (this.touch) this.select(option);
-
-		},
 		select(option)
 		{
 			this.$emit('change', this.isValueNumber ? Number.parseInt(option.value, 10) : option.value);
+
+			if (this.isMobileDevice) this.close();
 		},
 		clickOutside()
 		{
-			if (!this.isMobileDevice)
-				this.close();
+			if (!this.isMobileDevice) this.close();
 		},
 		close()
 		{
