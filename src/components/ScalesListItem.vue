@@ -287,7 +287,7 @@ export default {
 	{
 		@include space-children-v(40px);
 
-		padding: 20px;
+		padding: 10px;
 
 		border-width: 2px;
 		border-style: solid;
@@ -425,87 +425,6 @@ export default {
 		display: none;
 	}
 }
-
-//- .settings {
-//- 	@include mq($until: desktop)
-//- 	{
-//- 		display: grid;
-//- 		grid-template-columns: repeat(5, [col] 1fr);
-
-//- 		.select-type     { grid-column: col 1 / span 4; }
-//- 		.select-tonality { grid-column: col 5 / span 1; }
-//- 		.select-model    { grid-column: col 1 / span 3; }
-//- 		.select-position { grid-column: col 4 / span 2; }
-
-//- 		.select-type,
-//- 		.select-tonality,
-//- 		.select-model,
-//- 		.select-position {
-//- 			border-bottom: 1px solid var(--color--border);
-//- 		}
-
-//- 		.select-type, .select-model {
-//- 			border-right: 1px solid var(--color--border);
-//- 		}
-
-//- 		.select-model.is-arpeggio {
-//- 			grid-column: col 1 / span 5;
-
-//- 			border-right: none;
-//- 		}
-//- 	}
-
-//- 	@include mq($from: desktop)
-//- 	{
-//- 		display: flex;
-//- 		align-items: center;
-//- 		@include space-children-h(10px);
-
-//- 		margin-right: 30px;
-
-//- 		.select-type     { max-width: 120px; min-width: 120px; }
-//- 		.select-tonality { max-width: 60px;  min-width: 60px;  }
-//- 		.select-model    { max-width: 220px; min-width: 220px; }
-//- 		.select-position { max-width: 100px; min-width: 100px; }
-//- 	}
-//- }
-
-//- .tools {
-//- 	@include mq($from: desktop)
-//- 	{
-//- 		display: flex;
-//- 		align-items: center;
-//- 		@include space-children-h(10px);
-//- 	}
-//- }
-
-//- .toolbar {
-//- 	display: flex;
-
-//- 	@include mq($from: desktop)
-//- 	{
-//- 		align-items: center;
-//- 		@include space-children-h(10px);
-//- 	}
-//- }
-
-//- .toolbar__item {
-//- 	@include mq($until: desktop)
-//- 	{
-//- 		padding: 10px;
-
-//- 		&:not(:last-child) {
-//- 			border-right: 1px solid var(--color--border);
-//- 		}
-//- 	}
-//- }
-
-//- .intervals-tooltip {
-//- 	@include mq($until: desktop)
-//- 	{
-//- 		display: none;
-//- 	}
-//- }
 
 </style>
 <!--}}}-->

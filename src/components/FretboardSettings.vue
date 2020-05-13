@@ -8,36 +8,39 @@
 
 div.FretboardSettings
 
-	//- Instrument & tuning
-	VSelect(
-		:options="instrumentOptions"
-		v-model="instrument"
-		)
-	VSelect(
-		:options="tuningsOptions"
-		v-model="tuning"
-		)
+	div.settings
 
-	//- Frets range
-	//- vue-slider.slider-frets-range(
-		:min="0"
-		:max="24"
-		:interval="1"
+		//- Instrument & tuning
+		VSelect(
+			:options="instrumentOptions"
+			v-model="instrument"
+			)
+		VSelect(
+			:options="tuningsOptions"
+			v-model="tuning"
+			)
 
-		:min-range="4"
-		:enable-cross="false"
+		//- Frets range
+		//- vue-slider.slider-frets-range(
+			:min="0"
+			:max="24"
+			:interval="1"
 
-		:direction="isFlipped ? 'rtl' : 'ltr'"
-		adsorb lazy
+			:min-range="4"
+			:enable-cross="false"
 
-		:tooltip="isMobileDevice ? 'none' : 'hover'"
-		tooltip-placement="top"
-		:tooltip-formatter="tooltipFormatter"
+			:direction="isFlipped ? 'rtl' : 'ltr'"
+			adsorb lazy
 
-		v-model="fretRange"
-		)
+			:tooltip="isMobileDevice ? 'none' : 'hover'"
+			tooltip-placement="top"
+			:tooltip-formatter="tooltipFormatter"
+
+			v-model="fretRange"
+			)
 
 	div.buttons
+
 		//- Toggle fret numbers
 		VButton(
 			:icon="['fal', 'list-ol']"
@@ -209,14 +212,21 @@ export default {
 .FretboardSettings {
 	@include mq($until: desktop)
 	{
-		@include space-children-v(20px);
+		@include space-children-v(40px);
 	}
 
 	@include mq($from: desktop)
 	{
-		display: grid;
-		grid-template: 1fr / auto auto 1fr;
+		display: flex;
+		justify-content: space-between;
+	}
+}
 
+.settings {
+	display: flex;
+
+	@include mq($from: desktop)
+	{
 		@include space-children-h(10px);
 	}
 }
@@ -227,7 +237,6 @@ export default {
 	@include mq($from: desktop)
 	{
 		@include space-children-h(12px);
-		justify-content: end;
 	}
 }
 
