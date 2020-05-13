@@ -201,7 +201,7 @@ export default {
 			this.isOpen = !this.isOpen;
 
 			// Jump to the selected option
-			if (this.isOpen && this.optionsList.length > 1)
+			if (!this.isMobileDevice && this.isOpen && this.optionsList.length > 1)
 				Vue.nextTick(() => this.$refs.options[this.selectedOptionIndex].scrollIntoView(true));
 		},
 		select(option)
