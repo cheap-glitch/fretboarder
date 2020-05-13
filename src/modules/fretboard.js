@@ -3,19 +3,16 @@
  * modules/fretboard.js
  */
 
-import { MAX_NB_FRETS }             from '@/modules/consts'
-import { notes, scales, arpeggios } from '@/modules/music'
+import { notes }        from '@/modules/music'
+import { MAX_NB_FRETS } from '@/modules/consts'
 
 /**
  * Generate a list of frets
  */
-export function getFrets(nbStrings, tuningNotes, displayedScales)
+export function getFrets(nbStrings, tuningNotes, scales, models, displayedScales)
 {
-	// Get the model of each scale
-	const models = displayedScales.map(scale => [0, ...((scale.type == 'scale' ? scales : arpeggios)[scale.model].model)]);
-
 	// Get the index of the fret of the root note on the lowest string for each scale
-	const rootFrets = displayedScales.map(scale => getInterval(tuningNotes[0], scale.tonality));
+	const rootFrets = scales.map(scale => getInterval(tuningNotes[0], scale.tonality));
 
 	return [...Array(nbStrings*MAX_NB_FRETS).keys()].map(function(fretIndex)
 	{

@@ -38,6 +38,9 @@ div.VSelect(ref="selectbar")
 				v-html="option.name"
 
 				@click.left="select(option)"
+				@touchstart.prevent="touch = true"
+				@touchmove.passive="touch = false"
+				@touchend="() => touchend(option)"
 				)
 
 </template>
@@ -81,7 +84,8 @@ export default {
 
 	data() {
 		return {
-			isOpen: false,
+			touch:            false,
+			isOpen:           false,
 			openingDirection: 'below',
 		}
 	},
@@ -185,6 +189,11 @@ export default {
 			// Jump to the selected option
 			if (this.isOpen && this.optionsList.length > 1)
 				Vue.nextTick(() => this.$refs.options[this.selectedOptionIndex].scrollIntoView(true));
+		},
+		touchend(option)
+		{
+			if (this.touch) this.select(option);
+
 		},
 		select(option)
 		{

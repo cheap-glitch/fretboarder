@@ -3,12 +3,13 @@
  * stores/scales.js
  */
 
-import Vue               from 'vue'
-import { getVuexState }  from '@/modules/vuex-plugin-save-state'
+import Vue                   from 'vue'
+import { getVuexState }      from '@/modules/vuex-plugin-save-state'
 
-import { MAX_NB_SCALES } from '@/modules/consts'
-import { colors }        from '@/modules/colorscheme'
-import { isObject }      from '@/modules/object'
+import { MAX_NB_SCALES }     from '@/modules/consts'
+import { colors }            from '@/modules/colorscheme'
+import { isObject }          from '@/modules/object'
+import { scales, arpeggios } from '@/modules/music'
 
 /**
  * Colors
@@ -36,7 +37,8 @@ const state = getVuexState(model);
  * Getters
  */
 const getters = {
-	displayedScales: state => [].concat(state.scales.find(scale => scale.isFocused) || state.scales.filter(scale => scale.isVisible))
+	models:          state => state.scales.map(scale => [0, ...((scale.type == 'scale' ? scales : arpeggios)[scale.model].model)]),
+	displayedScales: state => [].concat(state.scales.find(scale => scale.isFocused) || state.scales.filter(scale => scale.isVisible)),
 };
 
 /**
@@ -65,10 +67,8 @@ const mutations = {
 	},
 	removeScale(state, index)
 	{
-		state.scales = state.scales.filter(scale => scale.index != index);
-
-		// Update the indexes
-		state.scales.forEach((scale, index) => Vue.set(scale, 'index', index));
+		// Remove the scale and update the index of the others
+		state.scales = state.scales.filter(scale => scale.index != index).map((scale, index) => ({ ...scale, ...index }));
 
 		// Disable showing intersections if there is only one scale left
 		if (state.scales.length == 1)

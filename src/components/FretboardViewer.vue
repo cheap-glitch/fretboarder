@@ -174,7 +174,7 @@ export default {
 		},
 		frets()
 		{
-			return getFrets(this.nbStrings, this.tuningNotes, this.displayedScales);
+			return getFrets(this.nbStrings, this.tuningNotes, this.scales, this.models, this.displayedScales);
 		},
 		fretNumbers()
 		{
@@ -213,7 +213,11 @@ export default {
 			return this.fretRange[1];
 		},
 
-		displayedScales: get('scales/displayedScales'),
+		...get('scales', [
+			'scales',
+			'models',
+			'displayedScales',
+		]),
 
 		...get('fretboard', [
 			'instrument',
