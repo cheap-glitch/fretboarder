@@ -177,6 +177,8 @@ export default {
 			// Export the fretboard to the select format and trigger a download of the resulting file
 			exportFretboard(
 				format,
+				this.$store.state.scales.scales,
+				this.$store.getters['scales/models'],
 				this.$store.getters['scales/displayedScales'],
 				this.instrument,
 				this.tuning,

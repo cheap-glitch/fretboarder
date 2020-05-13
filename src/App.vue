@@ -249,7 +249,6 @@ export default {
 @include mq($from: desktop)
 {
 	.FretboardSettings { margin-top: 40px; }
-	.FretboardViewer   { margin-top: 50px; }
 	.ScalesList        { margin-top: 80px; }
 }
 

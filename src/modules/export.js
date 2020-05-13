@@ -33,7 +33,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(scales, models, displayedScales, instrument, tuning, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -244,7 +244,7 @@ function exportFretboardToSVG(displayedScales, instrument, tuning, fretMin, fret
 	 */
 
 	// Get the list of active frets
-	const displayedFrets = getFrets(nbStrings, [...tunings[instrument][tuning]].reverse(), displayedScales)
+	const displayedFrets = getFrets(nbStrings, [...tunings[instrument][tuning]].reverse(), scales, models, displayedScales)
 		// Keep only the frets in the selected range
 		.filter(fret => (fretMin <= fret.number && fret.number <= fretMax));
 
