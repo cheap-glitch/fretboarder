@@ -11,8 +11,9 @@ div.VSelect(ref="selectbar")
 	//- Select bar
 	div.bar(
 		v-mods="{ isOpen }"
-		v-click-outside="close"
+
 		@click.left="toggle"
+		v-click-outside="clickOutside"
 		)
 		div
 			p.bar__filler(v-html="longestName")
@@ -38,7 +39,8 @@ div.VSelect(ref="selectbar")
 				v-html="option.name"
 
 				@click.left="select(option)"
-				@touchmove.prevent
+				@touchstart.prevent
+				@touchmove.prevent="touchmove"
 				)
 
 </template>
@@ -149,6 +151,10 @@ export default {
 	},
 
 	methods: {
+		touchmove()
+		{
+			console.count('touchmove');
+		},
 		jumpToOption(key)
 		{
 			if (!this.isOpen) return;
@@ -196,6 +202,11 @@ export default {
 		select(option)
 		{
 			this.$emit('change', this.isValueNumber ? Number.parseInt(option.value, 10) : option.value);
+		},
+		clickOutside()
+		{
+			if (!this.isMobileDevice)
+				this.close();
 		},
 		close()
 		{
