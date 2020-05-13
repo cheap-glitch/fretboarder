@@ -38,9 +38,7 @@ div.VSelect(ref="selectbar")
 				v-html="option.name"
 
 				@click.left="select(option)"
-				@touchstart.prevent="touch = true"
-				@touchmove.passive="touch = false"
-				@touchend="() => touchend(option)"
+				@touchmove.prevent
 				)
 
 </template>
