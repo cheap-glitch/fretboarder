@@ -41,14 +41,18 @@ li,
 		-apple-system,
 		BlinkMacSystemFont,
 		"San Francisco",
+		"Apple Color Emoji",
 
 		// Android
 		"Roboto Regular",
 		Roboto,
 		"Droid Sans",
+		"Noto Sans Symbols",
 
 		// Windows
 		"Segoe UI",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol",
 
 		// Linux
 		Oxygen-Sans,
@@ -61,12 +65,7 @@ li,
 		"Helvetica Neue",
 		Helvetica,
 		ui-sans-serif,
-		sans-serif,
-
-		// Symbols
-		"Apple Color Emoji",
-		"Segoe UI Emoji",
-		"Segoe UI Symbol";
+		sans-serif;
 
 	cursor: default;
 	user-select: none;
