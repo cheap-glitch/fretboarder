@@ -12,7 +12,7 @@ div.VSelect(ref="selectbar")
 	div.bar(
 		v-mods="{ isOpen }"
 
-		@click.left="toggle"
+		@click.left.stop="toggle"
 		v-click-outside="clickOutside"
 		)
 		div
@@ -38,10 +38,10 @@ div.VSelect(ref="selectbar")
 				ref="options"
 				v-html="option.name"
 
-				@click.left="click(option)"
+				@click.left.stop="click(option)"
 				@touchstart="touchmove = false"
 				@touchmove.passive="touchmove = true"
-				@touchend="touchend(option)"
+				@touchend.stop="touchend(option)"
 				)
 
 </template>
