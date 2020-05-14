@@ -32,19 +32,44 @@ h1,
 h2,
 li,
 .vue-slider-dot-tooltip-inner {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+ Helvetica, Arial, sans-serif,
+
 	font-family:
+		// Fancy
 		"IBM Plex Sans",
 		"Fira Sans",
+
+		// Apple
+		-apple-system,
+		BlinkMacSystemFont,
 		"San Francisco",
-		"Segoe UI",
-		"Roboto",
-		"Cantarell",
-		"Helvetica Neue",
-		"Arimo",
-		"DejaVu Sans",
+
+		// Android
+		"Roboto Regular",
+		Roboto,
 		"Droid Sans",
+
+		// Windows
+		"Segoe UI",
+
+		// Linux
+		Oxygen-Sans,
+		Ubuntu,
+		Cantarell,
+		Arimo,
+		"DejaVu Sans",
+
+		// Fallbacks
+		"Helvetica Neue",
+		Helvetica,
 		ui-sans-serif,
-		sans-serif;
+		sans-serif,
+
+		// Symbols
+		"Apple Color Emoji",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol";
 
 	cursor: default;
 	user-select: none;
