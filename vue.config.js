@@ -89,15 +89,9 @@ module.exports = {
 		 * Sitemap
 		 */
 		sitemap: {
+			// routes:         require('@/routes'),
+			trailingSlash:  false,
 			productionOnly: true,
-
-			urls: [
-				{
-					loc: 'https://fretboarder.app',
-					changefreq: 'always',
-				},
-			],
-			trailingSlash: false,
 		},
 	},
 }
