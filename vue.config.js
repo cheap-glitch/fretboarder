@@ -89,7 +89,7 @@ module.exports = {
 		 * Sitemap
 		 */
 		sitemap: {
-			// routes:         require('@/routes'),
+			routes:         require('./src/routes.js'),
 			trailingSlash:  false,
 			productionOnly: true,
 		},

@@ -6,7 +6,7 @@
 import Vue                   from 'vue'
 import { getVuexState }      from '@/modules/vuex-plugin-save-state'
 
-import { MAX_NB_SCALES }     from '@/modules/consts'
+import { MAX_NB_SCALES }     from '@/modules/constants'
 import { colors }            from '@/modules/colorscheme'
 import { isObject }          from '@/modules/object'
 import { scales, arpeggios } from '@/modules/music'

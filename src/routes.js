@@ -13,17 +13,7 @@ module.exports = [
 				changefreq: 'always',
 			}
 		},
-		component: loadAsyncPage('PageHome')
-	},
-	{
-		path: '/settings',
-		name: 'settings',
-		meta: {
-			sitemap: {
-				ignoreRoute: true,
-			}
-		},
-		component: loadAsyncPage('PageSettings')
+		component: loadAsyncPage('Home')
 	},
 	{
 		path: '/about',
@@ -34,7 +24,7 @@ module.exports = [
 				changefreq: 'monthly',
 			}
 		},
-		component: loadAsyncPage('PageAbout')
+		component: loadAsyncPage('About')
 	}
 ];
 
@@ -43,5 +33,5 @@ module.exports = [
  */
 function loadAsyncPage(page)
 {
-	return () => import(/* webpackChunkName: "page-[request]" */ `@/components/${page}`);
+	return () => import(/* webpackChunkName: "page-[request]" */ `@/pages/${page}`);
 }

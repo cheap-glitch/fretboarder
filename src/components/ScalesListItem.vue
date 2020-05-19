@@ -153,11 +153,12 @@ div.ScalesListItem(:style="{ 'border-color': color }")
 <!--{{{ JavaScript -->
 <script>
 
-import { get }                                             from 'vuex-pathify'
+import { get }                                 from 'vuex-pathify'
 
-import { MAX_NB_SCALES }                                   from '@/modules/consts'
-import { notes, scales, arpeggios }                        from '@/modules/music'
-import { notesNames, intervalsNames, intervalsShortNames } from '@/modules/music'
+import { MAX_NB_SCALES }                       from '@/modules/constants'
+import { notes, scales, arpeggios }            from '@/modules/music'
+import { notesNames }                          from '@/modules/music'
+import { intervalsNames, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'ScalesListItem',

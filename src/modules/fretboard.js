@@ -4,7 +4,7 @@
  */
 
 import { notes }        from '@/modules/music'
-import { MAX_NB_FRETS } from '@/modules/consts'
+import { MAX_NB_FRETS } from '@/modules/constants'
 
 /**
  * Generate a list of frets

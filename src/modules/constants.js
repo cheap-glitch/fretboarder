@@ -1,6 +1,6 @@
 
 /**
- * modules/consts.js
+ * modules/constants.js
  */
 
 export const MAX_NB_FRETS  = 25;
