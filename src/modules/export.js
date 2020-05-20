@@ -3,12 +3,12 @@
  * modules/export.js
  */
 
-import { saveAs }                           from 'file-saver'
+import { saveAs }            from 'file-saver'
 
-import { getFrets }                         from '@/modules/fretboard'
-import { colorscheme }                      from '@/modules/colorscheme'
-import { objectMapToObject }                from '@/modules/object'
-import { instruments, tunings, notesNames } from '@/modules/music'
+import { colorscheme }       from '@/modules/colorscheme'
+import { objectMapToObject } from '@/modules/object'
+import { notesNames }        from '@/modules/music'
+import { getFrets }          from '@/modules/fretboard'
 
 /**
  * Create and save an image of the fretboard
@@ -33,7 +33,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(scales, models, displayedScales, instrument, tuning, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(sequences, displayedSequences, tuningNotes, nbStrings, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -49,7 +49,6 @@ function exportFretboardToSVG(scales, models, displayedScales, instrument, tunin
 
 	// Layout
 	const nbFrets         = fretMax - fretMin;
-	const nbStrings       = instruments[instrument].nbStrings;
 	const marginTop       = 2;
 	const marginLeft      = 1;
 	const marginBottom    = isShowingFretNbs ? 5 : marginTop;
@@ -243,10 +242,8 @@ function exportFretboardToSVG(scales, models, displayedScales, instrument, tunin
 	 * ---------------------------------------------------------------------
 	 */
 
-	// Get the list of active frets
-	const displayedFrets = getFrets(nbStrings, [...tunings[instrument][tuning]].reverse(), scales, models, displayedScales)
-		// Keep only the frets in the selected range
-		.filter(fret => (fretMin <= fret.number && fret.number <= fretMax));
+	// Keep only the frets in the selected range
+	const displayedFrets = getFrets(displayedSequences, tuningNotes).filter(fret => (fretMin <= fret.number && fret.number <= fretMax));
 
 	// Draw the notes
 	let offset = 0;
@@ -255,19 +252,19 @@ function exportFretboardToSVG(scales, models, displayedScales, instrument, tunin
 		// Reset the horizontal offset at the start of every string
 		if (fret.number == 0) offset = 0;
 
-		if (fret.scales.length)
+		if (fret.sequences.length)
 		{
 			const x = (fret.number == 0) ? 1.8 : offset - getFretY(fret.number)/2 + marginRight;
 			const y = fret.string*fretHeight + marginTop;
 			const size = 1.6;
 
 			// Add the fret gradient to the global list if it's not already in
-			const gradientColors = fret.scales.map(scale => displayedScales[scale.index].color).join('-');
-			if (fret.scales.length > 1 && !gradients.includes(gradientColors))
+			const gradientColors = fret.sequences.map(seq => sequences[seq.index].color).join('-');
+			if (fret.sequences.length > 1 && !gradients.includes(gradientColors))
 				gradients.push(gradientColors);
 
-			// If the note belongs to more than one scale, fill it with a gradient
-			const fill = (fret.scales.length > 1) ? `url(#lg-${gradientColors})` : gradientColors;
+			// If the note belongs to more than one sequence, fill it with a gradient
+			const fill = (fret.sequences.length > 1) ? `url(#lg-${gradientColors})` : gradientColors;
 
 			// Draw the note
 			appendSingleTag(svg,

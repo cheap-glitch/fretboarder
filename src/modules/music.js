@@ -56,87 +56,93 @@ export const intervalsShortNames = [
 ];
 
 /**
- * Scales
+ * Models (scales & arpeggios)
  */
-export const scales = {
-	'maj':   { model: [2,  4,  5,  7,  9, 11],                       name: 'Natural major',           nbNotesPerString: 3 },
-	'min':   { model: [2,  3,  5,  7,  8, 10],                       name: 'Natural minor',           nbNotesPerString: 3 },
-	'maj5':  { model: [2,  4,  7,  9],                               name: 'Major pentatonic',        nbNotesPerString: 2 },
-	'min5':  { model: [3,  5,  7, 10],                               name: 'Minor pentatonic',        nbNotesPerString: 2 },
-	'majb':  { model: [2,  3,  4,  7,  9],                           name: 'Blues major',             nbNotesPerString: 3 },
-	'minb':  { model: [3,  5,  6,  7, 10],                           name: 'Blues minor',             nbNotesPerString: 3 },
-	'harm':  { model: [2,  3,  5,  7,  8, 11],                       name: 'Harmonic minor',          nbNotesPerString: 3 },
-	'mel':   { model: [2,  3,  5,  7,  9, 11],                       name: 'Melodic minor',           nbNotesPerString: 3 },
-	'dor':   { model: [2,  3,  5,  7,  9, 10],                       name: 'Dorian',                  nbNotesPerString: 3 },
-	'phry':  { model: [1,  3,  5,  7,  8, 10],                       name: 'Phrygian',                nbNotesPerString: 3 },
-	'lyd':   { model: [2,  4,  6,  7,  9, 11],                       name: 'Lydian',                  nbNotesPerString: 3 },
-	'mix':   { model: [2,  4,  5,  7,  9, 10],                       name: 'Mixolydian',              nbNotesPerString: 3 },
-	'locr':  { model: [1,  3,  5,  6,  8, 10],                       name: 'Locrian',                 nbNotesPerString: 3 },
-	'wtone': { model: [2,  4,  6,  8, 10],                           name: 'Whole tone',              nbNotesPerString: 3 },
-	'hdim':  { model: [1,  3,  4,  6,  7,  9, 10],                   name: 'Diminished (half/whole)', nbNotesPerString: 4 },
-	'wdim':  { model: [2,  3,  5,  6,  8,  9, 11],                   name: 'Diminished (whole/half)', nbNotesPerString: 4 },
-	'alt':   { model: [1,  3,  4,  6,  8, 10],                       name: 'Altered',                 nbNotesPerString: 4 },
-	'eni':   { model: [1,  4,  6,  8, 10, 11],                       name: 'Enigmatic',               nbNotesPerString: 4 },
-	'chro':  { model: [1,  2,  3,  4,  5,  6,  7,  8,  9,  10,  11], name: 'Chromatic',               nbNotesPerString: 5 },
-};
+export const models = {
 
-/**
- * Arpeggios
- */
-export const arpeggios = {
+	// SCALES
+
+	// Pentatonics & blues
+	'maj5':         { intervals: [2,  4,  7,  9],             name: 'major pentatonic'                     },
+	'min5':         { intervals: [3,  5,  7, 10],             name: 'minor pentatonic'                     },
+	'majb':         { intervals: [2,  3,  4,  7,  9],         name: 'blues major'                          },
+	'minb':         { intervals: [3,  5,  6,  7, 10],         name: 'blues minor'                          },
+
+	// Naturals
+	'maj':          { intervals: [2,  4,  5,  7,  9, 11],     name: 'natural major'                        },
+	'min':          { intervals: [2,  3,  5,  7,  8, 10],     name: 'natural minor'                        },
+	'harm':         { intervals: [2,  3,  5,  7,  8, 11],     name: 'harmonic minor'                       },
+	'mel':          { intervals: [2,  3,  5,  7,  9, 11],     name: 'melodic minor'                        },
+
+	// Modes
+	'dor':          { intervals: [2,  3,  5,  7,  9, 10],     name: 'dorian'                               },
+	'phry':         { intervals: [1,  3,  5,  7,  8, 10],     name: 'phrygian'                             },
+	'lyd':          { intervals: [2,  4,  6,  7,  9, 11],     name: 'lydian'                               },
+	'mix':          { intervals: [2,  4,  5,  7,  9, 10],     name: 'mixolydian'                           },
+	'locr':         { intervals: [1,  3,  5,  6,  8, 10],     name: 'locrian'                              },
+
+	// Others
+	'wtone':        { intervals: [2,  4,  6,  8, 10],         name: 'whole tone'                           },
+	'hdim':         { intervals: [1,  3,  4,  6,  7,  9, 10], name: 'diminished (half/whole)'              },
+	'wdim':         { intervals: [2,  3,  5,  6,  8,  9, 11], name: 'diminished (whole/half)'              },
+	'alt':          { intervals: [1,  3,  4,  6,  8, 10],     name: 'altered'                              },
+	'eni':          { intervals: [1,  4,  6,  8, 10, 11],     name: 'enigmatic'                            },
+
+	// ARPEGGIOS
+
 	// Triads
-	'maj':      { model: [4,  7],                  name: 'Major'                                },
-	'min':      { model: [3,  7],                  name: 'Minor'                                },
-	'pow':      { model: [4],                      name: 'Powerchord (fifth chord)'             },
-	'aug':      { model: [4,  8],                  name: 'Augmented'                            },
-	'dim':      { model: [3,  6],                  name: 'Diminished'                           },
+	'arp-maj':      { intervals: [4,  7],                     name: 'Major'                                },
+	'arp-min':      { intervals: [3,  7],                     name: 'Minor'                                },
+	'arp-pow':      { intervals: [4],                         name: 'Powerchord (fifth chord)'             },
+	'arp-aug':      { intervals: [4,  8],                     name: 'Augmented'                            },
+	'arp-dim':      { intervals: [3,  6],                     name: 'Diminished'                           },
 
 	// Sixth chords
-	'maj6':     { model: [4,  7,  9],              name: 'Major 6<sup>th</sup>'                 },
-	'min6':     { model: [3,  7,  9],              name: 'Minor 6<sup>th</sup>'                 },
+	'arp-maj6':     { intervals: [4,  7,  9],                 name: 'Major 6<sup>th</sup>'                 },
+	'arp-min6':     { intervals: [3,  7,  9],                 name: 'Minor 6<sup>th</sup>'                 },
 
 	// Seventh chords
-	'dom7':     { model: [4,  7, 10],              name: 'Dominant 7<sup>th</sup>'              },
-	'dom7f5':   { model: [4,  6, 10],              name: 'Dominant 7<sup>th</sup> flat five'    },
-	'maj7':     { model: [4,  7, 11],              name: 'Major 7<sup>th</sup>'                 },
-	'min7':     { model: [3,  7, 10],              name: 'Minor 7<sup>th</sup>'                 },
-	'minmaj7':  { model: [3,  7, 11],              name: 'Minor-Major 7<sup>th</sup>'           },
-	'aug7':     { model: [4,  8, 10],              name: 'Augmented 7<sup>th</sup>'             },
-	'hdim7':    { model: [3,  6, 10],              name: 'Half-diminished 7<sup>th</sup>'       },
-	'dim7':     { model: [3,  6,  9],              name: 'Diminished 7<sup>th</sup>'            },
+	'arp-dom7':     { intervals: [4,  7, 10],                 name: 'Dominant 7<sup>th</sup>'              },
+	'arp-dom7f5':   { intervals: [4,  6, 10],                 name: 'Dominant 7<sup>th</sup> flat five'    },
+	'arp-maj7':     { intervals: [4,  7, 11],                 name: 'Major 7<sup>th</sup>'                 },
+	'arp-min7':     { intervals: [3,  7, 10],                 name: 'Minor 7<sup>th</sup>'                 },
+	'arp-minmaj7':  { intervals: [3,  7, 11],                 name: 'Minor-Major 7<sup>th</sup>'           },
+	'arp-aug7':     { intervals: [4,  8, 10],                 name: 'Augmented 7<sup>th</sup>'             },
+	'arp-hdim7':    { intervals: [3,  6, 10],                 name: 'Half-diminished 7<sup>th</sup>'       },
+	'arp-dim7':     { intervals: [3,  6,  9],                 name: 'Diminished 7<sup>th</sup>'            },
 
 	// Ninth chords
-	'dom9':     { model: [2,  4,  7, 10],          name: 'Dominant 9<sup>th</sup>'              },
-	'maj9':     { model: [2,  4,  7, 11],          name: 'Major 9<sup>th</sup>'                 },
-	'min9':     { model: [2,  3,  7, 10],          name: 'Minor 9<sup>th</sup>'                 },
-	'minmaj9':  { model: [2,  3,  7, 11],          name: 'Minor-Major 9<sup>th</sup>'           },
-	'aug9':     { model: [2,  4,  8, 10],          name: 'Augmented 9<sup>th</sup>'             },
-	'augmaj9':  { model: [2,  4,  8, 11],          name: 'Augmented major 9<sup>th</sup>'       },
-	'hdim9':    { model: [2,  3,  6, 10],          name: 'Half-diminished 9<sup>th</sup>'       },
-	'hdimmin9': { model: [1,  3,  6, 10],          name: 'Half-diminished minor 9<sup>th</sup>' },
-	'dim9':     { model: [2,  3,  6,  9],          name: 'Diminished 9<sup>th</sup>'            },
-	'dimmin9':  { model: [1,  3,  6,  9],          name: 'Diminished minor 9<sup>th</sup>'      },
-	'6-9':      { model: [2,  4,  7,  9],          name: '6/9'                                  },
-	'min6-9':   { model: [2,  3,  7,  9],          name: 'Minor 6/9'                            },
+	'arp-dom9':     { intervals: [2,  4,  7, 10],             name: 'Dominant 9<sup>th</sup>'              },
+	'arp-maj9':     { intervals: [2,  4,  7, 11],             name: 'Major 9<sup>th</sup>'                 },
+	'arp-min9':     { intervals: [2,  3,  7, 10],             name: 'Minor 9<sup>th</sup>'                 },
+	'arp-minmaj9':  { intervals: [2,  3,  7, 11],             name: 'Minor-Major 9<sup>th</sup>'           },
+	'arp-aug9':     { intervals: [2,  4,  8, 10],             name: 'Augmented 9<sup>th</sup>'             },
+	'arp-augmaj9':  { intervals: [2,  4,  8, 11],             name: 'Augmented major 9<sup>th</sup>'       },
+	'arp-hdim9':    { intervals: [2,  3,  6, 10],             name: 'Half-diminished 9<sup>th</sup>'       },
+	'arp-hdimmin9': { intervals: [1,  3,  6, 10],             name: 'Half-diminished minor 9<sup>th</sup>' },
+	'arp-dim9':     { intervals: [2,  3,  6,  9],             name: 'Diminished 9<sup>th</sup>'            },
+	'arp-dimmin9':  { intervals: [1,  3,  6,  9],             name: 'Diminished minor 9<sup>th</sup>'      },
+	'arp-6-9':      { intervals: [2,  4,  7,  9],             name: '6/9'                                  },
+	'arp-min6-9':   { intervals: [2,  3,  7,  9],             name: 'Minor 6/9'                            },
 
 	// Eleventh chords
-	'dom11':    { model: [2,  4,  5,  7, 10],      name: 'Dominant 11<sup>th</sup>'             },
-	'maj11':    { model: [2,  4,  5,  7, 11],      name: 'Major 11<sup>th</sup>'                },
-	'minmaj11': { model: [2,  3,  5,  7, 11],      name: 'Minor-Major 11<sup>th</sup>'          },
-	'min11':    { model: [2,  3,  5,  7, 10],      name: 'Minor 11<sup>th</sup>'                },
-	'aug11':    { model: [2,  4,  5,  8, 10],      name: 'Augmented 11<sup>th</sup>'            },
-	'augmaj11': { model: [2,  4,  5,  8, 11],      name: 'Augmented major 11<sup>th</sup>'      },
-	'hdim11':   { model: [2,  3,  5,  6, 10],      name: 'Half-diminished 11<sup>th</sup>'      },
-	'dim11':    { model: [2,  3,  5,  6,  9],      name: 'Diminished 11<sup>th</sup>'           },
+	'arp-dom11':    { intervals: [2,  4,  5,  7, 10],         name: 'Dominant 11<sup>th</sup>'             },
+	'arp-maj11':    { intervals: [2,  4,  5,  7, 11],         name: 'Major 11<sup>th</sup>'                },
+	'arp-minmaj11': { intervals: [2,  3,  5,  7, 11],         name: 'Minor-Major 11<sup>th</sup>'          },
+	'arp-min11':    { intervals: [2,  3,  5,  7, 10],         name: 'Minor 11<sup>th</sup>'                },
+	'arp-aug11':    { intervals: [2,  4,  5,  8, 10],         name: 'Augmented 11<sup>th</sup>'            },
+	'arp-augmaj11': { intervals: [2,  4,  5,  8, 11],         name: 'Augmented major 11<sup>th</sup>'      },
+	'arp-hdim11':   { intervals: [2,  3,  5,  6, 10],         name: 'Half-diminished 11<sup>th</sup>'      },
+	'arp-dim11':    { intervals: [2,  3,  5,  6,  9],         name: 'Diminished 11<sup>th</sup>'           },
 
 	// Thirteenth chords
-	'dom13':    { model: [2,  4,  5,  7,  9, 10],  name: 'Dominant 13<sup>th</sup>'             },
-	'maj13':    { model: [2,  4,  5,  7,  9, 11],  name: 'Major 13<sup>th</sup>'                },
-	'min13':    { model: [2,  3,  5,  7,  9, 10],  name: 'Minor 13<sup>th</sup>'                },
-	'minmaj13': { model: [2,  3,  5,  7,  9, 11],  name: 'Minor-Major 13<sup>th</sup>'          },
-	'aug13':    { model: [2,  4,  5,  8,  9, 10],  name: 'Augmented 13<sup>th</sup>'            },
-	'augmaj13': { model: [2,  4,  5,  8,  9, 11],  name: 'Augmented major 13<sup>th</sup>'      },
-	'hdim13':   { model: [2,  3,  5,  6,  9, 10],  name: 'Half-diminished 13<sup>th</sup>'      },
+	'arp-dom13':    { intervals: [2,  4,  5,  7,  9, 10],     name: 'Dominant 13<sup>th</sup>'             },
+	'arp-maj13':    { intervals: [2,  4,  5,  7,  9, 11],     name: 'Major 13<sup>th</sup>'                },
+	'arp-min13':    { intervals: [2,  3,  5,  7,  9, 10],     name: 'Minor 13<sup>th</sup>'                },
+	'arp-minmaj13': { intervals: [2,  3,  5,  7,  9, 11],     name: 'Minor-Major 13<sup>th</sup>'          },
+	'arp-aug13':    { intervals: [2,  4,  5,  8,  9, 10],     name: 'Augmented 13<sup>th</sup>'            },
+	'arp-augmaj13': { intervals: [2,  4,  5,  8,  9, 11],     name: 'Augmented major 13<sup>th</sup>'      },
+	'arp-hdim13':   { intervals: [2,  3,  5,  6,  9, 10],     name: 'Half-diminished 13<sup>th</sup>'      },
 };
 
 /**

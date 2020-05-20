@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardViewer#fretboard-wrapper: div.fretboard(
+div.FretboardViewer(
 	v-mods="{ isShowingFretNbs }"
 	:style="[minLength, maxWidth, grid]"
 	)
@@ -21,7 +21,6 @@ div.FretboardViewer#fretboard-wrapper: div.fretboard(
 		:is-showing-note-name="isShowingNoteNames"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
-		:scales-colors="scalesColors"
 		:is-fretboard-flipped="isFlipped"
 		:is-fretboard-vertical="isVertical"
 
@@ -174,7 +173,7 @@ export default {
 		},
 		frets()
 		{
-			return getFrets(this.nbStrings, this.tuningNotes, this.scales, this.models, this.displayedScales);
+			return getFrets(this.displayedSequences, this.tuningNotes);
 		},
 		fretNumbers()
 		{
@@ -192,10 +191,6 @@ export default {
 
 			return (!this.isVertical || this.isFlipped) ? notes.reverse() : notes;
 		},
-		scalesColors()
-		{
-			return this.displayedScales.map(scale => scale.color);
-		},
 		nbStrings()
 		{
 			return instruments[this.instrument].nbStrings;
@@ -212,12 +207,7 @@ export default {
 		{
 			return this.fretRange[1];
 		},
-
-		...get('scales', [
-			'scales',
-			'models',
-			'displayedScales',
-		]),
+		displayedSequences: get('sequences/displayedSequences'),
 
 		...get('fretboard', [
 			'instrument',
@@ -239,14 +229,6 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardViewer {
-	@include mq($from: desktop)
-	{
-		padding: 70px 0 40px 0;
-		overflow-x: auto;
-	}
-}
-
-.fretboard {
 	display: grid;
 	position: relative;
 

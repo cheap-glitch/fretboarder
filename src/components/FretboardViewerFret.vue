@@ -20,10 +20,10 @@ div.FretboardViewerFret
 				:key="`interval--${string + 1}--${number}--${interval.value}`"
 				)
 				div.intervals__item__dot(
-					v-for="scale in interval.scales"
-					:key="`dot--${scale}`"
+					v-for="seq in interval.sequences"
+					:key="`dot--${seq}`"
 
-					:style="{ 'background-color': scalesColors[scale] }"
+					:style="{ 'background-color': colors[seq] }"
 					)
 				p {{ interval.name }}
 
@@ -37,8 +37,8 @@ div.FretboardViewerFret
 			v-mods="{ isActive, isHighlighted, isShowingNoteName, isOpenString, isFretboardFlipped, isFretboardVertical }"
 			:style="noteBg"
 
-			@mouseenter="mouseenterHandler"
-			@mouseleave="mouseleaveHandler"
+			@mouseenter="showTooltip = isActive"
+			@mouseleave="showTooltip = false"
 			) {{ noteName }}
 
 </template>
@@ -56,23 +56,19 @@ export default {
 	name: 'FretboardViewerFret',
 
 	props: {
-		note: {
-			type: String,
+		string: {
+			type: Number,
 			required: true,
 		},
 		number: {
 			type: Number,
 			required: true,
 		},
-		string: {
-			type: Number,
+		note: {
+			type: String,
 			required: true,
 		},
-		scales: {
-			type: Array,
-			required: true,
-		},
-		scalesColors: {
+		sequences: {
 			type: Array,
 			required: true,
 		},
@@ -111,32 +107,32 @@ export default {
 	computed: {
 		intervals()
 		{
-			// Make a list of intervals, each with the list of scales that contain them
-			const intervals = this.scales.reduce(function(list, scale)
+			// Make a list of intervals, each with the list of sequences that contain them
+			const intervals = this.sequences.reduce(function(list, seq)
 			{
-				const index = list.findIndex(item => item.value == scale.interval);
+				const index = list.findIndex(item => item.value == seq.interval);
 
 				// If the interval is not in the list
 				if (index === -1)
 				{
 					list.push({
-						name:   intervalsNames[scale.interval],
-						value:  scale.interval,
-						scales: [scale.index],
+						name:      intervalsNames[seq.interval],
+						value:     seq.interval,
+						sequences: [seq.index],
 					});
 				}
 				// If the interval is already in the list
 				else
 				{
-					list[index].scales.push(scale.index);
+					list[index].sequences.push(seq.index);
 				}
 
 				return list;
 			}, []);
 
-			// Sort the intervals and their scales to keep the same visual order
+			// Sort the intervals and their sequences to keep the same visual order
 			intervals.sort((a, b) => a.value - b.value);
-			intervals.forEach(interval => interval.scales.sort());
+			intervals.forEach(interval => interval.sequences.sort());
 
 			return intervals;
 		},
@@ -144,9 +140,9 @@ export default {
 		{
 			if (!this.isActive) return { 'background-color': 'var(--color--bg--highlight)' };
 
-			// Build a solid gradient with the colors of every scale the fret note belongs to
-			const stripeWidth = Math.ceil(100 / this.scales.length);
-			const gradient    = [...this.scales].reverse().map((scale, index) => `${this.scalesColors[scale.index]} ${index*stripeWidth}% ${(index + 1)*stripeWidth}%`);
+			// Build a solid gradient with the colors of every sequence the fret note belongs to
+			const stripeWidth = Math.ceil(100 / this.sequences.length);
+			const gradient    = [...this.sequences].reverse().map((seq, index) => `${this.colors[seq.index]} ${index*stripeWidth}% ${(index + 1)*stripeWidth}%`);
 
 			return { background: `linear-gradient(-45deg, ${gradient})` };
 		},
@@ -156,7 +152,7 @@ export default {
 		},
 		isActive()
 		{
-			return this.scales.length > 0;
+			return this.sequences.length > 0;
 		},
 		isOpenString()
 		{
@@ -166,19 +162,11 @@ export default {
 		{
 			return this.number == 1;
 		},
+		colors()
+		{
+			return this.$store.state.sequences.sequences.map(seq => seq.color);
+		},
 		isMobileDevice: get('isMobileDevice'),
-	},
-
-	methods: {
-		mouseenterHandler()
-		{
-			if (this.isActive)
-				this.showTooltip = true;
-		},
-		mouseleaveHandler()
-		{
-			this.showTooltip = false;
-		},
 	},
 }
 

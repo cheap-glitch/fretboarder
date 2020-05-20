@@ -23,46 +23,23 @@ import { mediaQueries }      from '@/stores/main'
 export default {
 	name: 'App',
 
-	data() {
-		return {
-			mailto: '',
-		}
-	},
-
 	computed: {
 		colorscheme()
 		{
 			return objectMapToObject(colorscheme, (varName, values) => values[this.$store.state.isDarkModeOn ? 1 : 0]);
 		},
-		instrumentIcon()
-		{
-			switch (this.instrument)
-			{
-				case 'bass':
-					return 'guitar-electric';
-
-				case 'banjo-4':
-				case 'banjo-5':
-					return 'banjo';
-
-				case 'mandolin':
-					return 'mandolin';
-
-				default:
-					return 'guitar';
-			}
-		},
 	},
 
 	created()
 	{
-		this.feedbackMail = {
-			subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
-			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
-		};
+		//- this.feedbackMail = {
+		//- 	subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
+		//- 	body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
+		//- };
 
-		if (this.$store.state.scales.scales.length == 0)
-			this.$store.commit('scales/addScale');
+		// Add a sequence if there is none at startup
+		if (this.$store.state.sequences.sequences.length == 0)
+			this.$store.commit('sequences/add');
 	},
 
 	mounted()
@@ -83,12 +60,10 @@ export default {
 		updateDeviceType(event)
 		{
 			this.$store.commit('isMobileDevice', event.matches);
-			this.isModalScalesOpen = this.isModalSettingsOpen = false;
 		},
 		updateLayoutOrientation(event)
 		{
 			this.$store.commit('isLayoutLandscape', event.matches);
-			this.isModalScalesOpen = this.isModalSettingsOpen = false;
 		},
 	},
 }
@@ -103,7 +78,7 @@ export default {
 .App {
 	flex: 1 1 auto;
 
-	padding: 10px;
+	padding: 20px;
 
 	background-color: var(--color--bg);
 }
@@ -114,10 +89,7 @@ export default {
 <!--{{{ Global styles -->
 <style lang="scss">
 
-// Load the reset stylesheet
 @use "@cheap-glitch/scss-reset/_reset";
-
-// Load the global styles
 @use "@/styles/global";
 
 </style>

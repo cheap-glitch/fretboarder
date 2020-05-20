@@ -13,7 +13,7 @@ import pathify             from '@/modules/pathify'
 import { makeTogglers }    from '@/modules/pathify'
 
 import { layout }          from '@/modules/layout'
-import scales              from '@/stores/scales'
+import sequences           from '@/stores/sequences'
 import fretboard           from '@/stores/fretboard'
 
 export const mediaQueries = {
@@ -60,16 +60,16 @@ export default new Vuex.Store(
 		pathify.plugin,
 		saveStatePlugin({
 			...model,
-			scales:    scales.model,
+			sequences: sequences.model,
 			fretboard: fretboard.model,
 		}, {
-			namespace:      'fretboarder',
+			namespace: `fretboarder-${process.env.VUE_APP_VERSION}`,
 			savedByDefault: true,
 		}),
 	],
 
 	modules: {
-		scales,
+		sequences,
 		fretboard,
 	},
 

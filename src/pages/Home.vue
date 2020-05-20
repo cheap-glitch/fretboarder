@@ -87,7 +87,8 @@ div.Home
 		)
 		FretboardSettings
 
-	FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
+	div.fretboard-wrapper#fretboard-wrapper
+		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- component(
 		:is="isMobileDevice ? 'VModal' : 'div'"
@@ -115,44 +116,32 @@ div.Home
 
 import { get }               from 'vuex-pathify'
 
-import ScalesList            from '@/components/ScalesList'
 import FretboardViewer       from '@/components/FretboardViewer'
-import FretboardSettings     from '@/components/FretboardSettings'
+
+//- import ScalesList            from '@/components/ScalesList'
+//- import FretboardSettings     from '@/components/FretboardSettings'
 
 export default {
 	name: 'Home',
 
 	components: {
-		ScalesList,
 		FretboardViewer,
-		FretboardSettings,
-	},
-
-	data() {
-		return {
-			mailto: '',
-		}
 	},
 
 	computed: {
+		/*
 		instrumentIcon()
 		{
-			switch (this.$store.state.fretboard.instrument)
+			switch (this.instrument)
 			{
-				case 'bass':
-					return 'guitar-electric';
-
-				case 'banjo-4':
-				case 'banjo-5':
-					return 'banjo';
-
-				case 'mandolin':
-					return 'mandolin';
-
-				default:
-					return 'guitar';
+				case 'bass':     return 'guitar-electric';
+				case 'banjo-4':  return 'banjo';
+				case 'banjo-5':  return 'banjo';
+				case 'mandolin': return 'mandolin';
+				default:         return 'guitar';
 			}
 		},
+		*/
 		...get([
 			'isMobileDevice',
 			'isLayoutLandscape',
@@ -167,6 +156,14 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+.fretboard-wrapper {
+	@include mq($from: desktop)
+	{
+		padding: 70px 0 40px 0;
+		overflow-x: auto;
+	}
+}
+
 /*
 @include mq($until: desktop)
 {
@@ -176,12 +173,7 @@ export default {
 		@media (orientation: portrait)  { justify-content: center; }
 		@media (orientation: landscape) { align-items:     center; }
 	}
-}
 
-@include mq($from: desktop)
-{
-	.FretboardSettings { margin-top: 40px; }
-	.ScalesList        { margin-top: 80px; }
 }
 */
 
@@ -190,6 +182,7 @@ export default {
  * -----------------------------------------------------------------------------
  */
 
+/*
 .header {
 	display: none;
 
@@ -316,12 +309,14 @@ export default {
 		}
 	}
 }
+*/
 
 /**
  * Mobile actions
  * -----------------------------------------------------------------------------
  */
 
+/*
 .mobile-actions {
 	position: fixed;
 	z-index: 100;
@@ -365,6 +360,7 @@ export default {
 		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) brightness(1.2);
 	}
 }
+*/
 
 </style>
 <!--}}}-->

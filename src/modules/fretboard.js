@@ -3,69 +3,95 @@
  * modules/fretboard.js
  */
 
-import { notes }        from '@/modules/music'
-import { MAX_NB_FRETS } from '@/modules/constants'
+import { MAX_NB_FRETS }  from '@/modules/constants'
+import { notes, models } from '@/modules/music'
 
 /**
- * Generate a list of frets
+ * Generate a list of frets with infos on the sequences they belong to
  */
-export function getFrets(nbStrings, tuningNotes, scales, models, displayedScales)
+export function getFrets(sequences, tuningNotes)
 {
-	// Get the index of the fret of the root note on the lowest string for each scale
-	const rootFrets = scales.map(scale => getInterval(tuningNotes[0], scale.tonality));
-
-	return [...Array(nbStrings*MAX_NB_FRETS).keys()].map(function(fretIndex)
+	// Compute the boundaries of the displayed position for each sequence
+	/*
+	const positions = sequences.map(function(seq)
 	{
-		let isFretHighlighted = false;
+		if (seq.position == 0)
+			return null;
 
-		const fretNumber = fretIndex % MAX_NB_FRETS;
-		const fretString = Math.floor(fretIndex / MAX_NB_FRETS);
-		const fretScales = displayedScales
-			.filter(function(scale)
-			{
-				if (scale.position == 0)
-					return true;
+		// Get the index of the fret of the root note on the lowest string
+		const rootFret = getInterval(tuningNotes[0], seq.tonality);
 
-				const posStart  = (rootFrets[scale.index] - 1 + 15*(scale.position - 1)) % MAX_NB_FRETS;
-				const posStop   = (posStart   +  5) %  MAX_NB_FRETS;
-				const otherFret = (fretNumber + 12) % (MAX_NB_FRETS - 1);
-
-				return posStart < posStop
-					? (posStart <= fretNumber && fretNumber < posStop) || (posStart <= otherFret && otherFret < posStop)
-					: (posStart <= fretNumber || fretNumber < posStop) || (posStart <= otherFret || otherFret < posStop);
-
-			})
-			.reduce(function(fretScales, scale)
-			{
-				// Compute the interval of the fret note relative to the root note of the scale
-				const interval = (getInterval(scale.tonality, tuningNotes[fretString]) + fretNumber) % notes.length;
-
-				if (models[scale.index].includes(interval))
-				{
-					fretScales.push({ index: scale.index, interval });
-
-					if (scale.highlightedInterval === interval)
-						isFretHighlighted = true;
-				}
-
-				return fretScales;
-			}, []);
+		// Get the start of the position
+		// const posStart = (rootFret - 1 + 15*(seq.position - 1)) % MAX_NB_FRETS,
 
 		return {
-			note:          notes[(notes.indexOf(tuningNotes[fretString]) + fretNumber) % notes.length],
-			number:        fretNumber,
-			string:        fretString,
-			isHighlighted: isFretHighlighted,
-
-			// Disable frets that only show intersected scales
-			scales: fretScales.every(scale => scales[scale.index].isIntersected) ? [] : fretScales,
+			start: posStart,
+			// stop:  (posStart + 5) % MAX_NB_FRETS,
 		};
+	});
+	*/
+
+	// Build an array of frets for each string and flatten them in a single list
+	return tuningNotes.flatMap(function(openStringNote, stringNumber)
+	{
+		// Create the frets
+		const frets = [...Array(MAX_NB_FRETS).keys()].map(fretNumber => ({
+			string:        stringNumber,
+			number:        fretNumber,
+			note:          notes[(notes.indexOf(openStringNote) + fretNumber) % notes.length],
+			sequences:     [],
+			isHighlighted: false,
+		}));
+
+		// Mark the frets that belong to each sequence
+		sequences.forEach(function(seq)
+		{
+			// Find the first fret whose note is the root of the sequence
+			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
+
+			// Loop through the intervals and add the sequence index to the sequences list of their corresponding frets
+			[0, ...models[seq.model].intervals].forEach(function(interval, intervalIndex)
+			{
+				// Modify the current fret and the one 12 half-steps above/below it
+				[rootFret + interval, (rootFret + interval + 12) % MAX_NB_FRETS].forEach(function(fret)
+				{
+					frets[fret].sequences.push({ index: seq.index, interval });
+
+					if (intervalIndex === seq.highlightedInterval)
+						frets[fret].isHighlighted = true;
+				});
+			});
+
+			// Compute the interval of the fret note relative to the root note of the sequence
+			// const interval = (getInterval(seq.tonality, openStringNote) + fretNumber) % notes.length;
+
+			// @TODO:
+			// If the sequence is limited to a single position, check that the fret is in its boundaries
+			// if (positions[index] !== null && )
+		});
+
+		return frets;
 	});
 }
 
 /**
+ * Check that a fret is in the boundaries of a position
+ */
+/*
+function isInPosition(fretNumber, pos)
+{
+	// const otherFret = (fretNumber + 12) % (MAX_NB_FRETS - 1);
+
+	return pos.start < pos.stop
+		? (pos.start <= fretNumber && fretNumber < pos.stop) || (pos.start <= otherFret && otherFret < pos.stop)
+		: (pos.start <= fretNumber || fretNumber < pos.stop) || (pos.start <= otherFret || otherFret < pos.stop);
+}
+*/
+
+/**
  * Return the positive number of half-steps between two notes
  */
+/*
 function getInterval(note1, note2)
 {
 	const index1 = notes.indexOf(note1);
@@ -73,3 +99,4 @@ function getInterval(note1, note2)
 
 	return index1 <= index2 ? index2 - index1 : notes.length - (index1 - index2);
 }
+*/

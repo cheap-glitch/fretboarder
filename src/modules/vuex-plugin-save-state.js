@@ -9,7 +9,7 @@ const defaultOptions = {
 };
 
 /**
- * Returns a function to instantiate the Vuex plugin
+ * Return a function to instantiate the Vuex plugin
  */
 export function saveStatePlugin(stateModel, options = {})
 {
