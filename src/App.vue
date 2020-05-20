@@ -39,7 +39,11 @@ export default {
 
 		// Add a sequence if there is none at startup
 		if (this.$store.state.sequences.sequences.length == 0)
+		{
 			this.$store.commit('sequences/add');
+			// @TODO: temp
+			this.$store.commit('sequences/add');
+		}
 	},
 
 	mounted()
