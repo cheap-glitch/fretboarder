@@ -31,7 +31,7 @@ export default {
 
 	props: {
 		target: {
-			type: HTMLElement,
+			type: [HTMLElement, Boolean],
 			required: true,
 		},
 		placement: {
@@ -69,7 +69,7 @@ export default {
 	methods: {
 		createPopper()
 		{
-			if (this.isOpen && this.popper === null && this.target && document.body.contains(this.target))
+			if (this.isOpen && this.popper === null && this.target !== false && document.body.contains(this.target))
 			{
 				this.popper = createPopper(this.target, this.$refs.tooltip, {
 					placement: this.placement,
