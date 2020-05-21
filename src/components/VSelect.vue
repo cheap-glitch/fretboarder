@@ -14,14 +14,14 @@ mixin options(optionsList)
 
 		:value="option.value"
 		:selected="option.value === value"
-	) {{ cleanLabel(option.label) }}
+	) {{ option.label }}
 
 div.VSelect
 
 	//- Fake select bar
 	div.bar
 		//- Current value
-		p {{ selectedOptionLabel }}
+		p(v-html="selectedOptionLabel")
 
 		//- Chevron
 		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
@@ -111,11 +111,7 @@ export default {
 		},
 		updateSelectedOptionLabel()
 		{
-			this.selectedOptionLabel = this.$refs.select.selectedOptions[0].label;
-		},
-		cleanLabel(label)
-		{
-			return label.replace(/<\/?sup>/g, '');
+			this.selectedOptionLabel = this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>');
 		},
 	}
 }

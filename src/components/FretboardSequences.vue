@@ -45,6 +45,7 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSequences {
+	@include space-children-v(20px);
 }
 
 </style>

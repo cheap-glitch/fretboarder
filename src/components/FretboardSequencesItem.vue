@@ -22,7 +22,7 @@ div.FretboardSequencesItem
 	//- Model
 	VSelect(
 		:value="model"
-		:options="models"
+		:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
 
 		@change="v => update('model', v)"
 		)
@@ -31,7 +31,7 @@ div.FretboardSequencesItem
 	//- Intervals
 	//----------------------------------------------------------------------
 
-	//- div.intervals: div.intervals__item(
+	div.intervals: div.intervals__item(
 		v-for="interval in intervals"
 		:key="`sequence--${index}--interval--${interval.value}`"
 		)
@@ -48,9 +48,10 @@ div.FretboardSequencesItem
 <!--{{{ JavaScript -->
 <script>
 
-import { MAX_NB_SEQUENCES }   from '@/modules/constants'
-import { notesNames, models } from '@/modules/music'
-import { filterObject }       from '@/modules/object'
+import { MAX_NB_SEQUENCES }                    from '@/modules/constants'
+import { filterObject }                        from '@/modules/object'
+import { notes, notesNames, models }           from '@/modules/music'
+import { intervalsNames, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItem',
@@ -98,14 +99,24 @@ export default {
 		},
 	},
 
+	computed: {
+		intervals()
+		{
+			return [0, ...models[this.model].intervals].map(interval => ({
+				value:     interval,
+				note:      notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
+				name:      intervalsNames[interval],
+				shortName: intervalsShortNames[interval],
+			}))
+		},
+	},
+
 	created()
 	{
-		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 		this.tonalities       = notesNames;
-		this.models           = [
-			{ label: 'Scales',    options: filterObject(models, key => !key.startsWith('arp-')) },
-			{ label: 'Arpeggios', options: filterObject(models, key =>  key.startsWith('arp-')) },
-		];
+		this.scales           = filterObject(models, key => !key.startsWith('arp-'));
+		this.arpeggios        = filterObject(models, key =>  key.startsWith('arp-'));
+		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 	},
 
 	methods: {
@@ -128,7 +139,55 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSequencesItem {
+	display: flex;
+	align-items: flex-start;
+	@include space-children-h(20px);
+}
 
+.intervals {
+	display: grid;
+
+	grid-gap: 10px;
+	grid-template-columns: repeat(auto-fill, 60px);
+	grid-auto-rows: 24px;
+	align-content: center;
+
+	flex: 1 1 100%;
+}
+
+.intervals__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	@include pill;
+	padding: 2px 8px;
+
+	border: 1px solid var(--color--border);
+
+	cursor: pointer;
+
+	&.is-selected, &:hover {
+		background-color: var(--color--bg--highlight);
+	}
+}
+
+.interval__item__note {
+	color: var(--color--text);
+	cursor: pointer;
+
+	.intervals__item.is-selected             & { color: var(--color--highlight); }
+	.intervals__item:not(.is-selected):hover & { color: var(--color--hover);     }
+}
+
+.interval__item__name {
+	color: var(--color--text--secondary);
+	cursor: pointer;
+
+	font-size: 1.2rem;
+
+	.intervals__item.is-selected             & { color: var(--color--text);      }
+	.intervals__item:not(.is-selected):hover & { color: var(--color--text);      }
 }
 
 </style>
