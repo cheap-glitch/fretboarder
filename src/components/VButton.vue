@@ -8,18 +8,15 @@
 
 button.VButton(
 	v-mods="{ isActive, isDisabled }"
-
-	@click.left="clickHandler"
+	@click.left="clickButton"
 	)
-
 	//- Icon
 	fa-icon.icon(
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:flip="isFlipped ? 'horizontal' : null"
 		)
-
 	//- Text
-	p.title(v-show="title.length") {{ title }}
+	p.title(v-if="title.length") {{ title }}
 
 </template>
 <!--}}}-->
@@ -62,7 +59,7 @@ export default {
 	},
 
 	methods: {
-		clickHandler()
+		clickButton()
 		{
 			// Unfocus the button
 			this.$refs.button.blur();

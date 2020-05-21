@@ -6,7 +6,7 @@
 import { saveAs }            from 'file-saver'
 
 import { colorscheme }       from '@/modules/colorscheme'
-import { objectMapToObject } from '@/modules/object'
+import { mapObjectToObject } from '@/modules/object'
 import { notesNames }        from '@/modules/music'
 import { getFrets }          from '@/modules/fretboard'
 
@@ -63,7 +63,7 @@ function exportFretboardToSVG(sequences, displayedSequences, tuningNotes, nbStri
 	const fretsWithInlays = [3, 5, 7, 9, 15, 17, 19, 21];
 
 	// Colorscheme
-	const palette = objectMapToObject(colorscheme, (key, colors) => colors[isDarkModeOn ? 1 : 0]);
+	const palette = mapObjectToObject(colorscheme, (key, colors) => colors[isDarkModeOn ? 1 : 0]);
 	const colors  = {
 		bg:         palette['--color--bg'],
 		inlay:      isDarkModeOn ? palette['--color--bg--accent'] : '#eee',

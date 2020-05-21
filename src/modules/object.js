@@ -6,7 +6,7 @@
 /**
  * Create a new object with the same keys and the result of a callback as values
  */
-export function objectMapToObject(object, callback)
+export function mapObjectToObject(object, callback)
 {
 	return Object.keys(object).reduce(function(result, key)
 	{
@@ -14,6 +14,14 @@ export function objectMapToObject(object, callback)
 
 		return result;
 	}, {});
+}
+
+/**
+ * Create a new array from an object using a callback
+ */
+export function mapObjectToArray(object, callback)
+{
+	return Object.keys(object).map(key => callback(key, object[key]));
 }
 
 /**

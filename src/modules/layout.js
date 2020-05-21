@@ -4,9 +4,9 @@
  */
 
 import scssVars              from '@/styles/layout.export.scss'
-import { objectMapToObject } from '@/modules/object'
+import { mapObjectToObject } from '@/modules/object'
 
-export const layout = objectMapToObject(scssVars, function(_, value)
+export const layout = mapObjectToObject(scssVars, function(_, value)
 {
 	const numValue = parseInt(value.replace('px', ''), 10);
 

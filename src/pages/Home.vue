@@ -87,6 +87,13 @@ div.Home
 		)
 		FretboardSettings
 
+	VSelect(
+		:options="models"
+		:value="'maj'"
+
+		@change="onChange"
+		)
+
 	div.fretboard-wrapper#fretboard-wrapper
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
@@ -114,9 +121,10 @@ div.Home
 <!--{{{ JavaScript -->
 <script>
 
-import { get }               from 'vuex-pathify'
+import { get }         from 'vuex-pathify'
+import { models }      from '@/modules/music'
 
-import FretboardViewer       from '@/components/FretboardViewer'
+import FretboardViewer from '@/components/FretboardViewer'
 
 //- import ScalesList            from '@/components/ScalesList'
 //- import FretboardSettings     from '@/components/FretboardSettings'
@@ -147,6 +155,18 @@ export default {
 			'isLayoutLandscape',
 		]),
 	},
+
+	created() {
+		this.models = models;
+	},
+
+	methods: {
+		onChange(value)
+		{
+			console.log(value);
+		}
+	}
+
 }
 
 </script>

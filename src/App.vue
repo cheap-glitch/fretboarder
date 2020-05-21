@@ -15,7 +15,7 @@ div.App(:style="colorscheme"): router-view
 <!--{{{ JavaScript -->
 <script>
 
-import { objectMapToObject } from '@/modules/object'
+import { mapObjectToObject } from '@/modules/object'
 import { colorscheme }       from '@/modules/colorscheme'
 
 import { mediaQueries }      from '@/stores/main'
@@ -26,7 +26,7 @@ export default {
 	computed: {
 		colorscheme()
 		{
-			return objectMapToObject(colorscheme, (varName, values) => values[this.$store.state.isDarkModeOn ? 1 : 0]);
+			return mapObjectToObject(colorscheme, (varName, values) => values[this.$store.state.isDarkModeOn ? 1 : 0]);
 		},
 	},
 
@@ -39,11 +39,7 @@ export default {
 
 		// Add a sequence if there is none at startup
 		if (this.$store.state.sequences.sequences.length == 0)
-		{
 			this.$store.commit('sequences/add');
-			// @TODO: temp
-			this.$store.commit('sequences/add');
-		}
 	},
 
 	mounted()
