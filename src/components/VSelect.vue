@@ -21,8 +21,8 @@ select.VSelect(
 	)
 
 	//- Grouped options
-	template(v-if="false")
-		optiongroup(
+	template(v-if="Array.isArray(options)")
+		optgroup(
 			v-for="group in optionGroups"
 			:key="`option-group--${group.label.toLowerCase().replace(/\s+/g, '-')}`"
 
@@ -53,11 +53,11 @@ export default {
 
 	props: {
 		options: {
-			type: Object,
+			type: [Object, Array],
 			required: true,
 		},
 		value: {
-			type: [Number, String],
+			type: [String, Number],
 			required: true,
 		},
 		isValueNumeric: {

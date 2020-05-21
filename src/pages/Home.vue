@@ -88,7 +88,7 @@ div.Home
 		FretboardSettings
 
 	VSelect(
-		:options="models"
+		:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
 		:value="'maj'"
 
 		@change="onChange"
@@ -121,10 +121,11 @@ div.Home
 <!--{{{ JavaScript -->
 <script>
 
-import { get }         from 'vuex-pathify'
-import { models }      from '@/modules/music'
+import { get }          from 'vuex-pathify'
+import { models }       from '@/modules/music'
+import { filterObject } from '@/modules/object'
 
-import FretboardViewer from '@/components/FretboardViewer'
+import FretboardViewer  from '@/components/FretboardViewer'
 
 //- import ScalesList            from '@/components/ScalesList'
 //- import FretboardSettings     from '@/components/FretboardSettings'
@@ -157,7 +158,8 @@ export default {
 	},
 
 	created() {
-		this.models = models;
+		this.scales    = filterObject(models, key => !key.startsWith('arp-'));
+		this.arpeggios = filterObject(models, key =>  key.startsWith('arp-'));
 	},
 
 	methods: {

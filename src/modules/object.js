@@ -25,6 +25,20 @@ export function mapObjectToArray(object, callback)
 }
 
 /**
+ * Create a new object that only has a subset of the properties of the original, with the same values
+ */
+export function filterObject(object, filter)
+{
+	return Object.keys(object).reduce(function(result, key)
+	{
+		if (filter(key, object[key]))
+			result[key] = object[key];
+
+		return result;
+	}, {});
+}
+
+/**
  * Check that a value is an actual object
  */
 export function isObject(value)
