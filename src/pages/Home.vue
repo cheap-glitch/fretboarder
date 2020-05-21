@@ -87,15 +87,10 @@ div.Home
 		)
 		FretboardSettings
 
-	VSelect(
-		:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
-		:value="'maj'"
-
-		@change="onChange"
-		)
-
 	div.fretboard-wrapper#fretboard-wrapper
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
+
+	FretboardSequences
 
 	//- component(
 		:is="isMobileDevice ? 'VModal' : 'div'"
@@ -121,20 +116,17 @@ div.Home
 <!--{{{ JavaScript -->
 <script>
 
-import { get }          from 'vuex-pathify'
-import { models }       from '@/modules/music'
-import { filterObject } from '@/modules/object'
+import { get }            from 'vuex-pathify'
 
-import FretboardViewer  from '@/components/FretboardViewer'
-
-//- import ScalesList            from '@/components/ScalesList'
-//- import FretboardSettings     from '@/components/FretboardSettings'
+import FretboardViewer    from '@/components/FretboardViewer'
+import FretboardSequences from '@/components/FretboardSequences'
 
 export default {
 	name: 'Home',
 
 	components: {
 		FretboardViewer,
+		FretboardSequences,
 	},
 
 	computed: {
@@ -156,19 +148,6 @@ export default {
 			'isLayoutLandscape',
 		]),
 	},
-
-	created() {
-		this.scales    = filterObject(models, key => !key.startsWith('arp-'));
-		this.arpeggios = filterObject(models, key =>  key.startsWith('arp-'));
-	},
-
-	methods: {
-		onChange(value)
-		{
-			console.log(value);
-		}
-	}
-
 }
 
 </script>

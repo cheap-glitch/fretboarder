@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-//- Create a mixin for the list of <option> tags
+//- List of <option> tags
 mixin options(optionsList)
 	option(
 		v-for=`option in ${optionsList}`
@@ -16,23 +16,34 @@ mixin options(optionsList)
 		:selected="option.value === value"
 	) {{ cleanLabel(option.label) }}
 
-select.VSelect(
-	@change="selectOption"
-	)
+div.VSelect
 
-	//- Grouped options
-	template(v-if="Array.isArray(options)")
-		optgroup(
-			v-for="group in optionGroups"
-			:key="`option-group--${group.label.toLowerCase().replace(/\s+/g, '-')}`"
+	//- Fake select bar
+	div.bar
+		//- Current value
+		p {{ selectedOptionLabel }}
 
-			:label="group.label"
-			)
-			+options("group.options")
+		//- Chevron
+		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
 
-	//- Simple options list
-	template(v-else)
-		+options("optionGroups[0].options")
+	//- Menu
+	select.select(
+		ref="select"
+		@change="selectOption"
+		)
+		//- Grouped options
+		template(v-if="Array.isArray(options)")
+			optgroup(
+				v-for="group in optionGroups"
+				:key="`option-group--${group.label.toLowerCase().replace(/\s+/g, '-')}`"
+
+				:label="group.label"
+				)
+				+options("group.options")
+
+		//- Simple options list
+		template(v-else)
+			+options("optionGroups[0].options")
 
 </template>
 <!--}}}-->
@@ -66,6 +77,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			selectedOptionLabel: '',
+		}
+	},
+
 	computed: {
 		optionGroups()
 		{
@@ -81,10 +98,20 @@ export default {
 		},
 	},
 
+	mounted()
+	{
+		this.updateSelectedOptionLabel();
+	},
+
 	methods: {
 		selectOption(event)
 		{
 			this.$emit('change', this.isValueNumeric ? Number.parseInt(event.target.value, 10) : event.target.value);
+			this.updateSelectedOptionLabel();
+		},
+		updateSelectedOptionLabel()
+		{
+			this.selectedOptionLabel = this.$refs.select.selectedOptions[0].label;
 		},
 		cleanLabel(label)
 		{
@@ -101,6 +128,34 @@ export default {
 <style lang="scss" scoped>
 
 .VSelect {
+	position: relative;
+
+	display: inline-block;
+}
+
+.bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
+
+	padding-bottom: 2px;
+
+	border-bottom: 1px solid var(--color--border);
+}
+
+.bar__chevron {
+	font-size: 1.2rem;
+	color: var(--color--text--secondary);
+}
+
+.select {
+	opacity: 0.0001;
 }
 
 </style>
