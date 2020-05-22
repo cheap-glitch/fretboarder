@@ -23,6 +23,7 @@ div.FretboardSequencesItem
 	VSelect(
 		:value="model"
 		:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
+		:label-formatter="(value, label) => `${label} ${value.startsWith('arp-') ? 'arp.' : 'scale'}`"
 
 		@change="v => update('model', v)"
 		)
@@ -34,12 +35,13 @@ div.FretboardSequencesItem
 	div.intervals: div.intervals__item(
 		v-for="interval in intervals"
 		:key="`sequence--${index}--interval--${interval.value}`"
+
+		v-mods="{ isSelected: highlightedInterval == interval.value }"
+		@click.left="update('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
 		)
-		//- v-mods="{ isSelected: highlightedInterval == interval.value }"
-		//- @click.left="update('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
 
 		p.interval__item__note {{ interval.note }}
-		p.interval__item__name(v-html="interval.shortName")
+		p.interval__item__name(v-html="interval.name")
 
 </template>
 <!--}}}-->
@@ -48,10 +50,9 @@ div.FretboardSequencesItem
 <!--{{{ JavaScript -->
 <script>
 
-import { MAX_NB_SEQUENCES }                    from '@/modules/constants'
-import { filterObject }                        from '@/modules/object'
-import { notes, notesNames, models }           from '@/modules/music'
-import { intervalsNames, intervalsShortNames } from '@/modules/music'
+import { MAX_NB_SEQUENCES }                               from '@/modules/constants'
+import { filterObject }                                   from '@/modules/object'
+import { notes, notesNames, models, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItem',
@@ -103,10 +104,9 @@ export default {
 		intervals()
 		{
 			return [0, ...models[this.model].intervals].map(interval => ({
-				value:     interval,
-				note:      notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
-				name:      intervalsNames[interval],
-				shortName: intervalsShortNames[interval],
+				value: interval,
+				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
+				name:  intervalsShortNames[interval],
 			}))
 		},
 	},
@@ -145,19 +145,11 @@ export default {
 }
 
 .intervals {
-	display: grid;
-
-	grid-gap: 10px;
-	grid-template-columns: repeat(auto-fill, 60px);
-	grid-auto-rows: 24px;
-	align-content: center;
-
-	flex: 1 1 100%;
 }
 
 .intervals__item {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 
 	@include pill;

@@ -30,8 +30,7 @@ module.exports = {
 
 			@use "sass-mq/_mq" as * with (
 				$mq-breakpoints: (
-					desktop:      layout.$mq-breakpoint-desktop,
-					scale-item-h: layout.$mq-breakpoint-scale-item-h,
+					desktop: layout.$mq-breakpoint-desktop,
 				)
 			);
 

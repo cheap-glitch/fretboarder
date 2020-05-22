@@ -50,14 +50,14 @@ export function getFrets(sequences, tuningNotes)
 			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
 
 			// Loop through the intervals and add the sequence index to the sequences list of their corresponding frets
-			[0, ...models[seq.model].intervals].forEach(function(interval, intervalIndex)
+			[0, ...models[seq.model].intervals].forEach(function(interval)
 			{
 				// Modify the current fret and the one 12 half-steps above/below it
 				[rootFret + interval, (rootFret + interval + 12) % MAX_NB_FRETS].forEach(function(fret)
 				{
 					frets[fret].sequences.push({ index: seq.index, interval });
 
-					if (intervalIndex === seq.highlightedInterval)
+					if (interval === seq.highlightedInterval)
 						frets[fret].isHighlighted = true;
 				});
 			});

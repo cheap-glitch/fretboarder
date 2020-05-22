@@ -87,9 +87,7 @@ div.Home
 		)
 		FretboardSettings
 
-	div.fretboard-wrapper#fretboard-wrapper
-		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
-
+	div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 	FretboardSequences
 
 	//- component(
@@ -157,9 +155,13 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.fretboard-wrapper {
-	@include mq($from: desktop)
-	{
+.Home {
+	@include space-children-v(60px);
+}
+
+@include mq($from: desktop)
+{
+	.fretboard-wrapper {
 		padding: 70px 0 40px 0;
 		overflow-x: auto;
 	}

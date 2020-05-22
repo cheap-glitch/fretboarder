@@ -45,6 +45,7 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSequences {
+	@include center-column;
 	@include space-children-v(20px);
 }
 
