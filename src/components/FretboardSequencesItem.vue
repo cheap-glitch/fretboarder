@@ -15,7 +15,7 @@ div.FretboardSequencesItem
 		@click.left="isOpen = !isOpen"
 		)
 		p {{ infos }}
-		fa-icon(:icon="['far', 'ellipsis-v']")
+		fa-icon(:icon="['far', isOpen ? 'minus' : 'ellipsis-v']")
 
 	transition(name="fade"): div.settings(
 		v-show="isOpen"
@@ -55,6 +55,56 @@ div.FretboardSequencesItem
 
 			p.interval__item__note {{ interval.note }}
 			p.interval__item__name(v-html="interval.name")
+
+		//----------------------------------------------------------------------
+		//- Tools
+		//----------------------------------------------------------------------
+		div.tools
+			//- Show/hide
+			VButton.tools__item(
+				:icon="isVisible ? 'eye' : 'eye-slash'"
+				is-flipped
+				:title="isVisible ? 'Hide' : 'Show'"
+
+				@click="update('isVisible', !isVisible)"
+				)
+			//- Focus
+			VButton.tools__item(
+				icon="bullseye"
+				title="Focus"
+
+				v-show="nbSequences > 1"
+				:is-active="isFocused"
+
+				@click="$store.commit('sequences/toggleFocus', index)"
+				)
+			//- Show intersections only
+			VButton.tools__item(
+				:icon="['fas', 'intersection']"
+				title="Intersect"
+
+				v-show="nbSequences > 1"
+				:is-active="isIntersected"
+
+				@click="update('isIntersected', !isIntersected)"
+				)
+
+			//- Duplicate
+			VButton.tools__item(
+				icon="copy"
+				title="Duplicate"
+
+				:is-disabled="nbSequences == MAX_NB_SEQUENCES"
+
+				@click="$store.commit('sequences/duplicate', index)"
+				)
+			//- Remove
+			VButton.tools__item(
+				icon="times-circle"
+				title="Delete"
+
+				@click="$store.commit('sequences/remove', index)"
+				)
 
 </template>
 <!--}}}-->
@@ -161,13 +211,6 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardSequencesItem {
-	//- display: flex;
-	//- align-items: flex-start;
-	//- @include space-children-h(20px);
-
-}
-
 .infos,
 .settings {
 	padding: 10px;
@@ -194,6 +237,8 @@ export default {
 }
 
 .settings {
+	@include space-children-v(40px);
+
 	border-top: none;
 
 	border-bottom-left-radius: 10px;
@@ -204,7 +249,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	@include space-children-h(10px);
+	@include space-children-v(10px);
 }
 
 .intervals {
@@ -213,8 +258,6 @@ export default {
 	grid-gap: 10px;
 	grid-auto-rows: auto;
 	grid-template-columns: repeat(auto-fill, 60px);
-
-	margin: 20px 0;
 }
 
 .intervals__item {
@@ -248,8 +291,17 @@ export default {
 
 	font-size: 1.2rem;
 
-	.intervals__item.is-selected             & { color: var(--color--text);      }
-	.intervals__item:not(.is-selected):hover & { color: var(--color--text);      }
+	.intervals__item.is-selected             & { color: var(--color--text); }
+	.intervals__item:not(.is-selected):hover & { color: var(--color--text); }
+}
+
+.tools {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tools__item {
+	margin: 0 10px 10px 0;
 }
 
 </style>

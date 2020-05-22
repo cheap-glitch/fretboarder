@@ -48,6 +48,7 @@ module.exports = {
 				'arrow-left':               'pro-regular',
 				'chevron-down':             'pro-regular',
 				'ellipsis-v':               'pro-regular',
+				'minus':                    'pro-regular',
 
 				// Logo
 				'banjo':                    'pro-regular',
@@ -62,7 +63,7 @@ module.exports = {
 				'heart':                    'pro-regular',
 				'external-link-square-alt': 'pro-regular',
 				'sun':                      'pro-solid',
-				'moon':                    ['pro-solid', 'pro-regular'],
+				'moon':                     'pro-solid',
 
 				// Tools & settings
 				'cog':                      'pro-solid',

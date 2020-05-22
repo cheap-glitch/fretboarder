@@ -61,9 +61,6 @@ export default {
 	methods: {
 		clickButton()
 		{
-			// Unfocus the button
-			this.$refs.button.blur();
-
 			if (!this.isDisabled)
 				this.$emit('click');
 		}
@@ -86,13 +83,18 @@ export default {
 
 	padding: 8px 10px;
 
-	border: none;
-	appearance: none;
+	border: 1px solid var(--color--bg--highlight);
+
 	background-color: var(--color--bg--highlight);
 
+	appearance: none;
 	cursor: pointer;
 
-	transition: background-color 200ms;
+	transition: border-color 200ms, background-color 200ms;
+
+	&:focus {
+		border-color: var(--color--hover);
+	}
 
 	&:not(.is-active):not(.is-disabled):hover {
 		color: white;
