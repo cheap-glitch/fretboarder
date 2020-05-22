@@ -47,40 +47,39 @@ module.exports = {
 				// General UI
 				'arrow-left':               'pro-regular',
 				'chevron-down':             'pro-regular',
-				'times-circle':             'pro-regular',
+				'ellipsis-v':               'pro-regular',
 
-				// Header
+				// Logo
 				'banjo':                    'pro-regular',
-				'bug':                      'pro-regular',
-				'external-link-square-alt': 'pro-regular',
-				'github':                   'free-brands',
 				'guitar':                   'pro-regular',
 				'guitar-electric':          'pro-regular',
-				'heart':                    'pro-regular',
 				'mandolin':                 'pro-regular',
-				'moon':                    ['pro-solid', 'pro-regular'],
-				'paper-plane':              'pro-regular',
-				'sun':                      'pro-solid',
+
+				// Header
 				'twitter':                  'free-brands',
+				'github':                   'free-brands',
+				'paper-plane':              'pro-regular',
+				'heart':                    'pro-regular',
+				'external-link-square-alt': 'pro-regular',
+				'sun':                      'pro-solid',
+				'moon':                    ['pro-solid', 'pro-regular'],
 
 				// Tools & settings
-				'file-download':            'pro-regular',
-				'hand-paper':               'pro-regular',
-				'info-circle':              'pro-regular',
-				'list-ol':                  'pro-light',
-
-				// Scales
-				'bullseye':                 'pro-regular',
-				'copy':                     'pro-regular',
-				'eye':                      'pro-regular',
-				'eye-slash':                'pro-regular',
-				'intersection':             'pro-solid',
-				'plus-circle':              'pro-regular',
-				'trash-alt':                'pro-regular',
-
-				// Mobile actions
 				'cog':                      'pro-solid',
 				'list-music':               'pro-solid',
+				'list-ol':                  'pro-light',
+				'info-circle':              'pro-regular',
+				'hand-paper':               'pro-regular',
+				'file-download':            'pro-regular',
+
+				// Scales
+				'eye':                      'pro-regular',
+				'eye-slash':                'pro-regular',
+				'bullseye':                 'pro-regular',
+				'intersection':             'pro-solid',
+				'copy':                     'pro-regular',
+				'times-circle':             'pro-regular',
+				'trash-alt':                'pro-regular',
 			}
 		},
 

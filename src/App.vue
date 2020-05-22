@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.App(:style="colorscheme"): router-view
+div.App(:style="colorscheme")#app: router-view
 
 </template>
 <!--}}}-->

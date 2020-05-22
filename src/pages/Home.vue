@@ -87,7 +87,7 @@ div.Home
 		)
 		FretboardSettings
 
-	div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
+	//- div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 	FretboardSequences
 
 	//- component(
