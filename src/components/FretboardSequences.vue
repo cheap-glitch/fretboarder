@@ -8,7 +8,7 @@
 
 div.FretboardSequences: FretboardSequencesItem(
 	v-for="seq in sequences"
-	:key="`sequence--${seq.index}--${seq.type}--${seq.model}--${seq.tonality}`"
+	:key="`sequence--${seq.index}`"
 
 	v-bind="seq"
 	:nb-sequences="sequences.length"
