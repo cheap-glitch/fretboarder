@@ -11,15 +11,16 @@ div.Home
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
-	//- header.header
-		div.header__nav
-			//- Logo
-			div.logo
-				fa-icon.logo__icon(
-					:icon="['far', instrumentIcon]"
-					v-mods="{ isUkulele: instrument == 'ukulele' }"
-					)
-				h1.logo__text Fretboarder
+	header.header
+		//- Logo
+		div.logo
+			fa-icon.logo__icon(
+				:icon="['far', instrumentIcon]"
+				v-mods="{ isUkulele: instrument == 'ukulele' }"
+				)
+			h1.logo__text Fretboarder
+
+		//- div.header__nav
 
 			//- Links
 			nav.nav
@@ -65,7 +66,7 @@ div.Home
 					fa-icon(:icon="['far', 'external-link-square-alt']")
 
 		//- Light/dark switch
-		div.dark-mode-toggle(
+		//- div.dark-mode-toggle(
 			v-mods="{ isDarkModeOn }"
 			@click="$store.commit('toggle.isDarkModeOn')"
 			)
@@ -103,7 +104,6 @@ export default {
 	},
 
 	computed: {
-		/*
 		instrumentIcon()
 		{
 			switch (this.instrument)
@@ -115,7 +115,6 @@ export default {
 				default:         return 'guitar';
 			}
 		},
-		*/
 		...get([
 			'isMobileDevice',
 			'isLayoutLandscape',
@@ -149,25 +148,21 @@ export default {
 	}
 }
 
-/*
 .header {
-	display: none;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
 
-	@include mq($from: desktop)
-	{
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-
-		padding-bottom: 60px;
-	}
+	padding-bottom: 60px;
 }
 
+/*
 .header__nav {
 	display: flex;
 	align-items: baseline;
 	@include space-children-h(20px);
 }
+*/
 
 .logo {
 	display: flex;
@@ -177,6 +172,8 @@ export default {
 	padding: 4px 6px;
 
 	border-radius: 6px;
+
+	font-size: 14px;
 
 	color: var(--color--bg);
 	background-color: var(--color--border);
@@ -201,6 +198,7 @@ export default {
 	transition: color 0.2s;
 }
 
+/*
 .nav {
 	display: flex;
 	@include space-children-h(20px);
