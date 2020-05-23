@@ -68,8 +68,8 @@ module.exports = {
 				'moon':                     'pro-solid',
 
 				// Tools & settings
-				'cog':                      'pro-solid',
-				'list-music':               'pro-solid',
+				'cog':                      'pro-regular',
+				'list-music':               'pro-regular',
 				'list-ol':                  'pro-light',
 				'info-circle':              'pro-regular',
 				'hand-paper':               'pro-regular',

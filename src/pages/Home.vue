@@ -11,6 +11,7 @@ div.Home
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
+
 	header.header
 		//- Logo
 		div.logo
@@ -19,6 +20,12 @@ div.Home
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
 				)
 			h1.logo__text Fretboarder
+
+		//- Sub-pages links
+		nav.sublinks(v-if="isMobileDevice")
+			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
+			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
+			div.sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
 
 		//- div.header__nav
 
@@ -77,9 +84,16 @@ div.Home
 	//----------------------------------------------------------------------
 	//- Page content
 	//----------------------------------------------------------------------
-	FretboardSettings(v-if="!isMobileDevice")
-	div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
-	FretboardSequences(v-if="!isMobileDevice")
+
+	//- Settings
+	transition(name="fade"): FretboardSettings(v-show="!isMobileDevice || subpage == 'settings'")
+
+	//- Fretboard
+	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
+		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
+
+	//- Scales & arpeggios
+	transition(name="fade"): FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
 
 </template>
 <!--}}}-->
@@ -103,6 +117,12 @@ export default {
 		FretboardSequences,
 	},
 
+	data() {
+		return {
+			subpage: 'fretboard',
+		}
+	},
+
 	computed: {
 		instrumentIcon()
 		{
@@ -115,10 +135,21 @@ export default {
 				default:         return 'guitar';
 			}
 		},
+
+		instrument: get('fretboard/instrument'),
+
 		...get([
 			'isMobileDevice',
 			'isLayoutLandscape',
 		]),
+	},
+
+	created()
+	{
+		this.feedbackMail = {
+			subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
+			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
+		};
 	},
 }
 
@@ -156,14 +187,6 @@ export default {
 	padding-bottom: 60px;
 }
 
-/*
-.header__nav {
-	display: flex;
-	align-items: baseline;
-	@include space-children-h(20px);
-}
-*/
-
 .logo {
 	display: flex;
 	align-items: center;
@@ -172,8 +195,6 @@ export default {
 	padding: 4px 6px;
 
 	border-radius: 6px;
-
-	font-size: 14px;
 
 	color: var(--color--bg);
 	background-color: var(--color--border);
@@ -184,21 +205,47 @@ export default {
 }
 
 .logo__icon {
-	font-size: 20px;
+	font-size: 18px;
 
 	&.is-ukulele {
-		font-size: 14px;
+		font-size: 12px;
 	}
 }
 
 .logo__text {
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: bold;
 
 	transition: color 0.2s;
 }
 
+.sublinks {
+	display: flex;
+}
+
+.sublinks__item {
+	@include center-content;
+	@include circle(42px);
+
+	font-size: 20px;
+
+	color: white;
+	background-color: var(--color--bg--tooltip);
+
+	cursor: pointer;
+
+	&:first-child {
+		margin-right: 10px;
+	}
+}
+
 /*
+.header__nav {
+	display: flex;
+	align-items: baseline;
+	@include space-children-h(20px);
+}
+
 .nav {
 	display: flex;
 	@include space-children-h(20px);

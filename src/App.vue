@@ -34,11 +34,6 @@ export default {
 
 	created()
 	{
-		//- this.feedbackMail = {
-		//- 	subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
-		//- 	body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
-		//- };
-
 		// Add a sequence if there is none at startup
 		if (this.$store.state.sequences.sequences.length == 0)
 			this.$store.commit('sequences/add');

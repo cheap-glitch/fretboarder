@@ -309,6 +309,7 @@ export default {
 
 .intervals__item__dot {
 	@include circle(10px);
+	flex: 0 0 auto;
 }
 
 </style>
