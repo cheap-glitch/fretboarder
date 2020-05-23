@@ -229,7 +229,7 @@ export default {
 	methods: {
 		clickOutsideHandler(event)
 		{
-			if (this.$refs.extraToolsButton && !this.$refs.extraToolsButton.$el.contains(event.target))
+			if (!this.$refs.extraToolsButton.$el.contains(event.target))
 				this.isExtraToolsMenuOpen = false;
 		},
 		update(prop, value)

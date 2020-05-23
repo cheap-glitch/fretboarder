@@ -78,6 +78,7 @@ div.Home
 	//- Page content
 	//----------------------------------------------------------------------
 
+	FretboardSettings
 	div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 	FretboardSequences
 
@@ -90,6 +91,7 @@ div.Home
 
 import { get }            from 'vuex-pathify'
 
+import FretboardSettings  from '@/components/FretboardSettings'
 import FretboardViewer    from '@/components/FretboardViewer'
 import FretboardSequences from '@/components/FretboardSequences'
 
@@ -97,6 +99,7 @@ export default {
 	name: 'Home',
 
 	components: {
+		FretboardSettings,
 		FretboardViewer,
 		FretboardSequences,
 	},
@@ -129,15 +132,13 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.Home {
-	@include space-children-v(60px);
-}
-
 @include mq($from: desktop)
 {
 	.fretboard-wrapper {
-		padding: 70px 0 40px 0;
 		overflow-x: auto;
+
+		margin-bottom: 60px;
+		padding: 70px 0 40px 0;
 	}
 }
 
