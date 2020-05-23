@@ -45,7 +45,7 @@ div.FretboardSequencesItem
 		//----------------------------------------------------------------------
 		//- Intervals
 		//----------------------------------------------------------------------
-		div.intervals: div.intervals__item(
+		div.intervals: button.intervals__item(
 			v-for="interval in intervals"
 			:key="`sequence--${index}--interval--${interval.value}`"
 
@@ -278,9 +278,17 @@ export default {
 	border: 1px solid var(--color--border);
 
 	cursor: pointer;
+	appearance: none;
+	background-color: transparent;
+
+	transition: color 200ms, border-color 200ms, background-color 200ms;
 
 	&.is-selected, &:hover {
 		background-color: var(--color--bg--highlight);
+	}
+
+	&:focus {
+		border-color: var(--color--hover);
 	}
 }
 
