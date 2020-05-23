@@ -28,6 +28,11 @@ div.FretboardSequencesItem
 		//- Properties
 		//----------------------------------------------------------------------
 		div.properties
+			div.dot(
+				v-if="!isMobileDevice"
+				:style="{ 'background-color': color }"
+				)
+
 			//- Tonality
 			VSelect.properties__item(
 				:value="tonality"
@@ -217,10 +222,9 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.infos,
-.settings {
-	border-width: 2px;
-	border-style: solid;
+.dot {
+	@include circle(10px);
+	flex: 0 0 auto;
 }
 
 .infos {
@@ -229,7 +233,10 @@ export default {
 
 	padding: 10px;
 
+	border-width: 2px;
+	border-style: solid;
 	border-radius: 10px;
+
 	border-bottom: none;
 
 	color: white;
@@ -243,15 +250,18 @@ export default {
 }
 
 .settings {
-	padding: 20px 20px 10px 20px;
-
 	@include mq($until: desktop)
 	{
 		@include space-children-v(30px);
 
-		border-top: none;
+		padding: 20px 20px 10px 20px;
+
+		border-width: 2px;
+		border-style: solid;
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
+
+		border-top: none;
 	}
 
 	@include mq($from: desktop)
@@ -272,12 +282,16 @@ export default {
 	@include mq($from: desktop)
 	{
 		flex: 0 0 auto;
+		align-items: center;
 		justify-content: flex-end;
 	}
 }
 
 .properties__item {
-	margin-bottom: 10px;
+	@include mq($until: desktop)
+	{
+		margin-bottom: 10px;
+	}
 }
 
 .intervals {

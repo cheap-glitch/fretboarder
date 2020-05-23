@@ -114,6 +114,13 @@ export default {
 	&:focus {
 		border-color: var(--color--hover);
 	}
+
+	@include mq($from: desktop)
+	{
+		padding: 4px 8px;
+
+		font-size: 1.4rem;
+	}
 }
 
 .icon,

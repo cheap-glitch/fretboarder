@@ -46,6 +46,11 @@ export default {
 
 .FretboardSequences {
 	@include space-children-v(20px);
+
+	@include mq($from: desktop)
+	{
+		@include space-children-v(40px);
+	}
 }
 
 </style>

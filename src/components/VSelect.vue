@@ -17,7 +17,6 @@ mixin options(optionsList)
 	) {{ option.label }}
 
 div.VSelect
-
 	//- Menu
 	select.select(
 		ref="select"
