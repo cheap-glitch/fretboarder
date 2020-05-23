@@ -20,6 +20,8 @@ div.VSelect
 	//- Menu
 	select.select(
 		ref="select"
+		:value="value"
+
 		@change="selectOption"
 		)
 		//- Grouped options
@@ -50,6 +52,8 @@ div.VSelect
 
 <!--{{{ JavaScript -->
 <script>
+
+import Vue from 'vue'
 
 export default {
 	name: 'VSelect',
@@ -84,6 +88,10 @@ export default {
 		}
 	},
 
+	watch: {
+		value: 'updateSelectedOptionLabel',
+	},
+
 	mounted()
 	{
 		this.updateSelectedOptionLabel();
@@ -97,7 +105,9 @@ export default {
 		},
 		updateSelectedOptionLabel()
 		{
-			this.selectedOptionLabel = this.labelFormatter(this.value, this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>'));
+			Vue.nextTick(() => {
+				this.selectedOptionLabel = this.labelFormatter(this.value, this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>'));
+			});
 		},
 	}
 }
