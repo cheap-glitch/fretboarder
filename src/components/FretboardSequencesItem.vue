@@ -65,14 +65,14 @@ div.FretboardSequencesItem
 				)
 
 			//- Tonality
-			VSelect.properties__item(
+			VSelect(
 				:value="tonality"
 				:options="tonalities"
 
 				@change="v => update('tonality', v)"
 				)
 			//- Model
-			VSelect.properties__item(
+			VSelect(
 				:value="model"
 				:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
 				:label-formatter="(value, label) => `${label} ${value.startsWith('arp-') ? 'arp.' : 'scale'}`"
@@ -273,7 +273,7 @@ export default {
 
 	transition: border-radius 200ms;
 
-	&.is-open {
+	&.is-settings-panel-open {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
 	}
@@ -309,18 +309,16 @@ export default {
 	flex-wrap: wrap;
 	@include space-children-h(10px);
 
+	@include mq($until: desktop)
+	{
+		.VSelect { margin-bottom: 10px; }
+	}
+
 	@include mq($from: desktop)
 	{
 		flex: 0 0 auto;
 		align-items: center;
 		justify-content: flex-end;
-	}
-}
-
-.properties__item {
-	@include mq($until: desktop)
-	{
-		margin-bottom: 10px;
 	}
 }
 
