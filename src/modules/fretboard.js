@@ -70,6 +70,13 @@ export function getFrets(sequences, tuningNotes)
 			// if (positions[index] !== null && )
 		});
 
+		// Deactivate frets with only intersected sequences
+		frets.forEach(function(fret)
+		{
+			if (fret.sequences.every(seq => sequences[seq.index].isIntersected))
+				fret.sequences = [];
+		});
+
 		return frets;
 	});
 }

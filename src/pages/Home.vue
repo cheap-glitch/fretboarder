@@ -78,34 +78,8 @@ div.Home
 	//- Page content
 	//----------------------------------------------------------------------
 
-	//- component(
-		:is="isMobileDevice ? 'VModal' : 'div'"
-		modal-title="Settings"
-		:is-open="isModalSettingsOpen"
-
-		@close="isModalSettingsOpen = false"
-		)
-		FretboardSettings
-
 	div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 	FretboardSequences
-
-	//- component(
-		:is="isMobileDevice ? 'VModal' : 'div'"
-		modal-title="Scales"
-		:is-open="isModalScalesOpen"
-
-		@close="isModalScalesOpen = false"
-		)
-		ScalesList
-
-	//----------------------------------------------------------------------
-	//- Mobile actions
-	//----------------------------------------------------------------------
-
-	//- div.mobile-actions
-		div.mobile-actions__item(@click.left="isModalScalesOpen   = true"): fa-icon(icon="list-music")
-		div.mobile-actions__item(@click.left="isModalSettingsOpen = true"): fa-icon(icon="cog")
 
 </template>
 <!--}}}-->
@@ -310,57 +284,6 @@ export default {
 		.dark-mode-toggle.is-dark-mode-on & {
 			transform: translateX(8px);
 		}
-	}
-}
-*/
-
-/**
- * Mobile actions
- * -----------------------------------------------------------------------------
- */
-
-/*
-.mobile-actions {
-	position: fixed;
-	z-index: 100;
-	bottom: 10px;
-	right: 10px;
-
-	@media (orientation: portrait)
-	{
-		@include space-children-v(10px);
-	}
-
-	@media (orientation: landscape)
-	{
-		display: flex;
-		@include space-children-h(10px);
-	}
-
-	@include mq($from: desktop)
-	{
-		display: none;
-	}
-}
-
-.mobile-actions__item {
-	@include center-content;
-	@include circle(48px);
-
-	font-size: 22px;
-
-	color: white;
-	filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5)) brightness(1);
-
-	cursor: pointer;
-
-	transition: filter 0.2s;
-
-	&:nth-child(1) { background-color: var(--color--hover);       }
-	&:nth-child(2) { background-color: var(--color--bg--tooltip); }
-
-	&:hover {
-		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) brightness(1.2);
 	}
 }
 */
