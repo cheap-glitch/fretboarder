@@ -10,7 +10,7 @@ div.FretboardSequences
 	div.tools
 		//- Add a new sequence
 		VButton(
-			v-show="sequences.length < MAX_NB_SEQUENCES"
+			v-show="!isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
 
 			icon="plus"
 			title="Add new scale/arpeggio"
@@ -37,7 +37,10 @@ div.FretboardSequences
 			@click="$store.commit('sequences/removeAll')"
 		)
 
-	FretboardSequencesItem(
+	//- Text to display when there are no sequences
+	p.text-no-scales(v-show="sequences.length == 0") Add a new scale or arpeggio to see it displayed on the fretboard.
+
+	div.sequences: FretboardSequencesItem(
 		v-for="seq of sequences"
 		:key="`sequence--${seq.index}`"
 
@@ -45,8 +48,15 @@ div.FretboardSequences
 		:nb-sequences="sequences.length"
 		)
 
-	//- Text to display when there are no sequences
-	p.text-no-scales(v-show="sequences.length == 0") Add a new scale or arpeggio to see it displayed on the fretboard.
+	//- "New scale" button for mobile
+	VButton.add-button-mobile(
+		v-show="isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
+
+		icon="plus"
+		title="Add new scale/arpeggio"
+
+		@click="$store.commit('sequences/add')"
+		)
 
 </template>
 <!--}}}-->
@@ -68,7 +78,8 @@ export default {
 	},
 
 	computed: {
-		sequences: get('sequences/sequences'),
+		sequences:      get('sequences/sequences'),
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	created()
@@ -85,14 +96,21 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSequences {
+	@include space-children-v(40px);
+
+	@include mq($from: desktop)
+	{
+		max-width: 1300px;
+		margin: auto;
+	}
+}
+
+.sequences {
 	@include space-children-v(20px);
 
 	@include mq($from: desktop)
 	{
 		@include space-children-v(40px);
-
-		max-width: 1300px;
-		margin: auto;
 	}
 }
 
@@ -104,6 +122,10 @@ export default {
 
 .text-no-scales {
 	text-align: center;
+}
+
+.add-button-mobile {
+	margin: auto;
 }
 
 </style>
