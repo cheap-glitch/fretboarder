@@ -16,11 +16,11 @@ div.FretboardViewerFret
 		)
 		div.intervals
 			div.intervals__item(
-				v-for="interval in intervals"
+				v-for="interval of intervals"
 				:key="`interval--${string + 1}--${number}--${interval.value}`"
 				)
 				div.intervals__item__dot(
-					v-for="seq in interval.sequences"
+					v-for="seq of interval.sequences"
 					:key="`dot--${seq}`"
 
 					:style="{ 'background-color': colors[seq] }"

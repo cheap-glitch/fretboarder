@@ -74,13 +74,14 @@ module.exports = {
 				'file-download':            'pro-regular',
 
 				// Scales
+				'plus':                     'pro-regular',
+				'trash-alt':                'pro-regular',
 				'eye':                      'pro-regular',
 				'eye-slash':                'pro-regular',
 				'bullseye':                 'pro-regular',
 				'intersection':             'pro-solid',
 				'copy':                     'pro-regular',
 				'times-circle':             'pro-regular',
-				'trash-alt':                'pro-regular',
 			}
 		},
 

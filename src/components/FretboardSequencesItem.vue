@@ -53,7 +53,7 @@ div.FretboardSequencesItem
 		//- Intervals
 		//----------------------------------------------------------------------
 		div.intervals: button.intervals__item(
-			v-for="interval in intervals"
+			v-for="interval of intervals"
 			:key="`sequence--${index}--interval--${interval.value}`"
 
 			v-mods="{ isSelected: highlightedInterval == interval.value }"
@@ -108,7 +108,7 @@ div.FretboardSequencesItem
 			//- Remove
 			VButton.tools__item(
 				icon="times-circle"
-				title="Delete"
+				title="Remove"
 
 				@click="$store.commit('sequences/remove', index)"
 				)
@@ -221,14 +221,6 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
-
-.FretboardSequencesItem {
-	@include mq($from: desktop)
-	{
-		max-width: 1400px;
-		margin: auto;
-	}
-}
 
 .dot {
 	@include circle(10px);

@@ -13,7 +13,7 @@ div.FretboardViewer(
 
 	//- Frets
 	FretboardViewerFret(
-		v-for="fret in displayedFrets"
+		v-for="fret of displayedFrets"
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 
 		v-bind="fret"
@@ -29,7 +29,7 @@ div.FretboardViewer(
 
 	//- Strings
 	div.string(
-		v-for="(string, index) in strings"
+		v-for="(string, index) of strings"
 		:key="`string--${index + 1}`"
 
 		:style="string"
@@ -38,7 +38,7 @@ div.FretboardViewer(
 	//- Fret numbers
 	template(v-if="isShowingFretNbs")
 		div.fret-number(
-			v-for="(fret, index) in fretNumbers"
+			v-for="(fret, index) of fretNumbers"
 			:key="`fret-number--${index}`"
 
 			:style="isVertical ? { 'grid-area': `${index + 1} / 1 / span 1 / span 1` } : {}"

@@ -6,15 +6,15 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-//- List of <option> tags
-mixin options(optionsList)
+//- Generate a list of <option> tags
+mixin options(options)
 	option(
-		v-for=`option in ${optionsList}`
-		:key="`option--${option.value}`"
+		v-for=`(optionLabel, optionValue) of ${options}`
+		:key="`option--${optionValue}`"
 
-		:value="option.value"
-		:selected="option.value === value"
-	) {{ option.label }}
+		:value="optionValue"
+		:selected="optionValue === value"
+	) {{ optionLabel.name || optionLabel }}
 
 div.VSelect
 	//- Menu
@@ -25,16 +25,16 @@ div.VSelect
 		//- Grouped options
 		template(v-if="Array.isArray(options)")
 			optgroup(
-				v-for="group in optionGroups"
-				:key="`option-group--${group.label.toLowerCase().replace(/\s+/g, '-')}`"
+				v-for="optionGroup of options"
+				:key="`option-group--${optionGroup.label.toLowerCase().replace(/\s+/g, '-')}`"
 
-				:label="group.label"
+				:label="optionGroup.label"
 				)
-				+options("group.options")
+				+options("optionGroup.options")
 
 		//- Simple options list
 		template(v-else)
-			+options("optionGroups[0].options")
+			+options("options")
 
 	//- Fake select bar
 	div.bar
@@ -50,8 +50,6 @@ div.VSelect
 
 <!--{{{ JavaScript -->
 <script>
-
-import { isObject, mapObjectToArray } from '@/modules/object'
 
 export default {
 	name: 'VSelect',
@@ -84,21 +82,6 @@ export default {
 		return {
 			selectedOptionLabel: '',
 		}
-	},
-
-	computed: {
-		optionGroups()
-		{
-			return (
-				// Always wrap options in an option group
-				Array.isArray(this.options) ? this.options : [{ label: 'default', options: this.options }]
-			)
-			// Turn the options object into an options list
-			.map(group => ({
-				label:   group.label,
-				options: mapObjectToArray(group.options, (key, value) => ({ value: key, label: isObject(value) ? value.name : value })),
-			}));
-		},
 	},
 
 	mounted()
