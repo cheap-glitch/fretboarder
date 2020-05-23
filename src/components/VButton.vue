@@ -92,10 +92,6 @@ export default {
 
 	transition: border-color 200ms, background-color 200ms;
 
-	&:focus {
-		border-color: var(--color--hover);
-	}
-
 	&:not(.is-active):not(.is-disabled):hover {
 		color: white;
 		border-color: var(--color--hover);
@@ -113,6 +109,10 @@ export default {
 		color: white;
 		border-color: var(--color--highlight);
 		background-color: var(--color--highlight);
+	}
+
+	&:focus {
+		border-color: var(--color--hover);
 	}
 }
 

@@ -9,6 +9,8 @@
 div.FretboardSequencesItem
 
 	div.infos(
+		v-if="isMobileDevice"
+
 		:style="{ 'border-color': color, 'background-color': color }"
 		v-mods="{ isOpen }"
 
@@ -18,7 +20,7 @@ div.FretboardSequencesItem
 		fa-icon(:icon="['far', isOpen ? 'minus' : 'ellipsis-v']")
 
 	transition(name="fade"): div.settings(
-		v-show="isOpen"
+		v-show="isOpen || !isMobileDevice"
 		:style="{ 'border-color': color }"
 		)
 
@@ -106,12 +108,15 @@ div.FretboardSequencesItem
 				@click="$store.commit('sequences/remove', index)"
 				)
 
+
 </template>
 <!--}}}-->
 
 
 <!--{{{ JavaScript -->
 <script>
+
+import { get }                                            from 'vuex-pathify'
 
 import { MAX_NB_SEQUENCES }                               from '@/modules/constants'
 import { filterObject }                                   from '@/modules/object'
@@ -182,6 +187,7 @@ export default {
 				name:  intervalsShortNames[interval],
 			}))
 		},
+		isMobileDevice: get('isMobileDevice'),
 	},
 
 	created()
@@ -239,10 +245,23 @@ export default {
 .settings {
 	padding: 20px 20px 10px 20px;
 
-	border-top: none;
+	@include mq($until: desktop)
+	{
+		@include space-children-v(30px);
 
-	border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 10px;
+		border-top: none;
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		align-items: flex-start;
+		@include space-children-h(20px);
+
+		border-radius: 10px;
+	}
 }
 
 .properties {
@@ -250,7 +269,11 @@ export default {
 	flex-wrap: wrap;
 	@include space-children-h(10px);
 
-	margin-bottom: 30px;
+	@include mq($from: desktop)
+	{
+		flex: 0 0 auto;
+		justify-content: flex-end;
+	}
 }
 
 .properties__item {
@@ -264,7 +287,15 @@ export default {
 	grid-auto-rows: auto;
 	grid-template-columns: repeat(auto-fill, 60px);
 
-	margin-bottom: 40px;
+	@include mq($until: desktop)
+	{
+		&.intervals { margin-bottom: 40px; }
+	}
+
+	@include mq($from: desktop)
+	{
+		flex: 1 1 100%;
+	}
 }
 
 .intervals__item {
@@ -312,11 +343,23 @@ export default {
 
 .tools {
 	display: flex;
-	flex-wrap: wrap;
+
+	@include mq($until: desktop)
+	{
+		flex-wrap: wrap;
+	}
+
+	@include mq($from: desktop)
+	{
+		@include space-children-h(10px);
+	}
 }
 
 .tools__item {
-	margin: 0 10px 10px 0;
+	@include mq($until: desktop)
+	{
+		margin: 0 10px 10px 0;
+	}
 }
 
 </style>
