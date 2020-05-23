@@ -27,14 +27,14 @@ div.FretboardSequencesItem
 		//----------------------------------------------------------------------
 		div.properties
 			//- Tonality
-			VSelect(
+			VSelect.properties__item(
 				:value="tonality"
 				:options="tonalities"
 
 				@change="v => update('tonality', v)"
 				)
 			//- Model
-			VSelect(
+			VSelect.properties__item(
 				:value="model"
 				:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
 				:label-formatter="(value, label) => `${label} ${value.startsWith('arp-') ? 'arp.' : 'scale'}`"
@@ -213,8 +213,6 @@ export default {
 
 .infos,
 .settings {
-	padding: 10px;
-
 	border-width: 2px;
 	border-style: solid;
 }
@@ -222,6 +220,8 @@ export default {
 .infos {
 	display: flex;
 	justify-content: space-between;
+
+	padding: 10px;
 
 	border-radius: 10px;
 	border-bottom: none;
@@ -237,7 +237,7 @@ export default {
 }
 
 .settings {
-	@include space-children-v(40px);
+	padding: 20px 20px 10px 20px;
 
 	border-top: none;
 
@@ -247,9 +247,14 @@ export default {
 
 .properties {
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	@include space-children-v(10px);
+	flex-wrap: wrap;
+	@include space-children-h(10px);
+
+	margin-bottom: 30px;
+}
+
+.properties__item {
+	margin-bottom: 10px;
 }
 
 .intervals {
@@ -258,6 +263,8 @@ export default {
 	grid-gap: 10px;
 	grid-auto-rows: auto;
 	grid-template-columns: repeat(auto-fill, 60px);
+
+	margin-bottom: 40px;
 }
 
 .intervals__item {

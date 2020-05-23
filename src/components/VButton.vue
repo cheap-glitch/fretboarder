@@ -98,16 +98,20 @@ export default {
 
 	&:not(.is-active):not(.is-disabled):hover {
 		color: white;
+		border-color: var(--color--hover);
 		background-color: var(--color--hover);
 	}
 
 	&.is-disabled {
+		border-color: var(--color--border);
 		background-color: var(--color--border);
+
 		cursor: not-allowed;
 	}
 
 	&.is-active {
 		color: white;
+		border-color: var(--color--highlight);
 		background-color: var(--color--highlight);
 	}
 }

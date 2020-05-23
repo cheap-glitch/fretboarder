@@ -18,14 +18,6 @@ mixin options(optionsList)
 
 div.VSelect
 
-	//- Fake select bar
-	div.bar
-		//- Current value
-		p(v-html="selectedOptionLabel")
-
-		//- Chevron
-		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
-
 	//- Menu
 	select.select(
 		ref="select"
@@ -44,6 +36,14 @@ div.VSelect
 		//- Simple options list
 		template(v-else)
 			+options("optionGroups[0].options")
+
+	//- Fake select bar
+	div.bar
+		//- Current value
+		p(v-html="selectedOptionLabel")
+
+		//- Chevron
+		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
 
 </template>
 <!--}}}-->
@@ -133,29 +133,46 @@ export default {
 	display: inline-block;
 }
 
+.select {
+	position: relative;
+	z-index: 2;
+
+	opacity: 0.0001;
+}
+
 .bar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 
 	position: absolute;
+	z-index: 1;
 	top: 50%;
 	left: 0;
 	right: 0;
 	transform: translateY(-50%);
 
-	padding-bottom: 2px;
+	padding: 8px 10px;
 
-	border-bottom: 1px solid var(--color--border);
+	border: 1px solid var(--color--border);
+	border-radius: 4px;
+
+	.select:hover:not(:focus) + & {
+		background-color: var(--color--bg--highlight);
+	}
+
+	.select:focus + & {
+		border-color: var(--color--hover);
+	}
 }
 
 .bar__chevron {
 	font-size: 1.2rem;
 	color: var(--color--text--secondary);
-}
 
-.select {
-	opacity: 0.0001;
+	.select:focus + .bar & {
+		color: var(--color--hover);
+	}
 }
 
 </style>

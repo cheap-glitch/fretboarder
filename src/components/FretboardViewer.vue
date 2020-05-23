@@ -232,12 +232,12 @@ export default {
 	display: grid;
 	position: relative;
 
-	&.is-showing-fret-nbs {
-		@include mq($until: desktop, $and: '(orientation: portrait)')
-		{
-			transform: translateX(layout.$fret-number-wrapper-size / -2);
-		}
+	/*
+	@include mq($until: desktop, $and: '(orientation: portrait)')
+	{
+		&.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
 	}
+	*/
 }
 
 .string {
