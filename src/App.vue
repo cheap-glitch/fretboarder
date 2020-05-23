@@ -45,26 +45,17 @@ export default {
 	mounted()
 	{
 		// Listen to any changes on the device type and layout orientation
-		mediaQueries.isMobileDevice.addListener(this.updateDeviceType);
-		mediaQueries.isLayoutLandscape.addListener(this.updateLayoutOrientation);
+		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].addListener(this[mq]));
 	},
 
 	destroyed()
 	{
 		// Clear event listeners
-		mediaQueries.isMobileDevice.removeListener(this.updateDeviceType);
-		mediaQueries.isLayoutLandscape.removeListener(this.updateLayoutOrientation);
+		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[mq]));
 	},
 
 	methods: {
-		updateDeviceType(event)
-		{
-			this.$store.commit('isMobileDevice', event.matches);
-		},
-		updateLayoutOrientation(event)
-		{
-			this.$store.commit('isLayoutLandscape', event.matches);
-		},
+		...mapObjectToObject(mediaQueries, mq => (function(event) { this.$store.commit(mq, event.matches); })),
 	},
 }
 

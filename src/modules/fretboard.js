@@ -55,7 +55,7 @@ export function getFrets(sequences, tuningNotes)
 				// Modify the current fret and the one 12 half-steps above/below it
 				[rootFret + interval, (rootFret + interval + 12) % MAX_NB_FRETS].forEach(function(fret)
 				{
-					frets[fret].sequences.push({ index: seq.index, interval });
+					frets[fret].sequences.push({ index: seq.index, interval, isIntersected: seq.isIntersected });
 
 					if (interval === seq.highlightedInterval)
 						frets[fret].isHighlighted = true;
@@ -73,7 +73,7 @@ export function getFrets(sequences, tuningNotes)
 		// Deactivate frets with only intersected sequences
 		frets.forEach(function(fret)
 		{
-			if (fret.sequences.every(seq => sequences[seq.index].isIntersected))
+			if (fret.sequences.every(seq => seq.isIntersected))
 				fret.sequences = [];
 		});
 

@@ -3,21 +3,23 @@
  * stores/main.js
  */
 
-import Vue                 from 'vue'
-import Vuex                from 'vuex'
-import { make }            from 'vuex-pathify'
-import { getVuexState }    from '@/modules/vuex-plugin-save-state'
-import { saveStatePlugin } from '@/modules/vuex-plugin-save-state'
+import Vue                   from 'vue'
+import Vuex                  from 'vuex'
+import { make }              from 'vuex-pathify'
+import { getVuexState }      from '@/modules/vuex-plugin-save-state'
+import { saveStatePlugin }   from '@/modules/vuex-plugin-save-state'
 
-import pathify             from '@/modules/pathify'
-import { makeTogglers }    from '@/modules/pathify'
+import pathify               from '@/modules/pathify'
+import { makeTogglers }      from '@/modules/pathify'
+import { mapObjectToObject } from '@/modules/object'
 
-import { layout }          from '@/modules/layout'
-import sequences           from '@/stores/sequences'
-import fretboard           from '@/stores/fretboard'
+import { layout }            from '@/modules/layout'
+import sequences             from '@/stores/sequences'
+import fretboard             from '@/stores/fretboard'
 
 export const mediaQueries = {
 	isMobileDevice:    window.matchMedia(`(max-width:   ${layout.mqBreakpointDesktop.em})`),
+	isWideScreen:      window.matchMedia(`(min-width:   ${layout.mqBreakpointWide.em})`),
 	isLayoutLandscape: window.matchMedia('(orientation: landscape)'),
 }
 
@@ -29,14 +31,10 @@ const model = {
 		default: window.matchMedia('(prefers-color-scheme: dark)').matches,
 		validator: v => typeof v == 'boolean',
 	},
-	isMobileDevice: {
+	...mapObjectToObject(mediaQueries, mq => ({
 		saved: false,
-		default: mediaQueries.isMobileDevice.matches,
-	},
-	isLayoutLandscape: {
-		saved: false,
-		default: mediaQueries.isLayoutLandscape.matches,
-	},
+		default: mq.matches,
+	})),
 };
 const state = getVuexState(model);
 

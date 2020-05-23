@@ -31,6 +31,7 @@ module.exports = {
 			@use "sass-mq/_mq" as * with (
 				$mq-breakpoints: (
 					desktop: layout.$mq-breakpoint-desktop,
+					wide:    layout.$mq-breakpoint-wide,
 				)
 			);
 
@@ -47,6 +48,7 @@ module.exports = {
 				// General UI
 				'arrow-left':               'pro-regular',
 				'chevron-down':             'pro-regular',
+				'ellipsis-h':               'pro-regular',
 				'ellipsis-v':               'pro-regular',
 				'minus':                    'pro-regular',
 

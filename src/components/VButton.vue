@@ -33,13 +33,6 @@ export default {
 			type: [Array, String],
 			required: true,
 		},
-		/*
-		size: {
-			type: String,
-			default: 'normal',
-			validator: v => ['normal', 'big'].includes(v)
-		},
-		*/
 		title: {
 			type: String,
 			default: '',

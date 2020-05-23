@@ -6,21 +6,52 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
+mixin extra-tools
+	//- Focus
+	VButton.tools__item(
+		icon="bullseye"
+		title="Focus"
+
+		v-show="nbSequences > 1"
+		:is-active="isFocused"
+
+		@click="$store.commit('sequences/toggleFocus', index)"
+		)
+	//- Show intersections only
+	VButton.tools__item(
+		:icon="['fas', 'intersection']"
+		title="Intersect"
+
+		v-show="nbSequences > 1"
+		:is-active="isIntersected"
+
+		@click="update('isIntersected', !isIntersected)"
+		)
+	//- Duplicate
+	VButton.tools__item(
+		icon="copy"
+		title="Duplicate"
+
+		:is-disabled="nbSequences == MAX_NB_SEQUENCES"
+
+		@click="$store.commit('sequences/duplicate', index)"
+		)
+
 div.FretboardSequencesItem
 
 	div.infos(
 		v-if="isMobileDevice"
 
 		:style="{ 'border-color': color, 'background-color': color }"
-		v-mods="{ isOpen }"
+		v-mods="{ isSettingsPanelOpen }"
 
-		@click.left="isOpen = !isOpen"
+		@click.left="isSettingsPanelOpen = !isSettingsPanelOpen"
 		)
 		p {{ infos }}
-		fa-icon(:icon="['far', isOpen ? 'minus' : 'ellipsis-v']")
+		fa-icon(:icon="['far', isSettingsPanelOpen ? 'minus' : 'ellipsis-v']")
 
 	transition(name="fade"): div.settings(
-		v-show="isOpen || !isMobileDevice"
+		v-show="isSettingsPanelOpen || !isMobileDevice"
 		:style="{ 'border-color': color }"
 		)
 
@@ -67,7 +98,7 @@ div.FretboardSequencesItem
 		//- Tools
 		//----------------------------------------------------------------------
 		div.tools
-			//- Show/hide
+			//- Show/Hide
 			VButton.tools__item(
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				is-flipped
@@ -75,36 +106,24 @@ div.FretboardSequencesItem
 
 				@click="update('isVisible', !isVisible)"
 				)
-			//- Focus
-			VButton.tools__item(
-				icon="bullseye"
-				title="Focus"
+			//- Extra tools
+			template(v-if="isMobileDevice || isWideScreen")
+				+extra-tools
+			template(v-else)
+				VButton(
+					ref="extraToolsButton"
+					icon="ellipsis-h"
 
-				v-show="nbSequences > 1"
-				:is-active="isFocused"
+					@click="isExtraToolsMenuOpen = !isExtraToolsMenuOpen"
+					)
+				VTooltip.tools__extra(
+					:target="($refs.extraToolsButton && $refs.extraToolsButton.$el) || false"
+					placement="bottom"
 
-				@click="$store.commit('sequences/toggleFocus', index)"
-				)
-			//- Show intersections only
-			VButton.tools__item(
-				:icon="['fas', 'intersection']"
-				title="Intersect"
-
-				v-show="nbSequences > 1"
-				:is-active="isIntersected"
-
-				@click="update('isIntersected', !isIntersected)"
-				)
-
-			//- Duplicate
-			VButton.tools__item(
-				icon="copy"
-				title="Duplicate"
-
-				:is-disabled="nbSequences == MAX_NB_SEQUENCES"
-
-				@click="$store.commit('sequences/duplicate', index)"
-				)
+					:is-open="isExtraToolsMenuOpen"
+					v-click-outside="clickOutsideHandler"
+					)
+					+extra-tools
 			//- Remove
 			VButton.tools__item(
 				icon="times-circle"
@@ -112,7 +131,6 @@ div.FretboardSequencesItem
 
 				@click="$store.commit('sequences/remove', index)"
 				)
-
 
 </template>
 <!--}}}-->
@@ -175,7 +193,8 @@ export default {
 
 	data() {
 		return {
-			isOpen: false,
+			isSettingsPanelOpen:  false,
+			isExtraToolsMenuOpen: false,
 		}
 	},
 
@@ -192,7 +211,10 @@ export default {
 				name:  intervalsShortNames[interval],
 			}))
 		},
-		isMobileDevice: get('isMobileDevice'),
+		...get([
+			'isMobileDevice',
+			'isWideScreen',
+		]),
 	},
 
 	created()
@@ -204,6 +226,11 @@ export default {
 	},
 
 	methods: {
+		clickOutsideHandler(event)
+		{
+			if (this.$refs.extraToolsButton && !this.$refs.extraToolsButton.$el.contains(event.target))
+				this.isExtraToolsMenuOpen = false;
+		},
 		update(prop, value)
 		{
 			// Reset the highlighted interval when the model of the sequence is changed
@@ -372,6 +399,10 @@ export default {
 	{
 		@include space-children-h(10px);
 	}
+}
+
+.tools__extra {
+	@include space-children-v(10px);
 }
 
 .tools__item {
