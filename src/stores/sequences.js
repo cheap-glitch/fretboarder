@@ -78,7 +78,7 @@ function addSequence(state, params = {})
 
 	state.sequences.push({
 		// Merge the provided parameters with the defaults
-		model:               'maj',
+		model:               'min5',
 		tonality:            'A',
 		position:            0,
 		...params,

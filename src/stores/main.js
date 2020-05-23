@@ -33,7 +33,7 @@ const model = {
 	},
 	...mapObjectToObject(mediaQueries, mq => ({
 		saved: false,
-		default: mq.matches,
+		default: mediaQueries[mq].matches,
 	})),
 };
 const state = getVuexState(model);

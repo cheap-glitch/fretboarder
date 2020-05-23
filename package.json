@@ -1,6 +1,6 @@
 {
   "name": "fretboarder",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
