@@ -8,7 +8,7 @@
 
 mixin extra-tools
 	//- Focus
-	VButton.tools__item(
+	VButton(
 		icon="bullseye"
 		title="Focus"
 
@@ -18,7 +18,7 @@ mixin extra-tools
 		@click="$store.commit('sequences/toggleFocus', index)"
 		)
 	//- Show intersections only
-	VButton.tools__item(
+	VButton(
 		:icon="['fas', 'intersection']"
 		title="Intersect"
 
@@ -28,7 +28,7 @@ mixin extra-tools
 		@click="update('isIntersected', !isIntersected)"
 		)
 	//- Duplicate
-	VButton.tools__item(
+	VButton(
 		icon="copy"
 		title="Duplicate"
 
@@ -99,7 +99,7 @@ div.FretboardSequencesItem
 		//----------------------------------------------------------------------
 		div.tools
 			//- Show/Hide
-			VButton.tools__item(
+			VButton(
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				is-flipped
 				:title="isVisible ? 'Hide' : 'Show'"
@@ -126,7 +126,7 @@ div.FretboardSequencesItem
 					)
 					+extra-tools
 			//- Remove
-			VButton.tools__item(
+			VButton(
 				icon="times-circle"
 				title="Remove"
 
@@ -394,6 +394,8 @@ export default {
 	@include mq($until: desktop)
 	{
 		flex-wrap: wrap;
+
+		.VButton { margin: 0 10px 10px 0; }
 	}
 
 	@include mq($from: desktop)
@@ -405,13 +407,6 @@ export default {
 .tools__extra {
 	@include center-column;
 	@include space-children-v(10px);
-}
-
-.tools__item {
-	@include mq($until: desktop)
-	{
-		margin: 0 10px 10px 0;
-	}
 }
 
 </style>

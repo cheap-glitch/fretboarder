@@ -232,12 +232,11 @@ export default {
 	display: grid;
 	position: relative;
 
-	/*
+	// Shift fretboard to keep it horizontally centered when fret numbers are displayed
 	@include mq($until: desktop, $and: '(orientation: portrait)')
 	{
 		&.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
 	}
-	*/
 }
 
 .string {

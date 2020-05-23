@@ -168,7 +168,7 @@ export default {
 .FretboardSettings {
 	@include mq($until: desktop)
 	{
-		@include space-children-v(20px);
+		@include space-children-v(40px);
 	}
 
 	@include mq($from: desktop)
@@ -180,6 +180,12 @@ export default {
 }
 
 .settings {
+	@include mq($until: desktop)
+	{
+		@include center-column;
+		@include space-children-v(20px);
+	}
+
 	@include mq($from: desktop)
 	{
 		display: flex;
@@ -190,6 +196,12 @@ export default {
 }
 
 .tools {
+	@include mq($until: desktop)
+	{
+		@include center-column;
+		@include space-children-v(20px);
+	}
+
 	@include mq($from: desktop)
 	{
 		display: flex;

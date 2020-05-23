@@ -129,6 +129,8 @@ export default {
 	position: relative;
 	z-index: 2;
 
+	padding-right: 20px;
+
 	opacity: 0.0001;
 }
 

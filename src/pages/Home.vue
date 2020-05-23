@@ -11,7 +11,6 @@ div.Home
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
-
 	//- header.header
 		div.header__nav
 			//- Logo
@@ -77,10 +76,9 @@ div.Home
 	//----------------------------------------------------------------------
 	//- Page content
 	//----------------------------------------------------------------------
-
-	FretboardSettings
+	FretboardSettings(v-if="!isMobileDevice")
 	div.fretboard-wrapper#fretboard-wrapper: FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
-	FretboardSequences
+	FretboardSequences(v-if="!isMobileDevice")
 
 </template>
 <!--}}}-->
@@ -132,6 +130,15 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+@include mq($until: desktop, $and: '(orientation: portrait)')
+{
+	.fretboard-wrapper {
+		display: flex;
+		justify-content: center;
+	}
+
+}
+
 @include mq($from: desktop)
 {
 	.fretboard-wrapper {
@@ -141,24 +148,6 @@ export default {
 		padding: 70px 0 40px 0;
 	}
 }
-
-/*
-@include mq($until: desktop)
-{
-	.Home {
-		display: flex;
-
-		@media (orientation: portrait)  { justify-content: center; }
-		@media (orientation: landscape) { align-items:     center; }
-	}
-
-}
-*/
-
-/**
- * Header
- * -----------------------------------------------------------------------------
- */
 
 /*
 .header {
