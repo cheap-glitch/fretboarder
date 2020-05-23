@@ -39,7 +39,7 @@ div.VSelect
 	//- Fake select bar
 	div.bar
 		//- Current value
-		p(v-html="selectedOptionLabel")
+		p.bar__text(v-html="selectedOptionLabel")
 
 		//- Chevron
 		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
@@ -163,6 +163,12 @@ export default {
 	.select:focus + & {
 		border-color: var(--color--hover);
 	}
+}
+
+.bar__text {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .bar__chevron {

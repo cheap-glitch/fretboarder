@@ -93,7 +93,7 @@ export const models = {
 	// Triads
 	'arp-maj':      { intervals: [4,  7],                     name: 'major'                     },
 	'arp-min':      { intervals: [3,  7],                     name: 'minor'                     },
-	'arp-pow':      { intervals: [4],                         name: 'powerchord (fifth chord)'  },
+	'arp-pow':      { intervals: [4],                         name: 'fifth (powerchord)'        },
 	'arp-aug':      { intervals: [4,  8],                     name: 'augmented'                 },
 	'arp-dim':      { intervals: [3,  6],                     name: 'diminished'                },
 

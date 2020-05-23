@@ -222,9 +222,19 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+.FretboardSequencesItem {
+	@include mq($from: desktop)
+	{
+		max-width: 1400px;
+		margin: auto;
+	}
+}
+
 .dot {
 	@include circle(10px);
 	flex: 0 0 auto;
+
+	&.dot.dot { margin-right: 20px; }
 }
 
 .infos {
@@ -308,7 +318,10 @@ export default {
 
 	@include mq($from: desktop)
 	{
+		align-content: center;
+
 		flex: 1 1 100%;
+		align-self: stretch;
 	}
 }
 
