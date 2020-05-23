@@ -119,6 +119,7 @@ div.FretboardSequencesItem
 				VTooltip.tools__extra(
 					:target="($refs.extraToolsButton && $refs.extraToolsButton.$el) || false"
 					placement="bottom"
+					is-menu
 
 					:is-open="isExtraToolsMenuOpen"
 					v-click-outside="clickOutsideHandler"
@@ -402,6 +403,7 @@ export default {
 }
 
 .tools__extra {
+	@include center-column;
 	@include space-children-v(10px);
 }
 

@@ -8,7 +8,9 @@
 
 div.VTooltip(
 	ref="tooltip"
+
 	v-show="isOpen"
+	v-mods="{ isMenu }"
 	)
 	div.arrow(data-popper-arrow)
 	slot
@@ -46,7 +48,11 @@ export default {
 		isOpen: {
 			type: Boolean,
 			default: false,
-		}
+		},
+		isMenu: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	watch: {
@@ -135,6 +141,10 @@ export default {
 
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 
+	&.is-menu {
+		background-color: var(--color--bg);
+	}
+
 	&[data-popper-placement^="bottom"] > .arrow { top:    -4px; }
 	&[data-popper-placement^="right"]  > .arrow { left:   -4px; }
 	&[data-popper-placement^="left"]   > .arrow { right:  -4px; }
@@ -154,6 +164,10 @@ export default {
 		background-color: var(--color--bg--tooltip);
 
 		transform: rotate(45deg);
+
+		.VTooltip.is-menu & {
+			background-color: var(--color--bg);
+		}
 	}
 }
 
