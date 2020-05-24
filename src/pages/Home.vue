@@ -163,18 +163,22 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-@include mq($until: desktop, $and: '(orientation: portrait)')
-{
-	.fretboard-wrapper {
+.FretboardSettings {
+	@include mq($from: desktop)
+	{
+		margin-top: 20px;
+	}
+}
+
+.fretboard-wrapper {
+	@include mq($until: desktop, $and: '(orientation: portrait)')
+	{
 		display: flex;
 		justify-content: center;
 	}
 
-}
-
-@include mq($from: desktop)
-{
-	.fretboard-wrapper {
+	@include mq($from: desktop)
+	{
 		overflow-x: auto;
 
 		margin-bottom: 60px;
@@ -182,12 +186,20 @@ export default {
 	}
 }
 
+/**
+ * Header
+ * -----------------------------------------------------------------------------
+ */
+
 .header {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
 
-	padding-bottom: 60px;
+	@include mq($from: desktop)
+	{
+		padding-bottom: 60px;
+	}
 }
 
 .logo {

@@ -22,6 +22,13 @@ div.FretboardSettings
 			:options="tunings"
 			v-model="tuning"
 			)
+		//- Fret range
+		VMultiRange(
+			:min="MIN_NB_FRETS"
+			:max="MAX_NB_FRETS"
+			:min-gap="4"
+			v-model="fretRange"
+			)
 
 	//----------------------------------------------------------------------
 	//- Tools
@@ -91,6 +98,7 @@ div.FretboardSettings
 
 import { get, sync }                          from 'vuex-pathify'
 
+import { MIN_NB_FRETS, MAX_NB_FRETS }         from '@/modules/constants'
 import { mapObjectToObject }                  from '@/modules/object'
 import { exportFretboard }                    from '@/modules/export'
 import { instruments, tunings, tuningsNames } from '@/modules/music'
@@ -125,7 +133,9 @@ export default {
 
 	created()
 	{
-		this.instruments = instruments;
+		this.instruments  = instruments;
+		this.MIN_NB_FRETS = MIN_NB_FRETS;
+		this.MAX_NB_FRETS = MAX_NB_FRETS;
 	},
 
 	methods: {
@@ -189,6 +199,7 @@ export default {
 	@include mq($from: desktop)
 	{
 		display: flex;
+		align-items: center;
 		@include space-children-h(10px);
 
 		flex: 0 0 auto;

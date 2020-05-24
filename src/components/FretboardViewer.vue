@@ -24,7 +24,7 @@ div.FretboardViewer(
 		:is-fretboard-flipped="isFlipped"
 		:is-fretboard-vertical="isVertical"
 
-		:style="(isFlipped && !isVertical) ? { 'grid-area': `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : {}"
+		:style="(isFlipped && !isVertical) ? { 'grid-area': `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
 		)
 
 	//- Strings
@@ -36,12 +36,12 @@ div.FretboardViewer(
 		)
 
 	//- Fret numbers
-	template(v-if="isShowingFretNbs")
+	template(v-show="isShowingFretNbs")
 		div.fret-number(
 			v-for="(fret, index) of fretNumbers"
 			:key="`fret-number--${index}`"
 
-			:style="isVertical ? { 'grid-area': `${index + 1} / 1 / span 1 / span 1` } : {}"
+			:style="isVertical ? { 'grid-area': `${index + 1} / 1 / span 1 / span 1` } : null"
 			v-mods="{ isVertical }"
 			)
 			p.fret-number__text {{ fret }}
