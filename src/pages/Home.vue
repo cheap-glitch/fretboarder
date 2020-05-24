@@ -21,6 +21,15 @@ div.Home
 				)
 			h1.logo__text Fretboarder
 
+		//- Dark mode switch
+		div.dark-mode-toggle(
+			v-mods="{ isDarkModeOn }"
+			@click="$store.commit('toggle.isDarkModeOn')"
+			)
+			fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
+			div.dark-mode-toggle__switch
+			fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
+
 		//- Sub-pages links
 		nav.sublinks(v-if="isMobileDevice")
 			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
@@ -71,15 +80,6 @@ div.Home
 					)
 					p.nav__link__text The Guitar Lick Database
 					fa-icon(:icon="['far', 'external-link-square-alt']")
-
-		//- Light/dark switch
-		//- div.dark-mode-toggle(
-			v-mods="{ isDarkModeOn }"
-			@click="$store.commit('toggle.isDarkModeOn')"
-			)
-			fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
-			div.dark-mode-toggle__switch
-			fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
 
 	//----------------------------------------------------------------------
 	//- Page content
@@ -139,6 +139,7 @@ export default {
 		instrument: get('fretboard/instrument'),
 
 		...get([
+			'isDarkModeOn',
 			'isMobileDevice',
 			'isLayoutLandscape',
 		]),
@@ -219,6 +220,49 @@ export default {
 	transition: color 0.2s;
 }
 
+.dark-mode-toggle {
+	display: flex;
+	align-items: center;
+	@include space-children-h(5px);
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
+
+	&.is-dark-mode-on:hover       .dark-mode-toggle__sun,
+	&:not(.is-dark-mode-on):hover .dark-mode-toggle__moon {
+		color: var(--color--hover);
+	}
+}
+
+.dark-mode-toggle__switch {
+	position: relative;
+
+	width: 20px;
+	height: 12px;
+	@include pill;
+
+	border: 2px solid var(--color--border);
+
+	&::after {
+		content: "";
+
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		@include circle(8px);
+
+		background-color: var(--color--hover);
+
+		transition: transform 0.2s;
+
+		.dark-mode-toggle.is-dark-mode-on & {
+			transform: translateX(8px);
+		}
+	}
+}
+
 .sublinks {
 	display: flex;
 }
@@ -279,48 +323,6 @@ export default {
 .link-support:hover { color: var(--color--red);    }
 .link-tgld:hover    { color: var(--color--orange); }
 
-.dark-mode-toggle {
-	display: flex;
-	align-items: center;
-	@include space-children-h(5px);
-
-	color: var(--color--text--secondary);
-
-	cursor: pointer;
-
-	&.is-dark-mode-on:hover       .dark-mode-toggle__sun,
-	&:not(.is-dark-mode-on):hover .dark-mode-toggle__moon {
-		color: var(--color--hover);
-	}
-}
-
-.dark-mode-toggle__switch {
-	position: relative;
-
-	width: 20px;
-	height: 12px;
-	@include pill;
-
-	border: 2px solid var(--color--border);
-
-	&::after {
-		content: "";
-
-		position: absolute;
-		top: 0;
-		left: 0;
-
-		@include circle(8px);
-
-		background-color: var(--color--hover);
-
-		transition: transform 0.2s;
-
-		.dark-mode-toggle.is-dark-mode-on & {
-			transform: translateX(8px);
-		}
-	}
-}
 */
 
 </style>
