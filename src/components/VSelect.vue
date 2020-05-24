@@ -120,14 +120,17 @@ export default {
 <style lang="scss" scoped>
 
 .VSelect {
-	position: relative;
+	//- position: relative;
+	//- display: inline-block;
 
-	display: inline-block;
+	display: grid;
 }
 
 .select {
-	position: relative;
-	z-index: 2;
+	//- position: relative;
+	//- z-index: 2;
+
+	grid-area: 1 / 1;
 
 	padding-right: 20px;
 
@@ -139,12 +142,14 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 
-	position: absolute;
-	z-index: 1;
-	top: 50%;
-	left: 0;
-	right: 0;
-	transform: translateY(-50%);
+	grid-area: 1 / 1;
+
+	//- position: absolute;
+	//- z-index: 1;
+	//- top: 50%;
+	//- left: 0;
+	//- right: 0;
+	//- transform: translateY(-50%);
 
 	padding: 8px 10px;
 
@@ -152,8 +157,10 @@ export default {
 	border-radius: 4px;
 
 	color: var(--color--text);
+	background-color: var(--color--bg--accent);
 
-	.select:hover:not(:focus) + & {
+	.select:not(:focus):hover + & {
+		border-color: var(--color--hover);
 		background-color: var(--color--bg--highlight);
 	}
 
@@ -172,7 +179,7 @@ export default {
 	font-size: 1.2rem;
 	color: var(--color--text--secondary);
 
-	.select:focus + .bar & {
+	.select:not(:focus):hover + .bar & {
 		color: var(--color--hover);
 	}
 }
