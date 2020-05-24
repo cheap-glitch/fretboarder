@@ -78,8 +78,9 @@ export default {
 	},
 
 	computed: {
-		sequences:      get('sequences/sequences'),
-		isMobileDevice: get('isMobileDevice'),
+		...get('sequences', ['sequences']),
+
+		...get(['isMobileDevice']),
 	},
 
 	created()

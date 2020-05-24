@@ -207,7 +207,10 @@ export default {
 		{
 			return this.fretRange[1];
 		},
-		displayedSequences: get('sequences/displayedSequences'),
+
+		...get('sequences', [
+			'displayedSequences'
+		]),
 
 		...get('fretboard', [
 			'instrument',

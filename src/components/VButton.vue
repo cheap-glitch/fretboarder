@@ -7,7 +7,7 @@
 <template lang="pug">
 
 button.VButton(
-	v-mods="{ isActive, isDisabled }"
+	v-mods="{ isActive, isDisabled, isDarkModeOn }"
 	@click.left="clickButton"
 	)
 	//- Icon
@@ -24,6 +24,8 @@ button.VButton(
 
 <!--{{{ JavaScript -->
 <script>
+
+import { get } from 'vuex-pathify'
 
 export default {
 	name: 'VButton',
@@ -49,6 +51,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	computed: {
+		...get(['isDarkModeOn'])
 	},
 
 	methods: {
@@ -100,9 +106,13 @@ export default {
 	}
 
 	&.is-active {
-		color: white;
+		color: var(--color--highlight);
 		border-color: var(--color--highlight);
-		background-color: var(--color--highlight);
+
+		&:hover, &:not(.is-dark-mode-on) {
+			color: white;
+			background-color: var(--color--highlight);
+		}
 	}
 
 	&:focus {

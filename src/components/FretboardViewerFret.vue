@@ -166,7 +166,8 @@ export default {
 		{
 			return this.$store.state.sequences.sequences.map(seq => seq.color);
 		},
-		isMobileDevice: get('isMobileDevice'),
+
+		...get(['isMobileDevice']),
 	},
 }
 

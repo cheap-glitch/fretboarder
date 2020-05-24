@@ -136,7 +136,9 @@ export default {
 			}
 		},
 
-		instrument: get('fretboard/instrument'),
+		...get('fretboard', [
+			'instrument'
+		]),
 
 		...get([
 			'isDarkModeOn',
