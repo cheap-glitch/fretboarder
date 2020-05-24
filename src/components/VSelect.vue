@@ -151,6 +151,8 @@ export default {
 	border: 1px solid var(--color--border);
 	border-radius: 4px;
 
+	color: var(--color--text);
+
 	.select:hover:not(:focus) + & {
 		background-color: var(--color--bg--highlight);
 	}

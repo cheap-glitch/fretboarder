@@ -21,7 +21,7 @@ div.Home
 				)
 			h1.logo__text Fretboarder
 
-		//- Dark mode switch
+		//- Dark mode toggle switch
 		div.dark-mode-toggle(
 			v-mods="{ isDarkModeOn }"
 			@click="$store.commit('toggle.isDarkModeOn')"

@@ -78,6 +78,7 @@ export default {
 
 	border: 1px solid var(--color--bg--highlight);
 
+	color: var(--color--text);
 	background-color: var(--color--bg--highlight);
 
 	appearance: none;
