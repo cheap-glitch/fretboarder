@@ -23,7 +23,7 @@ div.FretboardViewerFret
 					v-for="seq of interval.sequences"
 					:key="`dot--${seq}`"
 
-					:style="{ 'background-color': colors[seq] }"
+					:style="{ backgroundColor: colors[seq] }"
 					)
 				p.intervals__item__text {{ interval.name }}
 

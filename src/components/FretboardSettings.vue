@@ -187,6 +187,7 @@ export default {
 .FretboardSettings {
 	@include mq($until: desktop)
 	{
+		@include center-column;
 		@include space-children-v(40px);
 	}
 
@@ -199,9 +200,14 @@ export default {
 
 .settings {
 	@include center-column;
-	@include space-children-v(20px);
+	@include space-children-v(40px);
 
-	padding: 10px;
+	@include mq($from: desktop)
+	{
+		@include space-children-v(20px);
+
+		padding: 10px;
+	}
 }
 
 .settings__instrument {

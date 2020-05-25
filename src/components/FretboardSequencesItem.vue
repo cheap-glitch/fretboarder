@@ -42,7 +42,7 @@ div.FretboardSequencesItem
 	div.infos(
 		v-if="isMobileDevice"
 
-		:style="{ 'border-color': color, 'background-color': color }"
+		:style="{ borderColor: color, backgroundColor: color }"
 		v-mods="{ isOpen }"
 
 		@click.left="isOpen = !isOpen"
@@ -52,7 +52,7 @@ div.FretboardSequencesItem
 
 	transition(name="fade"): div.settings(
 		v-show="isOpen || !isMobileDevice"
-		:style="{ 'border-color': color }"
+		:style="{ borderColor: color }"
 		)
 
 		//----------------------------------------------------------------------
@@ -61,7 +61,7 @@ div.FretboardSequencesItem
 		div.properties
 			div.dot(
 				v-if="!isMobileDevice"
-				:style="{ 'background-color': color }"
+				:style="{ backgroundColor: color }"
 				)
 
 			//- Tonality
