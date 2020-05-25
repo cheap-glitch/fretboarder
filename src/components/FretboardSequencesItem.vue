@@ -43,15 +43,15 @@ div.FretboardSequencesItem
 		v-if="isMobileDevice"
 
 		:style="{ 'border-color': color, 'background-color': color }"
-		v-mods="{ isSettingsPanelOpen }"
+		v-mods="{ isOpen }"
 
-		@click.left="isSettingsPanelOpen = !isSettingsPanelOpen"
+		@click.left="isOpen = !isOpen"
 		)
 		p {{ infos }}
-		fa-icon(:icon="['far', isSettingsPanelOpen ? 'minus' : 'ellipsis-v']")
+		fa-icon(:icon="['far', isOpen ? 'minus' : 'ellipsis-v']")
 
 	transition(name="fade"): div.settings(
-		v-show="isSettingsPanelOpen || !isMobileDevice"
+		v-show="isOpen || !isMobileDevice"
 		:style="{ 'border-color': color }"
 		)
 
@@ -106,25 +106,11 @@ div.FretboardSequencesItem
 
 				@click="update('isVisible', !isVisible)"
 				)
+
 			//- Extra tools
-			template(v-if="isMobileDevice || isWideScreen")
-				+extra-tools
-			template(v-else)
-				VButton(
-					ref="extraToolsButton"
-					icon="ellipsis-h"
+			template(v-if="isMobileDevice || isWideScreen"): +extra-tools
+			template(v-else): VPopupMenu(icon="ellipsis-h"): div.tools__extra: +extra-tools
 
-					@click="isExtraToolsMenuOpen = !isExtraToolsMenuOpen"
-					)
-				VPopup.tools__extra(
-					:target="($refs.extraToolsButton && $refs.extraToolsButton.$el) || false"
-					placement="bottom"
-					is-menu
-
-					:is-open="isExtraToolsMenuOpen"
-					v-click-outside="clickOutsideHandler"
-					)
-					+extra-tools
 			//- Remove
 			VButton(
 				icon="times-circle"
@@ -194,8 +180,7 @@ export default {
 
 	data() {
 		return {
-			isSettingsPanelOpen:  false,
-			isExtraToolsMenuOpen: false,
+			isOpen: false,
 		}
 	},
 
@@ -227,11 +212,6 @@ export default {
 	},
 
 	methods: {
-		clickOutsideHandler(event)
-		{
-			if (!this.$refs.extraToolsButton.$el.contains(event.target))
-				this.isExtraToolsMenuOpen = false;
-		},
 		update(prop, value)
 		{
 			// Reset the highlighted interval when the model of the sequence is changed
@@ -273,7 +253,7 @@ export default {
 
 	transition: border-radius 200ms;
 
-	&.is-settings-panel-open {
+	&.is-open {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
 	}

@@ -74,6 +74,8 @@ module.exports = {
 				'info-circle':              'pro-regular',
 				'hand-paper':               'pro-regular',
 				'file-download':            'pro-regular',
+				'file-image':               'pro-regular',
+				'image-polaroid':           'pro-regular',
 
 				// Scales
 				'plus':                     'pro-regular',

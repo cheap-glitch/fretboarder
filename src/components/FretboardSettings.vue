@@ -14,32 +14,33 @@ div.FretboardSettings
 		icon="guitar"
 		title="Instrument settings"
 		)
-		//- Instrument
-		VSelect(
-			:options="instruments"
-			v-model="instrument"
-			)
-		//- Tuning
-		VSelect(
-			:options="tunings"
-			v-model="tuning"
-			)
-		//- Fret range
-		VMultiRange(
-			:min="0"
-			:max="MAX_NB_FRETS"
-			:min-gap="MIN_NB_FRETS"
-			v-model="fretRange"
-			)
-		p(v-html="formatFretNb(fretRange[0]) + '&nbsp;—&nbsp;' + formatFretNb(fretRange[1])")
-		//- Switch fretting hand
-		VButton(
-			icon="hand-paper"
-			title="Switch hand"
+		div.instrument-settings
+			//- Instrument
+			VSelect(
+				:options="instruments"
+				v-model="instrument"
+				)
+			//- Tuning
+			VSelect(
+				:options="tunings"
+				v-model="tuning"
+				)
+			//- Fret range
+			VMultiRange(
+				:min="0"
+				:max="MAX_NB_FRETS"
+				:min-gap="MIN_NB_FRETS"
+				v-model="fretRange"
+				)
+			p.fret-range-text(v-html="formatFretNb(fretRange[0]) + '&nbsp;—&nbsp;' + formatFretNb(fretRange[1])")
+			//- Switch fretting hand
+			VButton(
+				icon="hand-paper"
+				title="Switch hand"
 
-			:is-flipped="!isFlipped"
-			@click="$store.commit('fretboard/toggle.isFlipped')"
-		)
+				:is-flipped="!isFlipped"
+				@click="$store.commit('fretboard/toggle.isFlipped')"
+			)
 
 	//- Toggle fret numbers
 	VButton(
@@ -66,14 +67,16 @@ div.FretboardSettings
 		icon="file-download"
 		title="Export"
 		)
-		div
-			p.export-menu__text: strong Choose a format to export in
-			p.export-menu__text: em
-				| If you want to print this  fretboard, choose PNG or JPG.
-				| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
+		div.export-menu
+			div.export-menu__text
+				p: strong Choose a format to export in
+				p: em
+					| If you want to print this  fretboard, choose PNG or JPG.
+					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
 			div.export-menu__buttons
 				each format in ['png', 'jpg', 'svg']
 					VButton(
+						icon=(format == 'svg' ? 'file-image' : 'image-polaroid')
 						title=format.toUpperCase()
 						@click.left=`exportFretboard('${format}')`
 						)
@@ -184,9 +187,38 @@ export default {
 	@include mq($from: desktop)
 	{
 		display: flex;
-		align-items: flex-end;
-		justify-content: space-between;
+		@include space-children-h(10px);
 	}
+}
+
+.instrument-settings {
+	@include center-column;
+	@include space-children-v(20px);
+}
+
+.fret-range-text {
+	color: var(--color--text);
+}
+
+.export-menu {
+	@include space-children-v(20px);
+}
+
+.export-menu__text {
+	@include space-children-v(10px);
+
+	max-width: 300px;
+
+	font-size: 1.6rem;
+	text-align: justify;
+
+	color: var(--color--text);
+}
+
+.export-menu__buttons {
+	display: flex;
+	justify-content: center;
+	@include space-children-h(10px);
 }
 
 /*
@@ -222,58 +254,6 @@ export default {
 
 		.VButton { margin: 10px 0 0 10px; }
 	}
-}
-*/
-
-.export-menu__text {
-	max-width: 300px;
-
-	font-size: 1.6rem;
-	text-align: justify;
-
-	&:first-of-type {
-		margin-bottom: 10px;
-	}
-}
-
-.export-menu__buttons {
-	display: flex;
-	justify-content: center;
-	@include space-children-h(10px);
-
-	margin-top: 40px;
-}
-
-/*
-.button {
-	padding: 6px;
-
-	appearance: none;
-	background-image: none;
-
-	border: 2px solid white;
-	border-radius: 6px;
-
-	background-color: var(--color--bg--popup);
-
-	transition: border-color 200ms, background-color 200ms;
-
-	cursor: pointer;
-
-	&:hover {
-		background-color: white;
-	}
-}
-
-.button__text {
-	color: white;
-	cursor: pointer;
-
-	text-align: justify;
-	overflow-wrap: break-word;
-	hyphens: auto;
-
-	.button:hover & { color: var(--color--bg--tooltip); }
 }
 */
 

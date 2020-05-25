@@ -157,9 +157,11 @@ export default {
 }
 
 .bar__text {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	font-size: 1.5rem;
+
+	//- overflow: hidden;
+	//- white-space: nowrap;
+	//- text-overflow: ellipsis;
 }
 
 .bar__chevron {

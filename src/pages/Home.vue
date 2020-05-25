@@ -21,8 +21,11 @@ div.Home
 				)
 			h1.logo__text Fretboarder
 
+		//- Settings
+		transition(name="fade"): FretboardSettings(v-show="!isMobileDevice || subpage == 'settings'")
+
 		//- Dark mode toggle switch
-		div.dark-mode-toggle(
+		//- div.dark-mode-toggle(
 			v-mods="{ isDarkModeOn }"
 			@click="$store.commit('toggle.isDarkModeOn')"
 			)
@@ -84,9 +87,6 @@ div.Home
 	//----------------------------------------------------------------------
 	//- Page content
 	//----------------------------------------------------------------------
-
-	//- Settings
-	transition(name="fade"): FretboardSettings(v-show="!isMobileDevice || subpage == 'settings'")
 
 	//- Fretboard
 	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
@@ -162,13 +162,6 @@ export default {
 
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
-
-.FretboardSettings {
-	@include mq($from: desktop)
-	{
-		margin-top: 20px;
-	}
-}
 
 .fretboard-wrapper {
 	@include mq($until: desktop, $and: '(orientation: portrait)')
