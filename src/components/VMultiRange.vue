@@ -7,7 +7,8 @@
 <template lang="pug">
 
 div.VMultiRange(
-	:style="`--fill--start: ${Math.floor(values[0]/max * 100)}%; --fill--stop: ${Math.ceil(values[1]/max * 100)}%` "
+	v-mods="{ isFlipped }"
+	:style="`--fill--start: ${values[0]/max * 100}%; --fill--stop: ${values[1]/max * 100}%` "
 
 	@click.left="selectValue"
 	)
@@ -56,6 +57,10 @@ export default {
 		minGap: {
 			type: Number,
 			default: 1,
+		},
+		isFlipped: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -139,6 +144,10 @@ export default {
 		right: calc(100% - var(--fill--stop));
 
 		background-color: var(--color--highlight);
+	}
+
+	&.is-flipped {
+		transform: scaleX(-1);
 	}
 }
 

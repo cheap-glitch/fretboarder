@@ -32,6 +32,7 @@ div.FretboardSettings
 					:min="0"
 					:max="MAX_NB_FRETS - 1"
 					:min-gap="MIN_NB_FRETS"
+					:is-flipped="isFlipped"
 
 					:values="fretRangeDisplay"
 
@@ -39,9 +40,9 @@ div.FretboardSettings
 					@change="fretRange = fretRangeDisplay = $event"
 					)
 				p.fret-range__text
-					span(v-html="formatFretNb(fretRangeDisplay[0])")
+					span(v-html="formatFretNb(fretRangeDisplay[isFlipped ? 1 : 0])")
 					span.fret-range__text__separator —
-					span(v-html="formatFretNb(fretRangeDisplay[1])")
+					span(v-html="formatFretNb(fretRangeDisplay[isFlipped ? 0 : 1])")
 
 			//- Switch fretting hand
 			VButton(
@@ -50,7 +51,7 @@ div.FretboardSettings
 
 				:is-flipped="!isFlipped"
 				@click="$store.commit('fretboard/toggle.isFlipped')"
-			)
+				)
 
 	//- Toggle fret numbers
 	VButton(

@@ -6,12 +6,51 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.Home
+//- Links {{{
+mixin links
+	nav.nav
+		//- GitHub & Twitter
+		a.nav__link(
+			href="https://github.com/cheap-glitch/fretboarder"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			fa-icon(:icon="['fab', 'github']")
+		a.nav__link(
+			href="https://twitter.com/cheap_glitch"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			fa-icon(:icon="['fab', 'twitter']")
+		//- Feedback
+		a.nav__link(
+			:href="`mailto:${mailto}`"
+			@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
+			)
+			fa-icon(:icon="['far', 'paper-plane']")
+			p.nav__link__text Send feedback
+		//- Patreon page
+		a.nav__link.link-support(
+			href="https://www.patreon.com/cheap_glitch"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			fa-icon(:icon="['far', 'heart']")
+			p.nav__link__text Support the app!
+		//- TGLD
+		a.nav__link.link-tgld(
+			href="https://www.theguitarlickdatabase.com"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			p.nav__link__text The Guitar Lick Database
+			fa-icon(:icon="['far', 'external-link-square-alt']")
+//- }}}
 
+div.Home
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
-
 	header.header
 		div.flexbar
 			//- Logo
@@ -21,6 +60,8 @@ div.Home
 					v-mods="{ isUkulele: instrument == 'ukulele' }"
 					)
 				h1.logo__text Fretboarder
+			//- Links
+			+links
 
 		div.flexbar(v-if="!isMobileDevice")
 			//- Desktop settings
@@ -40,50 +81,6 @@ div.Home
 			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
 			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
 			div.sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
-
-		//- Links {{{
-		//- nav.nav
-
-			//- GitHub & Twitter links
-			a.nav__link(
-				href="https://github.com/cheap-glitch/fretboarder"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
-				)
-				fa-icon(:icon="['fab', 'github']")
-			a.nav__link(
-				href="https://twitter.com/cheap_glitch"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
-				)
-				fa-icon(:icon="['fab', 'twitter']")
-
-			//- Feedback
-			a.nav__link(
-				:href="`mailto:${mailto}`"
-				@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
-				)
-				fa-icon(:icon="['far', 'paper-plane']")
-				p.nav__link__text Send feedback
-
-			//- Patreon page
-			a.nav__link.link-support(
-				href="https://www.patreon.com/cheap_glitch"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
-				)
-				fa-icon(:icon="['far', 'heart']")
-				p.nav__link__text Support the app!
-
-			//- TGLD
-			a.nav__link.link-tgld(
-				href="https://www.theguitarlickdatabase.com"
-				target="_blank"
-				rel="external nofollow noopener noreferrer"
-				)
-				p.nav__link__text The Guitar Lick Database
-				fa-icon(:icon="['far', 'external-link-square-alt']")
-		//- }}}
 
 	//----------------------------------------------------------------------
 	//- Page content
@@ -123,6 +120,7 @@ export default {
 
 	data() {
 		return {
+			mailto:  '',
 			subpage: 'fretboard',
 		}
 	},
@@ -227,8 +225,13 @@ export default {
 .logo__icon {
 	font-size: 18px;
 
-	&.is-ukulele {
-		font-size: 12px;
+	&.is-ukulele { font-size: 12px; }
+
+	@include mq($from: desktop)
+	{
+		font-size: 20px;
+
+		&.is-ukulele { font-size: 14px; }
 	}
 }
 
@@ -237,7 +240,45 @@ export default {
 	font-weight: bold;
 
 	transition: color 0.2s;
+
+	@include mq($from: desktop)
+	{
+		font-size: 24px;
+	}
 }
+
+.nav {
+	display: flex;
+	@include space-children-h(18px);
+
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	.header:hover & { opacity: 1; }
+}
+
+.nav__link {
+	display: flex;
+	align-items: center;
+	@include space-children-h(6px);
+
+	font-size: 1.4rem;
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color--hover);
+	}
+}
+
+.nav__link__text {
+	cursor: pointer;
+}
+
+.link-support:hover { color: var(--color--red);    }
+.link-tgld:hover    { color: var(--color--orange); }
 
 .dark-mode-toggle {
 	display: flex;
@@ -306,48 +347,6 @@ export default {
 		margin-right: 10px;
 	}
 }
-
-/*
-.header__nav {
-	display: flex;
-	align-items: baseline;
-	@include space-children-h(20px);
-}
-
-.nav {
-	display: flex;
-	@include space-children-h(20px);
-
-	opacity: 0;
-	transition: opacity 0.2s;
-
-	.header:hover & { opacity: 1; }
-}
-
-.nav__link {
-	display: flex;
-	align-items: center;
-	@include space-children-h(6px);
-
-	font-size: 1.4rem;
-
-	color: var(--color--text--secondary);
-
-	cursor: pointer;
-
-	&:hover {
-		color: var(--color--hover);
-	}
-}
-
-.nav__link__text {
-	cursor: pointer;
-}
-
-.link-support:hover { color: var(--color--red);    }
-.link-tgld:hover    { color: var(--color--orange); }
-
-*/
 
 </style>
 <!--}}}-->
