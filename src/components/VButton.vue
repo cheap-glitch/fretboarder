@@ -12,6 +12,8 @@ button.VButton(
 	)
 	//- Icon
 	fa-icon.icon(
+		v-if="icon.length"
+
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:flip="isFlipped ? 'horizontal' : null"
 		)
@@ -33,7 +35,7 @@ export default {
 	props: {
 		icon: {
 			type: [Array, String],
-			required: true,
+			default: '',
 		},
 		title: {
 			type: String,
