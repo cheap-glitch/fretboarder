@@ -7,7 +7,16 @@
 <template lang="pug">
 
 div.VMultiRange: each index in [0, 1]
-	input.slider(type="range" :min="min" :max="max" :value=`values[${index}]` @input=`e => updateValue(${index}, e)`)
+	input.slider(
+		type="range"
+		:min="min"
+		:max="max"
+
+		:value=`values[${index}]`
+
+		@input=` updateValue(${index}, $event)`
+		@change=`updateValue(${index}, $event)`
+		)
 
 </template>
 <!--}}}-->
@@ -21,7 +30,7 @@ export default {
 
 	model: {
 		prop:  'values',
-		event: 'change',
+		event: 'input',
 	},
 
 	props: {
@@ -47,7 +56,7 @@ export default {
 	methods: {
 		updateValue(inputIndex, event)
 		{
-			this.$emit('change', this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value) : value));
+			this.$emit(event.type, this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value) : value));
 		}
 	},
 }

@@ -14,7 +14,7 @@ div.FretboardViewer(
 	//- Frets
 	FretboardViewerFret(
 		v-for="(fret, index) of displayedFrets"
-		:key="`fret--${index}--${fret.string + 1}--${fret.number}`"
+		:key="`fret--${fret.string + 1}--${fret.number}`"
 
 		v-bind="fret"
 		:is-on-last-string="fret.string + 1 == nbStrings"

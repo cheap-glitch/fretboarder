@@ -14,25 +14,35 @@ div.FretboardSettings
 		icon="guitar"
 		title="Instrument settings"
 		)
-		div.instrument-settings
-			//- Instrument
-			VSelect(
-				:options="instruments"
-				v-model="instrument"
-				)
-			//- Tuning
-			VSelect(
-				:options="tunings"
-				v-model="tuning"
-				)
+		div.settings
+			div.settings__instrument
+				//- Instrument
+				VSelect(
+					:options="instruments"
+					v-model="instrument"
+					)
+				//- Tuning
+				VSelect(
+					:options="tunings"
+					v-model="tuning"
+					)
 			//- Fret range
-			VMultiRange.fret-range(
-				:min="0"
-				:max="MAX_NB_FRETS - 1"
-				:min-gap="MIN_NB_FRETS"
-				v-model="fretRange"
-				)
-			p.fret-range-text(v-html="formatFretNb(fretRange[0]) + '&nbsp;—&nbsp;' + formatFretNb(fretRange[1])")
+			div.settings__fret-range
+				VMultiRange.fret-range__slider(
+					:min="0"
+					:max="MAX_NB_FRETS - 1"
+					:min-gap="MIN_NB_FRETS"
+
+					:values="fretRangeDisplay"
+
+					@input=" fretRangeDisplay = $event"
+					@change="fretRange        = $event"
+					)
+				p.fret-range__text
+					span(v-html="formatFretNb(fretRangeDisplay[0])")
+					span.fret-range__text__separator —
+					span(v-html="formatFretNb(fretRangeDisplay[1])")
+
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
@@ -100,7 +110,7 @@ export default {
 
 	data() {
 		return {
-			isExportMenuOpened: false,
+			fretRangeDisplay: this.$store.state.fretboard.fretRange,
 		}
 	},
 
@@ -133,10 +143,6 @@ export default {
 	methods: {
 		exportFretboard(format)
 		{
-			// Close the export menu tooltip
-			this.isExportMenuOpened = false;
-
-			// Export the fretboard to the select format and trigger a download of the resulting file
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
@@ -191,19 +197,31 @@ export default {
 	}
 }
 
-.instrument-settings {
+.settings {
 	@include center-column;
 	@include space-children-v(20px);
 
 	padding: 10px;
 }
 
-.fret-range {
+.settings__instrument {
+	display: flex;
+	@include space-children-h(10px);
+}
+
+.fret-range__slider {
 	min-width: 250px;
 }
 
-.fret-range-text {
+.fret-range__text {
+	text-align: center;
+	@include space-children-h(6px);
+
 	color: var(--color--text);
+}
+
+.fret-range__text__separator {
+	color: var(--color--text--secondary);
 }
 
 .export-menu {
