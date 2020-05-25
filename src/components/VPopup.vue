@@ -8,9 +8,7 @@
 
 div.VPopup(
 	ref="tooltip"
-
 	v-show="isOpen"
-	v-mods="{ isMenu }"
 	)
 	div.arrow(data-popper-arrow)
 	slot
@@ -46,10 +44,6 @@ export default {
 			default: 'app',
 		},
 		isOpen: {
-			type: Boolean,
-			default: false,
-		},
-		isMenu: {
 			type: Boolean,
 			default: false,
 		},
@@ -136,14 +130,10 @@ export default {
 
 	font-size: 1.4rem;
 
-	color: white;
-	background-color: var(--color--bg--tooltip);
+	color: var(--color--bg--popup);
+	background-color: var(--color--bg--popup);
 
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-
-	&.is-menu {
-		background-color: var(--color--bg);
-	}
 
 	&[data-popper-placement^="bottom"] > .arrow { top:    -4px; }
 	&[data-popper-placement^="right"]  > .arrow { left:   -4px; }
@@ -161,13 +151,9 @@ export default {
 
 	&::before {
 		content: "";
-		background-color: var(--color--bg--tooltip);
+		background-color: currentcolor;
 
 		transform: rotate(45deg);
-
-		.VPopup.is-menu & {
-			background-color: var(--color--bg);
-		}
 	}
 }
 

@@ -254,7 +254,7 @@ export default {
 	border: 2px solid white;
 	border-radius: 6px;
 
-	background-color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--popup);
 
 	transition: border-color 200ms, background-color 200ms;
 

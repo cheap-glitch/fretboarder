@@ -25,7 +25,7 @@ div.FretboardViewerFret
 
 					:style="{ 'background-color': colors[seq] }"
 					)
-				p {{ interval.name }}
+				p.intervals__item__text {{ interval.name }}
 
 	div.fret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
 
@@ -311,6 +311,10 @@ export default {
 .intervals__item__dot {
 	@include circle(10px);
 	flex: 0 0 auto;
+}
+
+.intervals__item__text {
+	color: white;
 }
 
 </style>

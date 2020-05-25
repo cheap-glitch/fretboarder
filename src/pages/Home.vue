@@ -288,7 +288,7 @@ export default {
 	font-size: 20px;
 
 	color: white;
-	background-color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--popup);
 
 	cursor: pointer;
 

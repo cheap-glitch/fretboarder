@@ -67,7 +67,9 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VPopupMenu {
+.VPopup {
+	color: var(--color--bg);
+	background-color: var(--color--bg);
 }
 
 </style>

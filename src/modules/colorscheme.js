@@ -30,7 +30,7 @@ export const colorscheme = {
 	'--color--bg':              ['white',           colors.mirage],
 	'--color--bg--accent':      [colors.athensGray, colors.mirage2],
 	'--color--bg--highlight':   [colors.snow,       colors.ebonyClay],
-	'--color--bg--tooltip':     [colors.slateGray,  colors.slateGray],
+	'--color--bg--popup':       [colors.slateGray,  colors.slateGray],
 
 	'--color--border':          ['lightgray',       colors.oxfordBlue],
 
