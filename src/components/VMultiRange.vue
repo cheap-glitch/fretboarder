@@ -7,6 +7,8 @@
 <template lang="pug">
 
 div.VMultiRange(
+	:style="`--fill--start: ${Math.floor(values[0]/max * 100)}%; --fill--stop: ${Math.ceil(values[1]/max * 100)}%` "
+
 	@click.left="selectValue"
 	)
 	each index in [0, 1]
@@ -113,20 +115,30 @@ export default {
 
 	cursor: pointer;
 
-	&::before {
+	&::before, &::after {
 		content: "";
 
 		position: absolute;
 		top: 50%;
-		left: 0;
-		right: 0;
 		transform: translateY(-50%);
 
 		height: 4px;
 
 		border-radius: 2px;
+	}
+
+	&::before {
+		left: 0;
+		right: 0;
 
 		background-color: var(--color--border);
+	}
+
+	&::after {
+		left:  var(--fill--start);
+		right: calc(100% - var(--fill--stop));
+
+		background-color: var(--color--highlight);
 	}
 }
 
