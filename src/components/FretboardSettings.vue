@@ -8,10 +8,16 @@
 
 div.FretboardSettings
 
-	//----------------------------------------------------------------------
-	//- Settings
-	//----------------------------------------------------------------------
-	div.settings
+	//- Instrument settings
+	VButton(
+		:icon="['far', 'guitar']"
+		title="Instrument settings"
+
+		@click="isInstrumentSettingsMenuOpened = !isExportMenuOpened"
+		)
+
+	VPopup(
+		)
 		//- Instrument
 		VSelect(
 			:options="instruments"
@@ -22,9 +28,6 @@ div.FretboardSettings
 			:options="tunings"
 			v-model="tuning"
 			)
-		p {{ fretRange[0] }}
-		p —
-		p {{ fretRange[1] }}
 		//- Fret range
 		VMultiRange(
 			:min="0"
@@ -32,65 +35,61 @@ div.FretboardSettings
 			:min-gap="MIN_NB_FRETS"
 			v-model="fretRange"
 			)
+		p(v-html="formatFretNb(fretRange[0]) + '&nbsp;—&nbsp;' + formatFretNb(fretRange[1])")
 
-	//----------------------------------------------------------------------
-	//- Tools
-	//----------------------------------------------------------------------
-	div.tools
-		//- Toggle fret numbers
-		VButton(
-			:icon="['fal', 'list-ol']"
-			title="Show numbers"
+	//- Toggle fret numbers
+	VButton(
+		:icon="['fal', 'list-ol']"
+		title="Show numbers"
 
-			:is-active="isShowingFretNbs"
-			@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
-			)
-		//- Toggle note names
-		VButton(
-			icon="info-circle"
-			title="Show notes"
+		:is-active="isShowingFretNbs"
+		@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
+		)
+	//- Toggle note names
+	VButton(
+		icon="info-circle"
+		title="Show notes"
 
-			:is-active="isShowingNoteNames"
-			@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
-			)
-		//- Switch fretting hand
-		VButton(
-			icon="hand-paper"
-			title="Switch hand"
+		:is-active="isShowingNoteNames"
+		@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
+		)
+	//- Switch fretting hand
+	VButton(
+		icon="hand-paper"
+		title="Switch hand"
 
-			:is-flipped="!isFlipped"
-			@click="$store.commit('fretboard/toggle.isFlipped')"
-			)
-		//- Export the fretboard
-		VButton(
-			v-if="!isMobileDevice"
-			ref="buttonExport"
+		:is-flipped="!isFlipped"
+		@click="$store.commit('fretboard/toggle.isFlipped')"
+	)
+	//- Export the fretboard
+	VButton(
+		v-if="!isMobileDevice"
+		ref="buttonExport"
 
-			icon="file-download"
-			title="Export"
+		icon="file-download"
+		title="Export"
 
-			:is-active="isExportMenuOpened"
-			@click="isExportMenuOpened = !isExportMenuOpened"
-			)
-		//- Export menu
-		VTooltip(
-			:target="$refs.buttonExport ? ($refs.buttonExport.$el || false) : false"
-			placement="bottom"
+		@click="isExportMenuOpened = !isExportMenuOpened"
+		)
+	//- Export menu
+	VPopup(
+		:target="$refs.buttonExport ? ($refs.buttonExport.$el || false) : false"
+		placement="bottom"
 
-			:is-open="!isMobileDevice && isExportMenuOpened"
-			v-click-outside="clickOutsideHandler"
-			)
-			div
-				p.export-menu__text
-					strong Choose a format to export in
-				p.export-menu__text
-					em
-						| If you want to print this  fretboard, choose PNG or JPG.
-						| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
-				div.export-menu__buttons
-					each format in ['png', 'jpg', 'svg']
-						button.button.is-filled(@click.left=`exportFretboard('${format}')`)
-							p.button__text= format.toUpperCase()
+		:is-open="!isMobileDevice && isExportMenuOpened"
+		v-click-outside="clickOutsideHandler"
+		)
+		div
+			p.export-menu__text
+				strong Choose a format to export in
+			p.export-menu__text
+				em
+					| If you want to print this  fretboard, choose PNG or JPG.
+					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
+			div.export-menu__buttons
+				each format in ['png', 'jpg', 'svg']
+					button.button.is-filled(@click.left=`exportFretboard('${format}')`)
+						p.button__text= format.toUpperCase()
 
 </template>
 <!--}}}-->
@@ -168,6 +167,22 @@ export default {
 			if (!this.$refs.buttonExport.$el.contains(event.target))
 				this.isExportMenuOpened = false;
 		},
+		formatFretNb(number)
+		{
+			if (number == 0)
+				return 'Open strings';
+
+			if (11 <= number && number <= 13)
+				return `${number}<sup>th</sup> fret`;
+
+			switch (`${number}`.slice(-1))
+			{
+				case '1': return `${number}<sup>st</sup> fret`;
+				case '2': return `${number}<sup>nd</sup> fret`;
+				case '3': return `${number}<sup>rd</sup> fret`;
+				default:  return `${number}<sup>th</sup> fret`;
+			}
+		},
 	}
 }
 
@@ -192,6 +207,7 @@ export default {
 	}
 }
 
+/*
 .settings {
 	@include mq($until: desktop)
 	{
@@ -225,6 +241,7 @@ export default {
 		.VButton { margin: 10px 0 0 10px; }
 	}
 }
+*/
 
 .export-menu__text {
 	max-width: 300px;

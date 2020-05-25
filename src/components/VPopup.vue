@@ -1,12 +1,12 @@
 
 
-<!-- components/VTooltip.vue -->
+<!-- components/VPopup.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VTooltip(
+div.VPopup(
 	ref="tooltip"
 
 	v-show="isOpen"
@@ -29,7 +29,7 @@ import offset           from '@popperjs/core/lib/modifiers/offset'
 import preventOverflow  from '@popperjs/core/lib/modifiers/preventOverflow'
 
 export default {
-	name: 'VTooltip',
+	name: 'VPopup',
 
 	props: {
 		target: {
@@ -127,7 +127,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VTooltip {
+.VPopup {
 	position: absolute;
 	z-index: 1000;
 
@@ -165,7 +165,7 @@ export default {
 
 		transform: rotate(45deg);
 
-		.VTooltip.is-menu & {
+		.VPopup.is-menu & {
 			background-color: var(--color--bg);
 		}
 	}

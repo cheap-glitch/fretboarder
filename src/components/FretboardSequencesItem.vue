@@ -116,7 +116,7 @@ div.FretboardSequencesItem
 
 					@click="isExtraToolsMenuOpen = !isExtraToolsMenuOpen"
 					)
-				VTooltip.tools__extra(
+				VPopup.tools__extra(
 					:target="($refs.extraToolsButton && $refs.extraToolsButton.$el) || false"
 					placement="bottom"
 					is-menu
