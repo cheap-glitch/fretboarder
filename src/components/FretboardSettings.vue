@@ -7,16 +7,12 @@
 <template lang="pug">
 
 div.FretboardSettings
-
 	//- Instrument settings
-	VButton(
-		:icon="['far', 'guitar']"
+	component(
+		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
+
+		icon="guitar"
 		title="Instrument settings"
-
-		@click="isInstrumentSettingsMenuOpened = !isExportMenuOpened"
-		)
-
-	VPopup(
 		)
 		//- Instrument
 		VSelect(
@@ -36,6 +32,14 @@ div.FretboardSettings
 			v-model="fretRange"
 			)
 		p(v-html="formatFretNb(fretRange[0]) + '&nbsp;—&nbsp;' + formatFretNb(fretRange[1])")
+		//- Switch fretting hand
+		VButton(
+			icon="hand-paper"
+			title="Switch hand"
+
+			:is-flipped="!isFlipped"
+			@click="$store.commit('fretboard/toggle.isFlipped')"
+		)
 
 	//- Toggle fret numbers
 	VButton(
@@ -45,6 +49,7 @@ div.FretboardSettings
 		:is-active="isShowingFretNbs"
 		@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
 		)
+
 	//- Toggle note names
 	VButton(
 		icon="info-circle"
@@ -53,43 +58,25 @@ div.FretboardSettings
 		:is-active="isShowingNoteNames"
 		@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
 		)
-	//- Switch fretting hand
-	VButton(
-		icon="hand-paper"
-		title="Switch hand"
 
-		:is-flipped="!isFlipped"
-		@click="$store.commit('fretboard/toggle.isFlipped')"
-	)
 	//- Export the fretboard
-	VButton(
+	VPopupMenu(
 		v-if="!isMobileDevice"
-		ref="buttonExport"
 
 		icon="file-download"
 		title="Export"
-
-		@click="isExportMenuOpened = !isExportMenuOpened"
-		)
-	//- Export menu
-	VPopup(
-		:target="$refs.buttonExport ? ($refs.buttonExport.$el || false) : false"
-		placement="bottom"
-
-		:is-open="!isMobileDevice && isExportMenuOpened"
-		v-click-outside="clickOutsideHandler"
 		)
 		div
-			p.export-menu__text
-				strong Choose a format to export in
-			p.export-menu__text
-				em
-					| If you want to print this  fretboard, choose PNG or JPG.
-					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
+			p.export-menu__text: strong Choose a format to export in
+			p.export-menu__text: em
+				| If you want to print this  fretboard, choose PNG or JPG.
+				| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
 			div.export-menu__buttons
 				each format in ['png', 'jpg', 'svg']
-					button.button.is-filled(@click.left=`exportFretboard('${format}')`)
-						p.button__text= format.toUpperCase()
+					VButton(
+						title=format.toUpperCase()
+						@click.left=`exportFretboard('${format}')`
+						)
 
 </template>
 <!--}}}-->
@@ -161,11 +148,6 @@ export default {
 				this.isDarkModeOn,
 				format != 'svg',
 			);
-		},
-		clickOutsideHandler(event)
-		{
-			if (!this.$refs.buttonExport.$el.contains(event.target))
-				this.isExportMenuOpened = false;
 		},
 		formatFretNb(number)
 		{
@@ -262,6 +244,7 @@ export default {
 	margin-top: 40px;
 }
 
+/*
 .button {
 	padding: 6px;
 
@@ -292,6 +275,7 @@ export default {
 
 	.button:hover & { color: var(--color--bg--tooltip); }
 }
+*/
 
 </style>
 <!--}}}-->
