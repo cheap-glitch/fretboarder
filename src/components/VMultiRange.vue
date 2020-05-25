@@ -56,7 +56,33 @@ export default {
 	methods: {
 		updateValue(inputIndex, event)
 		{
-			this.$emit(event.type, this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value) : value));
+			const newValues  = this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value, 10) : value);
+			const missingGap = this.minGap - (newValues[1] - newValues[0]);
+
+			// Prevent the values from being too close or overlapping
+			if (missingGap > 0)
+			{
+				if (inputIndex == 0)
+				{
+					// Try "pushing" the second thumb forward
+					const spaceLeft = this.max - newValues[1];
+					newValues[1] += Math.min(spaceLeft, missingGap);
+
+					// Adjust the position of the first thumb accordingly
+					newValues[0] -= Math.max(0, missingGap - spaceLeft);
+				}
+				else if (inputIndex == 1)
+				{
+					// Try "pushing" the first thumb backward
+					const spaceLeft = newValues[0] - this.min;
+					newValues[0] -= Math.min(spaceLeft, missingGap);
+
+					// Adjust the position of the second thumb accordingly
+					newValues[1] += Math.max(0, missingGap - spaceLeft);
+				}
+			}
+
+			this.$emit(event.type, newValues);
 		}
 	},
 }
