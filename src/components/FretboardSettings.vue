@@ -14,8 +14,8 @@ div.FretboardSettings
 		icon="guitar"
 		title="Instrument settings"
 		)
-		div.settings
-			div.settings__instrument
+		div.instrument-settings
+			div.instrument-settings__main
 				//- Instrument
 				VSelect(
 					:options="instruments"
@@ -27,7 +27,7 @@ div.FretboardSettings
 					v-model="tuning"
 					)
 			//- Fret range
-			div.settings__fret-range
+			div.instrument-settings__fret-range
 				VMultiRange.fret-range__slider(
 					:min="0"
 					:max="MAX_NB_FRETS - 1"
@@ -199,9 +199,13 @@ export default {
 	}
 }
 
-.settings {
+.instrument-settings {
 	@include center-column;
-	@include space-children-v(40px);
+
+	@include mq($until: desktop)
+	{
+		@include space-children-v(40px);
+	}
 
 	@include mq($from: desktop)
 	{
@@ -211,9 +215,13 @@ export default {
 	}
 }
 
-.settings__instrument {
+.instrument-settings__main {
 	display: flex;
 	@include space-children-h(10px);
+}
+
+.instrument-settings__fret-range {
+	@include space-children-v(4px);
 }
 
 .fret-range__slider {
@@ -253,42 +261,6 @@ export default {
 	justify-content: center;
 	@include space-children-h(10px);
 }
-
-/*
-.settings {
-	@include mq($until: desktop)
-	{
-		@include center-column;
-		@include space-children-v(20px);
-	}
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-		align-items: center;
-		@include space-children-h(10px);
-
-		flex: 0 0 auto;
-	}
-}
-
-.tools {
-	@include mq($until: desktop)
-	{
-		@include center-column;
-		@include space-children-v(20px);
-	}
-
-	@include mq($from: desktop)
-	{
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-end;
-
-		.VButton { margin: 10px 0 0 10px; }
-	}
-}
-*/
 
 </style>
 <!--}}}-->

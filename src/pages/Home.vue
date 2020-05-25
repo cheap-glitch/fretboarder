@@ -6,53 +6,12 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-//- Links {{{
-mixin links
-	nav.nav
-		//- GitHub & Twitter
-		a.nav__link(
-			href="https://github.com/cheap-glitch/fretboarder"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			)
-			fa-icon(:icon="['fab', 'github']")
-		a.nav__link(
-			href="https://twitter.com/cheap_glitch"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			)
-			fa-icon(:icon="['fab', 'twitter']")
-		//- Feedback
-		a.nav__link(
-			:href="`mailto:${mailto}`"
-			@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
-			)
-			fa-icon(:icon="['far', 'paper-plane']")
-			p.nav__link__text Send feedback
-		//- Patreon page
-		a.nav__link.link-support(
-			href="https://www.patreon.com/cheap_glitch"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			)
-			fa-icon(:icon="['far', 'heart']")
-			p.nav__link__text Support the app!
-		//- TGLD
-		a.nav__link.link-tgld(
-			href="https://www.theguitarlickdatabase.com"
-			target="_blank"
-			rel="external nofollow noopener noreferrer"
-			)
-			p.nav__link__text The Guitar Lick Database
-			fa-icon(:icon="['far', 'external-link-square-alt']")
-//- }}}
-
 div.Home
 	//----------------------------------------------------------------------
 	//- Header
 	//----------------------------------------------------------------------
 	header.header
-		div.flexbar
+		div.header__section.hero
 			//- Logo
 			div.logo
 				fa-icon.logo__icon(
@@ -60,10 +19,48 @@ div.Home
 					v-mods="{ isUkulele: instrument == 'ukulele' }"
 					)
 				h1.logo__text Fretboarder
-			//- Links
-			+links
 
-		div.flexbar(v-if="!isMobileDevice")
+			//- {{{ Links
+			//- nav.nav(v-if="!isMobileDevice")
+				//- GitHub & Twitter
+				a.nav__link(
+					href="https://github.com/cheap-glitch/fretboarder"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'github']")
+				a.nav__link(
+					href="https://twitter.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['fab', 'twitter']")
+				//- Feedback
+				a.nav__link(
+					:href="`mailto:${mailto}`"
+					@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
+					)
+					fa-icon(:icon="['far', 'paper-plane']")
+					p.nav__link__text Send feedback
+				//- Patreon page
+				a.nav__link.link-support(
+					href="https://www.patreon.com/cheap_glitch"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					fa-icon(:icon="['far', 'heart']")
+					p.nav__link__text Support the app!
+				//- TGLD
+				a.nav__link.link-tgld(
+					href="https://www.theguitarlickdatabase.com"
+					target="_blank"
+					rel="external nofollow noopener noreferrer"
+					)
+					p.nav__link__text The Guitar Lick Database
+					fa-icon(:icon="['far', 'external-link-square-alt']")
+			//- }}}
+
+		div.header__section.settings(v-if="!isMobileDevice")
 			//- Desktop settings
 			FretboardSettings
 
@@ -87,7 +84,7 @@ div.Home
 	//----------------------------------------------------------------------
 
 	//- Settings
-	transition(name="fade"): FretboardSettings(v-show="isMobileDevice && subpage == 'settings'")
+	transition(name="fade"): FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
 	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
@@ -186,24 +183,24 @@ export default {
 	}
 }
 
-/**
- * Header
- * -----------------------------------------------------------------------------
- */
-
 .header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 
-	padding-bottom: 60px;
+	margin-bottom: 40px;
 }
 
-.flexbar {
+.header__section {
 	display: flex;
 	align-items: center;
 	@include space-children-h(20px);
 }
+
+/**
+ * Logo & links
+ * -----------------------------------------------------------------------------
+ */
 
 .logo {
 	display: flex;
@@ -248,13 +245,17 @@ export default {
 }
 
 .nav {
+	position: relative;
+
 	display: flex;
 	@include space-children-h(18px);
 
 	opacity: 0;
-	transition: opacity 0.2s;
+	transition: opacity 200ms;
 
-	.header:hover & { opacity: 1; }
+	background-color: var(--color--bg);
+
+	.header__section:first-child:hover & { opacity: 1; }
 }
 
 .nav__link {
@@ -279,6 +280,15 @@ export default {
 
 .link-support:hover { color: var(--color--red);    }
 .link-tgld:hover    { color: var(--color--orange); }
+
+/**
+ * Settings
+ * -----------------------------------------------------------------------------
+ */
+
+.settings {
+	justify-content: flex-end;
+}
 
 .dark-mode-toggle {
 	display: flex;
@@ -324,12 +334,13 @@ export default {
 }
 
 /**
- * Mobile header
+ * Mobile sublinks
  * -----------------------------------------------------------------------------
  */
 
 .sublinks {
 	display: flex;
+	justify-content: flex-end;
 }
 
 .sublinks__item {
