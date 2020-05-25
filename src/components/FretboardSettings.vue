@@ -28,7 +28,7 @@ div.FretboardSettings
 			//- Fret range
 			VMultiRange.fret-range(
 				:min="0"
-				:max="MAX_NB_FRETS"
+				:max="MAX_NB_FRETS - 1"
 				:min-gap="MIN_NB_FRETS"
 				v-model="fretRange"
 				)
