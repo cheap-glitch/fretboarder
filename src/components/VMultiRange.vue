@@ -60,9 +60,24 @@ export default {
 <style lang="scss" scoped>
 
 .VMultiRange {
+	position: relative;
 	display: grid;
 
-	background-color: var(--color--bg--highlight);
+	&::before {
+		content: "";
+
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		transform: translateY(-50%);
+
+		height: 4px;
+
+		border-radius: 2px;
+
+		background-color: var(--color--border);
+	}
 }
 
 @mixin track()
@@ -74,7 +89,7 @@ export default {
 
 @mixin thumb()
 {
-	@include circle(20px);
+	@include circle(14px);
 
 	border: none;
 	appearance: none;
@@ -108,9 +123,10 @@ export default {
 
 	&:focus {
 		z-index: 2;
-
 		color: var(--color--hover);
-		outline: 1px solid var(--color--hover);
+
+		outline: none;
+		&::-moz-focus-outer { border-style: none; }
 
 		&::-moz-range-thumb     { cursor: grabbing; }
 		&::-webkit-slider-thumb { cursor: grabbing; }

@@ -22,11 +22,14 @@ div.FretboardSettings
 			:options="tunings"
 			v-model="tuning"
 			)
+		p {{ fretRange[0] }}
+		p —
+		p {{ fretRange[1] }}
 		//- Fret range
 		VMultiRange(
-			:min="MIN_NB_FRETS"
+			:min="0"
 			:max="MAX_NB_FRETS"
-			:min-gap="4"
+			:min-gap="MIN_NB_FRETS"
 			v-model="fretRange"
 			)
 
