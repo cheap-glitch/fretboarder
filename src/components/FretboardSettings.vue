@@ -26,7 +26,7 @@ div.FretboardSettings
 				v-model="tuning"
 				)
 			//- Fret range
-			VMultiRange(
+			VMultiRange.fret-range(
 				:min="0"
 				:max="MAX_NB_FRETS"
 				:min-gap="MIN_NB_FRETS"
@@ -194,6 +194,12 @@ export default {
 .instrument-settings {
 	@include center-column;
 	@include space-children-v(20px);
+
+	padding: 10px;
+}
+
+.fret-range {
+	min-width: 250px;
 }
 
 .fret-range-text {
@@ -202,6 +208,8 @@ export default {
 
 .export-menu {
 	@include space-children-v(20px);
+
+	padding: 10px;
 }
 
 .export-menu__text {

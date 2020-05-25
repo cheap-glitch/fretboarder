@@ -13,25 +13,27 @@ div.Home
 	//----------------------------------------------------------------------
 
 	header.header
-		//- Logo
-		div.logo
-			fa-icon.logo__icon(
-				:icon="['far', instrumentIcon]"
-				v-mods="{ isUkulele: instrument == 'ukulele' }"
+		div.flexbar
+			//- Logo
+			div.logo
+				fa-icon.logo__icon(
+					:icon="['far', instrumentIcon]"
+					v-mods="{ isUkulele: instrument == 'ukulele' }"
+					)
+				h1.logo__text Fretboarder
+
+		div.flexbar(v-if="!isMobileDevice")
+			//- Desktop settings
+			FretboardSettings
+
+			//- Dark mode toggle switch
+			div.dark-mode-toggle(
+				v-mods="{ isDarkModeOn }"
+				@click="$store.commit('toggle.isDarkModeOn')"
 				)
-			h1.logo__text Fretboarder
-
-		//- Settings
-		transition(name="fade"): FretboardSettings(v-show="!isMobileDevice || subpage == 'settings'")
-
-		//- Dark mode toggle switch
-		//- div.dark-mode-toggle(
-			v-mods="{ isDarkModeOn }"
-			@click="$store.commit('toggle.isDarkModeOn')"
-			)
-			fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
-			div.dark-mode-toggle__switch
-			fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
+				fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
+				div.dark-mode-toggle__switch
+				fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
 
 		//- Sub-pages links
 		nav.sublinks(v-if="isMobileDevice")
@@ -39,54 +41,56 @@ div.Home
 			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
 			div.sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
 
-		//- div.header__nav
+		//- Links {{{
+		//- nav.nav
 
-			//- Links
-			nav.nav
+			//- GitHub & Twitter links
+			a.nav__link(
+				href="https://github.com/cheap-glitch/fretboarder"
+				target="_blank"
+				rel="external nofollow noopener noreferrer"
+				)
+				fa-icon(:icon="['fab', 'github']")
+			a.nav__link(
+				href="https://twitter.com/cheap_glitch"
+				target="_blank"
+				rel="external nofollow noopener noreferrer"
+				)
+				fa-icon(:icon="['fab', 'twitter']")
 
-				//- GitHub & Twitter links
-				a.nav__link(
-					href="https://github.com/cheap-glitch/fretboarder"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'github']")
-				a.nav__link(
-					href="https://twitter.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'twitter']")
+			//- Feedback
+			a.nav__link(
+				:href="`mailto:${mailto}`"
+				@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
+				)
+				fa-icon(:icon="['far', 'paper-plane']")
+				p.nav__link__text Send feedback
 
-				//- Feedback
-				a.nav__link(
-					:href="`mailto:${mailto}`"
-					@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
-					)
-					fa-icon(:icon="['far', 'paper-plane']")
-					p.nav__link__text Send feedback
+			//- Patreon page
+			a.nav__link.link-support(
+				href="https://www.patreon.com/cheap_glitch"
+				target="_blank"
+				rel="external nofollow noopener noreferrer"
+				)
+				fa-icon(:icon="['far', 'heart']")
+				p.nav__link__text Support the app!
 
-				//- Patreon page
-				a.nav__link.link-support(
-					href="https://www.patreon.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['far', 'heart']")
-					p.nav__link__text Support the app!
-
-				//- TGLD
-				a.nav__link.link-tgld(
-					href="https://www.theguitarlickdatabase.com"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					p.nav__link__text The Guitar Lick Database
-					fa-icon(:icon="['far', 'external-link-square-alt']")
+			//- TGLD
+			a.nav__link.link-tgld(
+				href="https://www.theguitarlickdatabase.com"
+				target="_blank"
+				rel="external nofollow noopener noreferrer"
+				)
+				p.nav__link__text The Guitar Lick Database
+				fa-icon(:icon="['far', 'external-link-square-alt']")
+		//- }}}
 
 	//----------------------------------------------------------------------
 	//- Page content
 	//----------------------------------------------------------------------
+
+	//- Settings
+	transition(name="fade"): FretboardSettings(v-show="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
 	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
@@ -163,6 +167,11 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
+/**
+ * Layout
+ * -----------------------------------------------------------------------------
+ */
+
 .fretboard-wrapper {
 	@include mq($until: desktop, $and: '(orientation: portrait)')
 	{
@@ -186,13 +195,16 @@ export default {
 
 .header {
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: space-between;
 
-	@include mq($from: desktop)
-	{
-		padding-bottom: 60px;
-	}
+	padding-bottom: 60px;
+}
+
+.flexbar {
+	display: flex;
+	align-items: center;
+	@include space-children-h(20px);
 }
 
 .logo {
@@ -269,6 +281,11 @@ export default {
 		}
 	}
 }
+
+/**
+ * Mobile header
+ * -----------------------------------------------------------------------------
+ */
 
 .sublinks {
 	display: flex;
