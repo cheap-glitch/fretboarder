@@ -37,15 +37,15 @@ div.FretboardViewer(
 		)
 
 	//- Fret numbers
-	template(v-show="isShowingFretNbs")
-		div.fret-number(
-			v-for="(fret, index) of fretNumbers"
-			:key="`fret-number--${index}`"
+	div.fret-number(
+		v-for="(fret, index) of fretNumbers"
+		:key="`fret-number--${index}`"
 
-			:style="isVertical ? { gridArea: `${index + 1} / 1 / span 1 / span 1` } : null"
-			v-mods="{ isVertical }"
-			)
-			p.fret-number__text {{ fret }}
+		v-show="isShowingFretNbs"
+		v-mods="{ isVertical }"
+		:style="isVertical ? { gridArea: `${index + 1} / 1 / span 1 / span 1` } : null"
+		)
+		p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
