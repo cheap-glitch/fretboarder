@@ -36,7 +36,7 @@ div.FretboardSettings
 					:values="fretRangeDisplay"
 
 					@input=" fretRangeDisplay = $event"
-					@change="fretRange        = $event"
+					@change="fretRange = fretRangeDisplay = $event"
 					)
 				p.fret-range__text
 					span(v-html="formatFretNb(fretRangeDisplay[0])")

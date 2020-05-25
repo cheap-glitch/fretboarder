@@ -6,17 +6,21 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VMultiRange: each index in [0, 1]
-	input.slider(
-		type="range"
-		:min="min"
-		:max="max"
+div.VMultiRange(
+	@click.left="selectValue"
+	)
+	each index in [0, 1]
+		input.slider(
+			type="range"
+			:min="min"
+			:max="max"
 
-		:value=`values[${index}]`
+			:value=`values[${index}]`
 
-		@input=` updateValue(${index}, $event)`
-		@change=`updateValue(${index}, $event)`
-		)
+			@input=` updateValue(${index}, $event)`
+			@change=`updateValue(${index}, $event)`
+			@click.left.stop
+			)
 
 </template>
 <!--}}}-->
@@ -54,6 +58,15 @@ export default {
 	},
 
 	methods: {
+		selectValue(event)
+		{
+			// Compute the selected value using the location of the pointer
+			const rect  = this.$el.getBoundingClientRect();
+			const value = Math.max(0, Math.min(this.max, this.min + Math.ceil(Math.max(0, event.clientX - rect.x)*this.max / rect.width)));
+
+			// "Trigger" a fake change event
+			this.updateValue(1, { type: 'change', target: { value } });
+		},
 		updateValue(inputIndex, event)
 		{
 			const newValues  = this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value, 10) : value);
@@ -97,6 +110,8 @@ export default {
 .VMultiRange {
 	position: relative;
 	display: grid;
+
+	cursor: pointer;
 
 	&::before {
 		content: "";
