@@ -46,7 +46,7 @@ div.FretboardSettings
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
-				title="Switch hand"
+				title="Switch fretting hand"
 
 				:is-flipped="!isFlipped"
 				@click="$store.commit('fretboard/toggle.isFlipped')"

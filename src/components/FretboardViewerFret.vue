@@ -27,7 +27,7 @@ div.FretboardViewerFret
 					)
 				p.intervals__item__text {{ interval.name }}
 
-	div.fret(v-mods="{ isOpenString, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
+	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
 
 		div.fret__inlay(v-show="isShowingInlay")
 
@@ -96,6 +96,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		fretMin: {
+			type: Number,
+			required: true,
+		},
 	},
 
 	data() {
@@ -158,6 +162,10 @@ export default {
 		{
 			return this.number == 0;
 		},
+		isStartingFret()
+		{
+			return this.number == this.fretMin && this.number > 0;
+		},
 		isFirstFret()
 		{
 			return this.number == 1;
@@ -209,11 +217,13 @@ export default {
 	&:not(.is-fretboard-vertical) {
 		&.is-fretboard-flipped {
 			&:not(.is-open-string) { border-left-width:   layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
 			&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
 		}
 
 		&:not(.is-fretboard-flipped) {
 			&:not(.is-open-string) { border-right-width:  layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-left-width:   layout.$fretbar-thickness; }
 			&.is-first-fret        { border-left-width:   layout.$nut-thickness;     }
 		}
 	}
