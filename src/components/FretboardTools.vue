@@ -77,6 +77,8 @@ div.FretboardTools
 
 		icon="file-download"
 		title="Export"
+
+		:force-closing="exportMenuClose"
 		)
 		div.export-menu
 			div.export-menu__text
@@ -89,7 +91,8 @@ div.FretboardTools
 					VButton(
 						icon=(format == 'svg' ? 'file-image' : 'image-polaroid')
 						title=format.toUpperCase()
-						@click.left=`exportFretboard('${format}')`
+
+						@click=`exportFretboard('${format}')`
 						)
 
 </template>
@@ -111,6 +114,7 @@ export default {
 
 	data() {
 		return {
+			exportMenuClose:  false,
 			fretRangeDisplay: this.$store.state.fretboard.fretRange,
 		}
 	},
@@ -144,6 +148,8 @@ export default {
 	methods: {
 		exportFretboard(format)
 		{
+			this.exportMenuClose = !this.exportMenuClose;
+
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,

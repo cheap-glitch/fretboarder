@@ -43,12 +43,23 @@ export default {
 			type: String,
 			default: '',
 		},
+		forceClosing: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
 		return {
 			isOpen: false,
 		}
+	},
+
+	watch: {
+		forceClosing()
+		{
+			this.isOpen = false;
+		},
 	},
 
 	methods: {
