@@ -305,8 +305,9 @@ export default {
 .intervals {
 	display: grid;
 
-	grid-gap: 10px;
-	grid-auto-rows: auto;
+	gap: 10px;
+	//- grid-auto-rows: auto;
+	grid-auto-flow: column;
 	grid-template-columns: repeat(auto-fill, 60px);
 
 	@include mq($until: desktop)
@@ -367,17 +368,21 @@ export default {
 }
 
 .tools {
-	display: flex;
-
 	@include mq($until: desktop)
 	{
-		flex-wrap: wrap;
+		display: grid;
 
-		.VButton { margin: 0 10px 10px 0; }
+		grid-auto-flow: column;
+		grid-template-columns: repeat(auto-fill, 10px);
+
+		//- flex-wrap: wrap;
+
+		//- .VButton { margin: 0 10px 10px 0; }
 	}
 
 	@include mq($from: desktop)
 	{
+		display: flex;
 		@include space-children-h(10px);
 	}
 }

@@ -13,18 +13,15 @@
  */
 
 import Vue           from 'vue'
-import VueRouter     from 'vue-router'
 import VClickOutside from 'v-click-outside'
 import VCSSModifiers from 'vue-css-modifiers'
 
 import App           from '@/App'
 import store         from '@/stores/main'
-import routes        from '@/routes'
 
 /**
  * Register plugins, directives & external components
  */
-Vue.use(VueRouter);
 Vue.directive('mods',          VCSSModifiers);
 Vue.directive('click-outside', VClickOutside.directive);
 
@@ -41,16 +38,6 @@ baseComponents.keys().forEach(function(filename)
 });
 
 /**
- * Create the router
- */
-const router = new VueRouter({
-	routes,
-
-	mode: 'history',
-	base: process.env.BASE_URL,
-});
-
-/**
  * Create the Vue instance
  */
-new Vue({ store, router, render: h => h(App) }).$mount('#app');
+new Vue({ store, render: h => h(App) }).$mount('#app');
