@@ -12,7 +12,7 @@ div.VMultiRange(
 
 	@click.left="selectValue"
 	)
-	each index in [0, 1]
+	each index of [0, 1]
 		input.slider(
 			type="range"
 			:min="min"

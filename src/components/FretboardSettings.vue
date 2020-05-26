@@ -85,7 +85,7 @@ div.FretboardSettings
 					| If you want to print this  fretboard, choose PNG or JPG.
 					| The SVG format is most useful for embedding in web pages as it will scale perfectly when resized.
 			div.export-menu__buttons
-				each format in ['png', 'jpg', 'svg']
+				each format of ['png', 'jpg', 'svg']
 					VButton(
 						icon=(format == 'svg' ? 'file-image' : 'image-polaroid')
 						title=format.toUpperCase()

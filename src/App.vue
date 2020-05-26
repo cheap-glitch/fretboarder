@@ -66,7 +66,7 @@ export default {
 .App {
 	flex: 1 1 auto;
 
-	padding: 20px;
+	padding: 12px;
 
 	background-color: var(--color--bg);
 }

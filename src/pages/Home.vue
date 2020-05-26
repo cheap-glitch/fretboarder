@@ -167,22 +167,6 @@ export default {
  * -----------------------------------------------------------------------------
  */
 
-.fretboard-wrapper {
-	@include mq($until: desktop, $and: '(orientation: portrait)')
-	{
-		display: flex;
-		justify-content: center;
-	}
-
-	@include mq($from: desktop)
-	{
-		overflow-x: auto;
-
-		margin-bottom: 60px;
-		padding: 70px 0 40px 0;
-	}
-}
-
 .header {
 	display: flex;
 	align-items: center;
@@ -195,6 +179,35 @@ export default {
 	display: flex;
 	align-items: center;
 	@include space-children-h(20px);
+}
+
+.fretboard-wrapper {
+	@include mq($until: desktop, $and: '(orientation: portrait)')
+	{
+		display: flex;
+		justify-content: center;
+	}
+
+	@include mq($from: desktop)
+	{
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+
+		overflow-x: auto;
+
+		min-height: 33vh;
+
+		margin-bottom: 60px;
+		padding: 70px 0 40px 0;
+	}
+}
+
+.FretboardSequences {
+	@include mq($from: desktop)
+	{
+		padding: 10px;
+	}
 }
 
 /**

@@ -68,6 +68,8 @@ export default {
 <style lang="scss" scoped>
 
 .VPopup {
+	z-index: 2000;
+
 	color: var(--color--bg);
 	background-color: var(--color--bg);
 }
