@@ -12,67 +12,26 @@ div.App#app(:style="colorscheme")
 	//- Header
 	//----------------------------------------------------------------------
 	header.header
-		div.header__section.hero
-			//- Logo
-			div.logo
-				fa-icon.logo__icon(
-					:icon="['far', instrumentIcon]"
-					v-mods="{ isUkulele: instrument == 'ukulele' }"
-					)
-				h1.logo__text Fretboarder
+		//- Logo
+		div.header__logo
+			fa-icon.logo__icon(
+				:icon="['far', instrumentIcon]"
+				v-mods="{ isUkulele: instrument == 'ukulele' }"
+				)
+			h1.logo__text Fretboarder
 
-			//- {{{ Links
-			//- nav.nav(v-if="!isMobileDevice")
-				//- GitHub & Twitter
-				a.nav__link(
-					href="https://github.com/cheap-glitch/fretboarder"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'github']")
-				a.nav__link(
-					href="https://twitter.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['fab', 'twitter']")
-				//- Feedback
-				a.nav__link(
-					:href="`mailto:${mailto}`"
-					@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
-					)
-					fa-icon(:icon="['far', 'paper-plane']")
-					p.nav__link__text Send feedback
-				//- Patreon page
-				a.nav__link.link-support(
-					href="https://www.patreon.com/cheap_glitch"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					fa-icon(:icon="['far', 'heart']")
-					p.nav__link__text Support the app!
-				//- TGLD
-				a.nav__link.link-tgld(
-					href="https://www.theguitarlickdatabase.com"
-					target="_blank"
-					rel="external nofollow noopener noreferrer"
-					)
-					p.nav__link__text The Guitar Lick Database
-					fa-icon(:icon="['far', 'external-link-square-alt']")
-			//- }}}
-
-		div.header__section.settings(v-if="!isMobileDevice")
+		div.header__settings(v-if="!isMobileDevice")
 			//- Desktop settings
 			FretboardTools
 
 			//- Dark mode toggle switch
-			div.dark-mode-toggle(
+			div.dark-mode-switch(
 				v-mods="{ isDarkModeOn }"
 				@click="$store.commit('toggle.isDarkModeOn')"
 				)
-				fa-icon.dark-mode-toggle__sun(:icon="['fas', 'sun']")
-				div.dark-mode-toggle__switch
-				fa-icon.dark-mode-toggle__moon(:icon="['fas', 'moon']")
+				fa-icon.dark-mode-switch__sun(:icon="['fas', 'sun']")
+				div.dark-mode-switch__toggle
+				fa-icon.dark-mode-switch__moon(:icon="['fas', 'moon']")
 
 		//- Sub-pages links
 		nav.sublinks(v-if="isMobileDevice")
@@ -81,7 +40,7 @@ div.App#app(:style="colorscheme")
 			div.sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
 
 	//----------------------------------------------------------------------
-	//- Page content
+	//- Body
 	//----------------------------------------------------------------------
 	div#canvas-wrapper(v-show="false")
 
@@ -93,7 +52,54 @@ div.App#app(:style="colorscheme")
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- Scales & arpeggios
-	transition(name="fade"): FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
+	transition(name="fade"): div.sequences-wrapper
+		FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
+
+	//----------------------------------------------------------------------
+	//- Footer
+	//----------------------------------------------------------------------
+	footer.footer(v-if="!isMobileDevice"): nav.nav
+		//- GitHub & Twitter
+		a.nav__link(
+			href="https://github.com/cheap-glitch/fretboarder"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			fa-icon(:icon="['fab', 'github']")
+			p.nav__link__text GitHub
+		a.nav__link(
+			href="https://twitter.com/cheap_glitch"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			fa-icon(:icon="['fab', 'twitter']")
+			p.nav__link__text Twitter
+
+		//- Feedback
+		a.nav__link(
+			:href="`mailto:${mailto}`"
+			@click.left="mailto = `cheap.glitch@gmail.com?subject=${feedbackMail.subject}&body=${feedbackMail.body}`"
+			)
+			fa-icon(:icon="['far', 'paper-plane']")
+			p.nav__link__text Send feedback
+
+		//- Patreon page
+		a.nav__link.link-support(
+			href="https://www.patreon.com/cheap_glitch"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			fa-icon(:icon="['far', 'heart']")
+			p.nav__link__text Support the app!
+
+		//- TGLD
+		a.nav__link.link-tgld(
+			href="https://www.theguitarlickdatabase.com"
+			target="_blank"
+			rel="external nofollow noopener noreferrer"
+			)
+			p.nav__link__text The Guitar Lick Database
+			fa-icon(:icon="['far', 'external-link-square-alt']")
 
 </template>
 <!--}}}-->
@@ -194,31 +200,20 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.App {
-	flex: 1 1 auto;
-
-	padding: 12px;
-
-	background-color: var(--color--bg);
-}
-
 /**
  * Layout
  * -----------------------------------------------------------------------------
  */
 
-.header {
+.App {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column;
 
-	margin-bottom: 40px;
-}
+	flex: 1 1 auto;
 
-.header__section {
-	display: flex;
-	align-items: center;
-	@include space-children-h(20px);
+	padding: 12px;
+
+	background-color: var(--color--bg);
 }
 
 .fretboard-wrapper {
@@ -251,11 +246,19 @@ export default {
 }
 
 /**
- * Logo & links
+ * Header
  * -----------------------------------------------------------------------------
  */
 
-.logo {
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	margin-bottom: 40px;
+}
+
+.header__logo {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
@@ -270,6 +273,12 @@ export default {
 	&:hover {
 		background-color: var(--color--hover);
 	}
+}
+
+.header__settings {
+	display: flex;
+	align-items: center;
+	@include space-children-h(20px);
 }
 
 .logo__icon {
@@ -297,53 +306,7 @@ export default {
 	}
 }
 
-.nav {
-	position: relative;
-
-	display: flex;
-	@include space-children-h(18px);
-
-	opacity: 0;
-	transition: opacity 200ms;
-
-	background-color: var(--color--bg);
-
-	.header__section:first-child:hover & { opacity: 1; }
-}
-
-.nav__link {
-	display: flex;
-	align-items: center;
-	@include space-children-h(6px);
-
-	font-size: 1.4rem;
-
-	color: var(--color--text--secondary);
-
-	cursor: pointer;
-
-	&:hover {
-		color: var(--color--hover);
-	}
-}
-
-.nav__link__text {
-	cursor: pointer;
-}
-
-.link-support:hover { color: var(--color--red);    }
-.link-tgld:hover    { color: var(--color--orange); }
-
-/**
- * Settings
- * -----------------------------------------------------------------------------
- */
-
-.settings {
-	justify-content: flex-end;
-}
-
-.dark-mode-toggle {
+.dark-mode-switch {
 	display: flex;
 	align-items: center;
 	@include space-children-h(5px);
@@ -352,13 +315,13 @@ export default {
 
 	cursor: pointer;
 
-	&.is-dark-mode-on:hover       .dark-mode-toggle__sun,
-	&:not(.is-dark-mode-on):hover .dark-mode-toggle__moon {
+	&.is-dark-mode-on:hover       .dark-mode-switch__sun,
+	&:not(.is-dark-mode-on):hover .dark-mode-switch__moon {
 		color: var(--color--hover);
 	}
 }
 
-.dark-mode-toggle__switch {
+.dark-mode-switch__toggle {
 	position: relative;
 
 	width: 20px;
@@ -380,16 +343,11 @@ export default {
 
 		transition: transform 0.2s;
 
-		.dark-mode-toggle.is-dark-mode-on & {
+		.dark-mode-switch.is-dark-mode-on & {
 			transform: translateX(8px);
 		}
 	}
 }
-
-/**
- * Mobile sublinks
- * -----------------------------------------------------------------------------
- */
 
 .sublinks {
 	display: flex;
@@ -411,6 +369,55 @@ export default {
 		margin-right: 10px;
 	}
 }
+
+/**
+ * Footer
+ * -----------------------------------------------------------------------------
+ */
+
+.footer {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	flex: 1 1 100%;
+
+	margin-top: 20px;
+}
+
+.nav {
+	display: flex;
+	justify-content: flex-end;
+	@include space-children-h(20px);
+}
+
+.nav__link {
+	display: flex;
+	align-items: center;
+	@include space-children-h(6px);
+
+	font-size: 1.3rem;
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color--hover);
+	}
+}
+
+.nav__link__text {
+	cursor: pointer;
+}
+
+.link-support:hover { color: var(--color--red);    }
+.link-tgld:hover    { color: var(--color--orange); }
+
+/**
+ * Settings
+ * -----------------------------------------------------------------------------
+ */
 
 </style>
 <!--}}}-->

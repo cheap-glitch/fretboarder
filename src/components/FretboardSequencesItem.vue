@@ -369,21 +369,16 @@ export default {
 }
 
 .tools {
+	display: flex;
+
 	@include mq($until: desktop)
 	{
-		display: grid;
-
-		grid-auto-flow: column;
-		grid-template-columns: repeat(auto-fill, 10px);
-
-		//- flex-wrap: wrap;
-
-		//- .VButton { margin: 0 10px 10px 0; }
+		flex-wrap: wrap;
+		.VButton { margin: 0 10px 10px 0; }
 	}
 
 	@include mq($from: desktop)
 	{
-		display: flex;
 		@include space-children-h(10px);
 	}
 }
