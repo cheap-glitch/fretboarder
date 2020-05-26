@@ -62,7 +62,7 @@ div.Home
 
 		div.header__section.settings(v-if="!isMobileDevice")
 			//- Desktop settings
-			FretboardSettings
+			FretboardTools
 
 			//- Dark mode toggle switch
 			div.dark-mode-toggle(
@@ -76,15 +76,15 @@ div.Home
 		//- Sub-pages links
 		nav.sublinks(v-if="isMobileDevice")
 			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
-			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
+			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =     'tools'"): fa-icon(:icon="['far', 'cog']")
 			div.sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
 
 	//----------------------------------------------------------------------
 	//- Page content
 	//----------------------------------------------------------------------
 
-	//- Settings
-	transition(name="fade"): FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
+	//- Tools
+	transition(name="fade"): FretboardTools(v-if="isMobileDevice && subpage == 'tools'")
 
 	//- Fretboard
 	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
@@ -102,7 +102,7 @@ div.Home
 
 import { get }            from 'vuex-pathify'
 
-import FretboardSettings  from '@/components/FretboardSettings'
+import FretboardTools     from '@/components/FretboardTools'
 import FretboardViewer    from '@/components/FretboardViewer'
 import FretboardSequences from '@/components/FretboardSequences'
 
@@ -110,7 +110,7 @@ export default {
 	name: 'Home',
 
 	components: {
-		FretboardSettings,
+		FretboardTools,
 		FretboardViewer,
 		FretboardSequences,
 	},

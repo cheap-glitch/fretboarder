@@ -1,12 +1,12 @@
 
 
-<!-- components/FretboardSettings.vue -->
+<!-- components/FretboardTools.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardSettings
+div.FretboardTools
 	//- Instrument settings
 	component(
 		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
@@ -107,7 +107,7 @@ import { exportFretboard }                    from '@/modules/export'
 import { instruments, tunings, tuningsNames } from '@/modules/music'
 
 export default {
-	name: 'FretboardSettings',
+	name: 'FretboardTools',
 
 	data() {
 		return {
@@ -185,7 +185,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardSettings {
+.FretboardTools {
 	@include mq($until: desktop)
 	{
 		@include center-column;
