@@ -6,7 +6,7 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.App(:style="colorscheme")#app
+div.App#app(:style="colorscheme")
 
 	//----------------------------------------------------------------------
 	//- Header
@@ -105,6 +105,7 @@ div.App(:style="colorscheme")#app
 import { get }               from 'vuex-pathify'
 
 import { mapObjectToObject } from '@/modules/object'
+import { mapObjectKeys }     from '@/modules/object'
 import { colorscheme }       from '@/modules/colorscheme'
 
 import { mediaQueries }      from '@/stores/main'
@@ -132,7 +133,7 @@ export default {
 	computed: {
 		colorscheme()
 		{
-			return mapObjectToObject(colorscheme, (varName, values) => values[this.$store.state.isDarkModeOn ? 1 : 0]);
+			return mapObjectToObject(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
 		},
 		instrumentIcon()
 		{
@@ -172,17 +173,17 @@ export default {
 	mounted()
 	{
 		// Listen to any changes on the device type and layout orientation
-		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].addListener(this[mq]));
+		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].addListener(this[`update.${mq}`]));
 	},
 
 	destroyed()
 	{
 		// Clear event listeners
-		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[mq]));
+		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[`update.${mq}`]));
 	},
 
 	methods: {
-		...mapObjectToObject(mediaQueries, mq => (function(event) { this.$store.commit(mq, event.matches); })),
+		...mapObjectKeys(mapObjectToObject(mediaQueries, mq => (function(event) { this.$store.commit(mq, event.matches); })), mq => `update.${mq}`),
 	},
 }
 

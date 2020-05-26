@@ -38,7 +38,7 @@ mixin extra-tools
 		)
 
 div.FretboardSequencesItem
-
+	//- Infos (mobile)
 	div.infos(
 		v-if="isMobileDevice"
 
@@ -50,6 +50,7 @@ div.FretboardSequencesItem
 		p {{ infos }}
 		fa-icon(:icon="['far', isOpen ? 'minus' : 'ellipsis-v']")
 
+	//- Settings & tools
 	transition(name="fade"): div.settings(
 		v-show="isOpen || !isMobileDevice"
 		:style="{ borderColor: color }"
@@ -126,11 +127,12 @@ div.FretboardSequencesItem
 <!--{{{ JavaScript -->
 <script>
 
-import { get }                                            from 'vuex-pathify'
+import { get }                         from 'vuex-pathify'
 
-import { MAX_NB_SEQUENCES }                               from '@/modules/constants'
-import { filterObject }                                   from '@/modules/object'
-import { notes, notesNames, models, intervalsShortNames } from '@/modules/music'
+import { MAX_NB_SEQUENCES }            from '@/modules/constants'
+import { filterObject }                from '@/modules/object'
+import { notes, notesNames }           from '@/modules/music'
+import { models, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItem',
@@ -306,8 +308,7 @@ export default {
 	display: grid;
 
 	gap: 10px;
-	//- grid-auto-rows: auto;
-	grid-auto-flow: column;
+	grid-auto-rows: auto;
 	grid-template-columns: repeat(auto-fill, 60px);
 
 	@include mq($until: desktop)

@@ -4,6 +4,19 @@
  */
 
 /**
+ * Create a new object with the same values but with transformed keys
+ */
+export function mapObjectKeys(object, callback)
+{
+	return Object.keys(object).reduce(function(result, key)
+	{
+		result[callback(key, object[key])] = object[key];
+
+		return result;
+	}, {});
+}
+
+/**
  * Create a new object with the same keys and the result of a callback as values
  */
 export function mapObjectToObject(object, callback)
