@@ -1,33 +1,51 @@
 
 
-<!-- FretboardViewer.vue -->
+<!-- components/FretboardViewer.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
 div.FretboardViewer(
-	v-mods="{ isFretboardVertical, isDisplayingFretNbs }"
-	:style="[minWidth, grid, inlays]"
+	v-mods="{ isShowingFretNbs }"
+	:style="[minLength, maxWidth, grid]"
 	)
 
 	//- Frets
 	FretboardViewerFret(
-		v-for="fret in frets"
-		:key="`fret--${fret.fret}-${fret.string+1}`"
+		v-for="(fret, index) of displayedFrets"
+		:key="`fret--${fret.string + 1}--${fret.number}`"
 
-		v-bind="{ ...fret, nbStrings, fretRange, isFretboardVertical, isFretboardFlipped, isDisplayingNotesName }")
+		v-bind="fret"
+		:fret-min="fretMin"
+		:is-on-last-string="fret.string + 1 == nbStrings"
+		:is-showing-note-name="isShowingNoteNames"
+		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
+
+		:is-fretboard-flipped="isFlipped"
+		:is-fretboard-vertical="isVertical"
+
+		:style="(isFlipped && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
+		)
+
+	//- Strings
+	div.string(
+		v-for="(string, index) of strings"
+		:key="`string--${index + 1}`"
+
+		:style="string"
+		)
 
 	//- Fret numbers
-	template(v-if="isDisplayingFretNbs")
-		div.fret-number(
-			v-for="(fret, index) in fretNumbers"
-			:key="`fret-number--${fret}`"
+	div.fret-number(
+		v-for="(fret, index) of fretNumbers"
+		:key="`fret-number--${index}`"
 
-			:style="isFretboardVertical ? { 'grid-column-start': 1, 'grid-row-start': index + 1 } : {}"
-			v-mods="{ isFretboardVertical }"
-			)
-			p.fret-number__text {{ fret }}
+		v-show="isShowingFretNbs"
+		v-mods="{ isVertical }"
+		:style="isVertical ? { gridArea: `${index + 1} / 1 / span 1 / span 1` } : null"
+		)
+		p.fret-number__text {{ fret }}
 
 </template>
 <!--}}}-->
@@ -36,12 +54,13 @@ div.FretboardViewer(
 <!--{{{ JavaScript -->
 <script>
 
-import { get }             from 'vuex-pathify'
+import { get }                  from 'vuex-pathify'
 
-import data                from '@/modules/data'
-import * as music          from '@/modules/music'
-import { objectMap }       from '@/modules/object'
-import FretboardViewerFret from '@/components/FretboardViewerFret'
+import { layout }               from '@/modules/layout'
+import { instruments, tunings } from '@/modules/music'
+import { getFrets }             from '@/modules/fretboard'
+
+import FretboardViewerFret      from '@/components/FretboardViewerFret'
 
 export default {
 	name: 'FretboardViewer',
@@ -51,79 +70,41 @@ export default {
 	},
 
 	props: {
-		isFretboardVertical: {
+		isVertical: {
 			type: Boolean,
 			default: false,
 		},
 	},
 
-	data() {
-		return {
-			fretMinWidth:        25,
-			fretMinHeight:       40,
-
-			openStringFretsSize: 40,
-		}
-	},
-
 	computed: {
-		minWidth()
-		{
-			/**
-			 * The width of the fretboard must be so that the width
-			 * of the smallest fret is equal or greater than a set width
-			 */
-			const fbWidth = (this.isFretboardVertical ? this.fretMinHeight : this.fretMinWidth) * (this.nbFrets / this.fretsSizes.slice(-1)[0])
-			              + (this.fretMin == 0 ? this.openStringFretsSize : 0);
-
-			return { [this.isFretboardVertical ? 'min-height': 'min-width']: `${Math.ceil(fbWidth)}px` };
-		},
 		grid()
 		{
-			// Add the open-string fret to the list of frets if needed
-			const fretsList = [...(this.fretMin == 0 ? [`${this.openStringFretsSize}px`] : []), ...this.fretsSizes.map(size => `${size}fr`)];
+			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
-			// Build the grid layout
-			const fretsGrid = ((this.isFretboardFlipped && !this.isFretboardVertical) ? fretsList.reverse() : fretsList).join(' ');
+			// Invert the grid layout for horizontal fretboards only
+			if (this.isFlipped && !this.isVertical) template.reverse();
 
-			return this.isFretboardVertical
-				? { 'grid-template-columns': `${this.isDisplayingFretNbs ? 'auto' : ''} repeat(${this.nbStrings - 1}, 42px) 0`, 'grid-template-rows': fretsGrid }
-				: { 'grid-template-columns': fretsGrid };
+			return {
+				'grid-auto-flow': this.isVertical ? 'column' : 'row',
+				[`grid-template-${this.isVertical ? 'rows'   : 'columns'}`]: template.join(' '),
+			};
 		},
-		inlays()
+		maxWidth()
 		{
-			// List the frets which can have an inlay (only the 12th is omitted)
-			let frets = ['3', '5', '7', '9', '15', '17', '19', '21'];
-
-			switch (this.nbStrings)
-			{
-				/**
-				 * Bass, ukulele, guitar
-				 * Single inlay in the middle + double inlay at the 12th fret
-				 */
-				case 4:  return ['12-1', '12-3'].concat(frets.map(f => `${f}-2`));
-				case 6:  return ['12-2', '12-4'].concat(frets.map(f => `${f}-3`));
-
-				/**
-				 * Five-string banjo, seven-string guitar, mandolin, nine-, eleven- string guitar
-				 * Double inlay (close for odd frets, spreaded for the 12th)
-				 */
-				case 5:  return ['12-1', '12-4'].concat(frets.map(f => `${f}-2`), frets.map(f => `${f}-3`));
-				case 7:  return ['12-2', '12-5'].concat(frets.map(f => `${f}-3`), frets.map(f => `${f}-4`));
-				case 8:  return ['12-2', '12-6'].concat(frets.map(f => `${f}-3`), frets.map(f => `${f}-5`));
-				case 9:  return ['12-2', '12-7'].concat(frets.map(f => `${f}-3`), frets.map(f => `${f}-6`));
-				case 11: return ['12-3', '12-8'].concat(frets.map(f => `${f}-4`), frets.map(f => `${f}-7`));
-
-				/**
-				 * Ten-string guitar
-				 * Double inlay for odd frets, triple for the 12th
-				 */
-				case 10: return ['12-2', '12-8'].concat(frets.map(f => `${f}-4`), frets.map(f => `${f}-6`), ['12-5']);
-
-				default: return [];
-			}
+			// Limit the width of the fretboard in vertical mode
+			return this.isVertical ? { width: `${(this.nbStrings - 1)*layout.fretWidth.int + this.fretNumbersPadding.int}px` } : {};
 		},
-		fretsSizes()
+		minLength()
+		{
+			/**
+			 * The length of the fretboard must be so that the length
+			 * of the smallest fret is equal or greater than a fixed minimum length
+			 */
+			const length = layout.minFretLength.int*(this.nbFrets / this.layout.slice(-1)[0]) + (this.fretMin == 0 ? layout.openStringFretLength.int : 0);
+
+			return { [`min-${this.isVertical ? 'height': 'width'}`]: `${Math.ceil(length)}px` };
+		},
+		layout()
 		{
 			/**
 			 * Compute the size of each fret so that:
@@ -136,134 +117,88 @@ export default {
 			const n = this.nbFrets;
 			const c = (3*n - 1)/(2*n - 2);
 
-			return [...Array(this.nbFrets - (this.fretMin == 0 ? 1 : 0)).keys()].map(i => c - i/(n - 1));
+			// Don't include the open string fret in the flexible layout
+			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => c - i/(n - 1));
+		},
+		strings()
+		{
+			return [...Array(this.nbStrings).keys()].map(index => ({
+				// Start & end
+				[this.isVertical ? 'top'    : this.isFlipped ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
+				[this.isVertical ? 'bottom' : this.isFlipped ? 'left'  : 'right']: 0,
+
+				// Position
+				[this.isVertical ? 'left': 'top']: `calc(calc(100% - ${this.fretNumbersPadding.px})*${index / (this.nbStrings - 1)})`,
+				transform: this.isVertical ? `translateX(calc(${this.fretNumbersPadding.px} - 50%))` : 'translateY(-50%)',
+
+				// Width
+				[this.isVertical ? 'width' : 'height']: layout.stringThickness.px,
+			}));
+		},
+		inlays()
+		{
+			// List the frets which can have an inlay (only the 12th is omitted)
+			let frets = ['3', '5', '7', '9', '15', '17', '19', '21'];
+
+			switch (this.nbStrings)
+			{
+				/**
+				 * Bass, ukulele, guitar
+				 * Single inlay in the middle + double inlay at the 12th fret
+				 */
+				case 4:  return ['12-1', '12-3', ...frets.map(f => `${f}-2`)];
+				case 6:  return ['12-2', '12-4', ...frets.map(f => `${f}-3`)];
+
+				/**
+				 * Five-string banjo, seven-string guitar, mandolin, nine-, eleven- string guitar
+				 * Double inlay (close for odd frets, spreaded for the 12th)
+				 */
+				case 5:  return ['12-1', '12-4', ...frets.map(f => `${f}-2`), ...frets.map(f => `${f}-3`)];
+				case 7:  return ['12-2', '12-5', ...frets.map(f => `${f}-3`), ...frets.map(f => `${f}-4`)];
+				case 8:  return ['12-2', '12-6', ...frets.map(f => `${f}-3`), ...frets.map(f => `${f}-5`)];
+				case 9:  return ['12-2', '12-7', ...frets.map(f => `${f}-3`), ...frets.map(f => `${f}-6`)];
+				case 11: return ['12-3', '12-8', ...frets.map(f => `${f}-4`), ...frets.map(f => `${f}-7`)];
+
+				/**
+				 * Ten-string guitar
+				 * Double inlay for odd frets, triple for the 12th
+				 */
+				case 10: return ['12-2', '12-8', ...frets.map(f => `${f}-4`), ...frets.map(f => `${f}-6`), ['12-5']];
+			}
+
+			return [];
+		},
+		displayedFrets()
+		{
+			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
 		},
 		frets()
 		{
-			let frets = [];
-
-			// Get all the notes of each string according to the current tuning
-			const stringNotes = [...Array(this.nbStrings).keys()].map(string => music.getStringNotes(this.tuningNotes[string]));
-
-			const addFret = (string, _fret) =>
-			{
-				// Invert the order of the frets if the fretboard is flipped
-				const fret = (this.isFretboardFlipped && !this.isFretboardVertical) ? this.fretMin + this.fretMax - _fret : _fret;
-				const note = stringNotes[string][fret];
-
-				// Get the list of scales the note of the fret belongs to
-				let scales = this.scales.filter(
-					scale => scale.notes.includes(note)
-					&& (
-					       scale.type     == 'arpeggio'
-					    || scale.position == 0
-					    || scale.posCoordinates.filter(c => c.string == string && c.fret == fret).length > 0
-					)
-				);
-
-				// Remove the scales displaying intersections only if they are alone
-				if (scales.length == 1 && scales[0].isShowingIntersections) scales = [];
-
-				frets.push({
-					index: frets.length,
-
-					string, fret, note,
-
-					scales: scales.map(scale => ({
-						id:    scale.id,
-						color: scale.color,
-					})),
-
-					intervals: objectMap(
-						// Build the list of intervals
-						scales.map(scale => (
-						{
-							id:    scale.id,
-							size:  music.getNotesInterval(scale.notes[0], note),
-							color: scale.color,
-						}))
-						// Group the intervals of same size together
-						.reduce(
-							function(intervals, interval)
-							{
-								// If the interval is not in the list, initialize its color list
-								if (!(interval.size in intervals))
-									intervals[interval.size] = [];
-
-								// Add it to the list of colors
-								intervals[interval.size].push({ id: interval.id, color: interval.color });
-
-								return intervals;
-							}, {}
-						),
-						(interval, props) => ({
-							ids:    props.map(v => v.id).sort((a, b) => a - b),
-							name:   data.intervalsNames[interval],
-							colors: props.sort((a, b) => a.id - b.id).map(v => v.color),
-						})
-					)
-					// Sort the intervals to always have the same scale order
-					.sort((a, b) => {
-						for (let i=0; i<a.ids.length && i<b.ids.length; i++)
-						{
-							if (a.ids[i] < b.ids[i]) return -1;
-							if (a.ids[i] > b.ids[i]) return  1;
-						}
-
-						return 0;
-					}),
-
-					isHighlightedNote: scales.some(s => s.highlightedNote === music.getNotesInterval(s.notes[0], note)),
-					isDisplayingInlay: this.inlays.includes(`${fret}-${string}`),
-				});
-			}
-
-			if (this.isFretboardVertical)
-			{
-				if (this.isFretboardFlipped)
-				{
-					for (let fret   = this.fretMin;       fret   <= this.fretMax; fret++)
-					for (let string = this.nbStrings - 1; string >= 0;            string--)
-						addFret(string, fret);
-				}
-				else
-				{
-					for (let fret   = this.fretMin; fret   <= this.fretMax;   fret++)
-					for (let string = 0;            string <  this.nbStrings; string++)
-						addFret(string, fret);
-				}
-			}
-			else
-			{
-				for (let string = this.nbStrings - 1; string >= 0;            string--)
-				for (let fret   = this.fretMin;       fret   <= this.fretMax; fret++)
-					addFret(string, fret);
-			}
-
-			return frets;
+			return getFrets(this.displayedSequences, this.tuningNotes);
 		},
-		scales()
+		fretNumbers()
 		{
-			return this.$store.getters['scales/activeScales'].map(scale =>
-			{
-				const notes          = music.generateModelNotes(data[`${scale.type}s`][scale.model].model, scale.tonality);
-				const posCoordinates = scale.type == 'arpeggio'
-					? []
-					: music.generateModelPosition(
-						this.nbStrings,
-						this.nbFrets,
-						this.tuningNotes,
-						notes,
-						data.scales[scale.model].nbNotesPerString,
-						scale.position
-					);
+			return [...Array(this.nbFrets).keys()]
+				.map(index => (this.isFlipped && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
+				.map(fret  => fret == 0 ? '' : fret);
+		},
+		fretNumbersPadding()
+		{
+			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
+		},
+		tuningNotes()
+		{
+			const notes = Array.from(tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']);
 
-				return { notes, posCoordinates, ...scale };
-			});
+			return (!this.isVertical || this.isFlipped) ? notes.reverse() : notes;
 		},
 		nbStrings()
 		{
-			return data.instruments[this.instrument].nbStrings;
+			return instruments[this.instrument].nbStrings;
+		},
+		nbFrets()
+		{
+			return this.fretMax - this.fretMin + 1;
 		},
 		fretMin()
 		{
@@ -273,29 +208,19 @@ export default {
 		{
 			return this.fretRange[1];
 		},
-		nbFrets()
-		{
-			return this.fretMax - this.fretMin + 1;
-		},
-		fretNumbers()
-		{
-			return [...Array(this.nbFrets).keys()]
-				.map(index => (this.isFretboardFlipped && !this.isFretboardVertical) ? this.fretMax - index : this.fretMin + index)
-				.map(fret  => fret == 0 ? '' : fret);
-		},
-		tuningNotes()
-		{
-			return data.tunings[this.instrument][this.tuning] || data.tunings[this.instrument]['standard'];
-		},
+
+		...get('sequences', [
+			'displayedSequences'
+		]),
 
 		...get('fretboard', [
 			'instrument',
 			'tuning',
 			'fretRange',
 
-			'isFretboardFlipped',
-			'isDisplayingFretNbs',
-			'isDisplayingNotesName',
+			'isFlipped',
+			'isShowingFretNbs',
+			'isShowingNoteNames',
 		]),
 	},
 }
@@ -309,34 +234,36 @@ export default {
 
 .FretboardViewer {
 	display: grid;
+	position: relative;
 
-	&.is-fretboard-vertical.is-displaying-fret-nbs {
-		transform: translateX(-25px);
-	}
-
-	@include mq($until: desktop)
+	// Shift fretboard to keep it horizontally centered when fret numbers are displayed
+	@include mq($until: desktop, $and: '(orientation: portrait)')
 	{
-		justify-content: center;
-
-		&:not(.is-fretboard-vertical) { padding-right: 20px; }
+		&.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
 	}
+}
+
+.string {
+	position: absolute;
+
+	background-color: var(--color--string);
 }
 
 .fret-number {
 	display: flex;
 
-	&.is-fretboard-vertical {
+	&.is-vertical {
 		justify-content: flex-start;
 		align-items: center;
 
-		width: 50px;
+		width: layout.$fret-number-wrapper-size;
 	}
 
-	&:not(.is-fretboard-vertical) {
+	&:not(.is-vertical) {
 		justify-content: center;
 		align-items: flex-end;
 
-		height: 50px;
+		height: layout.$fret-number-wrapper-size;
 	}
 }
 

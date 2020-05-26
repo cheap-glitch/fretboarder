@@ -23,16 +23,19 @@ module.exports = {
 		sourceMap: process.env.NODE_ENV === 'development',
 
 		// Import the mixins in every component
-		loaderOptions: {
-			sass: {
-				prependData: [
-					'@cheap-glitch/scss-mixins/_mixins',
-					'@/styles/mq',
-				]
-				.map(stylesheet => `@use "${stylesheet}" as *;`)
-				.join('\n')
-			}
-		},
+		loaderOptions: { sass: { prependData: `
+
+			@use "@cheap-glitch/scss-mixins/_mixins" as *;
+			@use "@/styles/layout";
+
+			@use "sass-mq/_mq" as * with (
+				$mq-breakpoints: (
+					desktop: layout.$mq-breakpoint-desktop,
+					wide:    layout.$mq-breakpoint-wide,
+				)
+			);
+
+		`} },
 	},
 
 	pluginOptions: {
@@ -45,56 +48,55 @@ module.exports = {
 				// General UI
 				'arrow-left':               'pro-regular',
 				'chevron-down':             'pro-regular',
-				'times-circle':             'pro-regular',
+				'ellipsis-h':               'pro-regular',
+				'ellipsis-v':               'pro-regular',
+				'minus':                    'pro-regular',
 
-				// Header
+				// Logo
 				'banjo':                    'pro-regular',
-				'bug':                      'pro-regular',
-				'external-link-square-alt': 'pro-regular',
-				'github':                   'free-brands',
 				'guitar':                   'pro-regular',
 				'guitar-electric':          'pro-regular',
-				'heart':                    'pro-regular',
 				'mandolin':                 'pro-regular',
-				'moon':                    ['pro-solid', 'pro-regular'],
-				'sun':                      'pro-solid',
+
+				// Header
 				'twitter':                  'free-brands',
+				'github':                   'free-brands',
+				'paper-plane':              'pro-regular',
+				'heart':                    'pro-regular',
+				'external-link-square-alt': 'pro-regular',
+				'sun':                      'pro-solid',
+				'moon':                     'pro-solid',
 
 				// Tools & settings
-				'file-download':            'pro-regular',
-				'hand-paper':               'pro-regular',
-				'info-circle':              'pro-regular',
+				'cog':                      'pro-regular',
+				'list-music':               'pro-regular',
 				'list-ol':                  'pro-light',
+				'info-circle':              'pro-regular',
+				'hand-paper':               'pro-regular',
+				'file-download':            'pro-regular',
+				'file-image':               'pro-regular',
+				'image-polaroid':           'pro-regular',
 
 				// Scales
-				'bullseye':                 'pro-regular',
-				'copy':                     'pro-regular',
+				'plus':                     'pro-regular',
+				'trash-alt':                'pro-regular',
 				'eye':                      'pro-regular',
 				'eye-slash':                'pro-regular',
+				'bullseye':                 'pro-regular',
 				'intersection':             'pro-solid',
-				'low-vision':               'pro-regular',
-				'plus-circle':              'pro-regular',
-				'trash-alt':                'pro-regular',
-
-				// Mobile actions
-				'cog':                      'pro-solid',
-				'list-music':               'pro-solid',
+				'copy':                     'pro-regular',
+				'times-circle':             'pro-regular',
 			}
 		},
 
 		/**
 		 * Sitemap
 		 */
+		/*
 		sitemap: {
+			trailingSlash:  false,
 			productionOnly: true,
-
-			urls: [
-				{
-					loc: 'https://fretboarder.app',
-					changefreq: 'always',
-				},
-			],
-			trailingSlash: false,
 		},
+		*/
 	},
 }

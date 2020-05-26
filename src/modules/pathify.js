@@ -3,8 +3,7 @@
  * modules/pathify.js
  */
 
-import pathify           from 'vuex-pathify'
-import { objectForEach } from '@/modules/object'
+import pathify from 'vuex-pathify'
 
 /**
  * Configure vuex-pathify
@@ -19,13 +18,11 @@ export default pathify;
  */
 export function makeTogglers(state)
 {
-	const togglers = {};
-
-	objectForEach(state, function(key)
+	return Object.keys(state).reduce(function(togglers, propertyName)
 	{
-		if (/^is[A-Z]/.test(key))
-			togglers[`toggleI${key.slice(1)}`] = storeState => storeState[key] = !storeState[key];
-	});
+		if (/^is[A-Z]/.test(propertyName))
+			togglers[`toggle.${propertyName}`] = storeState => storeState[propertyName] = !storeState[propertyName];
 
-	return togglers;
+		return togglers;
+	}, {});
 }

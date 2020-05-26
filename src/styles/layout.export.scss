@@ -1,0 +1,19 @@
+
+/**
+ * styles/layout.export.scss
+ */
+
+:export {
+	mqBreakpointDesktop:   layout.$mq-breakpoint-desktop;
+	mqBreakpointWide:      layout.$mq-breakpoint-wide;
+
+	selectBarHeight:       layout.$select-bar-height;
+	selectOptionsHeight:   layout.$select-options-height;
+
+	fretWidth:             layout.$fret-width;
+	minFretLength:         layout.$min-fret-length;
+	openStringFretLength:  layout.$open-string-fret-length;
+	fretNumberWrapperSize: layout.$fret-number-wrapper-size;
+
+	stringThickness:       layout.$string-thickness;
+}

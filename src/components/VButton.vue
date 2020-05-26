@@ -6,34 +6,19 @@
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.VButton(
-	ref="wrapper"
-	@click.left="click"
+button.VButton(
+	v-mods="{ isActive, isDisabled, isDarkModeOn }"
+	@click.left="clickButton"
 	)
-	button.VButton__button(
-		ref="button"
-		v-mods="{ isDisabled }"
+	//- Icon
+	fa-icon.icon(
+		v-if="icon.length"
 
-		@click.left="click"
-		@mouseenter="showTooltip = true"
-		@mouseleave="showTooltip = hasBeenClicked = false"
+		:icon="Array.isArray(icon) ? icon : ['far', icon]"
+		:flip="isFlipped ? 'horizontal' : null"
 		)
-
-		fa-icon.VButton__icon(
-			:icon="Array.isArray(icon) ? icon : ['far', icon]"
-			:class="`size-${size}`"
-			v-mods="{ isActive, isDisabled, isFlipped }"
-			)
-
-	VTooltip(
-		v-if="!isMobileDevice && !isTooltipDisabled && !hasBeenClicked"
-
-		:target="$refs.button || false"
-		:placement="tooltipPlacement"
-		:delay="500"
-		:is-open="showTooltip && !isTooltipDisabled"
-		)
-		p {{ tooltip }}
+	//- Text
+	p.title(v-if="title.length") {{ title }}
 
 </template>
 <!--}}}-->
@@ -50,27 +35,13 @@ export default {
 	props: {
 		icon: {
 			type: [Array, String],
-			required: true,
+			default: '',
 		},
-		size: {
+		title: {
 			type: String,
-			default: 'normal',
-			validator: v => ['normal', 'small'].includes(v)
-		},
-		tooltip: {
-			type: String,
-			required: true,
-		},
-		tooltipPlacement: {
-			type: String,
-			default: 'top',
-			validator: v => ['top', 'bottom'].includes(v),
+			default: '',
 		},
 		isActive: {
-			type: Boolean,
-			default: false,
-		},
-		isFlipped: {
 			type: Boolean,
 			default: false,
 		},
@@ -78,36 +49,21 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isTooltipDisabled: {
+		isFlipped: {
 			type: Boolean,
 			default: false,
 		},
 	},
 
-	data() {
-		return {
-			showTooltip:    false,
-			hasBeenClicked: false,
-		}
-	},
-
 	computed: {
-		isMobileDevice: get('isMobileDevice'),
+		...get(['isDarkModeOn'])
 	},
 
 	methods: {
-		click(event)
+		clickButton()
 		{
-			// Prevent the button from registering the click twice
-			event.stopPropagation();
-
-			if (this.isDisabled
-			// Disable the wider click zone on desktop
-			|| (event.target === this.$refs.wrapper && !this.isMobileDevice))
-				return;
-
-			this.hasBeenClicked = true;
-			this.$emit('click');
+			if (!this.isDisabled)
+				this.$emit('click');
 		}
 	},
 }
@@ -120,51 +76,66 @@ export default {
 <style lang="scss" scoped>
 
 .VButton {
-	@include center-content;
-}
+	display: flex;
+	align-items: center;
+	@include space-children-h(8px);
 
-.VButton__button {
-	display: block;
+	@include pill;
 
-	border: none;
+	padding: 8px 10px;
+
+	border: 1px solid var(--color--bg--highlight);
+
+	color: var(--color--text);
+	background-color: var(--color--bg--highlight);
+
 	appearance: none;
-	background-color: transparent;
-
 	cursor: pointer;
-}
 
-.VButton__icon {
-	color: var(--color--text--secondary);
+	transition: border-color 200ms, background-color 200ms;
 
 	&:not(.is-active):not(.is-disabled):hover {
-		color: var(--color--hover);
+		color: white;
+		border-color: var(--color--hover);
+		background-color: var(--color--hover);
 	}
 
 	&.is-disabled {
-		color: var(--color--bg--highlight);
+		border-color: var(--color--border);
+		background-color: var(--color--border);
 
 		cursor: not-allowed;
 	}
 
 	&.is-active {
 		color: var(--color--highlight);
+		border-color: var(--color--highlight);
+
+		&:hover, &:not(.is-dark-mode-on) {
+			color: white;
+			background-color: var(--color--highlight);
+		}
 	}
 
-	&.is-flipped {
-		transform: scaleX(-1);
+	&:focus {
+		border-color: var(--color--hover);
 	}
-
-	&.is-disabled {
-		cursor: not-allowed;
-	}
-
-	&.size-normal { @include square(36px); }
-	&.size-small  { @include square(26px); }
 
 	@include mq($from: desktop)
 	{
-		&.size-normal { @include square(26px); }
-		&.size-small  { @include square(22px); }
+		padding: 4px 8px;
+
+		font-size: 1.4rem;
+	}
+}
+
+.icon,
+.icon > *,
+.title {
+	cursor: pointer;
+
+	.VButton.is-disabled & {
+		cursor: not-allowed;
 	}
 }
 

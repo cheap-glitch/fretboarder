@@ -8,17 +8,16 @@
  * -----------------------------------------------------------------------------
  */
 
-html {
+html, body {
 	display: flex;
 	flex-direction: column;
+}
 
+html {
 	min-height: 100%;
 }
 
 body {
-	display: flex;
-	flex-direction: column;
-
 	flex: 1 1 auto;
 }
 
@@ -31,9 +30,41 @@ p,
 a,
 h1,
 h2,
-li,
-.vue-slider-dot-tooltip-inner {
-	font-family: "IBM Plex Sans", "Fira Sans", "San Francisco", "Segoe UI", "Roboto", "Cantarell", "Helvetica Neue", ui-sans-serif, sans-serif;
+li {
+	font-family:
+		// Fancy stuff
+		"IBM Plex Sans",
+		"Fira Sans",
+
+		// Apple
+		-apple-system,
+		BlinkMacSystemFont,
+		"San Francisco",
+		"Apple Color Emoji",
+
+		// Android
+		"Roboto Regular",
+		Roboto,
+		"Droid Sans",
+		"Noto Sans Symbols",
+
+		// Windows
+		"Segoe UI",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol",
+
+		// Linux
+		Oxygen-Sans,
+		Ubuntu,
+		Cantarell,
+		Arimo,
+		"DejaVu Sans",
+
+		// Fallbacks
+		"Helvetica Neue",
+		Helvetica,
+		ui-sans-serif,
+		sans-serif;
 
 	cursor: default;
 	user-select: none;

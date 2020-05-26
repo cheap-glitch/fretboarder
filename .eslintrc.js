@@ -23,12 +23,14 @@ module.exports = {
 		'no-console':  process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
-		'no-mixed-spaces-and-tabs':   ['warn', 'smart-tabs'],
-		'smarter-tabs/smarter-tabs':  'warn',
+		'no-mixed-spaces-and-tabs':  ['warn', 'smart-tabs'],
+		'smarter-tabs/smarter-tabs': 'warn',
 	},
 
 	overrides: [{
-		files: ['test/*.test.js'],
+		files: [
+			'test/*.test.js'
+		],
 		env: {
 			mocha: true
 		}

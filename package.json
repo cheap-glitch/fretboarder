@@ -1,45 +1,28 @@
 {
-  "private": true,
   "name": "fretboarder",
+  "version": "3.0.0",
+  "private": true,
   "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
-  "version": "2.0.0",
-  "license": "LGPL-3.0-only",
-  "repository": "github:cheap-glitch/fretboarder",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
-  "main": "src/main.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
-    "build": "vue-cli-service build --modern",
-    "coverage": "nyc npm test",
-    "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
+    "build": "vue-cli-service build --modern",
+    "test:unit": "vue-cli-service test:unit 'test/*.test.js'",
+    "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
+    "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
+    "coverage": "nyc npm test",
     "serve-vue-cli": "vue-cli-service serve",
     "sitemap": "vue-cli-service sitemap",
-    "test": "npm run test:unit -- ",
-    "test:unit": "vue-cli-service test:unit 'test/*.test.js'"
+    "test": "npm run test:unit -- "
   },
-  "browserslist": [
-    "last 1 version",
-    "not dead",
-    "> 0.2%"
-  ],
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
+  "main": "src/main.js",
   "dependencies": {
-    "@cheap-glitch/local-storage-wrapper": "^1.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/pro-light-svg-icons": "^5.13.0",
     "@fortawesome/pro-regular-svg-icons": "^5.13.0",
     "@fortawesome/pro-solid-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
-    "@linusborg/vue-simple-portal": "^0.1.4",
     "@popperjs/core": "^2.4.0",
     "body-scroll-lock": "^3.0.2",
     "core-js": "^3.6.5",
@@ -47,13 +30,10 @@
     "v-click-outside": "^3.0.1",
     "vue": "^2.6.11",
     "vue-css-modifiers": "^1.0.7",
-    "vue-slider-component": "^3.1.2",
-    "vuex": "^3.3.0",
+    "vuex": "^3.4.0",
     "vuex-pathify": "^1.4.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "@cheap-glitch/scss-mixins": "^1.0.1",
     "@cheap-glitch/scss-reset": "^1.0.0",
     "@cheap-glitch/vue-cli-plugin-fontawesome": "^1.0.8",
@@ -62,23 +42,36 @@
     "@vue/cli-plugin-unit-mocha": "^4.3.1",
     "@vue/cli-plugin-vuex": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
-    "@vue/test-utils": "1.0.0-beta.33",
+    "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-smarter-tabs": "^1.1.0",
+    "eslint": "^7.1.0",
+    "eslint-plugin-smarter-tabs": "^1.1.1",
     "eslint-plugin-vue": "^6.2.2",
-    "fibers": "^5.0.0",
-    "jsdom": "^16.2.2",
-    "nodemon": "^2.0.3",
+    "nodemon": "^2.0.4",
     "nyc": "^15.0.1",
-    "pug": "^2.0.4",
+    "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "sass-mq": "^5.0.1",
     "vue-cli-plugin-sitemap": "^2.1.1",
     "vue-template-compiler": "^2.6.11",
-    "webpack-bundle-analyzer": "^3.7.0"
-  }
+    "webpack-bundle-analyzer": "^3.8.0"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "last 1 version",
+    "not dead",
+    "> 0.2%"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "license": "LGPL-3.0-only",
+  "repository": "github:cheap-glitch/fretboarder"
 }

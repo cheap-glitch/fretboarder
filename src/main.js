@@ -13,7 +13,6 @@
  */
 
 import Vue           from 'vue'
-import VueSlider     from 'vue-slider-component'
 import VClickOutside from 'v-click-outside'
 import VCSSModifiers from 'vue-css-modifiers'
 
@@ -23,20 +22,19 @@ import store         from '@/stores/main'
 /**
  * Register plugins, directives & external components
  */
-Vue.component('vue-slider',    VueSlider);
 Vue.directive('mods',          VCSSModifiers);
 Vue.directive('click-outside', VClickOutside.directive);
 
 /**
  * Register globally the base components
  */
-const requireBaseComponents = require.context('@/components', false, /V[A-Z]\w+\.vue$/);
-requireBaseComponents.keys().forEach(function(fileName)
+const baseComponents = require.context('@/components', false, /V[A-Z]\w+\.vue$/);
+baseComponents.keys().forEach(function(filename)
 {
-	const componentConfig = requireBaseComponents(fileName);
-	const componentName   = fileName.split('/').pop().replace(/\.\w+$/, '');
+	const name   = filename.split('/').pop().replace(/\.\w+$/, '');
+	const config = baseComponents(filename);
 
-	Vue.component(componentName, componentConfig.default || componentConfig);
+	Vue.component(name, config.default || config);
 });
 
 /**
