@@ -53,8 +53,6 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
-import Vue from 'vue'
-
 export default {
 	name: 'VSelect',
 
@@ -103,11 +101,10 @@ export default {
 			this.$emit('change', this.isValueNumeric ? Number.parseInt(event.target.value, 10) : event.target.value);
 			this.updateSelectedOptionLabel();
 		},
-		updateSelectedOptionLabel()
+		async updateSelectedOptionLabel()
 		{
-			Vue.nextTick(() => {
-				this.selectedOptionLabel = this.labelFormatter(this.value, this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>'));
-			});
+			await this.$nextTick();
+			this.selectedOptionLabel = this.labelFormatter(this.value, this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>'));
 		},
 	}
 }
