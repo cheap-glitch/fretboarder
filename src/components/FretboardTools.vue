@@ -7,7 +7,10 @@
 <template lang="pug">
 
 div.FretboardTools
+
+	//----------------------------------------------------------------------
 	//- Instrument settings
+	//----------------------------------------------------------------------
 	component(
 		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
@@ -26,6 +29,14 @@ div.FretboardTools
 					:options="tunings"
 					v-model="tuning"
 					)
+
+			//- Capo
+			VSelect(
+				:options="capoFrets"
+				is-value-numeric
+				v-model="capo"
+				)
+
 			//- Fret range
 			div.instrument-settings__fret-range
 				VMultiRange.fret-range__slider(
@@ -52,6 +63,10 @@ div.FretboardTools
 				:is-flipped="!isFlipped"
 				@click="$store.commit('fretboard/toggle.isFlipped')"
 				)
+
+	//----------------------------------------------------------------------
+	//- Display settings
+	//----------------------------------------------------------------------
 
 	//- Toggle fret numbers
 	VButton(
@@ -108,6 +123,7 @@ import { MIN_NB_FRETS, MAX_NB_FRETS }         from '@/modules/constants'
 import { mapObjectToObject }                  from '@/modules/object'
 import { exportFretboard }                    from '@/modules/export'
 import { instruments, tunings, tuningsNames } from '@/modules/music'
+import { getFrets }                           from '@/modules/fretboard'
 
 export default {
 	name: 'FretboardTools',
@@ -127,7 +143,9 @@ export default {
 		...sync('fretboard', [
 			'instrument',
 			'tuning',
+			'capo',
 			'fretRange',
+
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 			'isFlipped',
@@ -140,9 +158,11 @@ export default {
 
 	created()
 	{
-		this.instruments  = instruments;
 		this.MIN_NB_FRETS = MIN_NB_FRETS;
 		this.MAX_NB_FRETS = MAX_NB_FRETS;
+
+		this.instruments  = instruments;
+		this.capoFrets    = [...Array(11).keys()].reduce((res, f) => { res[f+1] = 'Capo ' + this.formatFretNb(f+1).replace(/<\/?sup>/g, ''); return res; }, { 0: 'No capo' });
 	},
 
 	methods: {
@@ -153,8 +173,7 @@ export default {
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
-				this.$store.getters['sequences/displayedSequences'],
-				tunings[this.instrument][this.tuning],
+				getFrets(this.$store.getters['sequences/displayedSequences'], tunings[this.instrument][this.tuning], this.capo),
 				instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],

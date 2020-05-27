@@ -5,10 +5,9 @@
 
 import { saveAs }            from 'file-saver'
 
-import { colorscheme }       from '@/modules/colorscheme'
 import { mapObjectToObject } from '@/modules/object'
+import { colorscheme }       from '@/modules/colorscheme'
 import { notesNames }        from '@/modules/music'
-import { getFrets }          from '@/modules/fretboard'
 
 /**
  * Create and save an image of the fretboard
@@ -33,7 +32,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(sequences, displayedSequences, tuningNotes, nbStrings, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -243,7 +242,7 @@ function exportFretboardToSVG(sequences, displayedSequences, tuningNotes, nbStri
 	 */
 
 	// Keep only the frets in the selected range
-	const displayedFrets = getFrets(displayedSequences, tuningNotes).filter(fret => (fretMin <= fret.number && fret.number <= fretMax));
+	const displayedFrets = frets.filter(fret => (fretMin <= fret.number && fret.number <= fretMax));
 
 	// Draw the notes
 	let offset = 0;

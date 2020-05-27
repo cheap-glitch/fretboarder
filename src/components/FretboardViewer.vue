@@ -174,7 +174,7 @@ export default {
 		},
 		frets()
 		{
-			return getFrets(this.displayedSequences, this.tuningNotes);
+			return getFrets(this.displayedSequences, this.tuningNotes, this.capo);
 		},
 		fretNumbers()
 		{
@@ -216,6 +216,7 @@ export default {
 		...get('fretboard', [
 			'instrument',
 			'tuning',
+			'capo',
 			'fretRange',
 
 			'isFlipped',

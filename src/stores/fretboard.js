@@ -21,6 +21,10 @@ const model = {
 		default: 'standard',
 		validator: v => (v in tuningsNames),
 	},
+	capo: {
+		default: 0,
+		validator: v => typeof v == 'number',
+	},
 	fretRange: {
 		default: [0, 22],
 		validator: v => Array.isArray(v) && v.length == 2,

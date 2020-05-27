@@ -25,7 +25,7 @@ div.App#app(:style="colorscheme")
 			FretboardTools
 
 			//- Dark mode toggle switch
-			div.dark-mode-switch(
+			button.dark-mode-switch(
 				v-mods="{ isDarkModeOn }"
 				@click="$store.commit('toggle.isDarkModeOn')"
 				)
@@ -311,14 +311,16 @@ export default {
 	align-items: center;
 	@include space-children-h(5px);
 
+	border: none;
+	appearance: none;
+	background: none;
+
 	color: var(--color--text--secondary);
 
 	cursor: pointer;
 
-	&.is-dark-mode-on:hover       .dark-mode-switch__sun,
-	&:not(.is-dark-mode-on):hover .dark-mode-switch__moon {
-		color: var(--color--hover);
-	}
+	&.is-dark-mode-on       { &:hover, &:focus { & .dark-mode-switch__sun  { color: var(--color--hover); } } }
+	&:not(.is-dark-mode-on) { &:hover, &:focus { & .dark-mode-switch__moon { color: var(--color--hover); } } }
 }
 
 .dark-mode-switch__toggle {

@@ -9,7 +9,7 @@ import { NB_FRETS, MAX_NB_FRETS } from '@/modules/constants'
 /**
  * Generate a list of frets with infos on the sequences they belong to
  */
-export function getFrets(sequences, tuningNotes)
+export function getFrets(sequences, tuningNotes, capo)
 {
 	// Build an array of frets for each string and flatten them in a single list
 	return tuningNotes.flatMap(function(openStringNote, stringNumber)
@@ -18,7 +18,7 @@ export function getFrets(sequences, tuningNotes)
 		const frets = [...Array(NB_FRETS).keys()].map(fretNumber => ({
 			string:        stringNumber,
 			number:        fretNumber,
-			note:          notes[(notes.indexOf(openStringNote) + fretNumber) % notes.length],
+			note:          notes[(notes.indexOf(openStringNote) + capo + fretNumber) % notes.length],
 			sequences:     [],
 			isHighlighted: false,
 		}));

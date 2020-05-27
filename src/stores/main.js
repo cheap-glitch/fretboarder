@@ -61,7 +61,7 @@ export default new Vuex.Store(
 			sequences: sequences.model,
 			fretboard: fretboard.model,
 		}, {
-			namespace: `fretboarder-${process.env.VUE_APP_VERSION}`,
+			namespace: 'fretboarder',
 			savedByDefault: true,
 		}),
 	],
