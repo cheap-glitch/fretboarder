@@ -53,6 +53,8 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
+import { formatOrdinalSuffix } from '@/modules/text'
+
 export default {
 	name: 'VSelect',
 
@@ -104,7 +106,7 @@ export default {
 		async updateSelectedOptionLabel()
 		{
 			await this.$nextTick();
-			this.selectedOptionLabel = this.labelFormatter(this.value, this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>'));
+			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
 		},
 	}
 }

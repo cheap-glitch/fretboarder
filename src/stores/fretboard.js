@@ -23,7 +23,7 @@ const model = {
 	},
 	capo: {
 		default: 0,
-		validator: v => typeof v == 'number',
+		validator: v => typeof v == 'number' && v >= 0,
 	},
 	fretRange: {
 		default: [0, 22],

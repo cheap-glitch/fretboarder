@@ -51,9 +51,9 @@ div.FretboardTools
 					@change="fretRange = fretRangeDisplay = $event"
 					)
 				p.fret-range__text
-					span(v-html="formatFretNb(fretRangeDisplay[isFlipped ? 1 : 0])")
+					span(v-html="lowestFret")
 					span.fret-range__text__separator —
-					span(v-html="formatFretNb(fretRangeDisplay[isFlipped ? 0 : 1])")
+					span(v-html="highestFret")
 
 			//- Switch fretting hand
 			VButton(
@@ -124,6 +124,7 @@ import { mapObjectToObject }                  from '@/modules/object'
 import { exportFretboard }                    from '@/modules/export'
 import { instruments, tunings, tuningsNames } from '@/modules/music'
 import { getFrets }                           from '@/modules/fretboard'
+import { formatOrdinalSuffix, formatFretNb }  from '@/modules/text'
 
 export default {
 	name: 'FretboardTools',
@@ -136,6 +137,8 @@ export default {
 	},
 
 	computed: {
+		lowestFret()  { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlipped ? 1 : 0])); },
+		highestFret() { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlipped ? 0 : 1])); },
 		tunings()
 		{
 			return mapObjectToObject(tunings[this.instrument], tuning => tuningsNames[tuning]);
@@ -162,7 +165,7 @@ export default {
 		this.MAX_NB_FRETS = MAX_NB_FRETS;
 
 		this.instruments  = instruments;
-		this.capoFrets    = [...Array(11).keys()].reduce((res, f) => { res[f+1] = 'Capo ' + this.formatFretNb(f+1).replace(/<\/?sup>/g, ''); return res; }, { 0: 'No capo' });
+		this.capoFrets    = [...Array(11).keys()].reduce((result, fret) => { result[fret + 1] = 'Capo ' + formatFretNb(fret + 1); return result; }, { 0: 'No capo' });
 	},
 
 	methods: {
@@ -183,22 +186,6 @@ export default {
 				this.isDarkModeOn,
 				format != 'svg',
 			);
-		},
-		formatFretNb(number)
-		{
-			if (number == 0)
-				return 'Open strings';
-
-			if (11 <= number && number <= 13)
-				return `${number}<sup>th</sup> fret`;
-
-			switch (`${number}`.slice(-1))
-			{
-				case '1': return `${number}<sup>st</sup> fret`;
-				case '2': return `${number}<sup>nd</sup> fret`;
-				case '3': return `${number}<sup>rd</sup> fret`;
-				default:  return `${number}<sup>th</sup> fret`;
-			}
 		},
 	}
 }

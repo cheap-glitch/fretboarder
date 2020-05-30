@@ -80,6 +80,14 @@ div.FretboardSequencesItem
 
 				@change="v => update('model', v)"
 				)
+			//- Model
+			VSelect(
+				:value="position"
+				:options="positions"
+				is-value-numeric
+
+				@change="v => update('position', v)"
+				)
 
 		//----------------------------------------------------------------------
 		//- Intervals
@@ -207,10 +215,18 @@ export default {
 
 	created()
 	{
+		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 		this.tonalities       = notesNames;
 		this.scales           = filterObject(models, key => !key.startsWith('arp-'));
 		this.arpeggios        = filterObject(models, key =>  key.startsWith('arp-'));
-		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
+		this.positions        = {
+			0: 'Whole',
+			1: '1st pos.',
+			2: '2nd pos.',
+			3: '3rd pos.',
+			4: '4th pos.',
+			5: '5th pos.',
+		};
 	},
 
 	methods: {
