@@ -21,6 +21,7 @@ div.VSelect
 	select.select(
 		ref="select"
 		:value="value"
+		:disabled="isDisabled"
 
 		@change="selectOption"
 		)
@@ -76,6 +77,10 @@ export default {
 			type: Function,
 			default: (value, label) => label,
 		},
+		isDisabled: {
+			type: Boolean,
+			default: false,
+		},
 		isValueNumeric: {
 			type: Boolean,
 			default: false,
@@ -128,6 +133,10 @@ export default {
 	padding-right: 20px;
 
 	opacity: 0.0001;
+
+	&:disabled {
+		cursor: not-allowed;
+	}
 }
 
 .bar {
@@ -145,7 +154,7 @@ export default {
 	color: var(--color--text);
 	background-color: var(--color--bg--accent);
 
-	.select:not(:focus):hover + & {
+	.select:not(:focus):not(:disabled):hover + & {
 		border-color: var(--color--hover);
 		background-color: var(--color--bg--highlight);
 	}
@@ -153,21 +162,27 @@ export default {
 	.select:focus + & {
 		border-color: var(--color--hover);
 	}
+
+	.select:disabled + & {
+		opacity: 0.5;
+
+		cursor: not-allowed;
+	}
 }
 
 .bar__text {
 	font-size: 1.5rem;
 
-	//- overflow: hidden;
-	//- white-space: nowrap;
-	//- text-overflow: ellipsis;
+	.select:disabled + .bar & {
+		cursor: not-allowed;
+	}
 }
 
 .bar__chevron {
 	font-size: 1.2rem;
 	color: var(--color--text--secondary);
 
-	.select:not(:focus):hover + .bar & {
+	.select:not(:focus):not(:disabled):hover + .bar & {
 		color: var(--color--hover);
 	}
 }
