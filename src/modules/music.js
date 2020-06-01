@@ -46,9 +46,9 @@ export const intervalsShortNames = [
 	'2M',
 	'3m',
 	'3M',
-	'4<sup>th</sup>',
+	'4th',
 	'5♭',
-	'5<sup>th</sup>',
+	'5th',
 	'6m',
 	'6M',
 	'7m',
@@ -63,16 +63,16 @@ export const models = {
 	// SCALES
 
 	// Pentatonics & blues
-	'maj5':         { intervals: [2,  4,  7,  9],             name: 'major pentatonic'          },
-	'min5':         { intervals: [3,  5,  7, 10],             name: 'minor pentatonic'          },
-	'majb':         { intervals: [2,  3,  4,  7,  9],         name: 'blues major'               },
-	'minb':         { intervals: [3,  5,  6,  7, 10],         name: 'blues minor'               },
+	'maj5':         { intervals: [2,  4,  7,  9],             name: 'major pentatonic'          , positions: [[-1, 3], [1, 5], [3, 7], [6, 10], [9, 12]] },
+	'min5':         { intervals: [3,  5,  7, 10],             name: 'minor pentatonic'          , positions: [[ 0, 3], [2, 6], [4, 8], [7, 11], [9, 13]] },
+	'majb':         { intervals: [2,  3,  4,  7,  9],         name: 'blues major'               , positions: [[-1, 3], [1, 5], [3, 7], [6, 10], [9, 12]] },
+	'minb':         { intervals: [3,  5,  6,  7, 10],         name: 'blues minor'               , positions: [[ 0, 3], [2, 6], [4, 8], [7, 11], [9, 13]] },
 
 	// Naturals
-	'maj':          { intervals: [2,  4,  5,  7,  9, 11],     name: 'natural major'             },
-	'min':          { intervals: [2,  3,  5,  7,  8, 10],     name: 'natural minor'             },
-	'harm':         { intervals: [2,  3,  5,  7,  8, 11],     name: 'harmonic minor'            },
-	'mel':          { intervals: [2,  3,  5,  7,  9, 11],     name: 'melodic minor'             },
+	'maj':          { intervals: [2,  4,  5,  7,  9, 11],     name: 'natural major'             , positions: [[-1, 3], [1, 5], [3, 7], [6, 10], [8, 12]] },
+	'min':          { intervals: [2,  3,  5,  7,  8, 10],     name: 'natural minor'             , positions: [[-1, 3], [2, 6], [4, 8], [7, 10], [9, 13]] },
+	'harm':         { intervals: [2,  3,  5,  7,  8, 11],     name: 'harmonic minor'            , positions: [[-1, 3], [2, 6], [3, 7], [6, 10], [9, 13]] },
+	'mel':          { intervals: [2,  3,  5,  7,  9, 11],     name: 'melodic minor'             , positions: [[-1, 3], [1, 5], [3, 7], [6, 10], [9, 13]] },
 
 	// Modes
 	'dor':          { intervals: [2,  3,  5,  7,  9, 10],     name: 'dorian'                    },

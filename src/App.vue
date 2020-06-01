@@ -25,7 +25,7 @@ div.App#app(:style="colorscheme")
 			FretboardTools
 
 			//- Dark mode toggle switch
-			div.dark-mode-switch(
+			button.dark-mode-switch(
 				v-mods="{ isDarkModeOn }"
 				@click="$store.commit('toggle.isDarkModeOn')"
 				)
@@ -90,7 +90,7 @@ div.App#app(:style="colorscheme")
 			rel="external nofollow noopener noreferrer"
 			)
 			fa-icon(:icon="['far', 'heart']")
-			p.nav__link__text Support the app!
+			p.nav__link__text Support the app
 
 		//- TGLD
 		a.nav__link.link-tgld(
@@ -311,14 +311,16 @@ export default {
 	align-items: center;
 	@include space-children-h(5px);
 
+	border: none;
+	appearance: none;
+	background: none;
+
 	color: var(--color--text--secondary);
 
 	cursor: pointer;
 
-	&.is-dark-mode-on:hover       .dark-mode-switch__sun,
-	&:not(.is-dark-mode-on):hover .dark-mode-switch__moon {
-		color: var(--color--hover);
-	}
+	&.is-dark-mode-on       { &:hover, &:focus { & .dark-mode-switch__sun  { color: var(--color--hover); } } }
+	&:not(.is-dark-mode-on) { &:hover, &:focus { & .dark-mode-switch__moon { color: var(--color--hover); } } }
 }
 
 .dark-mode-switch__toggle {
@@ -396,7 +398,7 @@ export default {
 	align-items: center;
 	@include space-children-h(6px);
 
-	font-size: 1.3rem;
+	font-size: 1.35rem;
 
 	color: var(--color--text--secondary);
 
@@ -411,8 +413,8 @@ export default {
 	cursor: pointer;
 }
 
-.link-support:hover { color: var(--color--red);    }
-.link-tgld:hover    { color: var(--color--orange); }
+.link-support    { color: var(--color--red);    }
+.link-tgld:hover { color: var(--color--orange); }
 
 /**
  * Settings

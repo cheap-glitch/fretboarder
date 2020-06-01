@@ -101,7 +101,7 @@ export default {
 
 	@include mq($from: desktop)
 	{
-		max-width: 1300px;
+		max-width: 1400px;
 		margin: auto;
 	}
 }

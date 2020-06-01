@@ -76,9 +76,18 @@ div.FretboardSequencesItem
 			VSelect(
 				:value="model"
 				:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
-				:label-formatter="(value, label) => `${label} ${value.startsWith('arp-') ? 'arp.' : 'scale'}`"
+				:label-formatter="(value, label) => `${label} ${isArpeggio(value) ? 'arp.' : 'scale'}`"
 
 				@change="v => update('model', v)"
+				)
+			//- Model
+			VSelect(
+				:value="position"
+				:options="positions"
+				:is-disabled="!hasPositions"
+				is-value-numeric
+
+				@change="v => update('position', v)"
 				)
 
 		//----------------------------------------------------------------------
@@ -189,7 +198,7 @@ export default {
 	computed: {
 		infos()
 		{
-			return `${notesNames[this.tonality]} ${models[this.model].name} ${this.model.startsWith('arp-') ? 'arpeggio' : 'scale'}`;
+			return `${notesNames[this.tonality]} ${models[this.model].name} ${this.isArpeggio(this.model) ? 'arpeggio' : 'scale'}`;
 		},
 		intervals()
 		{
@@ -199,6 +208,11 @@ export default {
 				name:  intervalsShortNames[interval],
 			}))
 		},
+		hasPositions()
+		{
+			return ('positions' in models[this.model]);
+		},
+
 		...get([
 			'isMobileDevice',
 			'isWideScreen',
@@ -207,20 +221,28 @@ export default {
 
 	created()
 	{
-		this.tonalities       = notesNames;
-		this.scales           = filterObject(models, key => !key.startsWith('arp-'));
-		this.arpeggios        = filterObject(models, key =>  key.startsWith('arp-'));
 		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
+		this.tonalities       = notesNames;
+		this.scales           = filterObject(models, key => !this.isArpeggio(key));
+		this.arpeggios        = filterObject(models, key =>  this.isArpeggio(key));
+		this.positions        = {
+			0: 'Whole',
+			1: '1st pos.',
+			2: '2nd pos.',
+			3: '3rd pos.',
+			4: '4th pos.',
+			5: '5th pos.',
+		};
 	},
 
 	methods: {
 		update(prop, value)
 		{
-			// Reset the highlighted interval when the model of the sequence is changed
-			if (prop == 'model')
-				this.update('highlightedInterval', null);
-
 			this.$store.commit('sequences/update', { index: this.index, prop, value });
+		},
+		isArpeggio(model)
+		{
+			return model.startsWith('arp-');
 		},
 	}
 }
@@ -280,7 +302,7 @@ export default {
 	{
 		display: flex;
 		align-items: flex-start;
-		@include space-children-h(20px);
+		@include space-children-h(40px);
 
 		border-radius: 10px;
 	}

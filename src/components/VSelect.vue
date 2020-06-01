@@ -21,6 +21,7 @@ div.VSelect
 	select.select(
 		ref="select"
 		:value="value"
+		:disabled="isDisabled"
 
 		@change="selectOption"
 		)
@@ -53,7 +54,7 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
-import Vue from 'vue'
+import { formatOrdinalSuffix } from '@/modules/text'
 
 export default {
 	name: 'VSelect',
@@ -75,6 +76,10 @@ export default {
 		labelFormatter: {
 			type: Function,
 			default: (value, label) => label,
+		},
+		isDisabled: {
+			type: Boolean,
+			default: false,
 		},
 		isValueNumeric: {
 			type: Boolean,
@@ -103,11 +108,10 @@ export default {
 			this.$emit('change', this.isValueNumeric ? Number.parseInt(event.target.value, 10) : event.target.value);
 			this.updateSelectedOptionLabel();
 		},
-		updateSelectedOptionLabel()
+		async updateSelectedOptionLabel()
 		{
-			Vue.nextTick(() => {
-				this.selectedOptionLabel = this.labelFormatter(this.value, this.$refs.select.selectedOptions[0].label.replace(/(\d)th/, '$1<sup>th</sup>'));
-			});
+			await this.$nextTick();
+			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
 		},
 	}
 }
@@ -129,6 +133,10 @@ export default {
 	padding-right: 20px;
 
 	opacity: 0.0001;
+
+	&:disabled {
+		cursor: not-allowed;
+	}
 }
 
 .bar {
@@ -146,7 +154,7 @@ export default {
 	color: var(--color--text);
 	background-color: var(--color--bg--accent);
 
-	.select:not(:focus):hover + & {
+	.select:not(:focus):not(:disabled):hover + & {
 		border-color: var(--color--hover);
 		background-color: var(--color--bg--highlight);
 	}
@@ -154,21 +162,27 @@ export default {
 	.select:focus + & {
 		border-color: var(--color--hover);
 	}
+
+	.select:disabled + & {
+		opacity: 0.5;
+
+		cursor: not-allowed;
+	}
 }
 
 .bar__text {
 	font-size: 1.5rem;
 
-	//- overflow: hidden;
-	//- white-space: nowrap;
-	//- text-overflow: ellipsis;
+	.select:disabled + .bar & {
+		cursor: not-allowed;
+	}
 }
 
 .bar__chevron {
 	font-size: 1.2rem;
 	color: var(--color--text--secondary);
 
-	.select:not(:focus):hover + .bar & {
+	.select:not(:focus):not(:disabled):hover + .bar & {
 		color: var(--color--hover);
 	}
 }
