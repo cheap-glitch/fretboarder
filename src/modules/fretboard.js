@@ -30,6 +30,7 @@ export function getFrets(sequences, tuningNotes, capo)
 		sequences.forEach(function(seq, seqIndex)
 		{
 			// Find the first fret whose note is the root of the sequence
+			// @TODO : simplify ?
 			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
 
 			// Loop through the intervals and add the sequence index to the sequences list of their corresponding frets

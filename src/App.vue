@@ -398,7 +398,7 @@ export default {
 	align-items: center;
 	@include space-children-h(6px);
 
-	font-size: 1.4rem;
+	font-size: 1.35rem;
 
 	color: var(--color--text--secondary);
 
