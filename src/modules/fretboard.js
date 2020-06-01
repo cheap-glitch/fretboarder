@@ -11,13 +11,8 @@ import { NB_FRETS, MAX_NB_FRETS } from '@/modules/constants'
  */
 export function getFrets(sequences, tuningNotes, capo)
 {
-	const positionStarts = sequences.map(function(seq)
-	{
-		return (seq.position !== 0 && ('positionOffsets' in models[seq.model]))
-			// Get the index of the fret of the root note on the lowest string for every sequence
-			? (getInterval(tuningNotes[0], seq.tonality) - 1) + (seq.position == 1 ? 0 : models[seq.model].positionOffsets[seq.position - 2])
-			: null;
-	});
+	// Get the index of the fret of the root note on the lowest string for every sequence
+	const positionOffsets = sequences.map(seq => getInterval(tuningNotes[0], seq.tonality));
 
 	// Build an array of frets for each string and flatten them in a single list
 	return tuningNotes.flatMap(function(openStringNote, stringNumber)
@@ -43,7 +38,10 @@ export function getFrets(sequences, tuningNotes, capo)
 				const fretNumber = rootFret + interval;
 
 				// If the sequence is limited to a single position, check that the fret is in its boundaries
-				if (positionStarts[seqIndex] && !isInPosition(fretNumber, positionStarts[seqIndex])) return;//&& (!(positionStarts[seqIndex] <= fretNumber && fretNumber <= (positionStarts[seqIndex] + 4)))) return;
+				if (seq.position != 0
+				 && ('positions' in models[seq.model])
+				 && !isInPosition(fretNumber, models[seq.model].positions[seq.position - 1], positionOffsets[seqIndex]))
+					return;
 
 				// Modify the current fret and the one 12 half-steps above/below it
 				[fretNumber, (fretNumber + 12) % NB_FRETS].forEach(function(fret)
@@ -71,9 +69,10 @@ export function getFrets(sequences, tuningNotes, capo)
 /**
  * Check that a fret is in the boundaries of a position
  */
-function isInPosition(fretNumber, start)
+function isInPosition(fretNumber, position, offset)
 {
-	const stop      = start + 4;
+	const start     = position[0] + offset;
+	const stop      = position[1] + offset;
 	const otherFret = (fretNumber + 12) % NB_FRETS;
 
 	return start < stop

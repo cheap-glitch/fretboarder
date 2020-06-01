@@ -49,7 +49,7 @@
     "eslint-plugin-smarter-tabs": "^1.1.1",
     "eslint-plugin-vue": "^6.2.2",
     "nodemon": "^2.0.4",
-    "nyc": "^15.0.1",
+    "nyc": "^15.1.0",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.26.7",
