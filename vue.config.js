@@ -65,7 +65,7 @@ module.exports = {
 				'heart':                    'pro-regular',
 				'external-link-square-alt': 'pro-regular',
 				'sun':                      'pro-solid',
-				'moon':                     'pro-solid',
+				'moon':                    ['pro-regular', 'pro-solid'],
 
 				// Tools & settings
 				'cog':                      'pro-regular',

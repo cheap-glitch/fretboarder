@@ -58,7 +58,7 @@ div.FretboardTools
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
-				title="Switch fretting hand"
+				:title="`${isFlipped ? 'Right' : 'Left'}-handed fretting`"
 
 				:is-flipped="!isFlipped"
 				@click="$store.commit('fretboard/toggle.isFlipped')"
@@ -84,6 +84,17 @@ div.FretboardTools
 
 		:is-active="isShowingNoteNames"
 		@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
+		)
+
+	//- Switch to dark mode
+	VButton(
+		v-if="isMobileDevice"
+
+		icon="moon"
+		title="Dark mode"
+
+		:is-active="isDarkModeOn"
+		@click="$store.commit('toggle.isDarkModeOn')"
 		)
 
 	//- Export the fretboard
@@ -201,7 +212,7 @@ export default {
 	@include mq($until: desktop)
 	{
 		@include center-column;
-		@include space-children-v(40px);
+		@include space-children-v(20px);
 	}
 
 	@include mq($from: desktop)
