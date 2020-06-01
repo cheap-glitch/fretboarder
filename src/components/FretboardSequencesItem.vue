@@ -238,10 +238,6 @@ export default {
 	methods: {
 		update(prop, value)
 		{
-			// Reset the highlighted interval when the model of the sequence is changed
-			if (prop == 'model')
-				this.update('highlightedInterval', null);
-
 			this.$store.commit('sequences/update', { index: this.index, prop, value });
 		},
 		isArpeggio(model)
