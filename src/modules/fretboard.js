@@ -11,22 +11,12 @@ import { NB_FRETS, MAX_NB_FRETS } from '@/modules/constants'
  */
 export function getFrets(sequences, tuningNotes, capo)
 {
-	// Compute the boundaries of the displayed position for each sequence
-	const positions = sequences.map(function(seq)
+	const positionStarts = sequences.map(function(seq)
 	{
-		if (seq.position === 0)
-			return null;
-
-		// Get the index of the fret of the root note on the lowest string
-		const rootFret = getInterval(tuningNotes[0], seq.tonality);
-
-		// Get the start of the position
-		const posStart = (rootFret - 1 + 15*(seq.position - 1)) % NB_FRETS;
-
-		return {
-			start: posStart,
-			stop:  (posStart + 5) % NB_FRETS,
-		};
+		return (seq.position !== 0 && ('positionOffsets' in models[seq.model]))
+			// Get the index of the fret of the root note on the lowest string for every sequence
+			? (getInterval(tuningNotes[0], seq.tonality) - 1) + (seq.position == 1 ? 0 : models[seq.model].positionOffsets[seq.position - 2])
+			: null;
 	});
 
 	// Build an array of frets for each string and flatten them in a single list
@@ -50,11 +40,13 @@ export function getFrets(sequences, tuningNotes, capo)
 			// Loop through the intervals and add the sequence index to the sequences list of their corresponding frets
 			[0, ...models[seq.model].intervals].forEach(function(interval)
 			{
+				const fretNumber = rootFret + interval;
+
 				// If the sequence is limited to a single position, check that the fret is in its boundaries
-				if (positions[seqIndex] !== null && !isInPosition(rootFret + interval, positions[seqIndex])) return;
+				if (positionStarts[seqIndex] && !isInPosition(fretNumber, positionStarts[seqIndex])) return;//&& (!(positionStarts[seqIndex] <= fretNumber && fretNumber <= (positionStarts[seqIndex] + 4)))) return;
 
 				// Modify the current fret and the one 12 half-steps above/below it
-				[rootFret + interval, (rootFret + interval + 12) % NB_FRETS].forEach(function(fret)
+				[fretNumber, (fretNumber + 12) % NB_FRETS].forEach(function(fret)
 				{
 					frets[fret].sequences.push({ index: seq.index, interval, isIntersected: seq.isIntersected });
 
@@ -79,13 +71,14 @@ export function getFrets(sequences, tuningNotes, capo)
 /**
  * Check that a fret is in the boundaries of a position
  */
-function isInPosition(fretNumber, pos)
+function isInPosition(fretNumber, start)
 {
+	const stop      = start + 4;
 	const otherFret = (fretNumber + 12) % NB_FRETS;
 
-	return pos.start < pos.stop
-		? (pos.start <= fretNumber && fretNumber < pos.stop) || (pos.start <= otherFret && otherFret < pos.stop)
-		: (pos.start <= fretNumber || fretNumber < pos.stop) || (pos.start <= otherFret || otherFret < pos.stop);
+	return start < stop
+		? (start <= fretNumber && fretNumber <= stop) || (start <= otherFret && otherFret <= stop)
+		: (start <= fretNumber || fretNumber <= stop) || (start <= otherFret || otherFret <= stop);
 }
 
 /**
