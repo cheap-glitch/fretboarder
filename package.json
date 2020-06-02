@@ -1,21 +1,36 @@
 {
-  "name": "fretboarder",
-  "version": "3.0.0",
   "private": true,
+  "name": "fretboarder",
   "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
+  "version": "3.0.0",
+  "license": "LGPL-3.0-only",
+  "repository": "github:cheap-glitch/fretboarder",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
+  "main": "src/main.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
-    "build": "vue-cli-service build --modern",
-    "test:unit": "vue-cli-service test:unit 'test/*.test.js'",
-    "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
     "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
+    "build": "vue-cli-service build --modern",
     "coverage": "nyc npm test",
+    "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
+    "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
     "serve-vue-cli": "vue-cli-service serve",
     "sitemap": "vue-cli-service sitemap",
-    "test": "npm run test:unit -- "
+    "test": "npm run test:unit -- ",
+    "test:unit": "vue-cli-service test:unit 'test/*.test.js'"
   },
-  "main": "src/main.js",
+  "browserslist": [
+    "last 1 version",
+    "not dead",
+    "> 0.2%"
+  ],
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
@@ -58,20 +73,5 @@
     "vue-cli-plugin-sitemap": "^2.1.1",
     "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^3.8.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "last 1 version",
-    "not dead",
-    "> 0.2%"
-  ],
-  "directories": {
-    "test": "test"
-  },
-  "license": "LGPL-3.0-only",
-  "repository": "github:cheap-glitch/fretboarder"
+  }
 }
