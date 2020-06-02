@@ -30,11 +30,10 @@ export function getFrets(sequences, tuningNotes, capo)
 		sequences.forEach(function(seq, seqIndex)
 		{
 			// Find the first fret whose note is the root of the sequence
-			// @TODO : simplify ?
 			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
 
-			// Loop through the intervals and add the sequence index to the sequences list of their corresponding frets
-			[0, ...models[seq.model].intervals].forEach(function(interval)
+			// Create a function to add a reference to the sequence into the frets corresponding to the given interval
+			function applyInterval(interval)
 			{
 				const fretNumber = rootFret + interval;
 
@@ -52,7 +51,11 @@ export function getFrets(sequences, tuningNotes, capo)
 					if (interval === seq.highlightedInterval)
 						frets[fret].isHighlighted = true;
 				});
-			});
+			}
+
+			// Loop through the intervals (plus the root) and apply them to their corresponding frets
+			applyInterval(0);
+			models[seq.model].intervals.forEach(interval => applyInterval(interval));
 		});
 
 		// Deactivate frets with only intersected sequences
