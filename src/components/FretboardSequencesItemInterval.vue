@@ -14,14 +14,19 @@ div.FretboardSequencesItemInterval
 		v-mods="{ isSelected }"
 
 		@click.left="$emit('update-interval', isSelected ? null : value)"
+
+		@mouseenter="isTootlipOpen = true"
+		@mouseleave="isTootlipOpen = false"
 		)
 		p.button__note {{ note }}
-		p.button__name(v-html="name")
+		p.button__name(v-html="shortName")
 
 	//- Tooltip
 	VPopup(
 		:target="$refs.button || false"
+		:is-open="isTootlipOpen"
 		)
+		p.tooltip__text Highlight {{ name }} notes
 
 </template>
 <!--}}}-->
@@ -29,6 +34,8 @@ div.FretboardSequencesItemInterval
 
 <!--{{{ JavaScript -->
 <script>
+
+import { intervalsNames, intervalsShortNames } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItemInterval',
@@ -42,14 +49,21 @@ export default {
 			type: String,
 			required: true,
 		},
-		name: {
-			type: String,
-			required: true,
-		},
 		isSelected: {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	data() {
+		return {
+			isTootlipOpen: false,
+		}
+	},
+
+	computed: {
+		name()      { return intervalsNames[this.value];      },
+		shortName() { return intervalsShortNames[this.value]; },
 	},
 }
 
@@ -107,6 +121,10 @@ export default {
 
 	.button.is-selected             & { color: var(--color--text); }
 	.button:not(.is-selected):hover & { color: var(--color--text); }
+}
+
+.tooltip__text {
+	color: white;
 }
 
 </style>

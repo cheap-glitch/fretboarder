@@ -140,8 +140,7 @@ import { get }                         from 'vuex-pathify'
 
 import { MAX_NB_SEQUENCES }            from '@/modules/constants'
 import { filterObject }                from '@/modules/object'
-import { notes, notesNames }           from '@/modules/music'
-import { models, intervalsShortNames } from '@/modules/music'
+import { models, notes, notesNames }   from '@/modules/music'
 
 import FretboardSequencesItemInterval  from '@/components/FretboardSequencesItemInterval'
 
@@ -209,9 +208,8 @@ export default {
 		intervals()
 		{
 			return [0, ...models[this.model].intervals].map(interval => ({
-				value: interval,
 				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
-				name:  intervalsShortNames[interval],
+				value: interval,
 			}))
 		},
 		hasPositions()
