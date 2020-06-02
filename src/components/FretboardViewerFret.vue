@@ -240,7 +240,7 @@ export default {
 	opacity: 0;
 	font-weight: bold;
 
-	transition: opacity 0.2s, filter 0.2s, border-radius 0.2s;
+	transition: opacity 200ms, filter 200ms, border-radius 200ms;
 
 	/**
 	 * Placement

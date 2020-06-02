@@ -298,7 +298,7 @@ export default {
 	font-size: 20px;
 	font-weight: bold;
 
-	transition: color 0.2s;
+	transition: color 200ms;
 
 	@include mq($from: desktop)
 	{
@@ -343,7 +343,7 @@ export default {
 
 		background-color: var(--color--hover);
 
-		transition: transform 0.2s;
+		transition: transform 200ms;
 
 		.dark-mode-switch.is-dark-mode-on & {
 			transform: translateX(8px);

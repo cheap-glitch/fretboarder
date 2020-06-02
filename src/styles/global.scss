@@ -84,13 +84,13 @@ sup {
  */
 
 div {
-	transition: border-color 0.2s, background-color 0.2s;
+	transition: border-color 200ms, background-color 200ms;
 }
 
 p,
 a,
 .svg-inline--fa {
-	transition: color 0.2s;
+	transition: color 200ms;
 }
 
 .fade-enter,
@@ -105,5 +105,5 @@ a,
 
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity 0.2s;
+	transition: opacity 200ms;
 }
