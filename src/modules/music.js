@@ -26,18 +26,18 @@ export const notes = Object.keys(notesNames);
  * Intervals
  */
 export const intervalsNames = [
-	'root',
-	'minor second',
-	'major second',
-	'minor third',
-	'major third',
-	'perfect fourth',
-	'diminished fifth',
-	'perfect fifth',
-	'minor sixth',
-	'major sixth',
-	'minor seventh',
-	'major seventh',
+	'Root',
+	'Minor second',
+	'Major second',
+	'Minor third',
+	'Major third',
+	'Perfect fourth',
+	'Diminished fifth',
+	'Perfect fifth',
+	'Minor sixth',
+	'Major sixth',
+	'Minor seventh',
+	'Major seventh',
 ];
 
 export const intervalsShortNames = [

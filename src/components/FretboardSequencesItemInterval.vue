@@ -62,8 +62,8 @@ export default {
 	},
 
 	computed: {
-		name()      { return intervalsNames[this.value];      },
-		shortName() { return intervalsShortNames[this.value]; },
+		name()      { return intervalsNames[this.value].toLowerCase(); },
+		shortName() { return intervalsShortNames[this.value];          },
 	},
 }
 
