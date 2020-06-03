@@ -3,7 +3,7 @@
  * modules/colorscheme.js
  */
 
-export const colors = {
+const colors = {
 	sun:                        '#ffb610',
 	cinnabar:                   '#e54124',
 	crimson:                    '#e1112c',
@@ -24,9 +24,9 @@ export const colors = {
 	mirage2:                    '#1c2532',
 	mirage:                     '#171e29',
 	black:                      '#222222',
-}
+};
 
-export const colorscheme = {
+const colorscheme = {
 	'--color--bg':              ['white',           colors.mirage],
 	'--color--bg--accent':      [colors.athensGray, colors.mirage2],
 	'--color--bg--highlight':   [colors.snow,       colors.ebonyClay],
@@ -45,4 +45,9 @@ export const colorscheme = {
 
 	'--color--red':             [colors.crimson,    colors.crimson],
 	'--color--orange':          [colors.cinnabar,   colors.cinnabar],
+};
+
+module.exports = {
+	colors,
+	colorscheme,
 }

@@ -18,6 +18,7 @@ import VCSSModifiers from 'vue-css-modifiers'
 
 import App           from '@/App'
 import store         from '@/stores/main'
+import './registerServiceWorker'
 
 /**
  * Register plugins, directives & external components
