@@ -24,7 +24,7 @@ module.exports = {
 		sourceMap: process.env.NODE_ENV === 'development',
 
 		// Import the mixins in every component
-		loaderOptions: { sass: { prependData: `
+		loaderOptions: { scss: { prependData: `
 
 			@use "@cheap-glitch/scss-mixins/_mixins" as *;
 			@use "@/styles/layout";
