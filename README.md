@@ -4,39 +4,34 @@
 	</a>
 </p>
 
-<p>&nbsp;</p>
-
 **[Fretboarder](https://fretboarder.app)** is  a webapp to visualize  the layout
-of scales and arpeggios across a variety of fretboards. Features:
-  * 🎸 support for a variety of string instruments, from ukulele to eleven-string guitar, and many different tunings
-  * 🎨 visualize several scales and arpeggios at once (full scales, positions, overlaps and intersections)
-  * 🎯 highlight specific notes and intervals
-  * 🤘 support for both left and right-handed fretting
-  * 🌒 dark mode
-  * 🖼️ export the result to the PNG, JPG and SVG formats
+of scales and arpeggios across a variety of fretboards.
 
-<p>&nbsp;</p>
+### Highlights
 
-![screenshot (light mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-01.png)
+🎨 Visualize several scales and arpeggios at once: overlap them or display their intersections.
 
-<p>&nbsp;</p>
+🎸 Choose between a variety of string instruments, from ukulele to eleven-string guitar, and many different tunings.
 
-![screenshot (dark  mode)](https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-02.png)
+🎯 Highlight specific intervals in a sequence of notes.
 
-#### Credits & acknowledgements
-Dark mode colorscheme heavily inspired by [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode).
+🤘 Switch between left and right-handed fretting easily.
 
-#### Related tools & web-apps
-  * [All Guitar Chords](http://www.all-guitar-chords.com): scales, chords, arpeggios, licks, etc.
+### Credits & acknowledgements
+The dark mode colorscheme is heavily borrowed from the [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode) project.
+
+### Other related tools & resources
+  * [All Guitar Chords](http://www.all-guitar-chords.com): a compilation of scales, chords, arpeggios, licks, and more
   * [ChordMaster 2000](http://chordmaster.tardate.com): a tool to practice and memorize chords
   * [ChordPic](https://chordpic.com): a chord diagram generator, with lots of options to fine-tune the looks
-  * [Fretmap](https://fretmap.app): a nice looking fretboard visualizer
+  * [Fretmap](https://fretmap.app): a very nice looking fretboard visualizer
   * [Glorious Voice Leader](https://www.gloriousvoiceleader.com): helps you find chord voicings that lead smoothly from one chord to the next
+  * [Guitar Practice Loop](https://www.guitarpracticeloops.com): practice various scales with accompanying audio
   * [Guitar Recorder](https://1j01.github.io/guitar): display and compose ASCII tablatures with an interactive fretboard
-  * [Guitar Scientist](https://www.guitarscientist.com/generator): generate diagrams with lots of options
-  * https://guitarstreams.com/tool/fretboard: interactive fretboard for guitar and ukulele players
-  * [JGuitar](https://jguitar.com): lots of tools regarding chords and music theory
-  * [Johann](https://scribbletune.github.io/johann/#/guitar): fretboard visualizer (can also display piano keyboards)
+  * [Guitar Scientist](https://www.guitarscientist.com/generator): a fretboard diagram generator with tons of options to customize the result
+  * [GuitarStreams](https://guitarstreams.com/tool/fretboard): an interactive fretboard for guitar and ukulele players
+  * [JGuitar](https://jguitar.com): an extensive collection of tools regarding chords and music theory
+  * [Johann](https://scribbletune.github.io/johann/#/guitar): a fretboard visualizer (with an accompanying piano version)
 
-#### License
-This software is distributed under the [GNU LGPL 3.0](https://spdx.org/licenses/LGPL-3.0-only.html).
+### License
+This software is distributed under the [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0).
