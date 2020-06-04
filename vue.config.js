@@ -3,12 +3,17 @@
  * vue.config.js
  */
 
+process.env.VUE_APP_TITLE       = 'Fretboarder';
+process.env.VUE_APP_BASE_URL    = 'https://fretboarder.app';
 process.env.VUE_APP_VERSION     = require('./package.json').version;
 process.env.VUE_APP_DESCRIPTION = require('./package.json').description;
 
 module.exports = {
-	productionSourceMap: false,
 
+	/**
+	 * Dev server
+	 * ---------------------------------------------------------------------
+	 */
 	devServer: {
 		https: true,
 		host:  'localhost',
@@ -19,6 +24,7 @@ module.exports = {
 	 * SCSS
 	 * ---------------------------------------------------------------------
 	 */
+	productionSourceMap: false,
 	css: {
 		// Enable source maps in dev mode only
 		sourceMap: process.env.NODE_ENV === 'development',
@@ -96,22 +102,24 @@ module.exports = {
 	 * Sitemap
 	 * ---------------------------------------------------------------------
 	 */
-	/*
 	sitemap: {
 		trailingSlash:  false,
 		productionOnly: true,
-	},
-	*/
 
+		baseURL: process.env.VUE_APP_BASE_URL,
+		urls: [
+			{
+				loc:        '/',
+				priority:   1.0,
+				changefreq: 'always',
+			},
+			{
+				loc:        '/about',
+				priority:   0.8,
+				changefreq: 'monthly',
+			},
+		]
 	},
 
-	/**
-	 * PWA
-	 * ---------------------------------------------------------------------
-	 */
-	pwa: {
-		name:        'Fretboard',
-		themeColor:  require('./src/modules/colorscheme.js').colors.azure,
-		msTileColor: require('./src/modules/colorscheme.js').colors.azure,
-	},
+	}
 }
