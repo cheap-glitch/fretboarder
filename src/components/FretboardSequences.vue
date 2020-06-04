@@ -123,6 +123,7 @@ export default {
 
 .text-no-scales {
 	text-align: center;
+	color: var(--color--text);
 }
 
 .add-button-mobile {

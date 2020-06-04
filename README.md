@@ -1,26 +1,32 @@
 <p align="center">
 	<a href="https://fretboarder.app" target="_blank" rel="external nofollow noopener noreferrer">
-		<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/logo.png" alt="logo">
+		<img src="./docs/banner.png" alt="A white icon of a an acoustic guitar and a white text saying Fretboarder over a bright blue background.">
 	</a>
 </p>
 
-**[Fretboarder](https://fretboarder.app)** is  a webapp to visualize  the layout
-of scales and arpeggios across a variety of fretboards.
+<p align="center">A web app to visualize the layout of scales and arpeggios on a variety of fretboards.</p>
 
-### Highlights
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-light.png" alt="A screenshot of the app in usage.">
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-dark.png"  alt="A screenshot of the app in usage, with dark mode enabled.">
 
-🎨 Visualize several scales and arpeggios at once: overlap them or display their intersections.
+## Highlights
 
-🎸 Choose between a variety of string instruments, from ukulele to eleven-string guitar, and many different tunings.
+**🎸 Customize the instrument**
+Choose between a  variety of instruments (from ukulele to  11-string guitar) and
+tunings,  set  the  length  of  the fretboard,  and  switch  between  left-  and
+right-handed fretting.
 
-🎯 Highlight specific intervals in a sequence of notes.
+**🎨 Overlay scales and arpeggios**
+The main feature  that distinguishes Fretboarder from other similar  apps is the
+ability to display several scales and arpeggios all on the same fretboard.
 
-🤘 Switch between left and right-handed fretting easily.
-
-### Credits & acknowledgements
+## Credits & acknowledgements
 The dark mode colorscheme is heavily borrowed from the [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode) project.
 
-### Other related tools & resources
+## License
+This software is distributed under the [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0).
+
+## Other related tools & resources
   * [All Guitar Chords](http://www.all-guitar-chords.com): a compilation of scales, chords, arpeggios, licks, and more
   * [ChordMaster 2000](http://chordmaster.tardate.com): a tool to practice and memorize chords
   * [ChordPic](https://chordpic.com): a chord diagram generator, with lots of options to fine-tune the looks
@@ -32,6 +38,3 @@ The dark mode colorscheme is heavily borrowed from the [Vue Dark Mode](https://w
   * [GuitarStreams](https://guitarstreams.com/tool/fretboard): an interactive fretboard for guitar and ukulele players
   * [JGuitar](https://jguitar.com): an extensive collection of tools regarding chords and music theory
   * [Johann](https://scribbletune.github.io/johann/#/guitar): a fretboard visualizer (with an accompanying piano version)
-
-### License
-This software is distributed under the [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0).
