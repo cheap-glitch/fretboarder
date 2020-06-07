@@ -53,7 +53,7 @@ module.exports = {
 	 */
 	fontawesome: {
 		component: 'fa-icon',
-		imports: {
+		imports: !isModuleAvailable('@fortawesome/pro-regular-svg-icons') ? {} : {
 			// General UI
 			'arrow-left':               'pro-regular',
 			'chevron-down':             'pro-regular',
@@ -79,7 +79,7 @@ module.exports = {
 			// Tools & settings
 			'cog':                      'pro-regular',
 			'list-music':               'pro-regular',
-			'list-ol':                  'pro-light',
+			'list-ol':                  'pro-regular',
 			'info-circle':              'pro-regular',
 			'hand-paper':               'pro-regular',
 			'file-download':            'pro-regular',
@@ -122,4 +122,20 @@ module.exports = {
 	},
 
 	}
+}
+
+/**
+ * Helper function to check if a module is installed
+ */
+function isModuleAvailable(name)
+{
+	try {
+		require.resolve(name);
+		return true;
+	}
+	catch(err) {
+		return false;
+	}
+
+	return false;
 }
