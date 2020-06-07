@@ -18,7 +18,13 @@ right-handed fretting.
 
 **🎨 Overlay scales and arpeggios**
 The main feature  that distinguishes Fretboarder from other similar  apps is the
-ability to display several scales and arpeggios all on the same fretboard.
+ability to  display several sequences  of notes on  the same fretboard.  You can
+overlap scales  and arpeggios, display their  intersections and  select specific
+positions on the neck.
+
+**💻 Use on any device**
+The UI has been designed to be simple and intuitive, and to work on both desktop
+and mobile devices. Dark mode included!
 
 ## Credits & acknowledgements
 The dark mode colorscheme is heavily borrowed from the [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode) project.
