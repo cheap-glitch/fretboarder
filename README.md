@@ -9,30 +9,45 @@
 <img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/master/docs/screenshot-light.png" alt="A screenshot of the app in usage.">
 <img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/master/docs/screenshot-dark.png"  alt="A screenshot of the app in usage, with dark mode enabled.">
 
+
 ## Highlights
 
-**🎸 Customize the instrument**
+##### 🎸 Customize the instrument
+
 Choose between a  variety of instruments (from ukulele to  11-string guitar) and
 tunings,  set  the  length  of  the fretboard,  and  switch  between  left-  and
 right-handed fretting.
 
-**🎨 Overlay scales and arpeggios**
+##### 🎨 Overlay scales and arpeggios
+
 The main feature  that distinguishes Fretboarder from other similar  apps is the
 ability to  display several sequences  of notes on  the same fretboard.  You can
-overlap scales  and arpeggios, display their  intersections and  select specific
+overlap scales  and arpeggios, display  their intersections and  select specific
 positions on the neck.
 
-**💻 Use on any device**
+##### 💻 Use on any device
+
 The UI has been designed to be simple and intuitive, and to work on both desktop
 and mobile devices. Dark mode included!
 
+
+## Contributing
+
+Contributions are welcomed! See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+
 ## Credits & acknowledgements
+
 The dark mode colorscheme is heavily borrowed from the [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode) project.
 
+
 ## License
+
 This software is distributed under the [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0).
 
+
 ## Other related tools & resources
+
   * [All Guitar Chords](http://www.all-guitar-chords.com): a compilation of scales, chords, arpeggios, licks, and more
   * [ChordMaster 2000](http://chordmaster.tardate.com): a tool to practice and memorize chords
   * [ChordPic](https://chordpic.com): a chord diagram generator, with lots of options to fine-tune the looks
