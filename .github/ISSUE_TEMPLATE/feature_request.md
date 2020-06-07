@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: (ﾉ^ヮ^)ﾉ
+about: (ﾉ^ヮ^)ﾉ✨
 labels: enhancement
 ---
 

@@ -9,7 +9,7 @@
  * A web app to visualize scales, chords and arpeggios on all kinds of fretboards.
  *
  * Copyright (c) 2019-present, cheap glitch
- * This software is distributed under the GNU LGPL 3.0
+ * This software is distributed under the Mozilla Public License 2.0
  */
 
 import Vue           from 'vue'

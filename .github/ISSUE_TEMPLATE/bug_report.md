@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: ヽ(≧Д≦)ノ
+about: 💻🐛 ヽ(≧Д≦)ノ
 labels: bug
 ---
 

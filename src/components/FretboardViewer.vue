@@ -39,7 +39,7 @@ div.FretboardViewer(
 	//- Fret numbers
 	div.fret-number(
 		v-for="(fret, index) of fretNumbers"
-		:key="`fret-number--${index}`"
+		:key="`fret-number--${fret}`"
 
 		v-show="isShowingFretNbs"
 		v-mods="{ isVertical }"

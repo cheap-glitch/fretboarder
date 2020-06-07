@@ -26,17 +26,27 @@ export function getFrets(sequences, tuningNotes, capo)
 			isHighlighted: false,
 		}));
 
+		// Sort the sequences to process the non-intersected ones first
+		[...sequences].sort(function(a, b)
+		{
+			if (a.isIntersected && !b.isIntersected) return  1;
+			if (b.isIntersected && !a.isIntersected) return -1;
+
+			return 0;
+		})
 		// Mark the frets that belong to each sequence
-		sequences.forEach(function(seq, seqIndex)
+		.forEach(function(seq, seqIndex)
 		{
 			// Find the first fret whose note is the root of the sequence
-			// @TODO : simplify ?
 			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
 
-			// Loop through the intervals and add the sequence index to the sequences list of their corresponding frets
-			[0, ...models[seq.model].intervals].forEach(function(interval)
+			// Create a function to add a reference to the sequence into the frets corresponding to the given interval
+			function applyInterval(interval)
 			{
 				const fretNumber = rootFret + interval;
+
+				// If the sequence is intersected, check that there is already at least one other sequence on the fret
+				if (seq.isIntersected && frets[fretNumber].sequences.length == 0) return;
 
 				// If the sequence is limited to a single position, check that the fret is in its boundaries
 				if (seq.position != 0
@@ -47,19 +57,16 @@ export function getFrets(sequences, tuningNotes, capo)
 				// Modify the current fret and the one 12 half-steps above/below it
 				[fretNumber, (fretNumber + 12) % NB_FRETS].forEach(function(fret)
 				{
-					frets[fret].sequences.push({ index: seq.index, interval, isIntersected: seq.isIntersected });
+					frets[fret].sequences.push({ index: seq.index, interval });
 
 					if (interval === seq.highlightedInterval)
 						frets[fret].isHighlighted = true;
 				});
-			});
-		});
+			}
 
-		// Deactivate frets with only intersected sequences
-		frets.forEach(function(fret)
-		{
-			if (fret.sequences.every(seq => seq.isIntersected))
-				fret.sequences = [];
+			// Loop through the intervals (plus the root) and apply them to their corresponding frets
+			applyInterval(0);
+			models[seq.model].intervals.forEach(interval => applyInterval(interval));
 		});
 
 		// Extend the fretboard by duplicating the frets needed to reach the upper limit

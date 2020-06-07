@@ -1,6 +1,6 @@
 ---
 name: Question
-about: ʅฺ(・ω・。)ʃฺ
+about: ʅฺ(・ω・💧)ʃฺ
 labels: question
 ---
 

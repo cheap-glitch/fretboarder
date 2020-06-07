@@ -3,12 +3,17 @@
  * vue.config.js
  */
 
+process.env.VUE_APP_TITLE       = 'Fretboarder';
+process.env.VUE_APP_BASE_URL    = 'https://fretboarder.app';
 process.env.VUE_APP_VERSION     = require('./package.json').version;
 process.env.VUE_APP_DESCRIPTION = require('./package.json').description;
 
 module.exports = {
-	productionSourceMap: false,
 
+	/**
+	 * Dev server
+	 * ---------------------------------------------------------------------
+	 */
 	devServer: {
 		https: true,
 		host:  'localhost',
@@ -17,13 +22,15 @@ module.exports = {
 
 	/**
 	 * SCSS
+	 * ---------------------------------------------------------------------
 	 */
+	productionSourceMap: false,
 	css: {
 		// Enable source maps in dev mode only
 		sourceMap: process.env.NODE_ENV === 'development',
 
 		// Import the mixins in every component
-		loaderOptions: { sass: { prependData: `
+		loaderOptions: { scss: { prependData: `
 
 			@use "@cheap-glitch/scss-mixins/_mixins" as *;
 			@use "@/styles/layout";
@@ -39,64 +46,96 @@ module.exports = {
 	},
 
 	pluginOptions: {
-		/**
-		 * Font Awesome icons
-		 */
-		fontawesome: {
-			component: 'fa-icon',
-			imports: {
-				// General UI
-				'arrow-left':               'pro-regular',
-				'chevron-down':             'pro-regular',
-				'ellipsis-h':               'pro-regular',
-				'ellipsis-v':               'pro-regular',
-				'minus':                    'pro-regular',
 
-				// Logo
-				'banjo':                    'pro-regular',
-				'guitar':                   'pro-regular',
-				'guitar-electric':          'pro-regular',
-				'mandolin':                 'pro-regular',
+	/**
+	 * Font Awesome icons
+	 * ---------------------------------------------------------------------
+	 */
+	fontawesome: {
+		component: 'fa-icon',
+		imports: !isModuleAvailable('@fortawesome/pro-regular-svg-icons') ? {} : {
+			// General UI
+			'arrow-left':               'pro-regular',
+			'chevron-down':             'pro-regular',
+			'ellipsis-h':               'pro-regular',
+			'ellipsis-v':               'pro-regular',
+			'minus':                    'pro-regular',
 
-				// Header
-				'twitter':                  'free-brands',
-				'github':                   'free-brands',
-				'paper-plane':              'pro-regular',
-				'heart':                    'pro-regular',
-				'external-link-square-alt': 'pro-regular',
-				'sun':                      'pro-solid',
-				'moon':                    ['pro-regular', 'pro-solid'],
+			// Logo
+			'banjo':                    'pro-regular',
+			'guitar':                   'pro-regular',
+			'guitar-electric':          'pro-regular',
+			'mandolin':                 'pro-regular',
 
-				// Tools & settings
-				'cog':                      'pro-regular',
-				'list-music':               'pro-regular',
-				'list-ol':                  'pro-light',
-				'info-circle':              'pro-regular',
-				'hand-paper':               'pro-regular',
-				'file-download':            'pro-regular',
-				'file-image':               'pro-regular',
-				'image-polaroid':           'pro-regular',
+			// Header
+			'twitter':                  'free-brands',
+			'github':                   'free-brands',
+			'paper-plane':              'pro-regular',
+			'heart':                    'pro-regular',
+			'external-link-square-alt': 'pro-regular',
+			'sun':                      'pro-solid',
+			'moon':                    ['pro-regular', 'pro-solid'],
 
-				// Scales
-				'plus':                     'pro-regular',
-				'trash-alt':                'pro-regular',
-				'eye':                      'pro-regular',
-				'eye-slash':                'pro-regular',
-				'bullseye':                 'pro-regular',
-				'intersection':             'pro-solid',
-				'copy':                     'pro-regular',
-				'times-circle':             'pro-regular',
-			}
-		},
+			// Tools & settings
+			'cog':                      'pro-regular',
+			'list-music':               'pro-regular',
+			'list-ol':                  'pro-regular',
+			'info-circle':              'pro-regular',
+			'hand-paper':               'pro-regular',
+			'file-download':            'pro-regular',
+			'file-image':               'pro-regular',
+			'image-polaroid':           'pro-regular',
 
-		/**
-		 * Sitemap
-		 */
-		/*
-		sitemap: {
-			trailingSlash:  false,
-			productionOnly: true,
-		},
-		*/
+			// Scales
+			'plus':                     'pro-regular',
+			'trash-alt':                'pro-regular',
+			'eye':                      'pro-regular',
+			'eye-slash':                'pro-regular',
+			'bullseye':                 'pro-regular',
+			'intersection':             'pro-solid',
+			'copy':                     'pro-regular',
+			'times-circle':             'pro-regular',
+		}
 	},
+
+	/**
+	 * Sitemap
+	 * ---------------------------------------------------------------------
+	 */
+	sitemap: {
+		trailingSlash:  false,
+		productionOnly: true,
+
+		baseURL: process.env.VUE_APP_BASE_URL,
+		urls: [
+			{
+				loc:        '/',
+				priority:   1.0,
+				changefreq: 'always',
+			},
+			{
+				loc:        '/about',
+				priority:   0.8,
+				changefreq: 'monthly',
+			},
+		]
+	},
+
+	}
+}
+
+/**
+ * Helper function to check if a module is installed
+ */
+function isModuleAvailable(name)
+{
+	try {
+		require.resolve(name);
+		return true;
+	}
+	catch(err) {
+		return false;
+	}
+
+	return false;
 }

@@ -93,16 +93,16 @@ div.FretboardSequencesItem
 		//----------------------------------------------------------------------
 		//- Intervals
 		//----------------------------------------------------------------------
-		div.intervals: button.intervals__item(
-			v-for="interval of intervals"
-			:key="`sequence--${index}--interval--${interval.value}`"
+		div.intervals
+			FretboardSequencesItemInterval(
+				v-for="interval of intervals"
+				:key="`sequence--${index}--interval--${interval.value}`"
 
-			v-mods="{ isSelected: highlightedInterval == interval.value }"
-			@click.left="update('highlightedInterval', highlightedInterval == interval.value ? null : interval.value)"
-			)
+				v-bind="interval"
+				:is-selected="highlightedInterval == interval.value"
 
-			p.interval__item__note {{ interval.note }}
-			p.interval__item__name(v-html="interval.name")
+				@update-interval="v => update('highlightedInterval', v)"
+				)
 
 		//----------------------------------------------------------------------
 		//- Tools
@@ -140,11 +140,16 @@ import { get }                         from 'vuex-pathify'
 
 import { MAX_NB_SEQUENCES }            from '@/modules/constants'
 import { filterObject }                from '@/modules/object'
-import { notes, notesNames }           from '@/modules/music'
-import { models, intervalsShortNames } from '@/modules/music'
+import { models, notes, notesNames }   from '@/modules/music'
+
+import FretboardSequencesItemInterval  from '@/components/FretboardSequencesItemInterval'
 
 export default {
 	name: 'FretboardSequencesItem',
+
+	components: {
+		FretboardSequencesItemInterval,
+	},
 
 	props: {
 		index: {
@@ -203,9 +208,8 @@ export default {
 		intervals()
 		{
 			return [0, ...models[this.model].intervals].map(interval => ({
-				value: interval,
 				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
-				name:  intervalsShortNames[interval],
+				value: interval,
 			}))
 		},
 		hasPositions()
@@ -345,49 +349,6 @@ export default {
 		flex: 1 1 100%;
 		align-self: stretch;
 	}
-}
-
-.intervals__item {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-
-	@include pill;
-	padding: 2px 8px;
-
-	border: 1px solid var(--color--border);
-
-	cursor: pointer;
-	appearance: none;
-	background-color: transparent;
-
-	transition: color 200ms, border-color 200ms, background-color 200ms;
-
-	&.is-selected, &:hover {
-		background-color: var(--color--bg--highlight);
-	}
-
-	&:focus {
-		border-color: var(--color--hover);
-	}
-}
-
-.interval__item__note {
-	color: var(--color--text);
-	cursor: pointer;
-
-	.intervals__item.is-selected             & { color: var(--color--highlight); }
-	.intervals__item:not(.is-selected):hover & { color: var(--color--hover);     }
-}
-
-.interval__item__name {
-	color: var(--color--text--secondary);
-	cursor: pointer;
-
-	font-size: 1.2rem;
-
-	.intervals__item.is-selected             & { color: var(--color--text); }
-	.intervals__item:not(.is-selected):hover & { color: var(--color--text); }
 }
 
 .tools {
