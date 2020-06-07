@@ -6,8 +6,8 @@
 
 <p align="center">A web app to visualize the layout of scales and arpeggios on a variety of fretboards.</p>
 
-<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-light.png" alt="A screenshot of the app in usage.">
-<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot-dark.png"  alt="A screenshot of the app in usage, with dark mode enabled.">
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/master/docs/screenshot-light.png" alt="A screenshot of the app in usage.">
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/master/docs/screenshot-dark.png"  alt="A screenshot of the app in usage, with dark mode enabled.">
 
 ## Highlights
 
