@@ -12,20 +12,20 @@
 
 ## Highlights
 
-##### 🎸 Customize the instrument
+#### 🎸 Customize the instrument
 
 Choose between a  variety of instruments (from ukulele to  11-string guitar) and
 tunings,  set  the  length  of  the fretboard,  and  switch  between  left-  and
 right-handed fretting.
 
-##### 🎨 Overlay scales and arpeggios
+#### 🎨 Overlay scales and arpeggios
 
 The main feature  that distinguishes Fretboarder from other similar  apps is the
 ability to  display several sequences  of notes on  the same fretboard.  You can
 overlap scales  and arpeggios, display  their intersections and  select specific
 positions on the neck.
 
-##### 💻 Use on any device
+#### 💻 Use on any device
 
 The UI has been designed to be simple and intuitive, and to work on both desktop
 and mobile devices. Dark mode included!

@@ -4,8 +4,8 @@ Thank you for contributing to Fretboarder! PRs are welcomed, but please consider
 **opening an issue before submitting any sizable PR**.
 
 ### Code style
-  * [smart tabs](https://www.emacswiki.org/emacs/SmartTabs):  use tablatures for
-    indentation, spaces for presentation
+  * use [smart  tabs](https://www.emacswiki.org/emacs/SmartTabs) (tablatures for
+    indentation, spaces for presentation)
   * place block-opening curly quotes on  their own lines (expect for objects and
     CSS blocks)
   * write  comments  and  commit  messages  in  the  imperative style,  with  an

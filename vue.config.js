@@ -68,13 +68,8 @@ module.exports = {
 			'mandolin':                 'pro-regular',
 
 			// Header
-			'twitter':                  'free-brands',
-			'github':                   'free-brands',
-			'paper-plane':              'pro-regular',
-			'heart':                    'pro-regular',
-			'external-link-square-alt': 'pro-regular',
 			'sun':                      'pro-solid',
-			'moon':                    ['pro-regular', 'pro-solid'],
+			'moon':                    ['pro-solid', 'pro-regular'],
 
 			// Tools & settings
 			'cog':                      'pro-regular',
@@ -95,6 +90,13 @@ module.exports = {
 			'intersection':             'pro-solid',
 			'copy':                     'pro-regular',
 			'times-circle':             'pro-regular',
+
+			// Footer
+			'twitter':                  'free-brands',
+			'github':                   'free-brands',
+			'paper-plane':              'pro-regular',
+			'heart':                    'pro-regular',
+			'external-link-square-alt': 'pro-regular',
 		}
 	},
 
