@@ -1,6 +1,8 @@
 {
   "build": {
-    "env": { "NPM_RC": "@npmrc" }
+    "env": {
+      "NPM_RC": "@npmrc"
+    }
   },
 
   "github": {

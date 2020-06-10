@@ -70,7 +70,7 @@ div.FretboardTools
 
 	//- Toggle fret numbers
 	VButton(
-		:icon="['fal', 'list-ol']"
+		icon="list-ol"
 		title="Show numbers"
 
 		:is-active="isShowingFretNbs"
