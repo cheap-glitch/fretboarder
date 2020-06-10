@@ -38,6 +38,8 @@ Contributions are welcomed! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Supporting the app
 
+<a href="https://www.patreon.com/bePatron?u=23911957" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+
 You can support my work on Fretboarder by donating on my [Patreon](https://www.patreon.com/cheap_glitch)
 or my [PayPal](https://paypal.me/CheapGlitch) page. Plenty of cool features are coming, such as:
   * an audio player to listen to the scales
