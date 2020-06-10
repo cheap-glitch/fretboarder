@@ -36,6 +36,16 @@ and mobile devices. Dark mode included!
 Contributions are welcomed! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 
+## Supporting the app
+
+You can support my work on Fretboarder by donating on my [Patreon](https://www.patreon.com/cheap_glitch)
+or my [PayPal](https://paypal.me/CheapGlitch) page. Plenty of cool features are coming, such as:
+  * an audio player to listen to the scales
+  * a tool to help learn & practice positions
+  * a chord chart builder to follow along with backtracks
+  * and more!
+
+
 ## Credits & acknowledgements
 
 The dark mode colorscheme is heavily borrowed from the [Vue Dark Mode](https://www.growthbunker.dev/vuedarkmode) project.
