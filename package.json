@@ -12,8 +12,8 @@
     "test": "test"
   },
   "scripts": {
-    "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
-    "build": "vue-cli-service build --modern",
+    "analyze-bundle": "vue-cli-service build --report-json && webpack-bundle-analyzer dist/report.json",
+    "build": "vue-cli-service build",
     "coverage": "nyc npm test",
     "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
@@ -23,9 +23,8 @@
     "test:unit": "vue-cli-service test:unit 'test/*.test.js'"
   },
   "browserslist": [
-    "last 1 version",
-    "not dead",
-    "> 0.2%"
+    "defaults",
+    "not ie 11"
   ],
   "postcss": {
     "plugins": {
