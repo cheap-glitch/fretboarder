@@ -4,28 +4,32 @@
 	</a>
 </p>
 
-<p align="center">A web app to visualize the layout of scales and arpeggios on a variety of fretboards.</p>
+<p align="center">Ride your fretboard and take your guitar skills to the next level!&nbsp;&nbsp;🎸&nbsp;&nbsp;🤘</p>
 
-<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/master/docs/screenshot-light.png" alt="A screenshot of the app in usage.">
-<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/master/docs/screenshot-dark.png"  alt="A screenshot of the app in usage, with dark mode enabled.">
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot.png" alt="A screenshot of the app in usage.">
+
+> Fretboarder is a web app to visualize  the layout of scales and arpeggios on a
+> variety of fretboards. It  aims to help players get a  better grasp on scales,
+> and ultimately to become a flexible learning and practicing tool for musicians
+> interested in music theory and improvisation.
 
 
 ## Highlights
 
-#### 🎸 Customize the instrument
+🎸&nbsp;&nbsp;&nbsp;**Customize the instrument**
 
 Choose between a  variety of instruments (from ukulele to  11-string guitar) and
 tunings,  set  the  length  of  the fretboard,  and  switch  between  left-  and
 right-handed fretting.
 
-#### 🎨 Overlay scales and arpeggios
+🎨&nbsp;&nbsp;&nbsp;**Overlay scales and arpeggios**
 
 The main feature  that distinguishes Fretboarder from other similar  apps is the
 ability to  display several sequences  of notes on  the same fretboard.  You can
 overlap scales  and arpeggios, display  their intersections and  select specific
 positions on the neck.
 
-#### 💻 Use on any device
+💻&nbsp;&nbsp;&nbsp;**Use on any device**
 
 The UI has been designed to be simple and intuitive, and to work on both desktop
 and mobile devices. Dark mode included!
@@ -38,7 +42,9 @@ Contributions are welcomed! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Supporting the app
 
-<a href="https://www.patreon.com/bePatron?u=23911957" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+<a href="https://www.patreon.com/cheap_glitch" target="_blank" rel="external nofollow noopener noreferrer">
+	<img src="./docs/patreon-badge.png" alt="Become a patron">
+</a>
 
 You can support my work on Fretboarder by donating on my [Patreon](https://www.patreon.com/cheap_glitch)
 or my [PayPal](https://paypal.me/CheapGlitch) page. Plenty of cool features are coming, such as:
