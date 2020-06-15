@@ -3,11 +3,11 @@
  * modules/export.js
  */
 
-import { saveAs }            from 'file-saver'
+import { saveAs }                          from 'file-saver'
 
-import { mapObjectToObject } from '@/modules/object'
-import { colorscheme }       from '@/modules/colorscheme'
-import { notesNames }        from '@/modules/music'
+import { mapObjectToObject }               from '@/modules/object'
+import { colorscheme }                     from '@/modules/colorscheme'
+import { notesNames, intervalsShorthands } from '@/modules/music'
 
 /**
  * Create and save an image of the fretboard
@@ -32,7 +32,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, isFretboardFlipped, isShowingNoteNames, isShowingFretNbs, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, displayedInfo, isFretboardFlipped, isShowingFretNbs, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -271,13 +271,13 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, isF
 				fret.isHighlighted ? { x: x - size, y: y - size, width: size*2, height: size*2, fill } : { r: size, cx: x, cy: y, fill }
 			);
 
-			// Draw the note name
-			if (isShowingNoteNames)
+			// Draw the note info
+			if (displayedInfo != 'none')
 			{
 				// If the fretboard is flipped, flip the text again to render it properly
 				if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
-				appendFullTag(svg, 'text', notesNames[fret.note], {
+				appendFullTag(svg, 'text', (displayedInfo == 'name' ? notesNames[fret.note] : intervalsShorthands[fret.sequences[0].interval]), {
 					x:          isFretboardFlipped ? (svgWidth - x) :  x,
 					y:          y + size/3,
 					fill:       colors.noteName,

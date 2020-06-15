@@ -85,9 +85,8 @@ div.FretboardSequencesItem
 				:value="position"
 				:options="positions"
 				:is-disabled="!hasPositions"
-				is-value-numeric
 
-				@change="v => update('position', v)"
+				@change="v => update('position', parseInt(v, 10))"
 				)
 
 		//----------------------------------------------------------------------

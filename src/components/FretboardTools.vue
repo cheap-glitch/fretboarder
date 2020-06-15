@@ -33,8 +33,7 @@ div.FretboardTools
 			//- Capo
 			VSelect(
 				:options="capoFrets"
-				is-value-numeric
-				v-model="capo"
+				v-model.number="capo"
 				)
 
 			//- Fret range
@@ -210,12 +209,12 @@ export default {
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
-				getFrets(this.$store.getters['sequences/displayedSequences'], tunings[this.instrument][this.tuning], this.capo),
+				getFrets(this.displayedSequences, tunings[this.instrument][this.tuning], this.capo),
 				instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
+				(this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos,
 				this.isFlipped,
-				this.isShowingNoteNames,
 				this.isShowingFretNbs,
 				this.isDarkModeOn,
 				format != 'svg',
