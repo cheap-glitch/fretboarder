@@ -34,12 +34,14 @@ div.FretboardViewerFret
 		p.fret__note(
 			ref="note"
 
-			v-mods="{ isActive, isHighlighted, isShowingNoteName, isOpenString, isFretboardFlipped, isFretboardVertical }"
+			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardFlipped, isFretboardVertical }"
 			:style="noteBg"
 
 			@mouseenter="showTooltip = isActive"
 			@mouseleave="showTooltip = false"
-			) {{ noteName }}
+
+			v-html="infos"
+			)
 
 </template>
 <!--}}}-->
@@ -48,9 +50,11 @@ div.FretboardViewerFret
 <!--{{{ JavaScript -->
 <script>
 
-import { get } from 'vuex-pathify'
+import { get }                                 from 'vuex-pathify'
 
-import { notesNames, intervalsNames } from '@/modules/music'
+import { notesNames }                          from '@/modules/music'
+import { intervalsNames, intervalsShortNames } from '@/modules/music'
+import { formatOrdinalSuffix }                 from '@/modules/text'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -72,6 +76,11 @@ export default {
 			type: Array,
 			required: true,
 		},
+		displayedInfos: {
+			type: String,
+			required: true,
+			validator: v => ['none', 'name', 'interval'].includes(v)
+		},
 		isHighlighted: {
 			type: Boolean,
 			default: false,
@@ -81,10 +90,6 @@ export default {
 			default: false,
 		},
 		isShowingInlay: {
-			type: Boolean,
-			default: false,
-		},
-		isShowingNoteName: {
 			type: Boolean,
 			default: false,
 		},
@@ -150,9 +155,15 @@ export default {
 
 			return { background: `linear-gradient(-45deg, ${gradient})` };
 		},
-		noteName()
+		colors()
 		{
-			return notesNames[this.note];
+			return this.$store.state.sequences.sequences.map(seq => seq.color);
+		},
+		infos()
+		{
+			return (this.displayedInfos == 'interval' && this.isActive)
+				? formatOrdinalSuffix(intervalsShortNames[this.sequences[0].interval])
+				: notesNames[this.note];
 		},
 		isActive()
 		{
@@ -170,9 +181,9 @@ export default {
 		{
 			return this.number == 1;
 		},
-		colors()
+		isShowingNoteInfos()
 		{
-			return this.$store.state.sequences.sequences.map(seq => seq.color);
+			return this.displayedInfos != 'none';
 		},
 
 		...get(['isMobileDevice']),
@@ -286,8 +297,8 @@ export default {
 			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
 		}
 
-		&.is-highlighted       { border-radius: 0; }
-		&.is-showing-note-name { color: white;     }
+		&.is-highlighted        { border-radius: 0; }
+		&.is-showing-note-infos { color: white;     }
 	}
 
 	&:not(.is-active) {
