@@ -30,7 +30,7 @@ const model = {
 		validator: v => Array.isArray(v) && v.length == 2,
 	},
 	noteInfos: {
-		default: 'none',
+		default: 'name',
 		validator: v => typeof v == 'string' && ['none', 'name', 'interval'].includes(v),
 	},
 	isShowingFretNbs: {
