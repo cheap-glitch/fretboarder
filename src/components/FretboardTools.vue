@@ -84,8 +84,18 @@ div.FretboardTools
 				@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
-			//- Toggle note names
+			//- Possible options for the information displayed on the notes:
+				* single sequence:    none/note name/interval (select menu)
+				* multiple sequences: none/note name          (toggle button)
+			VSelect(
+				v-if="displayedSequences.length <= 1"
+
+				:options="{ none: 'Display no info', name: 'Display notes names', interval: 'Display intervals names' }"
+				v-model="noteInfos"
+				)
 			VButton(
+				v-else
+
 				icon="info-circle"
 				title="Show note names"
 
@@ -169,11 +179,15 @@ export default {
 			'capo',
 			'fretRange',
 
+			'noteInfos',
+
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 			'isFlipped',
 		]),
 		...get([
+			'sequences/displayedSequences',
+
 			'isDarkModeOn',
 			'isMobileDevice',
 		]),
@@ -221,7 +235,7 @@ export default {
 	@include mq($until: desktop)
 	{
 		@include center-column;
-		@include space-children-v(20px);
+		@include space-children-v(30px);
 	}
 
 	@include mq($from: desktop)
@@ -237,7 +251,7 @@ export default {
 
 	@include mq($until: desktop)
 	{
-		@include space-children-v(40px);
+		@include space-children-v(30px);
 	}
 
 	@include mq($from: desktop)
