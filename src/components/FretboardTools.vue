@@ -15,7 +15,7 @@ div.FretboardTools
 		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
 		icon="guitar"
-		title="Instrument settings"
+		title="Instrument"
 		)
 		div.instrument-settings
 			div.instrument-settings__main
@@ -67,37 +67,46 @@ div.FretboardTools
 	//----------------------------------------------------------------------
 	//- Display settings
 	//----------------------------------------------------------------------
+	component(
+		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
-	//- Toggle fret numbers
-	VButton(
-		icon="list-ol"
-		title="Show numbers"
-
-		:is-active="isShowingFretNbs"
-		@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
+		icon="eye"
+		title="Display"
 		)
+		div.display-settings
 
-	//- Toggle note names
-	VButton(
-		icon="info-circle"
-		title="Show notes"
+			//- Toggle fret numbers
+			VButton(
+				icon="list-ol"
+				title="Show fret numbers"
 
-		:is-active="isShowingNoteNames"
-		@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
-		)
+				:is-active="isShowingFretNbs"
+				@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
+				)
 
-	//- Switch to dark mode
-	VButton(
-		v-if="isMobileDevice"
+			//- Toggle note names
+			VButton(
+				icon="info-circle"
+				title="Show note names"
 
-		icon="moon"
-		title="Dark mode"
+				:is-active="isShowingNoteNames"
+				@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
+				)
 
-		:is-active="isDarkModeOn"
-		@click="$store.commit('toggle.isDarkModeOn')"
-		)
+			//- Switch to dark mode
+			VButton(
+				v-if="isMobileDevice"
 
-	//- Export the fretboard
+				icon="moon"
+				title="Dark mode"
+
+				:is-active="isDarkModeOn"
+				@click="$store.commit('toggle.isDarkModeOn')"
+				)
+
+	//----------------------------------------------------------------------
+	//- Export menu
+	//----------------------------------------------------------------------
 	VPopupMenu(
 		v-if="!isMobileDevice"
 
@@ -222,6 +231,7 @@ export default {
 	}
 }
 
+.display-settings,
 .instrument-settings {
 	@include center-column;
 
