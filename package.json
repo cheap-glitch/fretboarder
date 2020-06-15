@@ -2,7 +2,7 @@
   "private": true,
   "name": "fretboarder",
   "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "license": "MPL-2.0",
   "repository": "github:cheap-glitch/fretboarder",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
@@ -12,8 +12,8 @@
     "test": "test"
   },
   "scripts": {
-    "analyze-bundle": "vue-cli-service build --modern --report-json && webpack-bundle-analyzer dist/report.json",
-    "build": "vue-cli-service build --modern",
+    "analyze-bundle": "vue-cli-service build --report-json && webpack-bundle-analyzer dist/report.json",
+    "build": "vue-cli-service build",
     "coverage": "nyc npm test",
     "lint": "vue-cli-service lint --no-fix 'src/**/*.{js,vue}'",
     "serve": "nodemon --watch vue.config.js --exec npm run serve-vue-cli",
@@ -23,9 +23,8 @@
     "test:unit": "vue-cli-service test:unit 'test/*.test.js'"
   },
   "browserslist": [
-    "last 1 version",
-    "not dead",
-    "> 0.2%"
+    "defaults",
+    "not ie 11"
   ],
   "postcss": {
     "plugins": {
@@ -54,11 +53,11 @@
     "@cheap-glitch/scss-mixins": "^1.0.1",
     "@cheap-glitch/scss-reset": "^1.0.0",
     "@cheap-glitch/vue-cli-plugin-fontawesome": "^1.0.8",
-    "@vue/cli-plugin-babel": "^4.4.1",
-    "@vue/cli-plugin-eslint": "^4.4.1",
-    "@vue/cli-plugin-unit-mocha": "^4.4.1",
-    "@vue/cli-plugin-vuex": "^4.4.1",
-    "@vue/cli-service": "^4.4.1",
+    "@vue/cli-plugin-babel": "^4.4.4",
+    "@vue/cli-plugin-eslint": "^4.4.4",
+    "@vue/cli-plugin-unit-mocha": "^4.4.4",
+    "@vue/cli-plugin-vuex": "^4.4.4",
+    "@vue/cli-service": "^4.4.4",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",

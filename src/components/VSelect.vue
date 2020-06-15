@@ -81,10 +81,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isValueNumeric: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	data() {
@@ -105,7 +101,7 @@ export default {
 	methods: {
 		selectOption(event)
 		{
-			this.$emit('change', this.isValueNumeric ? Number.parseInt(event.target.value, 10) : event.target.value);
+			this.$emit('change', event.target.value);
 			this.updateSelectedOptionLabel();
 		},
 		async updateSelectedOptionLabel()

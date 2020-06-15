@@ -17,9 +17,10 @@ div.FretboardViewer(
 		:key="`fret--${fret.string + 1}--${fret.number}`"
 
 		v-bind="fret"
+		:displayed-infos="displayedInfos"
+
 		:fret-min="fretMin"
 		:is-on-last-string="fret.string + 1 == nbStrings"
-		:is-showing-note-name="isShowingNoteNames"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
 		:is-fretboard-flipped="isFlipped"
@@ -168,6 +169,10 @@ export default {
 
 			return [];
 		},
+		displayedInfos()
+		{
+			return (this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos;
+		},
 		displayedFrets()
 		{
 			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
@@ -218,6 +223,8 @@ export default {
 			'tuning',
 			'capo',
 			'fretRange',
+
+			'noteInfos',
 
 			'isFlipped',
 			'isShowingFretNbs',

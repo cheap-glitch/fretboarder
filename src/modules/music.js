@@ -40,19 +40,19 @@ export const intervalsNames = [
 	'Major seventh',
 ];
 
-export const intervalsShortNames = [
+export const intervalsShorthands = [
 	'R',
-	'2m',
-	'2M',
-	'3m',
-	'3M',
-	'4th',
+	'2♭',
+	'2',
+	'3♭',
+	'3',
+	'4',
 	'5♭',
-	'5th',
-	'6m',
-	'6M',
-	'7m',
-	'7M',
+	'5',
+	'6♭',
+	'6',
+	'7♭',
+	'7',
 ];
 
 /**

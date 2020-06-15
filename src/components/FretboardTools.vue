@@ -15,7 +15,7 @@ div.FretboardTools
 		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
 		icon="guitar"
-		title="Instrument settings"
+		title="Instrument"
 		)
 		div.instrument-settings
 			div.instrument-settings__main
@@ -33,8 +33,7 @@ div.FretboardTools
 			//- Capo
 			VSelect(
 				:options="capoFrets"
-				is-value-numeric
-				v-model="capo"
+				v-model.number="capo"
 				)
 
 			//- Fret range
@@ -67,37 +66,56 @@ div.FretboardTools
 	//----------------------------------------------------------------------
 	//- Display settings
 	//----------------------------------------------------------------------
+	component(
+		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
-	//- Toggle fret numbers
-	VButton(
-		icon="list-ol"
-		title="Show numbers"
-
-		:is-active="isShowingFretNbs"
-		@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
+		icon="eye"
+		title="Display"
 		)
+		div.display-settings
 
-	//- Toggle note names
-	VButton(
-		icon="info-circle"
-		title="Show notes"
+			//- Toggle fret numbers
+			VButton(
+				icon="list-ol"
+				title="Show fret numbers"
 
-		:is-active="isShowingNoteNames"
-		@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
-		)
+				:is-active="isShowingFretNbs"
+				@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
+				)
 
-	//- Switch to dark mode
-	VButton(
-		v-if="isMobileDevice"
+			//- Possible options for the information displayed on the notes:
+				* single sequence:    none/note name/interval (select menu)
+				* multiple sequences: none/note name          (toggle button)
+			VSelect(
+				v-if="displayedSequences.length <= 1"
 
-		icon="moon"
-		title="Dark mode"
+				:options="{ none: 'Display no info', name: 'Display notes names', interval: 'Display intervals names' }"
+				v-model="noteInfos"
+				)
+			VButton(
+				v-else
 
-		:is-active="isDarkModeOn"
-		@click="$store.commit('toggle.isDarkModeOn')"
-		)
+				icon="info-circle"
+				title="Show note names"
 
-	//- Export the fretboard
+				:is-active="isShowingNoteNames"
+				@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
+				)
+
+			//- Switch to dark mode
+			VButton(
+				v-if="isMobileDevice"
+
+				icon="moon"
+				title="Dark mode"
+
+				:is-active="isDarkModeOn"
+				@click="$store.commit('toggle.isDarkModeOn')"
+				)
+
+	//----------------------------------------------------------------------
+	//- Export menu
+	//----------------------------------------------------------------------
 	VPopupMenu(
 		v-if="!isMobileDevice"
 
@@ -160,11 +178,15 @@ export default {
 			'capo',
 			'fretRange',
 
+			'noteInfos',
+
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 			'isFlipped',
 		]),
 		...get([
+			'sequences/displayedSequences',
+
 			'isDarkModeOn',
 			'isMobileDevice',
 		]),
@@ -187,12 +209,12 @@ export default {
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
-				getFrets(this.$store.getters['sequences/displayedSequences'], tunings[this.instrument][this.tuning], this.capo),
+				getFrets(this.displayedSequences, tunings[this.instrument][this.tuning], this.capo),
 				instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
+				(this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos,
 				this.isFlipped,
-				this.isShowingNoteNames,
 				this.isShowingFretNbs,
 				this.isDarkModeOn,
 				format != 'svg',
@@ -212,7 +234,7 @@ export default {
 	@include mq($until: desktop)
 	{
 		@include center-column;
-		@include space-children-v(20px);
+		@include space-children-v(30px);
 	}
 
 	@include mq($from: desktop)
@@ -222,12 +244,13 @@ export default {
 	}
 }
 
+.display-settings,
 .instrument-settings {
 	@include center-column;
 
 	@include mq($until: desktop)
 	{
-		@include space-children-v(40px);
+		@include space-children-v(30px);
 	}
 
 	@include mq($from: desktop)
