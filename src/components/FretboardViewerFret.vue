@@ -53,8 +53,7 @@ div.FretboardViewerFret
 import { get }                                 from 'vuex-pathify'
 
 import { notesNames }                          from '@/modules/music'
-import { intervalsNames, intervalsShortNames } from '@/modules/music'
-import { formatOrdinalSuffix }                 from '@/modules/text'
+import { intervalsNames, intervalsShorthands } from '@/modules/music'
 
 export default {
 	name: 'FretboardViewerFret',
@@ -162,7 +161,7 @@ export default {
 		infos()
 		{
 			return (this.displayedInfos == 'interval' && this.isActive)
-				? formatOrdinalSuffix(intervalsShortNames[this.sequences[0].interval])
+				? intervalsShorthands[this.sequences[0].interval]
 				: notesNames[this.note];
 		},
 		isActive()

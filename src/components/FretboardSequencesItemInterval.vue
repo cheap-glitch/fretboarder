@@ -19,7 +19,7 @@ div.FretboardSequencesItemInterval
 		@mouseleave="isTootlipOpen = false"
 		)
 		p.button__note {{ note }}
-		p.button__name(v-html="shortName")
+		p.button__interval(v-html="shortName")
 
 	//- Tooltip
 	VPopup(
@@ -35,7 +35,7 @@ div.FretboardSequencesItemInterval
 <!--{{{ JavaScript -->
 <script>
 
-import { intervalsNames, intervalsShortNames } from '@/modules/music'
+import { intervalsNames, intervalsShorthands } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItemInterval',
@@ -63,7 +63,7 @@ export default {
 
 	computed: {
 		name()      { return intervalsNames[this.value].toLowerCase(); },
-		shortName() { return intervalsShortNames[this.value];          },
+		shortName() { return intervalsShorthands[this.value];          },
 	},
 }
 
@@ -113,11 +113,11 @@ export default {
 	.button:not(.is-selected):hover & { color: var(--color--hover);     }
 }
 
-.button__name {
+.button__interval {
 	color: var(--color--text--secondary);
 	cursor: pointer;
 
-	font-size: 1.2rem;
+	font-size: 1.35rem;
 
 	.button.is-selected             & { color: var(--color--text); }
 	.button:not(.is-selected):hover & { color: var(--color--text); }
