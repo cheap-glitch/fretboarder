@@ -2,7 +2,7 @@
   "private": true,
   "name": "fretboarder",
   "description": "A web app to visualize scales, chords and arpeggios on all kinds of fretboards.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "license": "MPL-2.0",
   "repository": "github:cheap-glitch/fretboarder",
   "author": "cheap glitch <cheap.glitch@gmail.com> (https://github.com/cheap-glitch)",
