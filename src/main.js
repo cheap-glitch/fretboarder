@@ -20,6 +20,12 @@ import App           from '@/App'
 import store         from '@/stores/main'
 
 /**
+ * Set global config options
+ */
+Vue.config.productionTip = false;
+Vue.config.performance   = process.env.NODE_ENV === 'development';
+
+/**
  * Register plugins, directives & external components
  */
 Vue.directive('mods',          VCSSModifiers);
