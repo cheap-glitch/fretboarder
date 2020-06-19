@@ -115,11 +115,6 @@ module.exports = {
 				priority:   1.0,
 				changefreq: 'always',
 			},
-			{
-				loc:        '/about',
-				priority:   0.8,
-				changefreq: 'monthly',
-			},
 		]
 	},
 
