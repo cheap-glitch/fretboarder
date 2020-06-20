@@ -45,10 +45,13 @@ div.FretboardSequencesItem
 		:style="{ borderColor: color, backgroundColor: color }"
 		v-mods="{ isOpen }"
 
-		@click.left="isOpen = !isOpen"
+		@click.left="isOpenedByUser = !isOpenedByUser"
 		)
 		p {{ infos }}
-		fa-icon(:icon="['far', isOpen ? 'minus' : 'ellipsis-v']")
+		fa-icon(
+			v-show="nbSequences > 1"
+			:icon="['far', isOpen ? 'minus' : 'ellipsis-v']"
+			)
 
 	//- Settings & tools
 	transition(name="fade"): div.settings(
@@ -195,7 +198,7 @@ export default {
 
 	data() {
 		return {
-			isOpen: false,
+			isOpenedByUser: false,
 		}
 	},
 
@@ -214,6 +217,10 @@ export default {
 		hasPositions()
 		{
 			return ('positions' in models[this.model]);
+		},
+		isOpen()
+		{
+			return this.isOpenedByUser || this.nbSequences == 1;
 		},
 
 		...get([
