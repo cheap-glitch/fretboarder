@@ -18,19 +18,24 @@ import sequences             from '@/stores/sequences'
 import fretboard             from '@/stores/fretboard'
 
 export const mediaQueries = {
-	isMobileDevice:    window.matchMedia(`(max-width:   ${layout.mqBreakpointDesktop.em})`),
-	isWideScreen:      window.matchMedia(`(min-width:   ${layout.mqBreakpointWide.em})`),
-	isLayoutLandscape: window.matchMedia('(orientation: landscape)'),
+	isMobileDevice:    window.matchMedia(`(max-width:            ${layout.mqBreakpointDesktop.em})`),
+	isWideScreen:      window.matchMedia(`(min-width:            ${layout.mqBreakpointWide.em})`),
+	isLayoutLandscape: window.matchMedia('(orientation:          landscape)'),
+	isDarkModeOn:      window.matchMedia('(prefers-color-scheme: dark)'),
 }
 
 /**
  * State
  */
 const model = {
-	isDarkModeOn: {
-		default: window.matchMedia('(prefers-color-scheme: dark)').matches,
-		validator: v => typeof v == 'boolean',
+	darkModeSetting: {
+		default: 'system',
+		validator: v => ['light', 'dark', 'system'].includes(v),
 	},
+	darkModeSystem: {
+		saved: false,
+		default: mediaQueries.isDarkModeOn.matches,
+	}
 	...mapObjectToObject(mediaQueries, mq => ({
 		saved: false,
 		default: mediaQueries[mq].matches,
