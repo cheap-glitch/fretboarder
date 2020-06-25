@@ -44,6 +44,13 @@ const model = {
 const state = getVuexState(model);
 
 /**
+ * Getters
+ */
+const getters = {
+	isDarkModeOn: state => (state.darkModeSetting == 'system' && state.darkModeSystem) || state.darkModeSetting == 'dark',
+};
+
+/**
  * Mutations
  */
 const mutations = {
