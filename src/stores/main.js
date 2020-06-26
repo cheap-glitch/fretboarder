@@ -18,10 +18,10 @@ import sequences             from '@/stores/sequences'
 import fretboard             from '@/stores/fretboard'
 
 export const mediaQueries = {
-	isMobileDevice:    window.matchMedia(`(max-width:            ${layout.mqBreakpointDesktop.em})`),
-	isWideScreen:      window.matchMedia(`(min-width:            ${layout.mqBreakpointWide.em})`),
-	isLayoutLandscape: window.matchMedia('(orientation:          landscape)'),
-	isDarkModeOn:      window.matchMedia('(prefers-color-scheme: dark)'),
+	isMobileDevice:     window.matchMedia(`(max-width:            ${layout.mqBreakpointDesktop.em})`),
+	isWideScreen:       window.matchMedia(`(min-width:            ${layout.mqBreakpointWide.em})`),
+	isLayoutLandscape:  window.matchMedia('(orientation:          landscape)'),
+	isSystemDarkModeOn: window.matchMedia('(prefers-color-scheme: dark)'),
 }
 
 /**
@@ -34,8 +34,8 @@ const model = {
 	},
 	darkModeSystem: {
 		saved: false,
-		default: mediaQueries.isDarkModeOn.matches,
-	}
+		default: mediaQueries.isSystemDarkModeOn.matches,
+	},
 	...mapObjectToObject(mediaQueries, mq => ({
 		saved: false,
 		default: mediaQueries[mq].matches,
@@ -83,5 +83,5 @@ export default new Vuex.Store(
 		fretboard,
 	},
 
-	state, mutations,
+	state, getters, mutations,
 });
