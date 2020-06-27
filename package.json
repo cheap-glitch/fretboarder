@@ -44,7 +44,8 @@
     "vue": "^2.6.11",
     "vue-css-modifiers": "^1.0.7",
     "vuex": "^3.4.0",
-    "vuex-pathify": "^1.4.1"
+    "vuex-pathify": "^1.4.1",
+    "vuex-plugin-save-state": "^1.0.0"
   },
   "optionalDependencies": {
     "@fortawesome/pro-regular-svg-icons": "^5.13.0",

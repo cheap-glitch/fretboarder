@@ -6,8 +6,8 @@
 import Vue                   from 'vue'
 import Vuex                  from 'vuex'
 import { make }              from 'vuex-pathify'
-import { getVuexState }      from '@/modules/vuex-plugin-save-state'
-import { saveStatePlugin }   from '@/modules/vuex-plugin-save-state'
+import { getVuexState }      from 'vuex-plugin-save-state'
+import { saveStatePlugin }   from 'vuex-plugin-save-state'
 
 import pathify               from '@/modules/pathify'
 import { makeTogglers }      from '@/modules/pathify'
