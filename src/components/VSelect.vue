@@ -23,7 +23,7 @@ div.VSelect
 		:value="value"
 		:disabled="isDisabled"
 
-		@change="selectOption"
+		@change="$emit('change', $event.target.value)"
 		)
 		//- Grouped options
 		template(v-if="Array.isArray(options)")
@@ -54,7 +54,9 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
-import { formatOrdinalSuffix } from '@/modules/text'
+import { toRef }                  from '@vue/composition-api'
+
+import { useSelectedOptionLabel } from '@/hooks/useSelectedOptionLabel'
 
 export default {
 	name: 'VSelect',
@@ -83,32 +85,14 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			selectedOptionLabel: '',
-		}
-	},
-
-	watch: {
-		value: 'updateSelectedOptionLabel',
-	},
-
-	mounted()
+	setup(props)
 	{
-		this.updateSelectedOptionLabel();
-	},
+		const { select, selectedOptionLabel } = useSelectedOptionLabel(toRef(props, 'value'), props.labelFormatter);
 
-	methods: {
-		selectOption(event)
-		{
-			this.$emit('change', event.target.value);
-			this.updateSelectedOptionLabel();
-		},
-		async updateSelectedOptionLabel()
-		{
-			await this.$nextTick();
-			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
-		},
+		return {
+			select,
+			selectedOptionLabel,
+		}
 	},
 }
 

@@ -12,12 +12,13 @@
  * This software is distributed under the Mozilla Public License 2.0
  */
 
-import Vue           from 'vue'
-import VClickOutside from 'v-click-outside'
-import VCSSModifiers from 'vue-css-modifiers'
+import Vue            from 'vue'
+import CompositionAPI from '@vue/composition-api'
+import VClickOutside  from 'v-click-outside'
+import VCSSModifiers  from 'vue-css-modifiers'
 
-import App           from '@/App'
-import store         from '@/stores/main'
+import App            from '@/App'
+import store          from '@/stores/main'
 
 /**
  * Set global config options
@@ -28,6 +29,7 @@ Vue.config.performance   = process.env.NODE_ENV === 'development';
 /**
  * Register plugins, directives & external components
  */
+Vue.use(CompositionAPI);
 Vue.directive('mods',          VCSSModifiers);
 Vue.directive('click-outside', VClickOutside.directive);
 

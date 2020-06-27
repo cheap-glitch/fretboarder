@@ -11,7 +11,8 @@ div.VTextSelect
 	select.select(
 		ref="select"
 		:value="value"
-		@change="selectOption"
+
+		@change="$emit('change', $event.target.value)"
 		)
 		option(
 			v-for=`(optionLabel, optionValue) of options`
@@ -37,7 +38,9 @@ div.VTextSelect
 <!--{{{ JavaScript -->
 <script>
 
-import { formatOrdinalSuffix } from '@/modules/text'
+import { toRef }                  from '@vue/composition-api'
+
+import { useSelectedOptionLabel } from '@/hooks/useSelectedOptionLabel'
 
 export default {
 	name: 'VTextSelect',
@@ -66,32 +69,14 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			selectedOptionLabel: '',
-		}
-	},
-
-	watch: {
-		value: 'updateSelectedOptionLabel',
-	},
-
-	mounted()
+	setup(props)
 	{
-		this.updateSelectedOptionLabel();
-	},
+		const { select, selectedOptionLabel } = useSelectedOptionLabel(toRef(props, 'value'), props.labelFormatter);
 
-	methods: {
-		selectOption(event)
-		{
-			this.$emit('change', event.target.value);
-			this.updateSelectedOptionLabel();
-		},
-		async updateSelectedOptionLabel()
-		{
-			await this.$nextTick();
-			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
-		},
+		return {
+			select,
+			selectedOptionLabel,
+		}
 	},
 }
 
