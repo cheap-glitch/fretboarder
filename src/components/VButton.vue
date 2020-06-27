@@ -130,7 +130,6 @@ export default {
 }
 
 .icon,
-.icon > *,
 .title {
 	cursor: pointer;
 
