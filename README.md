@@ -1,3 +1,4 @@
+<p>&nbsp;</p>
 <p align="center">
 	<a href="https://fretboarder.app">
 		<img src="./docs/banner.png" alt="A white icon of a an acoustic guitar and a white text saying Fretboarder over a bright blue background.">
