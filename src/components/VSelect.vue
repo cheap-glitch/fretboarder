@@ -109,7 +109,7 @@ export default {
 			await this.$nextTick();
 			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
 		},
-	}
+	},
 }
 
 </script>
@@ -150,7 +150,7 @@ export default {
 	color: var(--color--text);
 	background-color: var(--color--bg--accent);
 
-	.select:not(:focus):not(:disabled):hover + & {
+	.select:not(:disabled):hover + & {
 		border-color: var(--color--hover);
 		background-color: var(--color--bg--highlight);
 	}
