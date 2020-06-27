@@ -67,10 +67,6 @@ module.exports = {
 			'guitar-electric':          'pro-regular',
 			'mandolin':                 'pro-regular',
 
-			// Header
-			'sun':                      'pro-solid',
-			'moon':                    ['pro-solid', 'pro-regular'],
-
 			// Tools & settings
 			'cog':                      'pro-regular',
 			'list-music':               'pro-regular',
@@ -80,6 +76,8 @@ module.exports = {
 			'file-download':            'pro-regular',
 			'file-image':               'pro-regular',
 			'image-polaroid':           'pro-regular',
+			'sun':                      'pro-regular',
+			'moon':                     'pro-regular',
 
 			// Scales
 			'plus':                     'pro-regular',
