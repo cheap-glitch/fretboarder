@@ -21,10 +21,11 @@ module.exports = {
 	},
 
 	/**
-	 * SCSS
+	 * CSS
 	 * ---------------------------------------------------------------------
 	 */
 	productionSourceMap: false,
+
 	css: {
 		// Enable source maps in dev mode only
 		sourceMap: process.env.NODE_ENV === 'development',
@@ -44,6 +45,22 @@ module.exports = {
 
 		`} },
 	},
+
+	// Minify the CSS in 'public/index.html'
+	chainWebpack: config => config.plugin('html').tap(function(args)
+	{
+		args[0].minify = {
+			collapseWhitespace:            true,
+			removeComments:                true,
+			removeRedundantAttributes:     true,
+			removeScriptTypeAttributes:    true,
+			removeStyleLinkTypeAttributes: true,
+			useShortDoctype:               true,
+			minifyCSS:                     true,
+		};
+
+		return args;
+	}),
 
 	pluginOptions: {
 
