@@ -98,6 +98,8 @@ export default {
 	font-size: 1.4rem;
 
 	color: var(--color--text);
+
+	transition: border-color 200ms;
 }
 
 .select {
@@ -110,8 +112,18 @@ export default {
 	opacity: 0.0001;
 }
 
+.text {
+	.select:focus ~ & {
+		text-decoration: underline var(--color--hover);
+	}
+}
+
 .chevron {
 	font-size: 1.2rem;
+
+	.select:focus ~ & {
+		color: var(--color--hover);
+	}
 }
 
 </style>
