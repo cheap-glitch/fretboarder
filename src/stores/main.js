@@ -29,7 +29,7 @@ export const mediaQueries = {
  */
 const model = {
 	darkModeSetting: {
-		default: 'system',
+		default: 'light',
 		validator: v => ['light', 'dark', 'system'].includes(v),
 	},
 	darkModeSystem: {
