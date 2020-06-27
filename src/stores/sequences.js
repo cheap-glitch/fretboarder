@@ -4,7 +4,7 @@
  */
 
 import Vue                  from 'vue'
-import { getVuexState }     from '@/modules/vuex-plugin-save-state'
+import { getVuexState }     from 'vuex-plugin-save-state'
 
 import { MAX_NB_SEQUENCES } from '@/modules/constants'
 import { SEQ_COLORS }       from '@/modules/constants'

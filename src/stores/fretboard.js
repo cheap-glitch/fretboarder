@@ -4,7 +4,7 @@
  */
 
 import { make }                      from 'vuex-pathify'
-import { getVuexState }              from '@/modules/vuex-plugin-save-state'
+import { getVuexState }              from 'vuex-plugin-save-state'
 
 import { instruments, tuningsNames } from '@/modules/music'
 import { makeTogglers }              from '@/modules/pathify'

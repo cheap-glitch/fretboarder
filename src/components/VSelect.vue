@@ -23,7 +23,7 @@ div.VSelect
 		:value="value"
 		:disabled="isDisabled"
 
-		@change="selectOption"
+		@change="$emit('change', $event.target.value)"
 		)
 		//- Grouped options
 		template(v-if="Array.isArray(options)")
@@ -54,7 +54,9 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
-import { formatOrdinalSuffix } from '@/modules/text'
+import { toRef }                  from '@vue/composition-api'
+
+import { useSelectedOptionLabel } from '@/hooks/useSelectedOptionLabel'
 
 export default {
 	name: 'VSelect',
@@ -83,33 +85,15 @@ export default {
 		},
 	},
 
-	data() {
+	setup(props)
+	{
+		const { select, selectedOptionLabel } = useSelectedOptionLabel(toRef(props, 'value'), props.labelFormatter);
+
 		return {
-			selectedOptionLabel: '',
+			select,
+			selectedOptionLabel,
 		}
 	},
-
-	watch: {
-		value: 'updateSelectedOptionLabel',
-	},
-
-	mounted()
-	{
-		this.updateSelectedOptionLabel();
-	},
-
-	methods: {
-		selectOption(event)
-		{
-			this.$emit('change', event.target.value);
-			this.updateSelectedOptionLabel();
-		},
-		async updateSelectedOptionLabel()
-		{
-			await this.$nextTick();
-			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
-		},
-	}
 }
 
 </script>
@@ -150,7 +134,7 @@ export default {
 	color: var(--color--text);
 	background-color: var(--color--bg--accent);
 
-	.select:not(:focus):not(:disabled):hover + & {
+	.select:not(:disabled):hover + & {
 		border-color: var(--color--hover);
 		background-color: var(--color--bg--highlight);
 	}

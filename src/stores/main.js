@@ -6,8 +6,8 @@
 import Vue                   from 'vue'
 import Vuex                  from 'vuex'
 import { make }              from 'vuex-pathify'
-import { getVuexState }      from '@/modules/vuex-plugin-save-state'
-import { saveStatePlugin }   from '@/modules/vuex-plugin-save-state'
+import { getVuexState }      from 'vuex-plugin-save-state'
+import { saveStatePlugin }   from 'vuex-plugin-save-state'
 
 import pathify               from '@/modules/pathify'
 import { makeTogglers }      from '@/modules/pathify'
@@ -18,18 +18,23 @@ import sequences             from '@/stores/sequences'
 import fretboard             from '@/stores/fretboard'
 
 export const mediaQueries = {
-	isMobileDevice:    window.matchMedia(`(max-width:   ${layout.mqBreakpointDesktop.em})`),
-	isWideScreen:      window.matchMedia(`(min-width:   ${layout.mqBreakpointWide.em})`),
-	isLayoutLandscape: window.matchMedia('(orientation: landscape)'),
+	isMobileDevice:     window.matchMedia(`(max-width:            ${layout.mqBreakpointDesktop.em})`),
+	isWideScreen:       window.matchMedia(`(min-width:            ${layout.mqBreakpointWide.em})`),
+	isLayoutLandscape:  window.matchMedia('(orientation:          landscape)'),
+	isSystemDarkModeOn: window.matchMedia('(prefers-color-scheme: dark)'),
 }
 
 /**
  * State
  */
 const model = {
-	isDarkModeOn: {
-		default: window.matchMedia('(prefers-color-scheme: dark)').matches,
-		validator: v => typeof v == 'boolean',
+	darkModeSetting: {
+		default: 'system',
+		validator: v => ['light', 'dark', 'system'].includes(v),
+	},
+	darkModeSystem: {
+		saved: false,
+		default: mediaQueries.isSystemDarkModeOn.matches,
 	},
 	...mapObjectToObject(mediaQueries, mq => ({
 		saved: false,
@@ -37,6 +42,13 @@ const model = {
 	})),
 };
 const state = getVuexState(model);
+
+/**
+ * Getters
+ */
+const getters = {
+	isDarkModeOn: state => (state.darkModeSetting == 'system' && state.darkModeSystem) || state.darkModeSetting == 'dark',
+};
 
 /**
  * Mutations
@@ -71,5 +83,5 @@ export default new Vuex.Store(
 		fretboard,
 	},
 
-	state, mutations,
+	state, getters, mutations,
 });

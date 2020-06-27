@@ -20,12 +20,11 @@ div.App#app(:style="colorscheme")
 				)
 			h1.logo__text Fretboarder
 
-		div.header__settings(v-if="!isMobileDevice")
-			//- Desktop settings
-			FretboardTools
+		//- Settings (desktop)
+		FretboardTools(v-if="!isMobileDevice")
 
 			//- Dark mode toggle switch
-			button.dark-mode-switch(
+			//- button.dark-mode-switch(
 				v-mods="{ isDarkModeOn }"
 				@click="$store.commit('toggle.isDarkModeOn')"
 				)
@@ -33,18 +32,18 @@ div.App#app(:style="colorscheme")
 				div.dark-mode-switch__toggle
 				fa-icon.dark-mode-switch__moon(:icon="['fas', 'moon']")
 
-		//- Sub-pages links
-		nav.sublinks(v-if="isMobileDevice")
-			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
-			div.sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =     'tools'"): fa-icon(:icon="['far', 'cog']")
-			div.sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
+		//- Sub-pages links (mobile)
+		nav.header__sublinks(v-if="isMobileDevice")
+			div.header__sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
+			div.header__sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =     'tools'"): fa-icon(:icon="['far', 'cog']")
+			div.header__sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
 
 	//----------------------------------------------------------------------
 	//- Body
 	//----------------------------------------------------------------------
 	div#canvas-wrapper(v-show="false")
 
-	//- Tools
+	//- Settings (mobile)
 	transition(name="fade"): FretboardTools(v-if="isMobileDevice && subpage == 'tools'")
 
 	//- Fretboard
@@ -275,12 +274,6 @@ export default {
 	}
 }
 
-.header__settings {
-	display: flex;
-	align-items: center;
-	@include space-children-h(20px);
-}
-
 .logo__icon {
 	font-size: 18px;
 
@@ -351,12 +344,12 @@ export default {
 	}
 }
 
-.sublinks {
+.header__sublinks {
 	display: flex;
 	justify-content: flex-end;
 }
 
-.sublinks__item {
+.header__sublinks__item {
 	@include center-content;
 	@include circle(42px);
 

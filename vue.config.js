@@ -21,10 +21,11 @@ module.exports = {
 	},
 
 	/**
-	 * SCSS
+	 * CSS
 	 * ---------------------------------------------------------------------
 	 */
 	productionSourceMap: false,
+
 	css: {
 		// Enable source maps in dev mode only
 		sourceMap: process.env.NODE_ENV === 'development',
@@ -44,6 +45,22 @@ module.exports = {
 
 		`} },
 	},
+
+	// Minify the CSS in 'public/index.html'
+	chainWebpack: config => config.plugin('html').tap(function(args)
+	{
+		args[0].minify = {
+			collapseWhitespace:            true,
+			removeComments:                true,
+			removeRedundantAttributes:     true,
+			removeScriptTypeAttributes:    true,
+			removeStyleLinkTypeAttributes: true,
+			useShortDoctype:               true,
+			minifyCSS:                     true,
+		};
+
+		return args;
+	}),
 
 	pluginOptions: {
 
@@ -67,10 +84,6 @@ module.exports = {
 			'guitar-electric':          'pro-regular',
 			'mandolin':                 'pro-regular',
 
-			// Header
-			'sun':                      'pro-solid',
-			'moon':                    ['pro-solid', 'pro-regular'],
-
 			// Tools & settings
 			'cog':                      'pro-regular',
 			'list-music':               'pro-regular',
@@ -80,6 +93,8 @@ module.exports = {
 			'file-download':            'pro-regular',
 			'file-image':               'pro-regular',
 			'image-polaroid':           'pro-regular',
+			'sun':                      'pro-regular',
+			'moon':                     'pro-regular',
 
 			// Scales
 			'plus':                     'pro-regular',
@@ -114,11 +129,6 @@ module.exports = {
 				loc:        '/',
 				priority:   1.0,
 				changefreq: 'always',
-			},
-			{
-				loc:        '/about',
-				priority:   0.8,
-				changefreq: 'monthly',
 			},
 		]
 	},

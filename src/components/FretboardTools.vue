@@ -84,8 +84,8 @@ div.FretboardTools
 				)
 
 			//- Possible options for the information displayed on the notes:
-				* single sequence:    none/note name/interval (select menu)
-				* multiple sequences: none/note name          (toggle button)
+			//-   * single sequence:    none/note name/interval (select menu)
+			//-   * multiple sequences: none/note name          (toggle button)
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
@@ -100,17 +100,6 @@ div.FretboardTools
 
 				:is-active="isShowingNoteNames"
 				@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
-				)
-
-			//- Switch to dark mode
-			VButton(
-				v-if="isMobileDevice"
-
-				icon="moon"
-				title="Dark mode"
-
-				:is-active="isDarkModeOn"
-				@click="$store.commit('toggle.isDarkModeOn')"
 				)
 
 	//----------------------------------------------------------------------
@@ -138,6 +127,16 @@ div.FretboardTools
 
 						@click=`exportFretboard('${format}')`
 						)
+
+	//----------------------------------------------------------------------
+	//- Colorscheme setting
+	//----------------------------------------------------------------------
+	VTextSelect(
+		:options="{ light: 'Light mode', dark: 'Dark mode', system: 'System colors' }"
+		:icon="isDarkModeOn ? 'moon' : 'sun'"
+
+		v-model="darkModeSetting"
+		)
 
 </template>
 <!--}}}-->
@@ -172,6 +171,9 @@ export default {
 		{
 			return mapObjectToObject(tunings[this.instrument], tuning => tuningsNames[tuning]);
 		},
+		...sync([
+			'darkModeSetting',
+		]),
 		...sync('fretboard', [
 			'instrument',
 			'tuning',
