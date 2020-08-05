@@ -10,15 +10,15 @@ button.VButton(
 	v-mods="{ isActive, isDisabled, isDarkModeOn }"
 	@click.left="clickButton"
 	)
-	//- Icon
+
 	fa-icon.icon(
 		v-if="icon.length"
 
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:flip="isFlipped ? 'horizontal' : null"
 		)
-	//- Text
-	p.title(v-if="title.length") {{ title }}
+
+	p.text(v-if="text.length") {{ text }}
 
 </template>
 <!--}}}-->
@@ -37,7 +37,7 @@ export default {
 			type: [Array, String],
 			default: '',
 		},
-		title: {
+		text: {
 			type: String,
 			default: '',
 		},
@@ -130,7 +130,7 @@ export default {
 }
 
 .icon,
-.title {
+.text {
 	cursor: pointer;
 
 	.VButton.is-disabled & {
