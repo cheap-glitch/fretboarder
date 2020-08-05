@@ -17,18 +17,17 @@ div.FretboardSettings
 		icon="guitar"
 		text="Instrument"
 		)
-		div.instrument-settings
-			div.instrument-settings__main
-				//- Instrument
-				VSelect(
-					:options="instruments"
-					v-model="instrument"
-					)
-				//- Tuning
-				VSelect(
-					:options="tunings"
-					v-model="tuning"
-					)
+		div
+			//- Instrument
+			VSelect(
+				:options="instruments"
+				v-model="instrument"
+				)
+			//- Tuning
+			VSelect(
+				:options="tunings"
+				v-model="tuning"
+				)
 
 			//- Capo
 			VSelect(
@@ -37,7 +36,7 @@ div.FretboardSettings
 				)
 
 			//- Fret range
-			div.instrument-settings__fret-range
+			div.fret-range
 				VMultiRange.fret-range__slider(
 					:min="0"
 					:max="MAX_NB_FRETS - 1"
@@ -244,28 +243,6 @@ export default {
 		display: flex;
 		@include space-children-h(10px);
 	}
-}
-
-.display-settings,
-.instrument-settings {
-	@include mq($until: desktop)
-	{
-		@include space-children-v(30px);
-	}
-
-	@include mq($from: desktop)
-	{
-		@include space-children-v(20px);
-	}
-}
-
-.instrument-settings__main {
-	display: flex;
-	@include space-children-h(10px);
-}
-
-.instrument-settings__fret-range {
-	@include space-children-v(4px);
 }
 
 .fret-range__slider {

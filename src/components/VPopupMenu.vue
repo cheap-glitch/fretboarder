@@ -11,18 +11,18 @@ div.VPopupMenu
 		ref="button"
 
 		:icon="icon"
-		:title="title"
+		:text="text"
 
 		@click="isOpen = !isOpen"
 		)
-	VPopup(
+	VPopup.popup(
 		:target="$refs.button ? ($refs.button.$el || false) : false"
 		placement="bottom"
 
 		:is-open="isOpen"
 		v-click-outside="clickOutsideHandler"
 		)
-		slot
+		div.popup__content: slot
 
 </template>
 <!--}}}-->
@@ -39,7 +39,7 @@ export default {
 			type: [Array, String],
 			required: true,
 		},
-		title: {
+		text: {
 			type: String,
 			default: '',
 		},
@@ -78,11 +78,15 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VPopup {
+.popup {
 	z-index: 2000;
 
 	color: var(--color--bg);
 	background-color: var(--color--bg);
+}
+
+.popup__content > div:not(:last-child) {
+	border-bottom: 1px solid var(--color--border);
 }
 
 </style>

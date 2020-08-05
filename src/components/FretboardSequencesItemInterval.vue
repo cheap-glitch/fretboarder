@@ -22,7 +22,7 @@ div.FretboardSequencesItemInterval
 		p.button__interval(v-html="shortName")
 
 	//- Tooltip
-	VPopup(
+	VPopup.tooltip(
 		:target="$refs.button || false"
 		:is-open="isTootlipOpen"
 		)
@@ -121,6 +121,13 @@ export default {
 
 	.button.is-selected             & { color: var(--color--text); }
 	.button:not(.is-selected):hover & { color: var(--color--text); }
+}
+
+.tooltip {
+	padding: 8px;
+
+	color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--tooltip);
 }
 
 .tooltip__text {

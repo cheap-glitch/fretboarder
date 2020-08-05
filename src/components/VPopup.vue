@@ -125,13 +125,9 @@ export default {
 	position: absolute;
 	z-index: 1000;
 
-	padding: 8px;
 	border-radius: 4px;
 
 	font-size: 1.4rem;
-
-	color: var(--color--bg--popup);
-	background-color: var(--color--bg--popup);
 
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 

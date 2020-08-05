@@ -21,16 +21,7 @@ div.App#app(:style="colorscheme")
 			h1.logo__text Fretboarder
 
 		//- Settings (desktop)
-		FretboardTools(v-if="!isMobileDevice")
-
-			//- Dark mode toggle switch
-			//- button.dark-mode-switch(
-				v-mods="{ isDarkModeOn }"
-				@click="$store.commit('toggle.isDarkModeOn')"
-				)
-				fa-icon.dark-mode-switch__sun(:icon="['fas', 'sun']")
-				div.dark-mode-switch__toggle
-				fa-icon.dark-mode-switch__moon(:icon="['fas', 'moon']")
+		FretboardSettings(v-if="!isMobileDevice")
 
 		//- Sub-pages links (mobile)
 		nav.header__sublinks(v-if="isMobileDevice")
@@ -44,7 +35,7 @@ div.App#app(:style="colorscheme")
 	div#canvas-wrapper(v-show="false")
 
 	//- Settings (mobile)
-	transition(name="fade"): FretboardTools(v-if="isMobileDevice && subpage == 'tools'")
+	transition(name="fade"): FretboardSettings(v-if="isMobileDevice && subpage == 'tools'")
 
 	//- Fretboard
 	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
@@ -115,7 +106,7 @@ import { colorscheme }       from '@/modules/colorscheme'
 
 import { mediaQueries }      from '@/stores/main'
 
-import FretboardTools        from '@/components/FretboardTools'
+import FretboardSettings     from '@/components/FretboardSettings'
 import FretboardViewer       from '@/components/FretboardViewer'
 import FretboardSequences    from '@/components/FretboardSequences'
 
@@ -123,7 +114,7 @@ export default {
 	name: 'App',
 
 	components: {
-		FretboardTools,
+		FretboardSettings,
 		FretboardViewer,
 		FretboardSequences,
 	},
@@ -356,7 +347,7 @@ export default {
 	font-size: 20px;
 
 	color: white;
-	background-color: var(--color--bg--popup);
+	background-color: var(--color--bg--tooltip);
 
 	cursor: pointer;
 

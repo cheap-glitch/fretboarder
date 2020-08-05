@@ -10,7 +10,7 @@ mixin extra-tools
 	//- Focus
 	VButton(
 		icon="bullseye"
-		title="Focus"
+		text="Focus"
 
 		v-show="nbSequences > 1"
 		:is-active="isFocused"
@@ -20,7 +20,7 @@ mixin extra-tools
 	//- Show intersections only
 	VButton(
 		:icon="['fas', 'intersection']"
-		title="Intersect"
+		text="Intersect"
 
 		v-show="nbSequences > 1"
 		:is-active="isIntersected"
@@ -30,7 +30,7 @@ mixin extra-tools
 	//- Duplicate
 	VButton(
 		icon="copy"
-		title="Duplicate"
+		text="Duplicate"
 
 		:is-disabled="nbSequences == MAX_NB_SEQUENCES"
 
@@ -114,7 +114,7 @@ div.FretboardSequencesItem
 			VButton(
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				is-flipped
-				:title="isVisible ? 'Hide' : 'Show'"
+				:text="isVisible ? 'Hide' : 'Show'"
 
 				@click="update('isVisible', !isVisible)"
 				)
@@ -126,7 +126,7 @@ div.FretboardSequencesItem
 			//- Remove
 			VButton(
 				icon="times-circle"
-				title="Remove"
+				text="Remove"
 
 				@click="$store.commit('sequences/remove', index)"
 				)

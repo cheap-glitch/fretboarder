@@ -9,7 +9,7 @@
 div.FretboardViewerFret
 
 	//- Tooltip to show the intervals of the hovered fret
-	VPopup(
+	VPopup.tooltip(
 		:target="$refs.note || false"
 		:boundary="isMobileDevice ? 'app' : 'fretboard-wrapper'"
 		:is-open="showTooltip"
@@ -315,6 +315,16 @@ export default {
 	@include circle(15px);
 
 	background-color: var(--color--bg--highlight);
+}
+
+/**
+ * Intervals tooltip
+ */
+.tooltip {
+	padding: 8px;
+
+	color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--tooltip);
 }
 
 .intervals {

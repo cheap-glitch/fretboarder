@@ -13,7 +13,7 @@ div.FretboardSequences
 			v-show="!isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
 
 			icon="plus"
-			title="Add new scale/arpeggio"
+			text="Add new scale/arpeggio"
 
 			@click="$store.commit('sequences/add')"
 			)
@@ -23,7 +23,7 @@ div.FretboardSequences
 
 			icon="eye-slash"
 			is-flipped
-			title="Hide all"
+			text="Hide all"
 
 			@click="$store.commit('sequences/hideAll')"
 		)
@@ -32,7 +32,7 @@ div.FretboardSequences
 			v-show="sequences.length >= 2"
 
 			icon="trash-alt"
-			title="Remove all"
+			text="Remove all"
 
 			@click="$store.commit('sequences/removeAll')"
 		)
@@ -53,7 +53,7 @@ div.FretboardSequences
 		v-show="isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
 
 		icon="plus"
-		title="Add new scale/arpeggio"
+		text="Add new scale/arpeggio"
 
 		@click="$store.commit('sequences/add')"
 		)
