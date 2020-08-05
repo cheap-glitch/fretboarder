@@ -1,12 +1,12 @@
 
 
-<!-- components/FretboardTools.vue -->
+<!-- components/FretboardSettings.vue -->
 
 
 <!--{{{ Pug -->
 <template lang="pug">
 
-div.FretboardTools
+div.FretboardSettings
 
 	//----------------------------------------------------------------------
 	//- Instrument settings
@@ -15,7 +15,7 @@ div.FretboardTools
 		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
 		icon="guitar"
-		title="Instrument"
+		text="Instrument"
 		)
 		div.instrument-settings
 			div.instrument-settings__main
@@ -57,7 +57,7 @@ div.FretboardTools
 			//- Switch fretting hand
 			VButton(
 				icon="hand-paper"
-				:title="`${isFlipped ? 'Right' : 'Left'}-handed fretting`"
+				:text="`${isFlipped ? 'Right' : 'Left'}-handed fretting`"
 
 				:is-flipped="!isFlipped"
 				@click="$store.commit('fretboard/toggle.isFlipped')"
@@ -70,22 +70,22 @@ div.FretboardTools
 		:is="isMobileDevice ? 'div' : 'VPopupMenu'"
 
 		icon="eye"
-		title="Display"
+		text="Display"
 		)
 		div.display-settings
 
 			//- Toggle fret numbers
-			VButton(
+			VToggleButton(
 				icon="list-ol"
-				title="Show fret numbers"
+				text="Show fret numbers"
 
 				:is-active="isShowingFretNbs"
 				@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
 			//- Possible options for the information displayed on the notes:
-			//-   * single sequence:    none/note name/interval (select menu)
-			//-   * multiple sequences: none/note name          (toggle button)
+				- single sequence:    none/note name/interval (select menu)
+				- multiple sequences: none/note name          (toggle button)
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
@@ -96,7 +96,7 @@ div.FretboardTools
 				v-else
 
 				icon="info-circle"
-				title="Show note names"
+				text="Show note names"
 
 				:is-active="isShowingNoteNames"
 				@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
@@ -109,7 +109,7 @@ div.FretboardTools
 		v-if="!isMobileDevice"
 
 		icon="file-download"
-		title="Export"
+		text="Export"
 
 		:force-closing="exportMenuClose"
 		)
@@ -123,7 +123,7 @@ div.FretboardTools
 				each format of ['png', 'jpg', 'svg']
 					VButton(
 						icon=(format == 'svg' ? 'file-image' : 'image-polaroid')
-						title=format.toUpperCase()
+						text=format.toUpperCase()
 
 						@click=`exportFretboard('${format}')`
 						)
@@ -131,7 +131,7 @@ div.FretboardTools
 	//----------------------------------------------------------------------
 	//- Colorscheme setting
 	//----------------------------------------------------------------------
-	VTextSelect(
+	//- VTextSelect(
 		:options="{ light: 'Light mode', dark: 'Dark mode', system: 'System colors' }"
 		:icon="isDarkModeOn ? 'moon' : 'sun'"
 
@@ -155,7 +155,7 @@ import { getFrets }                           from '@/modules/fretboard'
 import { formatOrdinalSuffix, formatFretNb }  from '@/modules/text'
 
 export default {
-	name: 'FretboardTools',
+	name: 'FretboardSettings',
 
 	data() {
 		return {
@@ -232,7 +232,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.FretboardTools {
+.FretboardSettings {
 	@include mq($until: desktop)
 	{
 		@include center-column;
@@ -248,8 +248,6 @@ export default {
 
 .display-settings,
 .instrument-settings {
-	@include center-column;
-
 	@include mq($until: desktop)
 	{
 		@include space-children-v(30px);
@@ -258,8 +256,6 @@ export default {
 	@include mq($from: desktop)
 	{
 		@include space-children-v(20px);
-
-		padding: 10px;
 	}
 }
 
