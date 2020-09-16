@@ -8,7 +8,8 @@
 
 button.VToggleButton
 	p.text {{ text }}
-	div.toggle: div.toggle__handle
+	div.toggle
+		div.toggle__handle(v-mods="{ isActive }")
 
 </template>
 <!--}}}-->
@@ -41,13 +42,23 @@ export default {
 
 .VToggleButton {
 	display: flex;
+	align-items: center;
 	justify-content: space-between;
+	@include space-children-h(20px);
+
+	padding: 8px 14px 8px 10px;
 
 	border: none;
+	border-radius: 4px;
+
 	appearance: none;
 	background-color: transparent;
 
 	cursor: pointer;
+
+	&:hover {
+		background-color: var(--color--bg--highlight);
+	}
 }
 
 .text {
@@ -60,22 +71,33 @@ export default {
 	position: relative;
 
 	width: 20px;
-	height: 6px;
+	height: 8px;
 	@include pill;
 
-	border: 2px solid var(--color--bg--highlight);
+	background-color: var(--color--border);
 
 	cursor: pointer;
 }
 
 .toggle__handle {
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 50%;
 
-	@include circle(10px);
+	@include circle(14px);
 
-	background-color: var(--color--border);
+	transition: left 200ms ease-in-out;
+
+	transform: translate(-50%, -50%);
+
+	&:not(.is-active) {
+		left: 0;
+		background-color: var(--color--text--secondary);
+	}
+
+	&.is-active {
+		left: 100%;
+		background-color: var(--color--hover);
+	}
 }
 
 </style>
