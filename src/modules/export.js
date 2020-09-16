@@ -350,7 +350,7 @@ function createCanvasFromSVG(svg, width, height, callback)
 
 		// Destroy the URL object and remove the canvas
 		domURL.revokeObjectURL(url);
-		canvasWrapper.removeChild();
+		canvasWrapper.removeChild(canvas);
 	};
 
 	img.src = url;
