@@ -7,7 +7,7 @@
 
 <p align="center">Ride your fretboard and take your guitar skills to the next level! 🤘</p>
 
-<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/main/docs/screenshot.png" alt="A screenshot of the app in usage.">
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot.png" alt="A screenshot of the app in usage.">
 
 > Fretboarder is a web app to visualize  the layout of scales and arpeggios on a
 > variety of fretboards. It  aims to help players get a  better grasp on scales,
