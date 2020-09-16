@@ -329,14 +329,19 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 function createCanvasFromSVG(svg, width, height, callback)
 {
 	// Create a canvas the size of the SVG
-	const canvasWrapper     = document.getElementById('canvas-wrapper');
-	canvasWrapper.innerHTML = `<canvas width="${width}" height="${height}" id="canvas-export"><canvas>`;
+	const canvas  = document.createElement('canvas');
+	canvas.width  = width;
+	canvas.height = height;
 
-	const  canvas  = document.getElementById('canvas-export');
-	const  context = canvas.getContext('2d');
-	const  domURL  = window.URL || window.webkitURL || window;
-	const  url     = domURL.createObjectURL(svg);
-	const  img     = new Image();
+	// Insert the canvas into the page
+	const canvasWrapper = document.getElementById('canvas-wrapper');
+	canvasWrapper.appendChild(canvas);
+
+	// Create a new URL-encoded image
+	const context = canvas.getContext('2d');
+	const domURL  = window.URL || window.webkitURL || window;
+	const url     = domURL.createObjectURL(svg);
+	const img     = new Image();
 
 	img.onload = function ()
 	{
