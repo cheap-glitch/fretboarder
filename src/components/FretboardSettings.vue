@@ -22,17 +22,20 @@ div.FretboardSettings
 			VSelect(
 				:options="instruments"
 				v-model="instrument"
+				is-contained
 				)
 			//- Tuning
 			VSelect(
 				:options="tunings"
 				v-model="tuning"
+				is-contained
 				)
 
 			//- Capo
 			VSelect(
 				:options="capoFrets"
 				v-model.number="capo"
+				is-contained
 				)
 
 			//- Fret range
@@ -71,7 +74,7 @@ div.FretboardSettings
 		icon="eye"
 		text="Display"
 		)
-		div.display-settings
+		div.settings-wrapper
 
 			//- Toggle fret numbers
 			VToggleButton(
@@ -79,26 +82,26 @@ div.FretboardSettings
 				text="Show fret numbers"
 
 				:is-active="isShowingFretNbs"
-				@click="$store.commit('fretboard/toggle.isShowingFretNbs')"
+				@click.native="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
 			//- Possible options for the information displayed on the notes:
-				- single sequence:    none/note name/interval (select menu)
-				- multiple sequences: none/note name          (toggle button)
+				* single sequence:    none/note name/interval (select menu)
+				* multiple sequences: none/note name          (toggle button)
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
 				:options="{ none: 'Display no info', name: 'Display notes names', interval: 'Display intervals names' }"
 				v-model="noteInfos"
+				is-contained
 				)
-			VButton(
+			VToggleButton(
 				v-else
 
-				icon="info-circle"
 				text="Show note names"
 
 				:is-active="isShowingNoteNames"
-				@click="$store.commit('fretboard/toggle.isShowingNoteNames')"
+				@click.native="$store.commit('fretboard/toggle.isShowingNoteNames')"
 				)
 
 	//----------------------------------------------------------------------
@@ -243,6 +246,12 @@ export default {
 		display: flex;
 		@include space-children-h(10px);
 	}
+}
+
+.settings-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: stretch;
 }
 
 .fret-range__slider {
