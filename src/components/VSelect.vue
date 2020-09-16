@@ -40,7 +40,7 @@ div.VSelect
 			+options("options")
 
 	//- Fake select bar
-	div.bar
+	div.bar(v-mods="{ isContained }")
 		//- Current value
 		p.bar__text(v-html="selectedOptionLabel")
 
@@ -80,6 +80,10 @@ export default {
 			default: (value, label) => label,
 		},
 		isDisabled: {
+			type: Boolean,
+			default: false,
+		},
+		isContained: {
 			type: Boolean,
 			default: false,
 		},
@@ -128,11 +132,15 @@ export default {
 
 	padding: 8px 10px;
 
-	border: 1px solid var(--color--border);
 	border-radius: 4px;
 
 	color: var(--color--text);
-	background-color: var(--color--bg--accent);
+
+	&:not(.is-contained) {
+		border: 1px solid var(--color--border);
+
+		background-color: var(--color--bg--accent);
+	}
 
 	.select:not(:disabled):hover + & {
 		border-color: var(--color--hover);
