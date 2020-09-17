@@ -54,9 +54,7 @@ div.VSelect
 <!--{{{ JavaScript -->
 <script>
 
-import { toRef }                  from '@vue/composition-api'
-
-import { useSelectedOptionLabel } from '@/hooks/useSelectedOptionLabel'
+import { formatOrdinalSuffix } from '@/modules/text'
 
 export default {
 	name: 'VSelect',
@@ -93,14 +91,25 @@ export default {
 		},
 	},
 
-	setup(props)
-	{
-		const { select, selectedOptionLabel } = useSelectedOptionLabel(toRef(props, 'value'), props.labelFormatter);
-
+	data() {
 		return {
-			select,
-			selectedOptionLabel,
+			selectedOptionLabel: '',
 		}
+	},
+
+	watch: {
+		value: 'updateSelectedOptionLabel',
+	},
+
+	mounted() {
+		this.updateSelectedOptionLabel();
+	},
+
+	methods: {
+		updateSelectedOptionLabel() {
+			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
+		}
+
 	},
 }
 

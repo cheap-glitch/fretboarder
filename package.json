@@ -38,7 +38,6 @@
     "@fortawesome/pro-solid-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@popperjs/core": "^2.4.4",
-    "@vue/composition-api": "^0.6.7",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
     "register-service-worker": "^1.7.1",

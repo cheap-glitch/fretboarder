@@ -13,7 +13,6 @@
  */
 
 import Vue            from 'vue'
-import CompositionAPI from '@vue/composition-api'
 import VClickOutside  from 'v-click-outside'
 import VCSSModifiers  from 'vue-css-modifiers'
 
@@ -29,7 +28,6 @@ Vue.config.performance   = process.env.NODE_ENV === 'development';
 /**
  * Register plugins, directives & external components
  */
-Vue.use(CompositionAPI);
 Vue.directive('mods',          VCSSModifiers);
 Vue.directive('click-outside', VClickOutside.directive);
 
