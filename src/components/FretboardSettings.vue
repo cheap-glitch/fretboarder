@@ -17,7 +17,8 @@ div.FretboardSettings
 		icon="guitar"
 		text="Instrument"
 		)
-		div
+		div.settings-wrapper
+
 			//- Instrument
 			VSelect(
 				:options="instruments"
@@ -57,12 +58,11 @@ div.FretboardSettings
 					span(v-html="highestFret")
 
 			//- Switch fretting hand
-			VButton(
-				icon="hand-paper"
-				:text="`${isFlipped ? 'Right' : 'Left'}-handed fretting`"
+			VToggleButton(
+				text="Right-handed fretting"
+				:is-active="isFlipped"
 
-				:is-flipped="!isFlipped"
-				@click="$store.commit('fretboard/toggle.isFlipped')"
+				@click.native="$store.commit('fretboard/toggle.isFlipped')"
 				)
 
 	//----------------------------------------------------------------------
@@ -78,10 +78,9 @@ div.FretboardSettings
 
 			//- Toggle fret numbers
 			VToggleButton(
-				icon="list-ol"
 				text="Show fret numbers"
-
 				:is-active="isShowingFretNbs"
+
 				@click.native="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
@@ -92,15 +91,16 @@ div.FretboardSettings
 				v-if="displayedSequences.length <= 1"
 
 				:options="{ none: 'Display no info', name: 'Display notes names', interval: 'Display intervals names' }"
-				v-model="noteInfos"
 				is-contained
+
+				v-model="noteInfos"
 				)
 			VToggleButton(
 				v-else
 
 				text="Show note names"
-
 				:is-active="isShowingNoteNames"
+
 				@click.native="$store.commit('fretboard/toggle.isShowingNoteNames')"
 				)
 
