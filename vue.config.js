@@ -88,6 +88,8 @@ module.exports = {
 
 			// Tools & settings
 			'cog':                      'pro-regular',
+			'desktop':                  'pro-regular',
+			'desktop-alt':              'pro-regular',
 			'file-download':            'pro-regular',
 			'file-image':               'pro-regular',
 			'hand-paper':               'pro-regular',

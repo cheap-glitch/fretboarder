@@ -82,7 +82,16 @@ div.FretboardSettings
 		)
 		div.settings-menu
 
-			//- Switch fretting hand
+			//- Theme
+			VSelect(
+				:options="{ light: 'Light mode', dark: 'Dark mode', system: `System colors (${isSystemDarkModeOn ? 'dark' : 'light'})` }"
+				:icon="darkModeSetting == 'system' ? 'desktop-alt' : isDarkModeOn ? 'moon' : 'sun'"
+				is-contained
+
+				v-model="darkModeSetting"
+				)
+
+			//- Fretting hand
 			VToggleButton(
 				text="Right-handed fretting"
 				icon="hand-paper"
@@ -93,7 +102,7 @@ div.FretboardSettings
 
 			div.settings-menu__separator
 
-			//- Toggle fret numbers
+			//- Fret numbers
 			VToggleButton(
 				text="Show fret numbers"
 				icon="list-ol"
@@ -104,10 +113,9 @@ div.FretboardSettings
 
 			div.settings-menu__separator
 
-			//- Change the info displayed on the notes
-			//- Possible options:
-				* single sequence:    none/note name/interval (select menu)
-				* multiple sequences: none/note name          (toggle button)
+			//- Infos displayed on the notes
+				* single sequence:    nothing/note name/interval (select menu)
+				* multiple sequences: nothing/note name          (toggle button)
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
@@ -153,16 +161,6 @@ div.FretboardSettings
 
 						@click=`exportFretboard('${format}')`
 						)
-
-	//----------------------------------------------------------------------
-	//- Colorscheme setting
-	//----------------------------------------------------------------------
-	//- VTextSelect(
-		:options="{ light: 'Light mode', dark: 'Dark mode', system: 'System colors' }"
-		:icon="isDarkModeOn ? 'moon' : 'sun'"
-
-		v-model="darkModeSetting"
-		)
 
 </template>
 <!--}}}-->
@@ -217,6 +215,7 @@ export default {
 
 			'isDarkModeOn',
 			'isMobileDevice',
+			'isSystemDarkModeOn',
 		]),
 	},
 
@@ -244,7 +243,7 @@ export default {
 				(this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos,
 				this.isFlipped,
 				this.isShowingFretNbs,
-				this.isDarkModeOn,
+				this.darkModeSetting == 'system' ? this.isSystemDarkModeOn : this.isDarkModeOn,
 				format != 'svg',
 			);
 		},
