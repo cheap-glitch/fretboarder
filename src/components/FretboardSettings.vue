@@ -213,7 +213,7 @@ export default {
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
-				getFrets(this.displayedSequences, tunings[this.instrument][this.tuning], this.capo),
+				getFrets(this.displayedSequences, (a => { a.reverse(); return a; })([...tunings[this.instrument][this.tuning]]), this.capo),
 				instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
