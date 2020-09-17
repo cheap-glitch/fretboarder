@@ -62,7 +62,7 @@ div.FretboardSettings
 					)
 				p.fret-range__text
 					span(v-html="lowestFret")
-					span.fret-range__text__separator —
+					span.fret-range__text__separator ⟷
 					span(v-html="highestFret")
 
 	//----------------------------------------------------------------------
@@ -75,6 +75,16 @@ div.FretboardSettings
 		text="Display"
 		)
 		div.settings-menu
+
+			//- Switch fretting hand
+			VToggleButton(
+				text="Right-handed fretting"
+				:is-active="isFlipped"
+
+				@click.native="$store.commit('fretboard/toggle.isFlipped')"
+				)
+
+			div.settings-menu__separator
 
 			//- Toggle fret numbers
 			VToggleButton(
@@ -93,7 +103,8 @@ div.FretboardSettings
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
-				:options="{ none: 'Display no info', name: 'Display notes names', interval: 'Display intervals names' }"
+				label-prefix="Display on notes:"
+				:options="{ none: 'nothing', name: 'names', interval: 'intervals' }"
 				is-contained
 
 				v-model="noteInfos"
@@ -105,16 +116,6 @@ div.FretboardSettings
 				:is-active="isShowingNoteNames"
 
 				@click.native="$store.commit('fretboard/toggle.isShowingNoteNames')"
-				)
-
-			div.settings-menu__separator
-
-			//- Switch fretting hand
-			VToggleButton(
-				text="Right-handed fretting"
-				:is-active="isFlipped"
-
-				@click.native="$store.commit('fretboard/toggle.isFlipped')"
 				)
 
 	//----------------------------------------------------------------------
@@ -265,6 +266,8 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: stretch;
+
+	min-width: 250px;
 }
 
 .settings-menu__separator {
