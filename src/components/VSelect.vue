@@ -40,7 +40,7 @@ div.VSelect
 			+options("options")
 
 	//- Fake select bar
-	div.bar(v-mods="{ isContained }")
+	div.bar(v-mods="{ isContained, isFirstItem }")
 		//- Current value
 		p.bar__text(v-html="selectedOptionLabel")
 
@@ -84,6 +84,10 @@ export default {
 			default: false,
 		},
 		isContained: {
+			type: Boolean,
+			default: false,
+		},
+		isFirstItem: {
 			type: Boolean,
 			default: false,
 		},
@@ -132,12 +136,16 @@ export default {
 
 	padding: 8px 10px;
 
-	border-radius: 4px;
-
 	color: var(--color--text);
+
+	&.is-contained.is-first-item {
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
 
 	&:not(.is-contained) {
 		border: 1px solid var(--color--border);
+		border-radius: 4px;
 
 		background-color: var(--color--bg--accent);
 	}

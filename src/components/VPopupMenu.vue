@@ -22,7 +22,7 @@ div.VPopupMenu
 		:is-open="isOpen"
 		v-click-outside="clickOutsideHandler"
 		)
-		div.popup__content: slot
+		slot
 
 </template>
 <!--}}}-->
@@ -83,10 +83,6 @@ export default {
 
 	color: var(--color--bg);
 	background-color: var(--color--bg);
-}
-
-.popup__content > div:not(:last-child) {
-	border-bottom: 1px solid var(--color--border);
 }
 
 </style>

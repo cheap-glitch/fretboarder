@@ -17,14 +17,18 @@ div.FretboardSettings
 		icon="guitar"
 		text="Instrument"
 		)
-		div.settings-wrapper
+		div.settings-menu
 
 			//- Instrument
 			VSelect(
 				:options="instruments"
 				v-model="instrument"
 				is-contained
+				is-first-item
 				)
+
+			div.settings-menu__separator
+
 			//- Tuning
 			VSelect(
 				:options="tunings"
@@ -32,12 +36,16 @@ div.FretboardSettings
 				is-contained
 				)
 
+			div.settings-menu__separator
+
 			//- Capo
 			VSelect(
 				:options="capoFrets"
 				v-model.number="capo"
 				is-contained
 				)
+
+			div.settings-menu__separator
 
 			//- Fret range
 			div.fret-range
@@ -57,14 +65,6 @@ div.FretboardSettings
 					span.fret-range__text__separator —
 					span(v-html="highestFret")
 
-			//- Switch fretting hand
-			VToggleButton(
-				text="Right-handed fretting"
-				:is-active="isFlipped"
-
-				@click.native="$store.commit('fretboard/toggle.isFlipped')"
-				)
-
 	//----------------------------------------------------------------------
 	//- Display settings
 	//----------------------------------------------------------------------
@@ -74,7 +74,7 @@ div.FretboardSettings
 		icon="eye"
 		text="Display"
 		)
-		div.settings-wrapper
+		div.settings-menu
 
 			//- Toggle fret numbers
 			VToggleButton(
@@ -84,7 +84,10 @@ div.FretboardSettings
 				@click.native="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
-			//- Possible options for the information displayed on the notes:
+			div.settings-menu__separator
+
+			//- Change the info displayed on the notes
+			//- Possible options:
 				* single sequence:    none/note name/interval (select menu)
 				* multiple sequences: none/note name          (toggle button)
 			VSelect(
@@ -102,6 +105,16 @@ div.FretboardSettings
 				:is-active="isShowingNoteNames"
 
 				@click.native="$store.commit('fretboard/toggle.isShowingNoteNames')"
+				)
+
+			div.settings-menu__separator
+
+			//- Switch fretting hand
+			VToggleButton(
+				text="Right-handed fretting"
+				:is-active="isFlipped"
+
+				@click.native="$store.commit('fretboard/toggle.isFlipped')"
 				)
 
 	//----------------------------------------------------------------------
@@ -248,10 +261,22 @@ export default {
 	}
 }
 
-.settings-wrapper {
+.settings-menu {
 	display: flex;
 	flex-direction: column;
 	justify-content: stretch;
+}
+
+.settings-menu__separator {
+	height: 1px;
+
+	background-color: var(--color--bg--highlight);
+}
+
+.fret-range {
+	@include space-children-v(8px);
+
+	padding: 14px;
 }
 
 .fret-range__slider {

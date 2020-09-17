@@ -49,7 +49,6 @@ export default {
 	padding: 8px 14px 8px 10px;
 
 	border: none;
-	border-radius: 4px;
 
 	appearance: none;
 	background-color: transparent;
@@ -58,6 +57,16 @@ export default {
 
 	&:hover {
 		background-color: var(--color--bg--highlight);
+	}
+
+	&:first-child {
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+
+	&:last-child {
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
 	}
 }
 

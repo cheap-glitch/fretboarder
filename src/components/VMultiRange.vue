@@ -143,7 +143,7 @@ export default {
 		left:  var(--fill--start);
 		right: calc(100% - var(--fill--stop));
 
-		background-color: var(--color--highlight);
+		background-color: var(--color--hover);
 	}
 
 	&.is-flipped {
