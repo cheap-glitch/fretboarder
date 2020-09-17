@@ -84,11 +84,11 @@ export default {
 .label {
 	display: flex;
 	@include space-children-h(10px);
+
+	color: var(--color--text);
 }
 
 .label__text {
-	color: var(--color--text);
-
 	cursor: pointer;
 }
 
