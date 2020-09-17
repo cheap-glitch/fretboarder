@@ -34,8 +34,6 @@ export function exportFretboard(format, ...svgParams)
  */
 function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, displayedInfo, isFretboardFlipped, isShowingFretNbs, isDarkModeOn, isSizeFixed)
 {
-	console.log(frets);
-
 	const svg             = [];
 	const gradients       = [];
 
