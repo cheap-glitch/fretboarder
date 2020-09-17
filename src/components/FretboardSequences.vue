@@ -12,8 +12,8 @@ div.FretboardSequences
 		VButton(
 			v-show="!isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
 
-			icon="plus"
 			text="Add new scale/arpeggio"
+			icon="plus"
 
 			@click="$store.commit('sequences/add')"
 			)
@@ -21,9 +21,9 @@ div.FretboardSequences
 		VButton(
 			v-show="sequences.length >= 2"
 
+			text="Hide all"
 			icon="eye-slash"
 			is-flipped
-			text="Hide all"
 
 			@click="$store.commit('sequences/hideAll')"
 		)
@@ -31,8 +31,8 @@ div.FretboardSequences
 		VButton(
 			v-show="sequences.length >= 2"
 
-			icon="trash-alt"
 			text="Remove all"
+			icon="trash-alt"
 
 			@click="$store.commit('sequences/removeAll')"
 		)
@@ -52,8 +52,8 @@ div.FretboardSequences
 	VButton.add-button-mobile(
 		v-show="isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
 
-		icon="plus"
 		text="Add new scale/arpeggio"
+		icon="plus"
 
 		@click="$store.commit('sequences/add')"
 		)

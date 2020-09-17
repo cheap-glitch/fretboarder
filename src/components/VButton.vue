@@ -33,12 +33,12 @@ export default {
 	name: 'VButton',
 
 	props: {
-		icon: {
-			type: [Array, String],
-			default: '',
-		},
 		text: {
 			type: String,
+			default: '',
+		},
+		icon: {
+			type: [Array, String],
 			default: '',
 		},
 		isActive: {
