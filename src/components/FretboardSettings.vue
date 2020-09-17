@@ -22,9 +22,11 @@ div.FretboardSettings
 			//- Instrument
 			VSelect(
 				:options="instruments"
-				v-model="instrument"
+				icon="guitar"
 				is-contained
 				is-first-item
+
+				v-model="instrument"
 				)
 
 			div.settings-menu__separator
@@ -32,8 +34,10 @@ div.FretboardSettings
 			//- Tuning
 			VSelect(
 				:options="tunings"
-				v-model="tuning"
+				icon="music"
 				is-contained
+
+				v-model="tuning"
 				)
 
 			div.settings-menu__separator
@@ -41,8 +45,10 @@ div.FretboardSettings
 			//- Capo
 			VSelect(
 				:options="capoFrets"
-				v-model.number="capo"
+				icon="arrow-circle-up"
 				is-contained
+
+				v-model.number="capo"
 				)
 
 			div.settings-menu__separator
@@ -79,6 +85,7 @@ div.FretboardSettings
 			//- Switch fretting hand
 			VToggleButton(
 				text="Right-handed fretting"
+				icon="hand-paper"
 				:is-active="isFlipped"
 
 				@click.native="$store.commit('fretboard/toggle.isFlipped')"
@@ -89,6 +96,7 @@ div.FretboardSettings
 			//- Toggle fret numbers
 			VToggleButton(
 				text="Show fret numbers"
+				icon="list-ol"
 				:is-active="isShowingFretNbs"
 
 				@click.native="$store.commit('fretboard/toggle.isShowingFretNbs')"
@@ -103,8 +111,9 @@ div.FretboardSettings
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
-				label-prefix="Display on notes:"
 				:options="{ none: 'nothing', name: 'names', interval: 'intervals' }"
+				icon="info-circle"
+				label-prefix="Display on notes:"
 				is-contained
 
 				v-model="noteInfos"
@@ -113,6 +122,7 @@ div.FretboardSettings
 				v-else
 
 				text="Show note names"
+				icon="info-circle"
 				:is-active="isShowingNoteNames"
 
 				@click.native="$store.commit('fretboard/toggle.isShowingNoteNames')"

@@ -46,7 +46,7 @@ module.exports = {
 		`} },
 	},
 
-	// Minify the CSS in 'public/index.html'
+	// Minify the CSS in `public/index.html`
 	chainWebpack: config => config.plugin('html').tap(function(args)
 	{
 		args[0].minify = {
@@ -70,7 +70,9 @@ module.exports = {
 	 */
 	fontawesome: {
 		component: 'fa-icon',
+
 		imports: !isModuleAvailable('@fortawesome/pro-regular-svg-icons') ? {} : {
+
 			// General UI
 			'arrow-left':               'pro-regular',
 			'chevron-down':             'pro-regular',
@@ -78,7 +80,7 @@ module.exports = {
 			'ellipsis-v':               'pro-regular',
 			'minus':                    'pro-regular',
 
-			// Logo
+			// Instruments
 			'banjo':                    'pro-regular',
 			'guitar':                   'pro-regular',
 			'guitar-electric':          'pro-regular',
@@ -86,15 +88,17 @@ module.exports = {
 
 			// Tools & settings
 			'cog':                      'pro-regular',
-			'list-music':               'pro-regular',
-			'list-ol':                  'pro-regular',
-			'info-circle':              'pro-regular',
-			'hand-paper':               'pro-regular',
 			'file-download':            'pro-regular',
 			'file-image':               'pro-regular',
+			'hand-paper':               'pro-regular',
 			'image-polaroid':           'pro-regular',
-			'sun':                      'pro-regular',
+			'info-circle':              'pro-regular',
+			'list-music':               'pro-regular',
+			'list-ol':                  'pro-regular',
 			'moon':                     'pro-regular',
+			'music':                    'pro-regular',
+			'arrow-circle-up':          'pro-regular',
+			'sun':                      'pro-regular',
 
 			// Scales
 			'plus':                     'pro-regular',
@@ -124,13 +128,11 @@ module.exports = {
 		productionOnly: true,
 
 		baseURL: process.env.VUE_APP_BASE_URL,
-		urls: [
-			{
-				loc:        '/',
-				priority:   1.0,
-				changefreq: 'always',
-			},
-		]
+		urls: [{
+			loc:        '/',
+			priority:   1.0,
+			changefreq: 'always',
+		}]
 	},
 
 	}
