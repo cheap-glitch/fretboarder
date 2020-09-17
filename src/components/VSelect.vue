@@ -41,8 +41,15 @@ div.VSelect
 
 	//- Fake select bar
 	div.bar(v-mods="{ isContained, isFirstItem }")
-		//- Current value
-		p.bar__text(v-html="selectedOptionLabel")
+
+		div.bar__label
+			//- Icon
+			fa-icon(
+				v-if="icon.length"
+				:icon="Array.isArray(icon) ? icon : ['far', icon]"
+				)
+			//- Current value
+			p.bar__label__text(v-html="selectedOptionLabel")
 
 		//- Chevron
 		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
@@ -72,6 +79,10 @@ export default {
 		value: {
 			type: [String, Number],
 			required: true,
+		},
+		icon: {
+			type: [Array, String],
+			default: '',
 		},
 		labelPrefix: {
 			type: String,
@@ -179,7 +190,12 @@ export default {
 	}
 }
 
-.bar__text {
+.bar__label {
+	display: flex;
+	@include space-children-h(10px);
+}
+
+.bar__label__text {
 	font-size: 1.5rem;
 
 	.select:disabled + .bar & {

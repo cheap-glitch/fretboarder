@@ -7,7 +7,14 @@
 <template lang="pug">
 
 button.VToggleButton
-	p.text {{ text }}
+
+	div.label
+		fa-icon(
+			v-if="icon.length"
+			:icon="Array.isArray(icon) ? icon : ['far', icon]"
+			)
+		p.label__text {{ text }}
+
 	div.toggle
 		div.toggle__handle(v-mods="{ isActive }")
 
@@ -24,6 +31,10 @@ export default {
 	props: {
 		text: {
 			type: String,
+			default: '',
+		},
+		icon: {
+			type: [Array, String],
 			default: '',
 		},
 		isActive: {
@@ -70,7 +81,12 @@ export default {
 	}
 }
 
-.text {
+.label {
+	display: flex;
+	@include space-children-h(10px);
+}
+
+.label__text {
 	color: var(--color--text);
 
 	cursor: pointer;
