@@ -73,6 +73,10 @@ export default {
 			type: [String, Number],
 			required: true,
 		},
+		labelPrefix: {
+			type: String,
+			default: '',
+		},
 		labelFormatter: {
 			type: Function,
 			default: (value, label) => label,
@@ -107,7 +111,7 @@ export default {
 
 	methods: {
 		updateSelectedOptionLabel() {
-			this.selectedOptionLabel = this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label));
+			this.selectedOptionLabel = `${this.labelPrefix} ${this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label))}`;
 		}
 
 	},
