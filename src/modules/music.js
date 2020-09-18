@@ -132,7 +132,6 @@ export const models = {
 	'chro':            { intervals: [2,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11], name: 'chromatic'                                                                              },
 
 	// ARPEGGIOS
-	'arp-pow':         { intervals: [7],                                         name: 'fifth (powerchord)'                                                                     },
 
 	// Powerchord
 	'arp-pow':         { intervals: [7],                                         name: 'fifth (powerchord)'                                                                     },
