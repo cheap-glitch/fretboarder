@@ -53,24 +53,6 @@ div.FretboardSettings
 
 			div.settings-menu__separator
 
-			//- Fret range
-			div.fret-range
-				VMultiRange.fret-range__slider(
-					:min="0"
-					:max="MAX_NB_FRETS - 1"
-					:min-gap="MIN_NB_FRETS"
-					:is-flipped="isFlippedHor"
-
-					:values="fretRangeDisplay"
-
-					@input=" fretRangeDisplay = $event"
-					@change="fretRange = fretRangeDisplay = $event"
-					)
-				p.fret-range__text
-					span(v-html="lowestFret")
-					span.fret-range__text__separator ⟷
-					span(v-html="highestFret")
-
 	//----------------------------------------------------------------------
 	//- Display settings
 	//----------------------------------------------------------------------
@@ -90,6 +72,8 @@ div.FretboardSettings
 
 				v-model="darkModeSetting"
 				)
+
+			div.settings-menu__separator
 
 			//- Fretting hand
 			VToggleButton(
@@ -120,8 +104,6 @@ div.FretboardSettings
 				@click.native="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
-			div.settings-menu__separator
-
 			//- Infos displayed on the notes
 				* single sequence:    nothing/note name/interval (select menu)
 				* multiple sequences: nothing/note name          (toggle button)
@@ -144,6 +126,26 @@ div.FretboardSettings
 
 				@click.native="$store.commit('fretboard/toggle.isShowingNoteNames')"
 				)
+
+			div.settings-menu__separator
+
+			//- Fret range
+			div.fret-range
+				VMultiRange.fret-range__slider(
+					:min="0"
+					:max="MAX_NB_FRETS - 1"
+					:min-gap="MIN_NB_FRETS"
+					:is-flipped="isFlippedHor"
+
+					:values="fretRangeDisplay"
+
+					@input=" fretRangeDisplay = $event"
+					@change="fretRange = fretRangeDisplay = $event"
+					)
+				p.fret-range__text
+					span(v-html="lowestFret")
+					span.fret-range__text__separator ⟷
+					span(v-html="highestFret")
 
 	//----------------------------------------------------------------------
 	//- Export menu
