@@ -20,22 +20,6 @@ export function mapObjectToObject(object, callback)
 }
 
 /**
- * Create a new array from an object using a callback
- */
-export function mapObjectToArray(object, callback)
-{
-	return Object.keys(object).map(key => callback(key, object[key]));
-}
-
-/**
- * Create a new object that only has a subset of the properties of the original, with the same values
- */
-export function filterObject(object, objFilter)
-{
-	return Object.fromEntries(Object.entries(object).filter(([key, value]) => objFilter(key, value)));
-}
-
-/**
  * Check that a value is an actual object
  */
 export function isObject(value)

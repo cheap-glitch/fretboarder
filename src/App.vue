@@ -178,9 +178,7 @@ export default {
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[`update.${mq}`]));
 	},
 
-	methods: {
-		...mapObjectKeys(mapObjectToObject(mediaQueries, mq => (function(event) { this.$store.commit(mq, event.matches); })), mq => `update.${mq}`),
-	},
+	methods: mapObjectKeys(mapObjectToObject(mediaQueries, mq => (event => this.$store.commit(mq, event.matches))), mq => `update.${mq}`),
 }
 
 </script>
