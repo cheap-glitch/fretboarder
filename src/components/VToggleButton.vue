@@ -114,6 +114,8 @@ export default {
 
 	transform: translate(-50%, -50%);
 
+	filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+
 	&:not(.is-active) {
 		left: 0;
 		background-color: var(--color--text--secondary);
