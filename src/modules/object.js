@@ -4,16 +4,11 @@
  */
 
 /**
- * Create a new object with the same values but with transformed keys
+ * Create a new object with the same values but with keys modified by a callback
  */
 export function mapObjectKeys(object, callback)
 {
-	return Object.keys(object).reduce(function(result, key)
-	{
-		result[callback(key, object[key])] = object[key];
-
-		return result;
-	}, {});
+	return Object.fromEntries(Object.entries(object).map(([key, value]) => [callback(key, value), value]));
 }
 
 /**
@@ -21,12 +16,7 @@ export function mapObjectKeys(object, callback)
  */
 export function mapObjectToObject(object, callback)
 {
-	return Object.keys(object).reduce(function(result, key)
-	{
-		result[key] = callback(key, object[key]);
-
-		return result;
-	}, {});
+	return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, callback(key, value)]));
 }
 
 /**
@@ -40,15 +30,9 @@ export function mapObjectToArray(object, callback)
 /**
  * Create a new object that only has a subset of the properties of the original, with the same values
  */
-export function filterObject(object, filter)
+export function filterObject(object, objFilter)
 {
-	return Object.keys(object).reduce(function(result, key)
-	{
-		if (filter(key, object[key]))
-			result[key] = object[key];
-
-		return result;
-	}, {});
+	return Object.fromEntries(Object.entries(object).filter(([key, value]) => objFilter(key, value)));
 }
 
 /**

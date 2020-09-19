@@ -237,7 +237,7 @@ export default {
 		this.MAX_NB_FRETS = MAX_NB_FRETS;
 
 		this.instruments  = instruments;
-		this.capoFrets    = [...Array(11).keys()].reduce((result, fret) => { result[fret + 1] = 'Capo ' + formatFretNb(fret + 1); return result; }, { 0: 'No capo' });
+		this.capoFrets    = Object.fromEntries([[0, 'No capo'], ...[...Array(11).keys()].map(fret => [fret + 1, `Capo ${formatFretNb(fret + 1)}`])]);
 	},
 
 	methods: {

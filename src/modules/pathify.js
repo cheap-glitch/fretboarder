@@ -14,15 +14,14 @@ pathify.options.mapping = 'simple';
 export default pathify;
 
 /**
- * Generate mutations to toggle every property beginning with 'is'
+ * Generate mutations to toggle every property beginning with `is`
  */
-export function makeTogglers(state)
+export function makeTogglers(stateModel)
 {
-	return Object.keys(state).reduce(function(togglers, propertyName)
-	{
-		if (/^is[A-Z]/.test(propertyName))
-			togglers[`toggle.${propertyName}`] = storeState => storeState[propertyName] = !storeState[propertyName];
+	const togglePropRegex = /^is[A-Z]/;
 
-		return togglers;
-	}, {});
+	return Object.fromEntries(Object.keys(stateModel)
+		.filter(prop => togglePropRegex.test(prop))
+		.map(prop => [`toggle.${prop}`, state => state[prop] = !state[prop]])
+	);
 }
