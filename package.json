@@ -41,12 +41,12 @@
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
     "register-service-worker": "^1.7.1",
-    "v-click-outside": "^3.0.1",
+    "v-click-outside": "^3.1.2",
     "vue": "^2.6.12",
     "vue-css-modifiers": "^1.0.8",
     "vuex": "^3.5.1",
     "vuex-pathify": "^1.4.1",
-    "vuex-plugin-save-state": "^1.0.0"
+    "vuex-plugin-save-state": "^1.0.1"
   },
   "optionalDependencies": {
     "@fortawesome/pro-regular-svg-icons": "^5.13.0",
@@ -72,7 +72,7 @@
     "nyc": "^15.1.0",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
-    "sass": "^1.26.10",
+    "sass": "^1.26.11",
     "sass-loader": "^10.0.1",
     "sass-mq": "^5.0.1",
     "vue-cli-plugin-sitemap": "^2.2.1",
