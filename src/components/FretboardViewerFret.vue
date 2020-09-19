@@ -52,7 +52,7 @@ div.FretboardViewerFret
 
 import { get }                                 from 'vuex-pathify'
 
-import { notesNames }                          from '@/modules/music'
+import { notesNames, degrees }                 from '@/modules/music'
 import { intervalsNames, intervalsShorthands } from '@/modules/music'
 
 export default {
@@ -78,7 +78,7 @@ export default {
 		displayedInfos: {
 			type: String,
 			required: true,
-			validator: v => ['none', 'name', 'interval'].includes(v)
+			validator: v => ['none', 'name', 'degree', 'interval'].includes(v)
 		},
 		isHighlighted: {
 			type: Boolean,
@@ -160,9 +160,15 @@ export default {
 		},
 		infos()
 		{
-			return (this.displayedInfos == 'interval' && this.isActive)
-				? intervalsShorthands[this.sequences[0].interval]
-				: notesNames[this.note];
+			if (!this.isActive) return notesNames[this.note];
+
+			switch (this.displayedInfos)
+			{
+				case 'name':     return notesNames[this.note];
+				case 'degree':   return degrees[this.sequences[0].interval];
+				case 'interval': return intervalsShorthands[this.sequences[0].interval];
+				default:         return '';
+			}
 		},
 		isActive()
 		{

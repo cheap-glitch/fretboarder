@@ -35,7 +35,7 @@ div.FretboardSequencesItemInterval
 <!--{{{ JavaScript -->
 <script>
 
-import { intervalsNames, intervalsShorthands } from '@/modules/music'
+import { intervalsNames, degrees } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItemInterval',
@@ -63,7 +63,7 @@ export default {
 
 	computed: {
 		name()      { return intervalsNames[this.value].toLowerCase(); },
-		shortName() { return intervalsShorthands[this.value];          },
+		shortName() { return degrees[this.value];                      },
 	},
 }
 

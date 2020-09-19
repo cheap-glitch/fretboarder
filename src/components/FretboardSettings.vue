@@ -110,7 +110,7 @@ div.FretboardSettings
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
-				:options="{ none: 'nothing', name: 'names', interval: 'intervals' }"
+				:options="{ none: 'nothing', name: 'names', degree: 'degrees', interval: 'intervals' }"
 				icon="info-circle"
 				label-prefix="Display on notes:"
 				is-contained

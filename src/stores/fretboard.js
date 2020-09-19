@@ -31,7 +31,7 @@ const model = {
 	},
 	noteInfos: {
 		default: 'name',
-		validator: v => typeof v == 'string' && ['none', 'name', 'interval'].includes(v),
+		validator: v => typeof v == 'string' && ['none', 'name', 'degree', 'interval'].includes(v),
 	},
 	isShowingFretNbs: {
 		default: false,

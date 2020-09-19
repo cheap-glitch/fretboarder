@@ -3,11 +3,12 @@
  * modules/export.js
  */
 
-import { saveAs }                          from 'file-saver'
+import { saveAs }              from 'file-saver'
 
-import { mapObjectToObject }               from '@/modules/object'
-import { colorscheme }                     from '@/modules/colorscheme'
-import { notesNames, intervalsShorthands } from '@/modules/music'
+import { mapObjectToObject }   from '@/modules/object'
+import { colorscheme }         from '@/modules/colorscheme'
+import { notesNames, degrees } from '@/modules/music'
+import { intervalsShorthands } from '@/modules/music'
 
 /**
  * Create and save an image of the fretboard
@@ -277,7 +278,17 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 				// If the fretboard is flipped, flip the text again to render it properly
 				if (isFretboardFlippedHor) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
-				appendFullTag(svg, 'text', (displayedInfo == 'name' ? notesNames[fret.note] : intervalsShorthands[fret.sequences[0].interval]), {
+				const info = (() => {
+					switch (displayedInfo)
+					{
+						case 'name':     return notesNames[fret.note];
+						case 'degree':   return degrees[fret.sequences[0].interval];
+						case 'interval': return intervalsShorthands[fret.sequences[0].interval];
+						default:         return '';
+					}
+				})();
+
+				appendFullTag(svg, 'text', info, {
 					x:          isFretboardFlippedHor ? (svgWidth - x) :  x,
 					y:          y + size/3,
 					fill:       colors.noteName,
