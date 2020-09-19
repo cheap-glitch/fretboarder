@@ -87,6 +87,8 @@ module.exports = {
 			'mandolin':                 'pro-regular',
 
 			// Tools & settings
+			'arrow-circle-up':          'pro-regular',
+			'arrows-v':                 'pro-regular',
 			'cog':                      'pro-regular',
 			'desktop':                  'pro-regular',
 			'desktop-alt':              'pro-regular',
@@ -99,7 +101,6 @@ module.exports = {
 			'list-ol':                  'pro-regular',
 			'moon':                     'pro-regular',
 			'music':                    'pro-regular',
-			'arrow-circle-up':          'pro-regular',
 			'sun':                      'pro-regular',
 
 			// Scales

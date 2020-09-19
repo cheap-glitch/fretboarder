@@ -45,6 +45,10 @@ const model = {
 		default: false,
 		validator: v => typeof v == 'boolean',
 	},
+	isFlippedVert: {
+		default: false,
+		validator: v => typeof v == 'boolean',
+	},
 };
 const state = getVuexState(model);
 

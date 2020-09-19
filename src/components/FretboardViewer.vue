@@ -82,8 +82,12 @@ export default {
 		{
 			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
-			// Invert the grid layout for horizontal fretboards only
-			if (this.isFlippedHor && !this.isVertical) template.reverse();
+			/**
+			 * Invert the grid layout:
+			 *  - when the fretboard is horizontal (landscape mode) and the fretting hand is flipped
+			 *  - when the fretboard is vertical (portait mode, e.g. on mobile) and "mirrored"
+			 */
+			if (!this.isVertical ? this.isFlippedHor : this.isFlippedVert) template.reverse();
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
@@ -195,7 +199,12 @@ export default {
 		{
 			const notes = Array.from(tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']);
 
-			return (!this.isVertical || this.isFlippedHor) ? notes.reverse() : notes;
+			/**
+			 * Invert the order of the strings (the topmost becomes the bottommost, etc.) when:
+			 *   - the fretboard is horizontal and is not "mirrored" (i.e. flipped vertically)
+			 *   - the fretboard is vertical and the fretting hand is flipped (right-handed fretting mode enabled)
+			 */
+			return (!this.isVertical ? !this.isFlippedVert : this.isFlippedHor) ? notes.reverse() : notes;
 		},
 		nbStrings()
 		{
@@ -227,6 +236,7 @@ export default {
 			'noteInfos',
 
 			'isFlippedHor',
+			'isFlippedVert',
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 		]),

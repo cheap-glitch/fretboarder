@@ -100,6 +100,15 @@ div.FretboardSettings
 				@click.native="$store.commit('fretboard/toggle.isFlippedHor')"
 				)
 
+			//- Fretting hand
+			VToggleButton(
+				text="Mirror vertically"
+				icon="arrows-v"
+				:is-active="isFlippedVert"
+
+				@click.native="$store.commit('fretboard/toggle.isFlippedVert')"
+				)
+
 			div.settings-menu__separator
 
 			//- Fret numbers
@@ -209,6 +218,7 @@ export default {
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 			'isFlippedHor',
+			'isFlippedVert',
 		]),
 		...get([
 			'sequences/displayedSequences',
@@ -236,7 +246,7 @@ export default {
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
-				getFrets(this.displayedSequences, (a => { a.reverse(); return a; })([...tunings[this.instrument][this.tuning]]), this.capo),
+				getFrets(this.displayedSequences, (a => { if (!this.isFlippedVert) a.reverse(); return a; })([...tunings[this.instrument][this.tuning]]), this.capo),
 				instruments[this.instrument].nbStrings,
 				this.fretRange[0],
 				this.fretRange[1],
