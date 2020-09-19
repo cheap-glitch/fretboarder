@@ -59,7 +59,7 @@ div.FretboardSettings
 					:min="0"
 					:max="MAX_NB_FRETS - 1"
 					:min-gap="MIN_NB_FRETS"
-					:is-flipped="isFlipped"
+					:is-flipped="isFlippedHor"
 
 					:values="fretRangeDisplay"
 
@@ -95,9 +95,9 @@ div.FretboardSettings
 			VToggleButton(
 				text="Right-handed fretting"
 				icon="hand-paper"
-				:is-active="isFlipped"
+				:is-active="isFlippedHor"
 
-				@click.native="$store.commit('fretboard/toggle.isFlipped')"
+				@click.native="$store.commit('fretboard/toggle.isFlippedHor')"
 				)
 
 			div.settings-menu__separator
@@ -189,8 +189,8 @@ export default {
 	},
 
 	computed: {
-		lowestFret()  { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlipped ? 1 : 0])); },
-		highestFret() { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlipped ? 0 : 1])); },
+		lowestFret()  { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 1 : 0])); },
+		highestFret() { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 0 : 1])); },
 		tunings()
 		{
 			return mapObjectToObject(tunings[this.instrument], tuning => tuningsNames[tuning]);
@@ -208,7 +208,7 @@ export default {
 
 			'isShowingFretNbs',
 			'isShowingNoteNames',
-			'isFlipped',
+			'isFlippedHor',
 		]),
 		...get([
 			'sequences/displayedSequences',
@@ -241,7 +241,7 @@ export default {
 				this.fretRange[0],
 				this.fretRange[1],
 				(this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos,
-				this.isFlipped,
+				this.isFlippedHor,
 				this.isShowingFretNbs,
 				this.darkModeSetting == 'system' ? this.isSystemDarkModeOn : this.isDarkModeOn,
 				format != 'svg',

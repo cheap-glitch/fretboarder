@@ -23,10 +23,10 @@ div.FretboardViewer(
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
-		:is-fretboard-flipped="isFlipped"
+		:is-fretboard-flipped-h="isFlippedHor"
 		:is-fretboard-vertical="isVertical"
 
-		:style="(isFlipped && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
+		:style="(isFlippedHor && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
 		)
 
 	//- Strings
@@ -83,7 +83,7 @@ export default {
 			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
 			// Invert the grid layout for horizontal fretboards only
-			if (this.isFlipped && !this.isVertical) template.reverse();
+			if (this.isFlippedHor && !this.isVertical) template.reverse();
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
@@ -125,8 +125,8 @@ export default {
 		{
 			return [...Array(this.nbStrings).keys()].map(index => ({
 				// Start & end
-				[this.isVertical ? 'top'    : this.isFlipped ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
-				[this.isVertical ? 'bottom' : this.isFlipped ? 'left'  : 'right']: 0,
+				[this.isVertical ? 'top'    : this.isFlippedHor ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
+				[this.isVertical ? 'bottom' : this.isFlippedHor ? 'left'  : 'right']: 0,
 
 				// Position
 				[this.isVertical ? 'left': 'top']: `calc(calc(100% - ${this.fretNumbersPadding.px})*${index / (this.nbStrings - 1)})`,
@@ -184,7 +184,7 @@ export default {
 		fretNumbers()
 		{
 			return [...Array(this.nbFrets).keys()]
-				.map(index => (this.isFlipped && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
+				.map(index => (this.isFlippedHor && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
 				.map(fret  => fret == 0 ? '' : fret);
 		},
 		fretNumbersPadding()
@@ -195,7 +195,7 @@ export default {
 		{
 			const notes = Array.from(tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']);
 
-			return (!this.isVertical || this.isFlipped) ? notes.reverse() : notes;
+			return (!this.isVertical || this.isFlippedHor) ? notes.reverse() : notes;
 		},
 		nbStrings()
 		{
@@ -226,7 +226,7 @@ export default {
 
 			'noteInfos',
 
-			'isFlipped',
+			'isFlippedHor',
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 		]),

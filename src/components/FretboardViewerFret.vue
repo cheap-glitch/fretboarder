@@ -27,14 +27,14 @@ div.FretboardViewerFret
 					)
 				p.intervals__item__text {{ interval.name }}
 
-	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
+	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardFlippedHor, isFretboardVertical }")
 
 		div.fret__inlay(v-show="isShowingInlay")
 
 		p.fret__note(
 			ref="note"
 
-			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardFlipped, isFretboardVertical }"
+			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardFlippedHor, isFretboardVertical }"
 			:style="noteBg"
 
 			@mouseenter="showTooltip = isActive"
@@ -92,7 +92,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isFretboardFlipped: {
+		isFretboardFlippedHor: {
 			type: Boolean,
 			default: false,
 		},
@@ -225,13 +225,13 @@ export default {
 	}
 
 	&:not(.is-fretboard-vertical) {
-		&.is-fretboard-flipped {
+		&.is-fretboard-flipped-hor {
 			&:not(.is-open-string) { border-left-width:   layout.$fretbar-thickness; }
 			&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
 			&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
 		}
 
-		&:not(.is-fretboard-flipped) {
+		&:not(.is-fretboard-flipped-hor) {
 			&:not(.is-open-string) { border-right-width:  layout.$fretbar-thickness; }
 			&.is-starting-fret     { border-left-width:   layout.$fretbar-thickness; }
 			&.is-first-fret        { border-left-width:   layout.$nut-thickness;     }
@@ -274,8 +274,8 @@ export default {
 			top: 0;
 			transform: translateY(-50%);
 
-			&.is-fretboard-flipped        { right: 0; }
-			&:not(.is-fretboard-flipped)  { left:  0; }
+			&.is-fretboard-flipped-hor       { right: 0; }
+			&:not(.is-fretboard-flipped-hor) { left:  0; }
 		}
 
 		&:not(.is-open-string) {

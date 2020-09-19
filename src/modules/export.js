@@ -32,7 +32,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, displayedInfo, isFretboardFlipped, isShowingFretNbs, isDarkModeOn, isSizeFixed)
+function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, displayedInfo, isFretboardFlippedHor, isShowingFretNbs, isDarkModeOn, isSizeFixed)
 {
 	const svg             = [];
 	const gradients       = [];
@@ -91,7 +91,7 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 	appendFullTag(svg, 'style', textStyles.join(' '), {});
 
 	// Apply a transformation to flip the whole SVG if needed
-	if (isFretboardFlipped) openTag(svg, 'g', { transform: `scale(-1, 1) translate(-${svgWidth}, 0)` });
+	if (isFretboardFlippedHor) openTag(svg, 'g', { transform: `scale(-1, 1) translate(-${svgWidth}, 0)` });
 
 	// Return the position of a fret on the y-axis
 	const getFretY = fretNumber => !fretNumber ? 0 : fretWidth*((3*nbFrets - 1)/(2*nbFrets - 2) - fretNumber/(nbFrets - 1));
@@ -108,17 +108,17 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 			const x = offset - getFretY(fret)/2 + marginRight;
 
 			// Flip the fret numbers if needed
-			if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
+			if (isFretboardFlippedHor) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 			appendFullTag(svg, 'text', fret, {
-				x:          isFretboardFlipped ? (svgWidth - x) : x,
+				x:          isFretboardFlippedHor ? (svgWidth - x) : x,
 				y:          fretboardHeight + marginTop + 4,
 				fill:       colors.fretNumber,
 				class:      fretsWithInlays.includes(fret) ? 'bold' : 'normal',
 				textAnchor: 'middle',
 			});
 
-			if (isFretboardFlipped) closeTag(svg, 'g');
+			if (isFretboardFlippedHor) closeTag(svg, 'g');
 		}
 
 		// Draw the next fret bar
@@ -275,24 +275,24 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 			if (displayedInfo != 'none')
 			{
 				// If the fretboard is flipped, flip the text again to render it properly
-				if (isFretboardFlipped) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
+				if (isFretboardFlippedHor) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 				appendFullTag(svg, 'text', (displayedInfo == 'name' ? notesNames[fret.note] : intervalsShorthands[fret.sequences[0].interval]), {
-					x:          isFretboardFlipped ? (svgWidth - x) :  x,
+					x:          isFretboardFlippedHor ? (svgWidth - x) :  x,
 					y:          y + size/3,
 					fill:       colors.noteName,
 					class:      'note',
 					textAnchor: 'middle',
 				});
 
-				if (isFretboardFlipped) closeTag(svg, 'g');
+				if (isFretboardFlippedHor) closeTag(svg, 'g');
 			}
 		}
 
 		offset += getFretY(fret.number + 1);
 	});
 
-	if (isFretboardFlipped) closeTag(svg, 'g');
+	if (isFretboardFlippedHor) closeTag(svg, 'g');
 
 	/**
 	 * Gradients

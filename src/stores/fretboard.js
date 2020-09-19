@@ -41,7 +41,7 @@ const model = {
 		default: true,
 		validator: v => typeof v == 'boolean',
 	},
-	isFlipped: {
+	isFlippedHor: {
 		default: false,
 		validator: v => typeof v == 'boolean',
 	},
