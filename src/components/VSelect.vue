@@ -121,7 +121,8 @@ export default {
 	},
 
 	methods: {
-		updateSelectedOptionLabel() {
+		async updateSelectedOptionLabel() {
+			await this.$nextTick();
 			this.selectedOptionLabel = `${this.labelPrefix} ${this.labelFormatter(this.value, formatOrdinalSuffix(this.$refs.select.selectedOptions[0].label))}`;
 		}
 
