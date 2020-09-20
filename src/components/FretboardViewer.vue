@@ -23,7 +23,7 @@ div.FretboardViewer(
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
-		:is-fretboard-flipped-h="isFlippedHor"
+		:is-fretboard-flipped-hor="isFlippedHor"
 		:is-fretboard-vertical="isVertical"
 
 		:style="(isFlippedHor && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
