@@ -177,7 +177,7 @@ export default {
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[`update.${mq}`]));
 	},
 
-	methods: Object.fromEntries(Object.keys(mediaQueries).map(mq => [`update.${mq}`, event => this.$store.commit(mq, event.matches)])),
+	methods: Object.fromEntries(Object.keys(mediaQueries).map(mq => [`update.${mq}`, function(event) { return this.$store.commit(mq, event.matches); }])),
 }
 
 </script>
