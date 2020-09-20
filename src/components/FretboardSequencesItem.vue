@@ -460,7 +460,8 @@ name: 'FretboardSequencesItem',
 /**
  * Helper function to return an object with the models as keys and their name as values
  */
-function getModels(selectedModels) {
+function getModels(selectedModels)
+{
 	return Object.fromEntries(selectedModels.map(model => [model, models[model].name]));
 }
 

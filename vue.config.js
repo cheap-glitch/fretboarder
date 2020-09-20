@@ -150,7 +150,7 @@ function isModuleAvailable(name)
 		require.resolve(name);
 		return true;
 	}
-	catch(err) {
+	catch {
 		return false;
 	}
 
