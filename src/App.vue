@@ -100,9 +100,8 @@ div.App#app(:style="colorscheme")
 
 import { get }               from 'vuex-pathify'
 
-import { mapObjectToObject } from '@/modules/object'
-import { mapObjectKeys }     from '@/modules/object'
 import { colorscheme }       from '@/modules/colorscheme'
+import { mapObjectToObject } from '@/modules/object'
 
 import { mediaQueries }      from '@/stores/main'
 
@@ -178,7 +177,7 @@ export default {
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[`update.${mq}`]));
 	},
 
-	methods: mapObjectKeys(mapObjectToObject(mediaQueries, mq => (event => this.$store.commit(mq, event.matches))), mq => `update.${mq}`),
+	methods: Object.fromEntries(Object.keys(mediaQueries).map(mq => [`update.${mq}`, event => this.$store.commit(mq, event.matches)])),
 }
 
 </script>
