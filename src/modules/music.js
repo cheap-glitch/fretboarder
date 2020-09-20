@@ -230,6 +230,8 @@ export const models = {
 export const instruments = {
 	'guitar':    { name: 'Guitar',            nbStrings:  6 },
 	'bass':      { name: 'Bass',              nbStrings:  4 },
+	'bass-5':    { name: '5-string bass',     nbStrings:  5 },
+	'bass-6':    { name: '6-string bass',     nbStrings:  6 },
 	'ukulele':   { name: 'Ukulele',           nbStrings:  4 },
 	'banjo-4':   { name: '4-string banjo',    nbStrings:  4 },
 	'banjo-5':   { name: '5-string banjo',    nbStrings:  5 },
@@ -240,8 +242,6 @@ export const instruments = {
 	'guitar-10': { name: '10-string guitar',  nbStrings: 10 },
 	'guitar-11': { name: '11-string guitar',  nbStrings: 11 },
 	'guitar-12': { name: '12-string guitar',  nbStrings: 12 },
-	'bass-5':    { name: '5-string bass',     nbStrings:  5 },
-	'bass-6':    { name: '6-string bass',     nbStrings:  6 },
 };
 
 /**
