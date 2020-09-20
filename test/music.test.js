@@ -4,7 +4,7 @@
  */
 
 import 'chai/register-should'
-import { models, notes } from '../src/modules/music.js'
+import { models } from '../src/modules/music.js'
 
 describe("scales", () => {
 
@@ -91,18 +91,57 @@ describe("arpeggios", () => {
 /**
  * Helper function to test a single model
  */
-function test_model(modelName, notes_str) {
-	it(modelName, () => {
-		generate_model_notes(modelName).should.equal(notes_str.replace(/ {2,}/g, ' '));
-	});
+function testModel(modelName, notes, tonality = 'C')
+{
+	it(modelName, () => generateModelNotes(modelName, tonality).should.have.ordered.members(parseNotes(notes, tonality)));
+}
+
+/**
+ * Parse a string of notes into a array of intervals
+ */
+function parseNotes(notes, tonality)
+{
+	return notes
+		.trim()
+		.replace(RegExp(` ?${tonality}$`), '')
+		.replace(/[-–,]/g, ' ')
+		.replace(/ {2,}/g, ' ')
+		.trim()
+		.replace(/♭/g, 'b')
+		.replace(/♯/g, '#')
+		.split(' ')
+		.map(note => notesValues[note]);
 }
 
 /**
  * Return a string containing all the notes
  * of a scale/arpeggio in the C tonality, separated by spaces
  */
-function generate_model_notes(modelName) {
-	return [0, ...models[modelName].intervals]
-		.map(interval => notes[(notes.indexOf('C') + interval) % notes.length])
-		.join(' ');
+function generateModelNotes(modelName, tonality)
+{
+	return [0, ...models[modelName].intervals].map(interval => (notesValues[tonality] + interval) % 12);
 }
+
+const notesValues = {
+	'Ab': 11,
+	'A':   0,
+	'A#':  1,
+	'Bb':  1,
+	'B':   2,
+	'Cb':  2,
+	'B#':  3,
+	'C':   3,
+	'C#':  4,
+	'Db':  4,
+	'D':   5,
+	'D#':  6,
+	'Eb':  6,
+	'E':   7,
+	'Fb':  7,
+	'E#':  8,
+	'F':   8,
+	'F#':  9,
+	'Gb':  9,
+	'G':  10,
+	'G#': 11,
+};
