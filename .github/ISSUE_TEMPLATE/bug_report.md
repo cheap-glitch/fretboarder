@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: 💻🐛 ヽ(≧Д≦)ノ
-labels: bug
+labels: 🐛 bug
 ---
 
 <!--
@@ -11,24 +11,24 @@ Before opening a new issue, make sure that one with a similar title isn't alread
 Please follow the template below. It will help us better understand the problem and fix it faster!
 -->
 
-#### Environment
+### Environment
 
  * Operating system:
  * Browser name and version:
 
-#### Description
+### Description
 <!-- Please be as detailed as possible. Useful screenshots are always welcomed. -->
 
 
 
-#### Steps to reproduce
+### Steps to reproduce
 <!-- What did you do that caused the bug? -->
 
 1.
 2.
 3.
 
-#### Possible solutions
+### Possible solutions
 <!-- Anything that you think can help solve the problem (optional) -->
 
 

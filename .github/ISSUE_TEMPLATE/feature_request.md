@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: (ﾉ^ヮ^)ﾉ✨
-labels: enhancement
+labels: ✨ feature request
 ---
 
 <!--
@@ -10,17 +10,17 @@ Please fill the template below:
 -->
 
 
-#### Description
+### Description
 <!-- Please be as detailed as possible. -->
 
 
 
-#### Implementation details
+### Implementation details
 <!-- How would you like to this feature implemented? -->
 
 
 
-#### Examples
+### Examples
 <!-- If you know other products who implement this feature, you can reference them here (optional) -->
 
 
