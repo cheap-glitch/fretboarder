@@ -177,7 +177,7 @@ export const models = {
 	'arp-hdim7':       { intervals: [3,  6, 10],                                 name: 'half-diminished 7th'                                                                    },
 	'arp-dimmaj7':     { intervals: [3,  6, 11],                                 name: 'diminished major 7th'                                                                   },
 	'arp-dim7':        { intervals: [3,  6,  9],                                 name: 'diminished 7th'                                                                         },
-	'arp-dom7s9':      { intervals: [3,  4,  7, 10],                             name: '7th♯9 (Hendrix chord)'                                                                  },
+	'arp-dom7s9':      { intervals: [4,  7, 10,  3],                             name: '7th♯9 (Hendrix chord)'                                                                  },
 
 	// Ninth chords
 	'arp-majadd9':     { intervals: [4,  7,  2],                                 name: 'major added 9th'                                                                        },
