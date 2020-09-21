@@ -142,7 +142,7 @@ export const models = {
 	'bebmaj':          { intervals: [2,  4,  5,  7,  8,  9, 11],                 name: 'bebop major'                                                                            },
 	'bebdor':          { intervals: [2,  3,  4,  5,  7,  9, 10],                 name: 'bebop dorian'                                                                           },
 	'bebdoralt':       { intervals: [2,  3,  5,  7,  9, 10, 11],                 name: 'bebop dorian (alt.)'                                                                    },
-	'bebhmin':         { intervals: [2,  3,  5,  7,  8, 10, 11],                 name: 'bebop harmonic minor'                                                                   },
+	'bebharmin':       { intervals: [2,  3,  5,  7,  8, 10, 11],                 name: 'bebop harmonic minor'                                                                   },
 	'bebmel':          { intervals: [2,  3,  5,  7,  8,  9, 11],                 name: 'bebop melodic minor'                                                                    },
 
 	// Chromatic
