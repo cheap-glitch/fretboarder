@@ -174,6 +174,7 @@ export const models = {
 	'arp-min7':        { intervals: [3,  7, 10],                                 name: 'minor 7th'                                                                              },
 	'arp-minmaj7':     { intervals: [3,  7, 11],                                 name: 'minor-major 7th'                                                                        },
 	'arp-aug7':        { intervals: [4,  8, 10],                                 name: 'augmented 7th'                                                                          },
+	'arp-augmaj7':     { intervals: [4,  8, 11],                                 name: 'augmented major 7th'                                                                    },
 	'arp-hdim7':       { intervals: [3,  6, 10],                                 name: 'half-diminished 7th'                                                                    },
 	'arp-dimmaj7':     { intervals: [3,  6, 11],                                 name: 'diminished major 7th'                                                                   },
 	'arp-dim7':        { intervals: [3,  6,  9],                                 name: 'diminished 7th'                                                                         },
