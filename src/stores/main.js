@@ -64,7 +64,7 @@ const mutations = {
 Vue.use(Vuex);
 export default new Vuex.Store(
 {
-	strict: process.env.NODE_ENV !== 'production',
+	strict: process.env.NODE_ENV === 'development',
 
 	plugins: [
 		pathify.plugin,
@@ -73,8 +73,9 @@ export default new Vuex.Store(
 			sequences: sequences.model,
 			fretboard: fretboard.model,
 		}, {
-			namespace: 'fretboarder-3.0',
-			savedByDefault: true,
+			namespace:           'fretboarder@3.1',
+			savedByDefault:      true,
+			clearStorageOnError: process.env.NODE_ENV === 'production',
 		}),
 	],
 
