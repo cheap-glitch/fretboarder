@@ -50,27 +50,22 @@ export default {
 	},
 
 	watch: {
-		isOpen()
-		{
+		isOpen() {
 			if (this.isOpen) this.createPopper(); else this.destroyPopper();
 		},
 	},
 
-	created()
-	{
+	created() {
 		this.popper = null;
 	},
 
-	destroyed()
-	{
+	destroyed() {
 		this.destroyPopper();
 	},
 
 	methods: {
-		createPopper()
-		{
-			if (this.isOpen && this.popper === null && this.target !== false && document.body.contains(this.target))
-			{
+		createPopper() {
+			if (this.isOpen && this.popper === null && this.target !== false && document.body.contains(this.target)) {
 				this.popper = createPopper(this.target, this.$refs.tooltip, {
 					placement: this.placement,
 					modifiers: [
@@ -103,10 +98,8 @@ export default {
 				});
 			}
 		},
-		destroyPopper()
-		{
-			if (!this.isOpen && this.popper !== null)
-			{
+		destroyPopper() {
+			if (!this.isOpen && this.popper !== null) {
 				this.popper.destroy();
 				this.popper = null;
 			}

@@ -78,8 +78,7 @@ export default {
 	},
 
 	computed: {
-		grid()
-		{
+		grid() {
 			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
 			/**
@@ -94,13 +93,11 @@ export default {
 				[`grid-template-${this.isVertical ? 'rows'   : 'columns'}`]: template.join(' '),
 			};
 		},
-		maxWidth()
-		{
+		maxWidth() {
 			// Limit the width of the fretboard in vertical mode
 			return this.isVertical ? { width: `${(this.nbStrings - 1)*layout.fretWidth.int + this.fretNumbersPadding.int}px` } : {};
 		},
-		minLength()
-		{
+		minLength() {
 			/**
 			 * The length of the fretboard must be so that the length
 			 * of the smallest fret is equal or greater than a fixed minimum length
@@ -109,8 +106,7 @@ export default {
 
 			return { [`min-${this.isVertical ? 'height': 'width'}`]: `${Math.ceil(length)}px` };
 		},
-		layout()
-		{
+		layout() {
 			/**
 			 * Compute the size of each fret so that:
 			 *     - size(1) = 3/2
@@ -125,8 +121,7 @@ export default {
 			// Don't include the open string fret in the flexible layout
 			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => c - i/(n - 1));
 		},
-		strings()
-		{
+		strings() {
 			return [...Array(this.nbStrings).keys()].map(index => ({
 				// Start & end
 				[this.isVertical ? 'top'    : this.isFlippedHor ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
@@ -140,13 +135,11 @@ export default {
 				[this.isVertical ? 'width' : 'height']: layout.stringThickness.px,
 			}));
 		},
-		inlays()
-		{
+		inlays() {
 			// List the frets which can have an inlay (only the 12th is omitted)
 			let frets = ['3', '5', '7', '9', '15', '17', '19', '21'];
 
-			switch (this.nbStrings)
-			{
+			switch (this.nbStrings) {
 				/**
 				 * Bass, ukulele, guitar
 				 * Single inlay in the middle + double inlay at the 12th fret
@@ -173,30 +166,24 @@ export default {
 
 			return [];
 		},
-		displayedInfos()
-		{
+		displayedInfos() {
 			return (this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos;
 		},
-		displayedFrets()
-		{
+		displayedFrets() {
 			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
 		},
-		frets()
-		{
+		frets() {
 			return getFrets(this.displayedSequences, this.tuningNotes, this.capo);
 		},
-		fretNumbers()
-		{
+		fretNumbers() {
 			return [...Array(this.nbFrets).keys()]
 				.map(index => (this.isFlippedHor && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
 				.map(fret  => fret == 0 ? '' : fret);
 		},
-		fretNumbersPadding()
-		{
+		fretNumbersPadding() {
 			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
 		},
-		tuningNotes()
-		{
+		tuningNotes() {
 			const notes = Array.from(tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']);
 
 			/**
@@ -206,20 +193,16 @@ export default {
 			 */
 			return (!this.isVertical ? !this.isFlippedVert : this.isFlippedHor) ? notes.reverse() : notes;
 		},
-		nbStrings()
-		{
+		nbStrings() {
 			return instruments[this.instrument].nbStrings;
 		},
-		nbFrets()
-		{
+		nbFrets() {
 			return this.fretMax - this.fretMin + 1;
 		},
-		fretMin()
-		{
+		fretMin() {
 			return this.fretRange[0];
 		},
-		fretMax()
-		{
+		fretMax() {
 			return this.fretRange[1];
 		},
 

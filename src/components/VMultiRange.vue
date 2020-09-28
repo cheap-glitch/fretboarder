@@ -65,8 +65,7 @@ export default {
 	},
 
 	methods: {
-		selectValue(event)
-		{
+		selectValue(event) {
 			// Compute the selected value using the location of the pointer
 			const rect  = this.$el.getBoundingClientRect();
 			const value = Math.max(0, Math.min(this.max, this.min + Math.ceil(Math.max(0, event.clientX - rect.x)*this.max / rect.width)));
@@ -74,25 +73,20 @@ export default {
 			// "Trigger" a fake change event
 			this.updateValue(1, { type: 'change', target: { value } });
 		},
-		updateValue(inputIndex, event)
-		{
+		updateValue(inputIndex, event) {
 			const newValues  = this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value, 10) : value);
 			const missingGap = this.minGap - (newValues[1] - newValues[0]);
 
 			// Prevent the values from being too close or overlapping
-			if (missingGap > 0)
-			{
-				if (inputIndex == 0)
-				{
+			if (missingGap > 0) {
+				if (inputIndex == 0) {
 					// Try "pushing" the second thumb forward
 					const spaceLeft = this.max - newValues[1];
 					newValues[1] += Math.min(spaceLeft, missingGap);
 
 					// Adjust the position of the first thumb accordingly
 					newValues[0] -= Math.max(0, missingGap - spaceLeft);
-				}
-				else if (inputIndex == 1)
-				{
+				} else if (inputIndex == 1) {
 					// Try "pushing" the first thumb backward
 					const spaceLeft = newValues[0] - this.min;
 					newValues[0] -= Math.min(spaceLeft, missingGap);

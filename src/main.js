@@ -35,8 +35,7 @@ Vue.directive('click-outside', VClickOutside.directive);
  * Register globally the base components
  */
 const baseComponents = require.context('@/components', false, /V[A-Z]\w+\.vue$/);
-baseComponents.keys().forEach(function(filename)
-{
+baseComponents.keys().forEach(function(filename) {
 	const name   = filename.split('/').pop().replace(/\.\w+$/, '');
 	const config = baseComponents(filename);
 

@@ -203,23 +203,19 @@ export default {
 	},
 
 	computed: {
-		infos()
-		{
+		infos() {
 			return `${notesNames[this.tonality]} ${models[this.model].name} ${this.isArpeggio(this.model) ? 'arpeggio' : 'scale'}`;
 		},
-		intervals()
-		{
+		intervals() {
 			return [0, ...models[this.model].intervals].map(interval => ({
 				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
 				value: interval,
 			}))
 		},
-		hasPositions()
-		{
+		hasPositions() {
 			return ('positions' in models[this.model]);
 		},
-		isOpen()
-		{
+		isOpen() {
 			return this.isOpenedByUser || this.nbSequences == 1;
 		},
 
@@ -229,8 +225,7 @@ export default {
 		]),
 	},
 
-	created()
-	{
+	created() {
 		this.tonalities       = notesNames;
 		this.modelOptions     = modelOptions;
 		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
@@ -246,12 +241,10 @@ export default {
 	},
 
 	methods: {
-		update(prop, value)
-		{
+		update(prop, value) {
 			this.$store.commit('sequences/update', { index: this.index, prop, value });
 		},
-		isArpeggio(model)
-		{
+		isArpeggio(model) {
 			return model.startsWith('arp-');
 		},
 	}

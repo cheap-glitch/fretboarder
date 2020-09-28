@@ -13,12 +13,10 @@ import { intervalsShorthands } from '@/modules/music'
 /**
  * Create and save an image of the fretboard
  */
-export function exportFretboard(format, ...svgParams)
-{
+export function exportFretboard(format, ...svgParams) {
 	const svg = exportFretboardToSVG.apply(null, svgParams);
 
-	switch (format)
-	{
+	switch (format) {
 		case 'jpg':
 		case 'png':
 			createCanvasFromSVG(svg.blob, svg.width*10, svg.height*10, canvas => saveAs(canvas.toDataURL(`image/${format}`), `fretboard.${format}`));
@@ -33,8 +31,7 @@ export function exportFretboard(format, ...svgParams)
 /**
  * Return a snapshot of the current state of the fretboard in SVG format
  */
-function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, displayedInfo, isFretboardFlippedHor, isShowingFretNbs, isDarkModeOn, isSizeFixed)
-{
+function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, displayedInfo, isFretboardFlippedHor, isShowingFretNbs, isDarkModeOn, isSizeFixed) {
 	const svg             = [];
 	const gradients       = [];
 
@@ -101,11 +98,9 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 	 * Frets
 	 * ---------------------------------------------------------------------
 	 */
-	for (let fret=fretMin, offset=0; fret<=fretMax; fret++)
-	{
+	for (let fret=fretMin, offset=0; fret<=fretMax; fret++) {
 		// Draw the fret number
-		if (isShowingFretNbs && fret > 0)
-		{
+		if (isShowingFretNbs && fret > 0) {
 			const x = offset - getFretY(fret)/2 + marginRight;
 
 			// Flip the fret numbers if needed
@@ -144,63 +139,41 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 		});
 
 		// Draw the inlays
-		if (fretsWithInlays.includes(fret))
-		{
-			if (nbStrings <= 6)
-			{
+		if (fretsWithInlays.includes(fret)) {
+			if (nbStrings <= 6) {
 				drawInlay(fretboardHeight/2);
-			}
-			else if (nbStrings == 7)
-			{
+			} else if (nbStrings == 7) {
 				drawInlay(fretboardHeight/2 - fretHeight/2);
 				drawInlay(fretboardHeight/2 + fretHeight/2);
-			}
-			else if (nbStrings == 8)
-			{
+			} else if (nbStrings == 8) {
 				drawInlay(fretboardHeight/2 - fretHeight);
 				drawInlay(fretboardHeight/2 + fretHeight);
-			}
-			else
-			{
-				if (nbStrings % 2 == 0)
-				{
+			} else {
+				if (nbStrings % 2 == 0) {
 					drawInlay(fretboardHeight/2 - fretHeight*2);
 					drawInlay(fretboardHeight/2 + fretHeight*2);
-				}
-				else
-				{
+				} else {
 					drawInlay(fretboardHeight/2 - fretHeight*3/2);
 					drawInlay(fretboardHeight/2 + fretHeight*3/2);
 				}
 			}
 		}
-		if (fret == 12)
-		{
-			if (nbStrings <= 6)
-			{
+		if (fret == 12) {
+			if (nbStrings <= 6) {
 				drawInlay(fretboardHeight/2 - fretHeight);
 				drawInlay(fretboardHeight/2 + fretHeight);
-			}
-			else if (nbStrings == 7)
-			{
+			} else if (nbStrings == 7) {
 				drawInlay(fretboardHeight/2 - fretHeight*3/2);
 				drawInlay(fretboardHeight/2 + fretHeight*3/2);
-			}
-			else if (nbStrings == 8)
-			{
+			} else if (nbStrings == 8) {
 				drawInlay(fretboardHeight/2 - fretHeight*2);
 				drawInlay(fretboardHeight/2 + fretHeight*2);
-			}
-			else
-			{
-				if (nbStrings % 2 == 0)
-				{
+			} else {
+				if (nbStrings % 2 == 0) {
 					drawInlay(fretboardHeight/2);
 					drawInlay(fretboardHeight/2 - fretHeight*3);
 					drawInlay(fretboardHeight/2 + fretHeight*3);
-				}
-				else
-				{
+				} else {
 					drawInlay(fretboardHeight/2 - fretHeight*5/2);
 					drawInlay(fretboardHeight/2 + fretHeight*5/2);
 				}
@@ -223,8 +196,7 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 	 * Strings
 	 * ---------------------------------------------------------------------
 	 */
-	for (let string=0; string<nbStrings; string++)
-	{
+	for (let string=0; string<nbStrings; string++) {
 		appendSingleTag(svg, 'line', {
 			x1:             marginRight,
 			x2:             fretboardWidth    + marginRight,
@@ -247,13 +219,11 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 
 	// Draw the notes
 	let offset = 0;
-	displayedFrets.forEach(function(fret)
-	{
+	displayedFrets.forEach(function(fret) {
 		// Reset the horizontal offset at the start of every string
 		if (fret.number == 0) offset = 0;
 
-		if (fret.sequences.length)
-		{
+		if (fret.sequences.length) {
 			const x = (fret.number == 0) ? 1.8 : offset - getFretY(fret.number)/2 + marginRight;
 			const y = fret.string*fretHeight + marginTop;
 			const size = 1.6;
@@ -273,14 +243,12 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 			);
 
 			// Draw the note info
-			if (displayedInfo != 'none')
-			{
+			if (displayedInfo != 'none') {
 				// If the fretboard is flipped, flip the text again to render it properly
 				if (isFretboardFlippedHor) openTag(svg, 'g', { transform: `translate(${svgWidth}, 0) scale(-1, 1)` });
 
 				const info = (() => {
-					switch (displayedInfo)
-					{
+					switch (displayedInfo) {
 						case 'name':     return notesNames[fret.note];
 						case 'degree':   return degrees[fret.sequences[0].interval];
 						case 'interval': return intervalsShorthands[fret.sequences[0].interval];
@@ -309,15 +277,13 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 	 * Gradients
 	 * ---------------------------------------------------------------------
 	 */
-	gradients.forEach(function(gradient)
-	{
+	gradients.forEach(function(gradient) {
 		openTag(svg, 'linearGradient', {
 			id: `lg-${gradient}`,
 			// gradientTransform: 'rotate(45)',
 		});
 
-		gradient.split('-').forEach(function(stopColor, stopIndex, colors)
-		{
+		gradient.split('-').forEach(function(stopColor, stopIndex, colors) {
 			appendSingleTag(svg, 'stop', { offset:     `${stopIndex*(100/colors.length)}%`, stopColor });
 			appendSingleTag(svg, 'stop', { offset: `${(stopIndex+1)*(100/colors.length)}%`, stopColor });
 		});
@@ -337,8 +303,7 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 /**
  * Create a canvas from a SVG and apply a callback on the result
  */
-function createCanvasFromSVG(svg, width, height, callback)
-{
+function createCanvasFromSVG(svg, width, height, callback) {
 	// Create a canvas the size of the SVG
 	const canvas  = document.createElement('canvas');
 	canvas.width  = width;
@@ -354,8 +319,7 @@ function createCanvasFromSVG(svg, width, height, callback)
 	const url     = domURL.createObjectURL(svg);
 	const img     = new Image();
 
-	img.onload = function ()
-	{
+	img.onload = function () {
 		// Draw the SVG on a white background
 		context.fillStyle = 'white';
 		context.fillRect(      0, 0, canvas.width, canvas.height);

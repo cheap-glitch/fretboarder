@@ -9,14 +9,12 @@ import { NB_FRETS, MAX_NB_FRETS } from '@/modules/constants'
 /**
  * Generate a list of frets with infos on the sequences they belong to
  */
-export function getFrets(sequences, tuningNotes, capo)
-{
+export function getFrets(sequences, tuningNotes, capo) {
 	// Get the index of the fret of the root note on the lowest string for every sequence
 	const positionOffsets = sequences.map(seq => getInterval(tuningNotes[0], seq.tonality));
 
 	// Build an array of frets for each string and flatten them in a single list
-	return tuningNotes.flatMap(function(openStringNote, stringNumber)
-	{
+	return tuningNotes.flatMap(function(openStringNote, stringNumber) {
 		// Create the frets
 		const frets = [...Array(NB_FRETS).keys()].map(fretNumber => ({
 			string:        stringNumber,
@@ -27,22 +25,19 @@ export function getFrets(sequences, tuningNotes, capo)
 		}));
 
 		// Sort the sequences to process the non-intersected ones first
-		[...sequences].sort(function(a, b)
-		{
+		[...sequences].sort(function(a, b) {
 			if (a.isIntersected && !b.isIntersected) return  1;
 			if (b.isIntersected && !a.isIntersected) return -1;
 
 			return 0;
 		})
 		// Mark the frets that belong to each sequence
-		.forEach(function(seq, seqIndex)
-		{
+		.forEach(function(seq, seqIndex) {
 			// Find the first fret whose note is the root of the sequence
 			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
 
 			// Create a function to add a reference to the sequence into the frets corresponding to the given interval
-			function applyInterval(interval)
-			{
+			function applyInterval(interval) {
 				const fretNumber = rootFret + interval;
 
 				// If the sequence is intersected, check that there is already at least one other sequence on the fret
@@ -55,8 +50,7 @@ export function getFrets(sequences, tuningNotes, capo)
 					return;
 
 				// Modify the current fret and the one 12 half-steps above/below it
-				[fretNumber, (fretNumber + 12) % NB_FRETS].forEach(function(fret)
-				{
+				[fretNumber, (fretNumber + 12) % NB_FRETS].forEach(function(fret) {
 					frets[fret].sequences.push({ index: seq.index, interval });
 
 					if (interval === seq.highlightedInterval)
@@ -77,8 +71,7 @@ export function getFrets(sequences, tuningNotes, capo)
 /**
  * Check that a fret is in the boundaries of a position
  */
-function isInPosition(fretNumber, position, offset)
-{
+function isInPosition(fretNumber, position, offset) {
 	const start     = position[0] + offset;
 	const stop      = position[1] + offset;
 	const otherFret = (fretNumber + 12) % NB_FRETS;
@@ -91,8 +84,7 @@ function isInPosition(fretNumber, position, offset)
 /**
  * Return the positive number of half-steps between two notes
  */
-function getInterval(note1, note2)
-{
+function getInterval(note1, note2) {
 	const index1 = notes.indexOf(note1);
 	const index2 = notes.indexOf(note2);
 

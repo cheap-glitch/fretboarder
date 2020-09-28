@@ -83,8 +83,7 @@ export default {
 		...get(['isMobileDevice']),
 	},
 
-	created()
-	{
+	created() {
 		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 	},
 }

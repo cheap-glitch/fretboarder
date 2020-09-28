@@ -60,8 +60,7 @@ const mutations = {
 	...makeTogglers(state),
 
 	// Reset the tuning to the default when switching between different instruments
-	instrument(state, value)
-	{
+	instrument(state, value) {
 		state.tuning     = 'standard';
 		state.instrument = value;
 	},

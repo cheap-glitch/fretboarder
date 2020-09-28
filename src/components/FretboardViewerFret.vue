@@ -113,25 +113,20 @@ export default {
 	},
 
 	computed: {
-		intervals()
-		{
+		intervals() {
 			// Make a list of intervals, each with the list of sequences that contain them
-			const intervals = this.sequences.reduce(function(list, seq)
-			{
+			const intervals = this.sequences.reduce(function(list, seq) {
 				const index = list.findIndex(item => item.value == seq.interval);
 
 				// If the interval is not in the list
-				if (index === -1)
-				{
+				if (index === -1) {
 					list.push({
 						name:      intervalsNames[seq.interval],
 						value:     seq.interval,
 						sequences: [seq.index],
 					});
-				}
 				// If the interval is already in the list
-				else
-				{
+				} else {
 					list[index].sequences.push(seq.index);
 				}
 
@@ -144,8 +139,7 @@ export default {
 
 			return intervals;
 		},
-		noteBg()
-		{
+		noteBg() {
 			if (!this.isActive) return { 'background-color': 'var(--color--bg--highlight)' };
 
 			// Build a solid gradient with the colors of every sequence the fret note belongs to
@@ -154,40 +148,32 @@ export default {
 
 			return { background: `linear-gradient(-45deg, ${gradient})` };
 		},
-		colors()
-		{
+		colors() {
 			return this.$store.state.sequences.sequences.map(seq => seq.color);
 		},
-		infos()
-		{
+		infos() {
 			if (!this.isActive) return notesNames[this.note];
 
-			switch (this.displayedInfos)
-			{
+			switch (this.displayedInfos) {
 				case 'name':     return notesNames[this.note];
 				case 'degree':   return degrees[this.sequences[0].interval];
 				case 'interval': return intervalsShorthands[this.sequences[0].interval];
 				default:         return '';
 			}
 		},
-		isActive()
-		{
+		isActive() {
 			return this.sequences.length > 0;
 		},
-		isOpenString()
-		{
+		isOpenString() {
 			return this.number == 0;
 		},
-		isStartingFret()
-		{
+		isStartingFret() {
 			return this.number == this.fretMin && this.number > 0;
 		},
-		isFirstFret()
-		{
+		isFirstFret() {
 			return this.number == 1;
 		},
-		isShowingNoteInfos()
-		{
+		isShowingNoteInfos() {
 			return this.displayedInfos != 'none';
 		},
 

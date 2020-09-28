@@ -9,7 +9,6 @@ import { models } from '../src/modules/music.js'
 describe("scales", () => {
 
 	describe("pentatonics", () => {
-
 		// https://en.wikipedia.org/wiki/Pentatonic_scale
 		testModel('maj5',  'C D E G A C');
 		testModel('min5',  'C E♭ F G B♭ C');
@@ -28,7 +27,6 @@ describe("scales", () => {
 	});
 
 	describe("hexatonics", () => {
-
 		// https://en.wikipedia.org/wiki/C_(musical_note)
 		testModel('maj6', 'C D E F G A C');
 		testModel('min6', 'C D E♭ F G A♭ C');
@@ -46,7 +44,6 @@ describe("scales", () => {
 	});
 
 	describe("heptatonics", () => {
-
 		// https://en.wikipedia.org/wiki/C_(musical_note)
 		testModel('ion',      'C D E F G A B C');
 		testModel('dor',      'C D E♭ F G A B♭ C');
@@ -99,7 +96,6 @@ describe("scales", () => {
 	});
 
 	describe("octatonics", () => {
-
 		// https://en.wikipedia.org/wiki/Octatonic_scale
 		testModel('dimhw',      'C C# D# E F# G A Bb C');
 		testModel('dimwh',      'C D Eb F F# G# A B C');
@@ -214,16 +210,14 @@ describe("arpeggios", () => {
 /**
  * Helper function to test a single model
  */
-function testModel(modelName, notes, tonality = 'C')
-{
+function testModel(modelName, notes, tonality = 'C') {
 	it(modelName, () => generateModelNotes(modelName, tonality).should.have.ordered.members(parseNotes(notes, tonality)));
 }
 
 /**
  * Parse a string of notes into a array of intervals
  */
-function parseNotes(notes, tonality)
-{
+function parseNotes(notes, tonality) {
 	return notes
 		.trim()
 		.replace(RegExp(`${tonality}$`), '')
@@ -240,8 +234,7 @@ function parseNotes(notes, tonality)
  * Return a string containing all the notes
  * of a scale/arpeggio in the C tonality, separated by spaces
  */
-function generateModelNotes(modelName, tonality)
-{
+function generateModelNotes(modelName, tonality) {
 	return [0, ...models[modelName].intervals].map(interval => (notesValues[tonality] + interval) % 12);
 }
 

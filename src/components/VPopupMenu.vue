@@ -56,15 +56,13 @@ export default {
 	},
 
 	watch: {
-		forceClosing()
-		{
+		forceClosing() {
 			this.isOpen = false;
 		},
 	},
 
 	methods: {
-		clickOutsideHandler(event)
-		{
+		clickOutsideHandler(event) {
 			if (!this.$refs.button.$el.contains(event.target))
 				this.isOpen = false;
 		},

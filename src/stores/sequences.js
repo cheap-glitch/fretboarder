@@ -32,28 +32,22 @@ const getters = {
  * Mutations
  */
 const mutations = {
-	add(state)
-	{
+	add(state) {
 		addSequence(state);
 	},
-	duplicate(state, index)
-	{
+	duplicate(state, index) {
 		addSequence(state, state.sequences[index]);
 	},
-	update(state, params)
-	{
+	update(state, params) {
 		Vue.set(state.sequences[params.index], params.prop, params.value);
 	},
-	toggleFocus(state, index)
-	{
+	toggleFocus(state, index) {
 		state.sequences.forEach(seq => Vue.set(seq, 'isFocused', (seq.index == index && !seq.isFocused)));
 	},
-	hideAll(state)
-	{
+	hideAll(state) {
 		state.sequences.forEach(seq => Vue.set(seq, 'isVisible', false));
 	},
-	remove(state, index)
-	{
+	remove(state, index) {
 		// Remove the sequence and update the index of the others
 		state.sequences = state.sequences.filter(seq => seq.index != index).map((seq, index) => ({ ...seq, ...index }));
 
@@ -61,8 +55,7 @@ const mutations = {
 		if (state.sequences.length == 1)
 			Vue.set(state.sequences[0], 'isIntersected', false);
 	},
-	removeAll(state)
-	{
+	removeAll(state) {
 		state.sequences = [];
 	},
 };
@@ -70,8 +63,7 @@ const mutations = {
 /**
  * Helpers
  */
-function addSequence(state, params = {})
-{
+function addSequence(state, params = {}) {
 	// Limit the total number of sequences
 	if (state.sequences.length >= MAX_NB_SEQUENCES)
 		return;

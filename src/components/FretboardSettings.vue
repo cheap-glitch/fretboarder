@@ -202,8 +202,7 @@ export default {
 	computed: {
 		lowestFret()  { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 1 : 0])); },
 		highestFret() { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 0 : 1])); },
-		tunings()
-		{
+		tunings() {
 			return mapObjectToObject(tunings[this.instrument], tuning => tuningsNames[tuning]);
 		},
 		...sync([
@@ -231,8 +230,7 @@ export default {
 		]),
 	},
 
-	created()
-	{
+	created() {
 		this.MIN_NB_FRETS = MIN_NB_FRETS;
 		this.MAX_NB_FRETS = MAX_NB_FRETS;
 
@@ -241,8 +239,7 @@ export default {
 	},
 
 	methods: {
-		exportFretboard(format)
-		{
+		exportFretboard(format) {
 			this.exportMenuClose = !this.exportMenuClose;
 
 			exportFretboard(

@@ -126,14 +126,11 @@ export default {
 	},
 
 	computed: {
-		colorscheme()
-		{
+		colorscheme() {
 			return mapObjectToObject(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
 		},
-		instrumentIcon()
-		{
-			switch (this.instrument)
-			{
+		instrumentIcon() {
+			switch (this.instrument) {
 				case 'bass':     return 'guitar-electric';
 				case 'banjo-4':  return 'banjo';
 				case 'banjo-5':  return 'banjo';
@@ -153,8 +150,7 @@ export default {
 		]),
 	},
 
-	created()
-	{
+	created() {
 		this.feedbackMail = {
 			subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
 			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
@@ -165,14 +161,12 @@ export default {
 			this.$store.commit('sequences/add');
 	},
 
-	mounted()
-	{
+	mounted() {
 		// Listen to any changes on the device type and layout orientation
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].addListener(this[`update.${mq}`]));
 	},
 
-	destroyed()
-	{
+	destroyed() {
 		// Clear event listeners
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[`update.${mq}`]));
 	},

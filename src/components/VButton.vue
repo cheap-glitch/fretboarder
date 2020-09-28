@@ -60,8 +60,7 @@ export default {
 	},
 
 	methods: {
-		clickButton()
-		{
+		clickButton() {
 			if (!this.isDisabled)
 				this.$emit('click');
 		}
