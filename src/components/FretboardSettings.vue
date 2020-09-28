@@ -272,8 +272,9 @@ export default {
 .FretboardSettings {
 	@include mq($until: desktop)
 	{
-		@include center-column;
-		@include space-children-v(30px);
+		display: flex;
+		align-items: stretch;
+		flex-direction: column;
 	}
 
 	@include mq($from: desktop)

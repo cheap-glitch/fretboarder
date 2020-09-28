@@ -198,9 +198,12 @@ export default {
 
 	flex: 1 1 auto;
 
-	padding: 12px;
-
 	background-color: var(--color--bg);
+
+	@include mq($from: desktop)
+	{
+		padding: 12px;
+	}
 }
 
 .fretboard-wrapper {
@@ -243,6 +246,11 @@ export default {
 	justify-content: space-between;
 
 	margin-bottom: 40px;
+
+	@include mq($until: desktop)
+	{
+		background-color: var(--color--bg--tooltip);
+	}
 }
 
 .header__logo {

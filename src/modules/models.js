@@ -10,8 +10,8 @@ export const models = [
 			...getModels([
 				'maj5',
 				'min5',
-				'bmaj',
 				'bmin',
+				'bmaj',
 			]),
 			'ion': 'Natural major',
 			'aeo': 'Natural minor',
@@ -29,10 +29,10 @@ export const models = [
 		label:   'Pentatonic scales',
 		options: getModels([
 			'maj5',
-			'min5',
-			'bmaj5',
-			'bmin5',
 			'egyp',
+			'bmin5',
+			'bmaj5',
+			'min5',
 			'in',
 			'hira',
 			'iwa',
@@ -44,8 +44,8 @@ export const models = [
 		options: getModels([
 			'maj6',
 			'min6',
-			'bmaj',
 			'bmin',
+			'bmaj',
 			'aug',
 			'wtone',
 			'tri',
