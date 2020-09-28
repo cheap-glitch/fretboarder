@@ -78,7 +78,7 @@ div.FretboardSequencesItem
 			//- Model
 			VSelect(
 				:value="model"
-				:options="modelsOptionGroups"
+				:options="modelOptions"
 				:label-formatter="(value, label) => `${label} ${isArpeggio(value) ? 'arp.' : 'scale'}`"
 
 				@change="v => update('model', v)"
@@ -138,13 +138,13 @@ div.FretboardSequencesItem
 <!--{{{ JavaScript -->
 <script>
 
-import { get }                          from 'vuex-pathify'
+import { get }                        from 'vuex-pathify'
 
-import { MAX_NB_SEQUENCES }             from '@/modules/constants'
-import { models, notes, notesNames }    from '@/modules/music'
-import { models as modelsOptionGroups } from '@/modules/models'
+import { MAX_NB_SEQUENCES }           from '@/modules/constants'
+import { models, notes, notesNames }  from '@/modules/music'
+import { modelOptions }               from '@/modules/models'
 
-import FretboardSequencesItemInterval   from '@/components/FretboardSequencesItemInterval'
+import FretboardSequencesItemInterval from '@/components/FretboardSequencesItemInterval'
 
 export default {
 	name: 'FretboardSequencesItem',
@@ -231,9 +231,9 @@ export default {
 
 	created()
 	{
-		this.MAX_NB_SEQUENCES   = MAX_NB_SEQUENCES;
-		this.tonalities         = notesNames;
-		this.modelsOptionGroups = modelsOptionGroups;
+		this.tonalities       = notesNames;
+		this.modelOptions     = modelOptions;
+		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 
 		this.positions = {
 			0: 'Whole',

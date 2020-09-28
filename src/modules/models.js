@@ -3,7 +3,9 @@
  * modules/models.js
  */
 
-export const models = [
+import { models } from '@/modules/music.js'
+
+export const modelOptions = [
 	{
 		label:   'Common scales',
 		options: {
@@ -205,7 +207,6 @@ export const models = [
 /**
  * Helper function to return an object with the models as keys and their name as values
  */
-function getModels(selectedModels)
-{
+function getModels(selectedModels) {
 	return Object.fromEntries(selectedModels.map(model => [model, models[model].name]));
 }
