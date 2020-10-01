@@ -32,12 +32,10 @@
     }
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.30",
-    "@fortawesome/free-brands-svg-icons": "^5.14.0",
-    "@fortawesome/pro-regular-svg-icons": "^5.13.0",
-    "@fortawesome/pro-solid-svg-icons": "^5.13.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.31",
+    "@fortawesome/free-brands-svg-icons": "^5.15.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
-    "@popperjs/core": "^2.5.2",
+    "@popperjs/core": "^2.5.3",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
     "register-service-worker": "^1.7.1",
@@ -49,8 +47,8 @@
     "vuex-plugin-save-state": "^1.1.0"
   },
   "optionalDependencies": {
-    "@fortawesome/pro-regular-svg-icons": "^5.13.0",
-    "@fortawesome/pro-solid-svg-icons": "^5.13.0"
+    "@fortawesome/pro-regular-svg-icons": "^5.15.0",
+    "@fortawesome/pro-solid-svg-icons": "^5.15.0"
   },
   "devDependencies": {
     "@cheap-glitch/scss-mixins": "^1.0.1",
@@ -66,7 +64,7 @@
     "chai": "^4.2.0",
     "eslint": "^7.10.0",
     "eslint-plugin-smarter-tabs": "^1.1.2",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.0.1",
     "fibers": "^5.0.0",
     "nodemon": "^2.0.4",
     "nyc": "^15.1.0",

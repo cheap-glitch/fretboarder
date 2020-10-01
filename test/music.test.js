@@ -63,7 +63,7 @@ describe("scales", () => {
 		testModel('dharmmin', 'C D Eb F# G Ab B C');
 		// https://en.wikipedia.org/wiki/C_(musical_note)
 		testModel('amel',     'C D E♭ F G A B C');
-		testModel('dmel',     (a => { a.reverse(); return a; })('C B♭ A♭ G F E♭ D C'.split(' ')).join(' '));
+		testModel('dmel',     (a => { a.reverse(); return a; })('C B♭ A♭ G F E♭ D C'.split(/\s+/)).join(' '));
 
 		// https://en.wikipedia.org/wiki/Jazz_scale#Modes_of_the_melodic_minor_scale
 		testModel('dorf2',    'C–D♭–E♭–F–G–A–B♭');
@@ -222,11 +222,10 @@ function parseNotes(notes, tonality) {
 		.trim()
 		.replace(RegExp(`${tonality}$`), '')
 		.replace(/[-–,]/g, ' ')
-		.replace(/ {2,}/g, ' ')
 		.trim()
 		.replace(/♭/g, 'b')
 		.replace(/♯/g, '#')
-		.split(' ')
+		.split(/\s+/)
 		.map(note => notesValues[note]);
 }
 
