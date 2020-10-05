@@ -47,11 +47,10 @@ div.FretboardSettings
 				:options="capoFrets"
 				icon="arrow-circle-up"
 				is-contained
+				is-last-item
 
 				v-model.number="capo"
 				)
-
-			div.settings-menu__separator
 
 	//----------------------------------------------------------------------
 	//- Display settings

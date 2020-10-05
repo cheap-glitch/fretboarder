@@ -40,7 +40,7 @@ div.VSelect
 			+options("options")
 
 	//- Fake select bar
-	div.bar(v-mods="{ isContained, isFirstItem }")
+	div.bar(v-mods="{ isContained, isFirstItem, isLastItem }")
 
 		div.bar__label
 			//- Icon
@@ -104,6 +104,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isLastItem: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -163,9 +167,16 @@ export default {
 
 	color: var(--color--text);
 
-	&.is-contained.is-first-item {
-		border-top-left-radius: 4px;
-		border-top-right-radius: 4px;
+	&.is-contained {
+		&.is-first-item {
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+		}
+
+		&.is-last-item {
+			border-bottom-left-radius: 4px;
+			border-bottom-right-radius: 4px;
+		}
 	}
 
 	&:not(.is-contained) {
