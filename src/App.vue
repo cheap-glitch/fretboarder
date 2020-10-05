@@ -282,51 +282,6 @@ export default {
 	}
 }
 
-.dark-mode-switch {
-	display: flex;
-	align-items: center;
-	@include space-children-h(5px);
-
-	border: none;
-	appearance: none;
-	background: none;
-
-	color: var(--color--text--secondary);
-
-	cursor: pointer;
-
-	&.is-dark-mode-on       { &:hover, &:focus { & .dark-mode-switch__sun  { color: var(--color--hover); } } }
-	&:not(.is-dark-mode-on) { &:hover, &:focus { & .dark-mode-switch__moon { color: var(--color--hover); } } }
-}
-
-.dark-mode-switch__toggle {
-	position: relative;
-
-	width: 20px;
-	height: 12px;
-	@include pill;
-
-	border: 2px solid var(--color--border);
-
-	&::after {
-		content: "";
-
-		position: absolute;
-		top: 0;
-		left: 0;
-
-		@include circle(8px);
-
-		background-color: var(--color--hover);
-
-		transition: transform 200ms;
-
-		.dark-mode-switch.is-dark-mode-on & {
-			transform: translateX(8px);
-		}
-	}
-}
-
 .header__sublinks {
 	display: flex;
 	justify-content: flex-end;
@@ -339,7 +294,7 @@ export default {
 	font-size: 20px;
 
 	color: white;
-	background-color: var(--color--bg--tooltip);
+	border: 1px solid white;
 
 	cursor: pointer;
 
@@ -391,11 +346,6 @@ export default {
 
 .link-support    { color: var(--color--red);    }
 .link-tgld:hover { color: var(--color--orange); }
-
-/**
- * Settings
- * -----------------------------------------------------------------------------
- */
 
 </style>
 <!--}}}-->
