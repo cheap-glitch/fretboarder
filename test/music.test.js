@@ -69,7 +69,6 @@ describe("scales", () => {
 		testModel('dorf2',    'C–D♭–E♭–F–G–A–B♭');
 		testModel('lydaug',   'C–D–E–F♯–G♯–A–B');
 		testModel('lyddom',   'C–D–E–F♯–G–A–B♭');
-		testModel('mixf6',    'C–D–E–F–G–A♭–B♭');
 		testModel('locrs2',   'C–D–E♭–F–G♭–A♭–B♭');
 		testModel('alt',      'C–D♭–E♭–F♭–G♭–A♭–B♭');
 		// https://en.wikipedia.org/wiki/Phrygian_dominant_scale

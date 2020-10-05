@@ -118,7 +118,6 @@ export const models = {
 	'dorf2':           { intervals: [1,  3,  5,  7,  9, 10],                     name: 'dorian ♭2'                                                                              },
 	'lydaug':          { intervals: [2,  4,  6,  8,  9, 11],                     name: 'lydian augmented'                                                                       },
 	'lyddom':          { intervals: [2,  4,  6,  7,  9, 10],                     name: 'lydian dominant'                                                                        },
-	'mixf6':           { intervals: [2,  4,  5,  7,  8, 10],                     name: 'mixolydian ♭6'                                                                          },
 	'locrs2':          { intervals: [2,  3,  5,  6,  8, 10],                     name: 'locrian ♯2'                                                                             },
 	'alt':             { intervals: [1,  3,  4,  6,  8, 10],                     name: 'altered'                                                                                },
 	'phrydom':         { intervals: [1,  4,  5,  7,  8, 10],                     name: 'phrygian dominant'                                                                      },
