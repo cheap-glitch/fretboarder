@@ -122,7 +122,7 @@ export default {
 
 	font-size: 1.4rem;
 
-	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+	filter: drop-shadow(0 0 2px var(--color--drop-shadow));
 
 	&[data-popper-placement^="bottom"] > .arrow { top:    -4px; }
 	&[data-popper-placement^="right"]  > .arrow { left:   -4px; }

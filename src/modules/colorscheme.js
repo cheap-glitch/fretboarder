@@ -27,24 +27,25 @@ const colors = {
 };
 
 const colorscheme = {
-	'--color--bg':              ['white',           colors.mirage],
-	'--color--bg--accent':      [colors.athensGray, colors.mirage2],
-	'--color--bg--highlight':   [colors.snow,       colors.ebonyClay],
-	'--color--bg--tooltip':     [colors.slateGray,  colors.slateGray],
+	'--color--bg':              ['white',              colors.mirage],
+	'--color--bg--accent':      [colors.athensGray,    colors.mirage2],
+	'--color--bg--highlight':   [colors.snow,          colors.ebonyClay],
+	'--color--bg--tooltip':     [colors.slateGray,     colors.slateGray],
 
-	'--color--border':          ['lightgray',       colors.oxfordBlue],
+	'--color--border':          ['lightgray',          colors.oxfordBlue],
+	'--color--drop-shadow':     ['#00000088',          '#000000EE'],
 
-	'--color--text':            [colors.black,      colors.nepal],
-	'--color--text--secondary': ['gray',            colors.oxfordBlue2],
+	'--color--text':            [colors.black,         colors.nepal],
+	'--color--text--secondary': ['gray',               colors.oxfordBlue2],
 
-	'--color--hover':           [colors.azure,      colors.azure],
-	'--color--highlight':       [colors.sun,        colors.sun],
+	'--color--hover':           [colors.azure,         colors.azure],
+	'--color--highlight':       [colors.sun,           colors.sun],
 
-	'--color--string':          [colors.black,      colors.oxfordBlue],
-	'--color--fret':            ['darkgray',        colors.ebonyClay],
+	'--color--string':          [colors.black,         colors.oxfordBlue],
+	'--color--fret':            ['darkgray',           colors.ebonyClay],
 
-	'--color--red':             [colors.crimson,    colors.crimson],
-	'--color--orange':          [colors.cinnabar,   colors.cinnabar],
+	'--color--red':             [colors.crimson,       colors.crimson],
+	'--color--orange':          [colors.cinnabar,      colors.cinnabar],
 };
 
 module.exports = {
