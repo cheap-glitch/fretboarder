@@ -194,21 +194,18 @@ export default {
 
 	background-color: var(--color--bg);
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		padding: 12px;
 	}
 }
 
 .fretboard-wrapper {
-	@include mq($until: desktop, $and: '(orientation: portrait)')
-	{
+	@include mq($until: desktop, $and: '(orientation: portrait)') {
 		display: flex;
 		justify-content: center;
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
@@ -223,8 +220,7 @@ export default {
 }
 
 .FretboardSequences {
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		padding: 0 10px;
 	}
 }
@@ -241,8 +237,7 @@ export default {
 
 	margin-bottom: 40px;
 
-	@include mq($until: desktop)
-	{
+	@include mq($until: desktop) {
 		background-color: var(--color--bg--tooltip);
 	}
 }
@@ -269,8 +264,7 @@ export default {
 
 	&.is-ukulele { font-size: 12px; }
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		font-size: 20px;
 
 		&.is-ukulele { font-size: 14px; }
@@ -283,8 +277,7 @@ export default {
 
 	transition: color 200ms;
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		font-size: 24px;
 	}
 }

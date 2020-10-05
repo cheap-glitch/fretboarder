@@ -98,8 +98,7 @@ export default {
 .FretboardSequences {
 	@include space-children-v(40px);
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		max-width: 1400px;
 		margin: auto;
 	}
@@ -108,8 +107,7 @@ export default {
 .sequences {
 	@include space-children-v(20px);
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		@include space-children-v(40px);
 	}
 }

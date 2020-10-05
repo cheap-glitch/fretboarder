@@ -287,8 +287,7 @@ export default {
 }
 
 .settings {
-	@include mq($until: desktop)
-	{
+	@include mq($until: desktop) {
 		@include space-children-v(30px);
 
 		padding: 20px 20px 10px 20px;
@@ -301,8 +300,7 @@ export default {
 		border-top: none;
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		display: flex;
 		align-items: flex-start;
 		@include space-children-h(40px);
@@ -316,13 +314,11 @@ export default {
 	flex-wrap: wrap;
 	@include space-children-h(10px);
 
-	@include mq($until: desktop)
-	{
+	@include mq($until: desktop) {
 		.VSelect { margin-bottom: 10px; }
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		flex: 0 0 auto;
 		align-items: center;
 		justify-content: flex-end;
@@ -336,13 +332,11 @@ export default {
 	grid-auto-rows: auto;
 	grid-template-columns: repeat(auto-fill, 60px);
 
-	@include mq($until: desktop)
-	{
+	@include mq($until: desktop) {
 		&.intervals { margin-bottom: 40px; }
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		align-content: center;
 
 		flex: 1 1 100%;
@@ -353,14 +347,12 @@ export default {
 .tools {
 	display: flex;
 
-	@include mq($until: desktop)
-	{
+	@include mq($until: desktop) {
 		flex-wrap: wrap;
 		.VButton { margin: 0 10px 10px 0; }
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		@include space-children-h(10px);
 	}
 }
