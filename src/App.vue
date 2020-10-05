@@ -205,11 +205,15 @@ export default {
 
 .fretboard-wrapper {
 	@include mq($until: desktop) {
-		margin: 40px 0;
-
 		@media (orientation: portrait) {
 			display: flex;
 			justify-content: center;
+
+			margin: 20px 0;
+		}
+
+		@media (orientation: landscape) {
+			margin: 40px 20px 0 20px;
 		}
 	}
 
