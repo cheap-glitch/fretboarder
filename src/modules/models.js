@@ -67,27 +67,43 @@ export const modelOptions = [
 			'locr',
 
 			'harmaj',
-			'dharmaj',
-			'harmmin',
+			// dorf5
+			// prhyf4
+			// lydf3
+			// mixf2
+			// lydaugs2
+			// locrff7
+
 			'amel',
 			'dmel',
-
 			'dorf2',
 			'lydaug',
 			'lyddom',
-			'mixf6',
+			'aeodom',
 			'locrs2',
 			'alt',
+
+			'harmmin',
+			// locr13
+			// ions5
+			// dors11
 			'phrydom',
+			// lyds2
+			// suplocrff7
+
+			'dharmaj',
+			// lyds2s6
 			'ultphry',
-			'aeodom',
+			'hungmin', // ?
+			'hungmaj',
+			// orient
+			// ions2s5
+			// locrff3ff7
 
 			'majneap',
 			'minneap',
-			'pers',
-			'hungmaj',
-			'hungmin',
 			'gypsy',
+			'pers',
 			'ukrdor',
 			'eni',
 		]),
@@ -98,11 +114,13 @@ export const modelOptions = [
 			'dimhw',
 			'dimwh',
 
-			'bebdom',
+			'bebharmin',
 			'bebmaj',
+
+			'bebdom',
+			// beblocr
 			'bebdor',
 			'bebdoralt',
-			'bebharmin',
 			'bebmel',
 		]),
 	},
