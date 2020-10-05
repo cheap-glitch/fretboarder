@@ -15,8 +15,8 @@ export const modelOptions = [
 				'bmin',
 				'bmaj',
 			]),
-			'ion': 'Natural major',
-			'aeo': 'Natural minor',
+			'ion': 'natural major',
+			'aeo': 'natural minor',
 		}
 	},
 	{
