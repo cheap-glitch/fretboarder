@@ -13,7 +13,7 @@ div.App#app(:style="colorscheme")
 	//----------------------------------------------------------------------
 	header.header
 		//- Logo
-		div.header__logo
+		div.header__logo(v-show="!isMobileDevice || subpage == 'fretboard'")
 			fa-icon.logo__icon(
 				:icon="['far', instrumentIcon]"
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
@@ -25,9 +25,13 @@ div.App#app(:style="colorscheme")
 
 		//- Sub-pages links (mobile)
 		nav.header__sublinks(v-if="isMobileDevice")
-			div.header__sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
-			div.header__sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =     'tools'"): fa-icon(:icon="['far', 'cog']")
-			div.header__sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
+			div.header__sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
+			div.header__sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
+			div.header__sublinks__item(v-show="isMobileDevice && subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
+
+		//- Sub-pages headers
+		h1.header__subpage-header(v-show="isMobileDevice && subpage == 'sequences'") Scales & arpeggios
+		h1.header__subpage-header(v-show="isMobileDevice && subpage ==  'settings'") Settings
 
 	//----------------------------------------------------------------------
 	//- Body
@@ -35,10 +39,10 @@ div.App#app(:style="colorscheme")
 	div#canvas-wrapper(v-show="false")
 
 	//- Settings (mobile)
-	transition(name="fade"): FretboardSettings(v-if="isMobileDevice && subpage == 'tools'")
+	transition(name="fade"): FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
-	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
+	transition(name="fade"): div.fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- Scales & arpeggios
@@ -200,9 +204,13 @@ export default {
 }
 
 .fretboard-wrapper {
-	@include mq($until: desktop, $and: '(orientation: portrait)') {
-		display: flex;
-		justify-content: center;
+	@include mq($until: desktop) {
+		margin: 40px 0;
+
+		@media (orientation: portrait) {
+			display: flex;
+			justify-content: center;
+		}
 	}
 
 	@include mq($from: desktop) {
@@ -235,27 +243,36 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 
-	margin-bottom: 40px;
-
 	@include mq($until: desktop) {
 		background-color: var(--color--bg--tooltip);
+	}
+
+	@include mq($from: desktop) {
+		margin-bottom: 40px;
 	}
 }
 
 .header__logo {
 	display: flex;
 	align-items: center;
-	@include space-children-h(5px);
+	@include space-children-h(8px);
 
-	padding: 4px 6px;
+	padding: 10px;
 
 	border-radius: 6px;
 
 	color: var(--color--bg);
-	background-color: var(--color--border);
 
-	&:hover {
-		background-color: var(--color--hover);
+	@include mq($from: desktop) {
+		@include space-children-h(5px);
+
+		padding: 4px 6px;
+
+		background-color: var(--color--border);
+
+		&:hover {
+			background-color: var(--color--hover);
+		}
 	}
 }
 
@@ -285,13 +302,15 @@ export default {
 .header__sublinks {
 	display: flex;
 	justify-content: flex-end;
+
+	padding: 10px;
 }
 
 .header__sublinks__item {
 	@include center-content;
-	@include circle(42px);
+	@include circle(36px);
 
-	font-size: 20px;
+	font-size: 18px;
 
 	color: white;
 	border: 1px solid white;
@@ -301,6 +320,15 @@ export default {
 	&:first-child {
 		margin-right: 10px;
 	}
+}
+
+.header__subpage-header {
+	flex: 1 1 100%;
+
+	font-size: 18px;
+	font-weight: bold;
+
+	color: white;
 }
 
 /**

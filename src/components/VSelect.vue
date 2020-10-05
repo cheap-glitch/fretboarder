@@ -164,18 +164,6 @@ export default {
 
 	color: var(--color--text);
 
-	&.is-contained {
-		&.is-first-item {
-			border-top-left-radius: 4px;
-			border-top-right-radius: 4px;
-		}
-
-		&.is-last-item {
-			border-bottom-left-radius: 4px;
-			border-bottom-right-radius: 4px;
-		}
-	}
-
 	&:not(.is-contained) {
 		border: 1px solid var(--color--border);
 		border-radius: 4px;
@@ -200,6 +188,16 @@ export default {
 
 	@include mq($from: desktop) {
 		padding: 8px 10px;
+
+		&.is-first-item {
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+		}
+
+		&.is-last-item {
+			border-bottom-left-radius: 4px;
+			border-bottom-right-radius: 4px;
+		}
 	}
 }
 
