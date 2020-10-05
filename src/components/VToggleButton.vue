@@ -9,7 +9,7 @@
 button.VToggleButton
 
 	div.label
-		fa-icon(
+		fa-icon.label__icon(
 			v-if="icon.length"
 			:icon="Array.isArray(icon) ? icon : ['far', icon]"
 			)
@@ -57,7 +57,7 @@ export default {
 	justify-content: space-between;
 	@include space-children-h(20px);
 
-	padding: 8px 14px 8px 10px;
+	padding: 16px 14px;
 
 	border: none;
 
@@ -79,16 +79,32 @@ export default {
 		border-bottom-left-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
+
+	@include mq($from: desktop) {
+		padding: 8px 14px 8px 10px;
+	}
 }
 
 .label {
 	display: flex;
-	@include space-children-h(10px);
+	@include space-children-h(20px);
 
-	color: var(--color--text);
+	font-size: 1.6rem;
+
+	@include mq($from: desktop) {
+		@include space-children-h(10px);
+	}
+}
+
+.label__icon {
+	width: 1.6rem;
+
+	color: var(--color--text--secondary);
 }
 
 .label__text {
+	color: var(--color--text);
+
 	cursor: pointer;
 }
 

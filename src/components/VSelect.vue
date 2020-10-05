@@ -44,10 +44,7 @@ div.VSelect
 
 		div.bar__label
 			//- Icon
-			fa-icon(
-				v-if="icon.length"
-				:icon="Array.isArray(icon) ? icon : ['far', icon]"
-				)
+			div.bar__label__icon(v-if="icon.length"): fa-icon(:icon="Array.isArray(icon) ? icon : ['far', icon]")
 			//- Current value
 			p.bar__label__text(v-html="selectedOptionLabel")
 
@@ -163,7 +160,7 @@ export default {
 
 	grid-area: 1 / 1;
 
-	padding: 8px 10px;
+	padding: 16px 14px;
 
 	color: var(--color--text);
 
@@ -200,16 +197,30 @@ export default {
 
 		cursor: not-allowed;
 	}
+
+	@include mq($from: desktop) {
+		padding: 8px 10px;
+	}
 }
 
 .bar__label {
 	display: flex;
-	@include space-children-h(10px);
+	@include space-children-h(20px);
+
+	font-size: 1.6rem;
+
+	@include mq($from: desktop) {
+		@include space-children-h(10px);
+	}
+}
+
+.bar__label__icon {
+	width: 1.6rem;
+
+	color: var(--color--text--secondary);
 }
 
 .bar__label__text {
-	font-size: 1.5rem;
-
 	.select:disabled + .bar & {
 		cursor: not-allowed;
 	}
