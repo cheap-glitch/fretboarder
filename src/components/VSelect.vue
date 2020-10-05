@@ -44,9 +44,9 @@ div.VSelect
 
 		div.bar__label
 			//- Icon
-			div.bar__label__icon(v-if="icon.length"): fa-icon(:icon="Array.isArray(icon) ? icon : ['far', icon]")
+			div.label__icon(v-if="icon.length"): fa-icon(:icon="Array.isArray(icon) ? icon : ['far', icon]")
 			//- Current value
-			p.bar__label__text(v-html="selectedOptionLabel")
+			p.label__text(v-html="selectedOptionLabel")
 
 		//- Chevron
 		fa-icon.bar__chevron(:icon="['far', 'chevron-down']")
@@ -164,6 +164,10 @@ export default {
 
 	color: var(--color--text);
 
+	&.is-contained {
+		border-bottom: 1px solid var(--color--bg--highlight);
+	}
+
 	&:not(.is-contained) {
 		border: 1px solid var(--color--border);
 		border-radius: 4px;
@@ -189,6 +193,10 @@ export default {
 	@include mq($from: desktop) {
 		padding: 8px 10px;
 
+		&.is-contained {
+			border: none;
+		}
+
 		&.is-first-item {
 			border-top-left-radius: 4px;
 			border-top-right-radius: 4px;
@@ -212,13 +220,13 @@ export default {
 	}
 }
 
-.bar__label__icon {
+.label__icon {
 	width: 1.6rem;
 
 	color: var(--color--text--secondary);
 }
 
-.bar__label__text {
+.label__text {
 	.select:disabled + .bar & {
 		cursor: not-allowed;
 	}

@@ -289,9 +289,15 @@ export default {
 }
 
 .settings-menu__separator {
+	display: none;
+
 	height: 1px;
 
 	background-color: var(--color--bg--highlight);
+
+	@include mq($from: desktop) {
+		display: block;
+	}
 }
 
 .fret-range {
@@ -305,7 +311,9 @@ export default {
 }
 
 .fret-range__text {
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	@include space-children-h(6px);
 
 	color: var(--color--text);

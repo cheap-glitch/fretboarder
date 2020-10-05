@@ -25,9 +25,9 @@ div.App#app(:style="colorscheme")
 
 		//- Sub-pages links (mobile)
 		nav.header__sublinks(v-if="isMobileDevice")
-			div.header__sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
-			div.header__sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
-			div.header__sublinks__item(v-show="isMobileDevice && subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
+			div.sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
+			div.sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
+			div.sublinks__item(v-show="isMobileDevice && subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
 
 		//- Sub-pages headers
 		h1.header__subpage-header(v-show="isMobileDevice && subpage == 'sequences'") Scales & arpeggios
@@ -265,13 +265,14 @@ export default {
 
 	border-radius: 6px;
 
-	color: var(--color--bg);
+	color: white;
 
 	@include mq($from: desktop) {
 		@include space-children-h(5px);
 
 		padding: 4px 6px;
 
+		color: var(--color--bg);
 		background-color: var(--color--border);
 
 		&:hover {
@@ -281,15 +282,9 @@ export default {
 }
 
 .logo__icon {
-	font-size: 18px;
+	font-size: 20px;
 
-	&.is-ukulele { font-size: 12px; }
-
-	@include mq($from: desktop) {
-		font-size: 20px;
-
-		&.is-ukulele { font-size: 14px; }
-	}
+	&.is-ukulele { font-size: 14px; }
 }
 
 .logo__text {
@@ -310,7 +305,7 @@ export default {
 	padding: 10px;
 }
 
-.header__sublinks__item {
+.sublinks__item {
 	@include center-content;
 	@include circle(36px);
 

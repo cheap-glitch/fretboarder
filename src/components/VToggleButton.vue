@@ -60,6 +60,7 @@ export default {
 	padding: 16px 14px;
 
 	border: none;
+	border-bottom: 1px solid var(--color--bg--highlight);
 
 	appearance: none;
 	background-color: transparent;
@@ -82,6 +83,8 @@ export default {
 
 	@include mq($from: desktop) {
 		padding: 8px 14px 8px 10px;
+
+		border-bottom: none;
 	}
 }
 
