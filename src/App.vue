@@ -213,7 +213,9 @@ export default {
 		}
 
 		@media (orientation: landscape) {
-			margin: 40px 20px 0 20px;
+			padding: 40px 20px;
+
+			overflow-x: scroll;
 		}
 	}
 
