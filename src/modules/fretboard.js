@@ -13,6 +13,14 @@ export function getFrets(sequences, tuningNotes, capo) {
 	// Get the index of the fret of the root note on the lowest string for every sequence
 	const positionOffsets = sequences.map(seq => getInterval(tuningNotes[0], seq.tonality));
 
+	// Sort the sequences to process the non-intersected ones first
+	const sortedSequences = [...sequences].sort(function(a, b) {
+		if (a.isIntersected && !b.isIntersected) return  1;
+		if (b.isIntersected && !a.isIntersected) return -1;
+
+		return 0;
+	});
+
 	// Build an array of frets for each string and flatten them in a single list
 	return tuningNotes.flatMap(function(openStringNote, stringNumber) {
 		// Create the frets
@@ -24,15 +32,8 @@ export function getFrets(sequences, tuningNotes, capo) {
 			isHighlighted: false,
 		}));
 
-		// Sort the sequences to process the non-intersected ones first
-		[...sequences].sort(function(a, b) {
-			if (a.isIntersected && !b.isIntersected) return  1;
-			if (b.isIntersected && !a.isIntersected) return -1;
-
-			return 0;
-		})
 		// Mark the frets that belong to each sequence
-		.forEach(function(seq, seqIndex) {
+		sortedSequences.forEach(function(seq, index) {
 			// Find the first fret whose note is the root of the sequence
 			const rootFret = frets.findIndex(fret => fret.note == seq.tonality);
 
