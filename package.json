@@ -66,6 +66,7 @@
     "eslint-plugin-smarter-tabs": "^1.1.2",
     "eslint-plugin-vue": "^7.0.1",
     "fibers": "^5.0.0",
+    "istanbul-instrumenter-loader": "^3.0.1",
     "nodemon": "^2.0.4",
     "nyc": "^15.1.0",
     "pug": "^3.0.0",
