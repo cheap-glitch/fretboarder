@@ -39,14 +39,14 @@ div.App#app(:style="colorscheme")
 	div#canvas-wrapper(v-show="false")
 
 	//- Settings (mobile)
-	transition(name="fade"): FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
+	FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
-	transition(name="fade"): div.fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
+	div.fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- Scales & arpeggios
-	transition(name="fade"): div.sequences-wrapper
+	div.sequences-wrapper
 		FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
 
 	//----------------------------------------------------------------------
