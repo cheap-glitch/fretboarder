@@ -46,12 +46,12 @@ export function getFrets(sequences, tuningNotes, capo) {
 				// If the sequence is limited to a single position, check that the fret is in its boundaries
 				if (seq.position != 0
 				 && ('positions' in models[seq.model])
-				 && !isInPosition(fretNumber, models[seq.model].positions[seq.position - 1], positionOffsets[seqIndex]))
+				 && !isInPosition(fretNumber, models[seq.model].positions[seq.position - 1], positionOffsets[index]))
 					return;
 
 				// Modify the current fret and the one 12 half-steps above/below it
 				[fretNumber, (fretNumber + 12) % NB_FRETS].forEach(function(fret) {
-					frets[fret].sequences.push({ index: seq.index, interval });
+					frets[fret].sequences.push({ index, interval });
 
 					if (interval === seq.highlightedInterval)
 						frets[fret].isHighlighted = true;

@@ -41,9 +41,10 @@ div.FretboardSequences
 	p.text-no-scales(v-show="sequences.length == 0") Add a new scale or arpeggio to see it displayed on the fretboard.
 
 	div.sequences: FretboardSequencesItem(
-		v-for="seq of sequences"
-		:key="`sequence--${seq.index}`"
+		v-for="(seq, index) of sequences"
+		:key="`sequence--${index}`"
 
+		:index="index"
 		v-bind="seq"
 		:nb-sequences="sequences.length"
 		)
