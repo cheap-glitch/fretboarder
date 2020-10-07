@@ -160,7 +160,7 @@ export default {
 
 	grid-area: 1 / 1;
 
-	padding: 16px 14px;
+	padding: 16px 16px 16px 14px;
 
 	color: var(--color--text);
 
@@ -175,15 +175,6 @@ export default {
 		background-color: var(--color--bg--accent);
 	}
 
-	.select:not(:disabled):hover + & {
-		border-color: var(--color--hover);
-		background-color: var(--color--bg--highlight);
-	}
-
-	.select:focus + & {
-		border-color: var(--color--hover);
-	}
-
 	.select:disabled + & {
 		opacity: 0.5;
 
@@ -192,6 +183,15 @@ export default {
 
 	@include mq($from: desktop) {
 		padding: 8px 10px;
+
+		.select:not(:disabled):hover + & {
+			border-color: var(--color--hover);
+			background-color: var(--color--bg--highlight);
+		}
+
+		.select:focus + & {
+			border-color: var(--color--hover);
+		}
 
 		&.is-contained {
 			border: none;
@@ -233,11 +233,15 @@ export default {
 }
 
 .bar__chevron {
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	color: var(--color--text--secondary);
 
-	.select:not(:focus):not(:disabled):hover + .bar & {
-		color: var(--color--hover);
+	@include mq($from: desktop) {
+		font-size: 1.2rem;
+
+		.select:not(:focus):not(:disabled):hover + .bar & {
+			color: var(--color--hover);
+		}
 	}
 }
 

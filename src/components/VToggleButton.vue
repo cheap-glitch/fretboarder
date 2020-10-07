@@ -57,7 +57,7 @@ export default {
 	justify-content: space-between;
 	@include space-children-h(20px);
 
-	padding: 16px 14px;
+	padding: 16px 16px 16px 14px;
 
 	border: none;
 	border-bottom: 1px solid var(--color--bg--highlight);
@@ -66,10 +66,6 @@ export default {
 	background-color: transparent;
 
 	cursor: pointer;
-
-	&:hover {
-		background-color: var(--color--bg--highlight);
-	}
 
 	&:first-child {
 		border-top-left-radius: 4px;
@@ -85,6 +81,10 @@ export default {
 		padding: 8px 14px 8px 10px;
 
 		border-bottom: none;
+
+		&:hover {
+			background-color: var(--color--bg--highlight);
+		}
 	}
 }
 
@@ -114,20 +114,25 @@ export default {
 .toggle {
 	position: relative;
 
-	width: 20px;
-	height: 8px;
+	width: 22px;
+	height: 10px;
 	@include pill;
 
 	background-color: var(--color--border);
 
 	cursor: pointer;
+
+	@include mq($from: desktop) {
+		width: 20px;
+		height: 8px;
+	}
 }
 
 .toggle__handle {
 	position: absolute;
 	top: 50%;
 
-	@include circle(14px);
+	@include circle(16px);
 
 	transition: left 200ms ease-in-out;
 
@@ -143,6 +148,10 @@ export default {
 	&.is-active {
 		left: 100%;
 		background-color: var(--color--hover);
+	}
+
+	@include mq($from: desktop) {
+		@include circle(14px);
 	}
 }
 
