@@ -14,7 +14,7 @@ div.FretboardViewer(
 	//- Frets
 	FretboardViewerFret(
 		v-for="(fret, index) of displayedFrets"
-		:key="`fret--${fret.string + 1}--${fret.number}`"
+		:key="`fret--${fret.number}--${fret.string + 1}`"
 
 		v-bind="fret"
 		:displayed-infos="displayedInfos"
@@ -23,8 +23,9 @@ div.FretboardViewer(
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
-		:is-fretboard-flipped-hor="isFlippedHor"
 		:is-fretboard-vertical="isVertical"
+		:is-fretboard-flipped-hor="isFlippedHor"
+		:is-fretboard-flipped-vert="isFlippedVert"
 
 		:style="(isFlippedHor && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
 		)
@@ -83,10 +84,10 @@ export default {
 
 			/**
 			 * Invert the grid layout:
-			 *  - when the fretboard is horizontal (landscape mode) and the fretting hand is flipped
 			 *  - when the fretboard is vertical (portait mode, e.g. on mobile) and "mirrored"
+			 *  - when the fretboard is horizontal (desktop or mobile in landscape mode) and the fretting hand is flipped
 			 */
-			if (!this.isVertical ? this.isFlippedHor : this.isFlippedVert) template.reverse();
+			if (this.isVertical ? this.isFlippedVert : this.isFlippedHor) template.reverse();
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
@@ -124,8 +125,8 @@ export default {
 		strings() {
 			return [...Array(this.nbStrings).keys()].map(index => ({
 				// Start & end
-				[this.isVertical ? 'top'    : this.isFlippedHor ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
-				[this.isVertical ? 'bottom' : this.isFlippedHor ? 'left'  : 'right']: 0,
+				[this.isVertical ? (this.isFlippedVert ? 'bottom' : 'top'   ) : (this.isFlippedHor ? 'right' : 'left' )]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
+				[this.isVertical ? (this.isFlippedVert ? 'top'    : 'bottom') : (this.isFlippedHor ? 'left'  : 'right')]: 0,
 
 				// Position
 				[this.isVertical ? 'left': 'top']: `calc(calc(100% - ${this.fretNumbersPadding.px})*${index / (this.nbStrings - 1)})`,
@@ -173,7 +174,12 @@ export default {
 			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
 		},
 		frets() {
-			return getFrets(this.displayedSequences, this.tuningNotes, this.capo);
+			const frets = getFrets(this.displayedSequences, this.tuningNotes, this.capo);
+
+			if (this.isVertical && this.isFlippedVert)
+				frets.reverse();
+
+			return frets;
 		},
 		fretNumbers() {
 			return [...Array(this.nbFrets).keys()]
@@ -188,10 +194,10 @@ export default {
 
 			/**
 			 * Invert the order of the strings (the topmost becomes the bottommost, etc.) when:
+			 *   - the fretboard is vertical + mirrored and the fretting hand is NOT flipped
 			 *   - the fretboard is horizontal and is not "mirrored" (i.e. flipped vertically)
-			 *   - the fretboard is vertical and the fretting hand is flipped (right-handed fretting mode enabled)
 			 */
-			return (!this.isVertical ? !this.isFlippedVert : this.isFlippedHor) ? notes.reverse() : notes;
+			return (this.isVertical ? (this.isFlippedVert && !this.isFlippedHor) : !this.isFlippedVert) ? notes.reverse() : notes;
 		},
 		nbStrings() {
 			return instruments[this.instrument].nbStrings;

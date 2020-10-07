@@ -17,7 +17,7 @@ div.FretboardViewerFret
 		div.intervals
 			div.intervals__item(
 				v-for="interval of intervals"
-				:key="`interval--${string + 1}--${number}--${interval.value}`"
+				:key="`interval--${number}--${string + 1}--${interval.value}`"
 				)
 				div.intervals__item__dot(
 					v-for="seq of interval.sequences"
@@ -27,14 +27,14 @@ div.FretboardViewerFret
 					)
 				p.intervals__item__text {{ interval.name }}
 
-	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardFlippedHor, isFretboardVertical }")
+	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardVertical, isFretboardFlippedHor, isFretboardFlippedVert }")
 
-		div.fret__inlay(v-show="isShowingInlay")
+		div.fret__inlay(v-if="isShowingInlay")
 
 		p.fret__note(
 			ref="note"
 
-			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardFlippedHor, isFretboardVertical }"
+			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardVertical, isFretboardFlippedHor, isFretboardFlippedVert }"
 			:style="noteBg"
 
 			@mouseenter="showTooltip = isActive"
@@ -92,11 +92,15 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isFretboardVertical: {
+			type: Boolean,
+			default: false,
+		},
 		isFretboardFlippedHor: {
 			type: Boolean,
 			default: false,
 		},
-		isFretboardVertical: {
+		isFretboardFlippedVert: {
 			type: Boolean,
 			default: false,
 		},
@@ -212,8 +216,15 @@ export default {
 	 * Borders
 	 */
 	&.is-fretboard-vertical {
-		&:not(.is-open-string)         { border-bottom-width: layout.$fretbar-thickness; }
-		&.is-first-fret                { border-top-width:    layout.$nut-thickness;     }
+		&.is-fretboard-flipped-vert {
+			&:not(.is-open-string) { border-top-width:    layout.$fretbar-thickness; }
+			&.is-first-fret        { border-bottom-width: layout.$nut-thickness;     }
+		}
+
+		&:not(.is-fretboard-flipped-vert) {
+			&:not(.is-open-string) { border-bottom-width: layout.$fretbar-thickness; }
+			&.is-first-fret        { border-top-width:    layout.$nut-thickness;     }
+		}
 	}
 
 	&:not(.is-fretboard-vertical) {
@@ -245,19 +256,35 @@ export default {
 	transition: opacity 200ms, filter 200ms, border-radius 200ms;
 
 	/**
-	 * Placement
+	 * Position
 	 */
 	&.is-fretboard-vertical {
-		left: 0;
+		&.is-fretboard-flipped-vert {
+			right: 0;
 
-		&.is-open-string {
-			top: 0;
-			transform: translateX(-50%);
+			&.is-open-string {
+				bottom: 0;
+				transform: translateX(50%);
+			}
+
+			&:not(.is-open-string) {
+				top: 50%;
+				transform: translate(50%, -50%);
+			}
 		}
 
-		&:not(.is-open-string) {
-			top: 50%;
-			transform: translate(-50%, -50%);
+		&:not(.is-fretboard-flipped-vert) {
+			left: 0;
+
+			&.is-open-string {
+				top: 0;
+				transform: translateX(-50%);
+			}
+
+			&:not(.is-open-string) {
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
 		}
 	}
 
@@ -266,15 +293,15 @@ export default {
 			top: 0;
 			transform: translateY(-50%);
 
-			&.is-fretboard-flipped-hor       { right: 0; }
-			&:not(.is-fretboard-flipped-hor) { left:  0; }
+			&.is-fretboard-flipped-hor        { right: 0; }
+			&:not(.is-fretboard-flipped-hor)  { left:  0; }
 		}
 
 		&:not(.is-open-string) {
 			transform: translate(-50%, -50%);
 
-			&.is-fretboard-vertical       { top: 50%; left:   0; }
-			&:not(.is-fretboard-vertical) { top:   0; left: 50%; }
+			&.is-fretboard-vertical           { top: 50%; left:   0; }
+			&:not(.is-fretboard-vertical)     { top:   0; left: 50%; }
 		}
 	}
 
