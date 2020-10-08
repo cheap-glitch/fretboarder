@@ -178,7 +178,6 @@ import { get, sync }                          from 'vuex-pathify'
 
 import { MIN_NB_FRETS, MAX_NB_FRETS }         from '@/modules/constants'
 import { mapObjectToObject }                  from '@/modules/object'
-import { exportFretboard }                    from '@/modules/export'
 import { instruments, tunings, tuningsNames } from '@/modules/music'
 import { getFrets }                           from '@/modules/fretboard'
 import { formatOrdinalSuffix, formatFretNb }  from '@/modules/text'
@@ -233,9 +232,10 @@ export default {
 	},
 
 	methods: {
-		exportFretboard(format) {
+		async exportFretboard(format) {
 			this.exportMenuClose = !this.exportMenuClose;
 
+			const { exportFretboard } = await import('../modules/export.js');
 			exportFretboard(
 				format,
 				this.$store.state.sequences.sequences,
