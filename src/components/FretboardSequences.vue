@@ -42,7 +42,7 @@ div.FretboardSequences
 
 	div.sequences: FretboardSequencesItem(
 		v-for="(seq, index) of sequences"
-		:key="`sequence--${index}`"
+		:key="`sequence--${seq.id}`"
 
 		:index="index"
 		v-bind="seq"

@@ -67,6 +67,9 @@ function addSequence(state, params = {}) {
 	if (state.sequences.length >= MAX_NB_SEQUENCES) return;
 
 	state.sequences.push({
+		// Give the sequence a "unique" ID
+		id:                  Math.random(),
+
 		// Merge the provided parameters with the defaults
 		model:               'min5',
 		tonality:            'A',
