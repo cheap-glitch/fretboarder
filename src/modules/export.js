@@ -33,10 +33,10 @@ function exportFretboardToSVG(sequences, frets, nbStrings, fretMin, fretMax, dis
 	// Helper functions to generate XML
 	const camelAttributes = ['viewBox', 'gradientTransform'];
 	const camel2Kebab     = str                          => camelAttributes.includes(str) ? str : str.replace(/[A-Z]/g, character => `-${character.toLowerCase()}`);
-	const getAttrsString  = attrs                        => Object.keys(attrs).map(attr => attrs[attr] ? `${camel2Kebab(attr)}="${attrs[attr]}"` : '').join(' ');
-	const openTag         = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)}>`);
+	const getAttrsString  = attrs                        => Object.entries(attrs).filter(([, value]) => value).map(([attr, value]) => `${camel2Kebab(attr)}="${value}"`).join(' ');
+	const openTag         = (xml, tag, attrs)            => xml.push(`<${tag} ${getAttrsString(attrs)}>`);
 	const closeTag        = (xml, tag)                   => xml.push(`</${tag}>`);
-	const appendSingleTag = (xml, tag, attrs)            => xml.push(`<${tag}${getAttrsString(attrs)} />`);
+	const appendSingleTag = (xml, tag, attrs)            => xml.push(`<${tag} ${getAttrsString(attrs)} />`);
 	const appendFullTag   = (xml, tag, innerText, attrs) => { openTag(xml, tag, attrs); xml.push(innerText); closeTag(xml, tag); }
 
 	// Layout
