@@ -2,6 +2,12 @@ require          = require('esm')(module);
 const should     = require('chai').should();
 const { models } = require('../src/modules/music.js');
 
+describe("models", () => {
+	it("should test all models", () => {
+		Object.keys(models).length.should.equal(116);
+	});
+});
+
 describe("scales", () => {
 
 	describe("pentatonics", () => {
@@ -92,16 +98,16 @@ describe("scales", () => {
 
 	describe("octatonics", () => {
 		// https://en.wikipedia.org/wiki/Octatonic_scale
-		testModel('dimhw',      'C C# D# E F# G A Bb C');
-		testModel('dimwh',      'C D Eb F F# G# A B C');
+		testModel('dimhw',     'C C# D# E F# G A Bb C');
+		testModel('dimwh',     'C D Eb F F# G# A B C');
 
 		// https://en.wikipedia.org/wiki/Bebop_scale
-		testModel('bebdom',     'C D E F G A Bb B C');
-		testModel('bebmaj',     'C D E F G G# A B C');
-		testModel('bebdor',     'C D Eb E F G A Bb C');
-		testModel('bebdoralt',  'C D Eb F G A Bb B C');
-		testModel('bebharmin',  'C D Eb F G Ab Bb B C');
-		testModel('bebmel',     'C D  Eb F G G# A B C');
+		testModel('bebdom',    'C D E F G A Bb B C');
+		testModel('bebmaj',    'C D E F G G# A B C');
+		testModel('bebdor',    'C D Eb E F G A Bb C');
+		testModel('bebdoralt', 'C D Eb F G A Bb B C');
+		testModel('bebharmin', 'C D Eb F G Ab Bb B C');
+		testModel('bebmel',    'C D  Eb F G G# A B C');
 	});
 
 	describe("chromatic", () => {
@@ -110,6 +116,10 @@ describe("scales", () => {
 });
 
 describe("arpeggios", () => {
+
+	describe("powerchord", () => {
+		testModel('arp-pow', 'C-G');
+	});
 
 	describe("triads", () => {
 		// https://en.wikipedia.org/wiki/Triad_(music)
@@ -155,50 +165,59 @@ describe("arpeggios", () => {
 	});
 
 	describe("ninth chords", () => {
-		// testModel('arp-majadd9',  '');
-		// testModel('arp-dom9',     '');
-		// testModel('arp-dommin9',  '');
-		// testModel('arp-domaug9',  '');
-		// testModel('arp-maj9',     '');
-		// testModel('arp-min9',     '');
-		// testModel('arp-minmaj9',  '');
-		// testModel('arp-aug9',     '');
-		// testModel('arp-augmaj9',  '');
-		// testModel('arp-hdim9',    '');
-		// testModel('arp-hdimmin9', '');
-		// testModel('arp-dim9',     '');
-		// testModel('arp-dimmin9',  '');
-		// testModel('arp-69',       '');
-		// testModel('arp-minf69',   '');
-		// testModel('arp-min69',    '');
+		// https://en.wikipedia.org/wiki/Ninth_chord#Added_ninth
+		testModel('arp-majadd9',  'C, E, G D');
+		// https://en.wikipedia.org/wiki/Ninth_chord#Dominant_ninth
+		testModel('arp-dom9',     'C, E, G, B♭ D');
+		// https://en.wikipedia.org/wiki/Ninth_chord#Dominant_minor_ninth
+		testModel('arp-dommin9',  'C E G B♭ D♭');
+		// https://en.wikipedia.org/wiki/Ninth_chord#Dominant_ninth
+		testModel('arp-maj9',     'C E G B D');
+		// https://en.wikipedia.org/wiki/Ninth_chord#Minor_ninth
+		testModel('arp-min9',     'C Eb G Bb D');
+		testModel('arp-minmaj9',  'C–E♭–G–B-D');
+		// https://en.wikipedia.org/wiki/Altered_chord#Altered_dominant_chord
+		testModel('arp-domaug9',  'C–E–G–B♭–D♯');
+		testModel('arp-aug9',     'C–E–G–B♭–D♯');
+		testModel('arp-augmaj9',  'C–E–G–B–D♯');
+		testModel('arp-hdim9',    'C–Eb–G♭–B♭-D');
+		testModel('arp-hdimmin9', 'C–Eb–G♭–B♭-Db');
+		testModel('arp-dim9',     'C–E♭–G♭–A-D');
+		testModel('arp-dimmin9',  'C–E♭–G♭–A-Db');
+		// https://en.wikipedia.org/wiki/Ninth_chord#6/9_chord
+		testModel('arp-69',       'C,E,G,A,D');
+		testModel('arp-min69',    'C,Eb,G,A,D');
+		testModel('arp-minf69',   'C,Eb,G,Ab,D');
 	});
 
 	describe("eleventh chords", () => {
-		// testModel('arp-dom11',     '');
-		// testModel('arp-maj11',     '');
-		// testModel('arp-majaug11',  '');
-		// testModel('arp-min11',     '');
-		// testModel('arp-dom911',    '');
-		// testModel('arp-maj911',    '');
-		// testModel('arp-minmaj11',  '');
-		// testModel('arp-min911',    '');
-		// testModel('arp-aug911',    '');
-		// testModel('arp-augmaj911', '');
-		// testModel('arp-hdim911',   '');
-		// testModel('arp-dim911',    '');
+		// https://en.wikipedia.org/wiki/Eleventh_chord
+		testModel('arp-dom11',     'C–E–G–B♭–F');
+		testModel('arp-maj11',     'C–E–G–B–F');
+		testModel('arp-majaug11',  'C–E–G–B–F#');
+		testModel('arp-min11',     'C–E♭–G–B♭–F');
+		testModel('arp-dom911',    'C–E–G–B♭–D–F');
+		testModel('arp-maj911',    'C–E–G–B–D–F');
+		testModel('arp-minmaj11',  'C–E♭–G–B-D-F');
+		testModel('arp-min911',    'C–E♭–G–B♭–D–F');
+		testModel('arp-aug911',    'C–E–G♯–B♭-D-F');
+		testModel('arp-augmaj911', 'C–E–G♯–B-D-F');
+		testModel('arp-hdim911',   'C–Eb–G♭–B♭-D-F');
+		testModel('arp-dim911',    'C–E♭–G♭–A-D-F');
 	});
 
 	describe("thirteenth chords", () => {
-		// testModel('arp-dom13',       '');
-		// testModel('arp-maj13',       '');
-		// testModel('arp-min13',       '');
-		// testModel('arp-dom91113',    '');
-		// testModel('arp-maj91113',    '');
-		// testModel('arp-min91113',    '');
-		// testModel('arp-minmaj91113', '');
-		// testModel('arp-aug91113',    '');
-		// testModel('arp-augmaj91113', '');
-		// testModel('arp-hdim91113',   '');
+		// https://en.wikipedia.org/wiki/Thirteenth
+		testModel('arp-dom13',       'C, E, G, B♭, A');
+		testModel('arp-maj13',       'C-E-G-B--A');
+		testModel('arp-min13',       'C Eb G Bb A');
+		testModel('arp-dom91113',    'C, E, G, B♭, D, F, A');
+		testModel('arp-maj91113',    'C-E-G-B-D-F-A');
+		testModel('arp-min91113',    'C Eb G Bb D F A');
+		testModel('arp-minmaj91113', 'C–E♭–G–B-D-F-A');
+		testModel('arp-aug91113',    'C–E–G♯–B♭-D-F-A');
+		testModel('arp-augmaj91113', 'C–E–G♯–B-D-F-A');
+		testModel('arp-hdim91113',   'C–Eb–G♭–B♭-D-F-A');
 	});
 });
 
@@ -214,12 +233,11 @@ function testModel(modelName, notes, tonality = 'C') {
  */
 function parseNotes(notes, tonality) {
 	return notes
-		.trim()
-		.replace(RegExp(`${tonality}$`), '')
 		.replace(/[-–,]/g, ' ')
-		.trim()
 		.replace(/♭/g, 'b')
 		.replace(/♯/g, '#')
+		.replace(RegExp(`${tonality}$`), '')
+		.trim()
 		.split(/\s+/)
 		.map(note => notesValues[note]);
 }
