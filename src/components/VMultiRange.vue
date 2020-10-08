@@ -140,16 +140,14 @@ export default {
 	}
 }
 
-@mixin track()
-{
+@mixin track() {
 	border: none;
 	appearance: none;
 	background: none;
 }
 
-@mixin thumb()
-{
-	@include circle(14px);
+@mixin thumb() {
+	@include circle(16px);
 
 	border: none;
 	appearance: none;
@@ -160,6 +158,10 @@ export default {
 	cursor: grab;
 
 	transition: color 200ms;
+
+	@include mq($from: desktop) {
+		@include circle(14px);
+	}
 }
 
 .slider {
@@ -177,19 +179,21 @@ export default {
 	&::-webkit-slider-thumb          { @include thumb; }
 	&::-webkit-slider-runnable-track { @include track; }
 
-	&:hover {
-		color: var(--color--hover);
-	}
+	@include mq($from: desktop) {
+		&:hover {
+			color: var(--color--hover);
+		}
 
-	&:focus {
-		z-index: 2;
-		color: var(--color--hover);
+		&:focus {
+			z-index: 2;
+			color: var(--color--hover);
 
-		outline: none;
-		&::-moz-focus-outer { border-style: none; }
+			outline: none;
+			&::-moz-focus-outer { border-style: none; }
 
-		&::-moz-range-thumb     { cursor: grabbing; }
-		&::-webkit-slider-thumb { cursor: grabbing; }
+			&::-moz-range-thumb     { cursor: grabbing; }
+			&::-webkit-slider-thumb { cursor: grabbing; }
+		}
 	}
 }
 

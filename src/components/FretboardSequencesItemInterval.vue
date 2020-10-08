@@ -18,6 +18,8 @@ div.FretboardSequencesItemInterval
 
 	//- Tooltip
 	VPopup.tooltip(
+		v-if="!isMobileDevice"
+
 		:target="$refs.button || false"
 		:is-open="isTootlipOpen"
 		)
@@ -29,6 +31,8 @@ div.FretboardSequencesItemInterval
 
 <!--{{{ JavaScript -->
 <script>
+
+import { get }                     from 'vuex-pathify'
 
 import { intervalsNames, degrees } from '@/modules/music'
 
@@ -59,6 +63,10 @@ export default {
 	computed: {
 		name()      { return intervalsNames[this.value].toLowerCase(); },
 		shortName() { return degrees[this.value];                      },
+
+		...get([
+			'isMobileDevice',
+		]),
 	},
 }
 
@@ -71,6 +79,11 @@ export default {
 
 .FretboardSequencesItemInterval {
 	display: flex;
+
+	@include mq($until: desktop) {
+		// Simulate a border inside a grid
+		box-shadow: 0 0 0 1px var(--color--border);
+	}
 }
 
 .button {
@@ -80,14 +93,13 @@ export default {
 
 	flex: 1 1 100%;
 
-	@include pill;
-	padding: 2px 8px;
+	padding: 14px;
 
-	border: 1px solid var(--color--border);
-
-	cursor: pointer;
+	border: none;
 	appearance: none;
 	background-color: transparent;
+
+	cursor: pointer;
 
 	transition: color 200ms, border-color 200ms, background-color 200ms;
 
@@ -95,8 +107,15 @@ export default {
 		background-color: var(--color--bg--highlight);
 	}
 
-	&:focus {
-		border-color: var(--color--hover);
+	@include mq($from: desktop) {
+		@include pill;
+		padding: 2px 8px;
+
+		border: 1px solid var(--color--border);
+
+		&:focus {
+			border-color: var(--color--hover);
+		}
 	}
 }
 

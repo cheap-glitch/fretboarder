@@ -98,9 +98,9 @@ div.FretboardSettings
 				@click.native="$store.commit('fretboard/toggle.isShowingFretNbs')"
 				)
 
-			//- Infos displayed on the notes
-				* single sequence:    nothing/note name/interval (select menu)
-				* multiple sequences: nothing/note name          (toggle button)
+			//- Infos displayed on the notes:
+			//-   * single sequence:    nothing/note name/interval (select menu)
+			//-   * multiple sequences: nothing/note name          (toggle button)
 			VSelect(
 				v-if="displayedSequences.length <= 1"
 
@@ -296,9 +296,16 @@ export default {
 }
 
 .fret-range {
-	@include space-children-v(8px);
+	@include space-children-v(20px);
 
-	padding: 14px;
+	padding: 28px 20px;
+	padding-bottom: 0;
+
+	@include mq($from: desktop) {
+		@include space-children-v(8px);
+
+		padding: 14px;
+	}
 }
 
 .fret-range__slider {

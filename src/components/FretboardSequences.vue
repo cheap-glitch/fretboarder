@@ -4,8 +4,8 @@
 div.FretboardSequences
 	div.tools
 		//- Add a new sequence
-		VButton(
-			v-show="!isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
+		VButton.tools__add-sequence(
+			v-show="sequences.length < MAX_NB_SEQUENCES"
 
 			text="Add new scale/arpeggio"
 			icon="plus"
@@ -42,16 +42,6 @@ div.FretboardSequences
 		:index="index"
 		v-bind="seq"
 		:nb-sequences="sequences.length"
-		)
-
-	//- "New scale" button for mobile
-	VButton.add-button-mobile(
-		v-show="isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
-
-		text="Add new scale/arpeggio"
-		icon="plus"
-
-		@click="$store.commit('sequences/add')"
 		)
 
 </template>
@@ -92,35 +82,54 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSequences {
-	@include space-children-v(40px);
-
 	@include mq($from: desktop) {
+		@include space-children-v(40px);
+
 		max-width: 1400px;
 		margin: auto;
 	}
 }
 
 .sequences {
-	@include space-children-v(20px);
-
 	@include mq($from: desktop) {
 		@include space-children-v(40px);
 	}
 }
 
 .tools {
-	display: flex;
-	justify-content: center;
-	@include space-children-h(10px);
+	@include mq($until: desktop) {
+		display: grid;
+		grid-template: auto / 1fr 1fr;
+		gap: 1px;
+
+		// Fix for the box-shadow border hack
+		margin: 1px 0;
+	}
+
+	@include mq($from: desktop) {
+		display: flex;
+		justify-content: center;
+		@include space-children-h(10px);
+	}
+}
+
+.tools__add-sequence {
+	@include mq($until: desktop) {
+		grid-column: 1 / span 2;
+	}
 }
 
 .text-no-scales {
 	text-align: center;
 	color: var(--color--text);
-}
 
-.add-button-mobile {
-	margin: auto;
+	@include mq($until: desktop) {
+		padding: 20px;
+
+		line-height: 1.8;
+
+		color: var(--color--text--secondary);
+	}
 }
 
 </style>

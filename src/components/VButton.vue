@@ -72,27 +72,20 @@ export default {
 .VButton {
 	display: flex;
 	align-items: center;
-	@include space-children-h(8px);
 
-	@include pill;
+	padding: 14px 12px;
 
-	padding: 8px 10px;
-
-	border: 1px solid var(--color--bg--highlight);
+	// Simulate a border inside a grid
+	box-shadow: 0 0 0 1px var(--color--border);
+	border: none;
 
 	color: var(--color--text);
-	background-color: var(--color--bg--highlight);
+	background-color: transparent;
 
 	appearance: none;
 	cursor: pointer;
 
 	transition: border-color 200ms, background-color 200ms;
-
-	&:not(.is-active):not(.is-disabled):hover {
-		color: white;
-		border-color: var(--color--hover);
-		background-color: var(--color--hover);
-	}
 
 	&.is-disabled {
 		border-color: var(--color--border);
@@ -111,14 +104,34 @@ export default {
 		}
 	}
 
-	&:focus {
-		border-color: var(--color--hover);
+	@include mq($until: desktop) {
+		justify-content: center;
+		@include space-children-h(12px);
 	}
 
 	@include mq($from: desktop) {
+		@include space-children-h(8px);
+
+		@include pill;
+
 		padding: 4px 8px;
 
 		font-size: 1.4rem;
+
+		border: 1px solid var(--color--bg--highlight);
+		box-shadow: none;
+
+		background-color: var(--color--bg--highlight);
+
+		&:not(.is-active):not(.is-disabled):hover {
+			color: white;
+			border-color: var(--color--hover);
+			background-color: var(--color--hover);
+		}
+
+		&:focus {
+			border-color: var(--color--hover);
+		}
 	}
 }
 

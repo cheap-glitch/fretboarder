@@ -37,7 +37,7 @@ div.App#app(:style="colorscheme")
 	FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
-	div.fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
+	div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- Scales & arpeggios

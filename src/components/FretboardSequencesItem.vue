@@ -33,26 +33,18 @@ mixin extra-tools
 		)
 
 div.FretboardSequencesItem
-	//- Infos (mobile)
-	div.infos(
+	//- Infos bar (mobile only)
+	div.mobile-info-bar(
 		v-if="isMobileDevice"
 
-		:style="{ borderColor: color, backgroundColor: color }"
-		v-mods="{ isOpen }"
-
-		@click.left="isOpenedByUser = !isOpenedByUser"
+		:style="{ backgroundColor: color }"
+		@click.left="isOpen = !isOpen"
 		)
 		p {{ infos }}
-		fa-icon(
-			v-show="nbSequences > 1"
-			:icon="['far', isOpen ? 'minus' : 'ellipsis-v']"
-			)
+		fa-icon.mobile-info-bar__chevron(:icon="['far', isOpen ? 'chevron-up' : 'chevron-down']")
 
 	//- Settings & tools
-	transition(name="fade"): div.settings(
-		v-show="isOpen || !isMobileDevice"
-		:style="{ borderColor: color }"
-		)
+	transition(name="fade"): div.settings(v-show="isOpen || !isMobileDevice")
 
 		//----------------------------------------------------------------------
 		//- Properties
@@ -67,6 +59,7 @@ div.FretboardSequencesItem
 			VSelect(
 				:value="tonality"
 				:options="tonalities"
+				:is-contained="isMobileDevice"
 
 				@change="v => update('tonality', v)"
 				)
@@ -75,6 +68,7 @@ div.FretboardSequencesItem
 				:value="model"
 				:options="modelOptions"
 				:label-formatter="(value, label) => `${label} ${isArpeggio(value) ? 'arp.' : 'scale'}`"
+				:is-contained="isMobileDevice"
 
 				@change="v => update('model', v)"
 				)
@@ -83,6 +77,7 @@ div.FretboardSequencesItem
 				:value="position"
 				:options="positions"
 				:is-disabled="!hasPositions"
+				:is-contained="isMobileDevice"
 
 				@change="v => update('position', parseInt(v, 10))"
 				)
@@ -193,7 +188,7 @@ export default {
 
 	data() {
 		return {
-			isOpenedByUser: false,
+			isOpen: false,
 		}
 	},
 
@@ -210,9 +205,6 @@ export default {
 		hasPositions() {
 			return ('positions' in models[this.model]);
 		},
-		isOpen() {
-			return this.isOpenedByUser || this.nbSequences == 1;
-		},
 
 		...get([
 			'isMobileDevice',
@@ -226,7 +218,7 @@ export default {
 		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 
 		this.positions = {
-			0: 'Whole',
+			0: 'whole',
 			1: '1st pos.',
 			2: '2nd pos.',
 			3: '3rd pos.',
@@ -259,42 +251,20 @@ export default {
 	&.dot.dot { margin-right: 20px; }
 }
 
-.infos {
+.mobile-info-bar {
 	display: flex;
 	justify-content: space-between;
 
-	padding: 10px;
-
-	border-width: 2px;
-	border-style: solid;
-	border-radius: 10px;
-
-	border-bottom: none;
+	padding: 16px 16px 16px 14px;
 
 	color: white;
+}
 
-	transition: border-radius 200ms;
-
-	&.is-open {
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-	}
+.mobile-info-bar__chevron {
+	font-size: 1.4rem;
 }
 
 .settings {
-	@include mq($until: desktop) {
-		@include space-children-v(30px);
-
-		padding: 20px 20px 10px 20px;
-
-		border-width: 2px;
-		border-style: solid;
-		border-bottom-left-radius: 10px;
-		border-bottom-right-radius: 10px;
-
-		border-top: none;
-	}
-
 	@include mq($from: desktop) {
 		display: flex;
 		align-items: flex-start;
@@ -305,34 +275,32 @@ export default {
 }
 
 .properties {
-	display: flex;
-	flex-wrap: wrap;
-	@include space-children-h(10px);
-
-	@include mq($until: desktop) {
-		.VSelect { margin-bottom: 10px; }
-	}
-
 	@include mq($from: desktop) {
-		flex: 0 0 auto;
+		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: flex-end;
+		@include space-children-h(10px);
+
+		flex: 0 0 auto;
 	}
 }
 
 .intervals {
 	display: grid;
-
-	gap: 10px;
 	grid-auto-rows: auto;
-	grid-template-columns: repeat(auto-fill, 60px);
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+	gap: 1px;
 
 	@include mq($until: desktop) {
-		&.intervals { margin-bottom: 40px; }
+		// Fix for the box-shadow border hack
+		margin-bottom: 1px;
 	}
 
 	@include mq($from: desktop) {
+		grid-template-columns: repeat(auto-fill, 60px);
 		align-content: center;
+		gap: 10px;
 
 		flex: 1 1 100%;
 		align-self: stretch;
@@ -340,14 +308,18 @@ export default {
 }
 
 .tools {
-	display: flex;
-
 	@include mq($until: desktop) {
-		flex-wrap: wrap;
-		.VButton { margin: 0 10px 10px 0; }
+		display: grid;
+		grid-auto-rows: auto;
+		grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+		gap: 1px;
+
+		// Fix for the box-shadow border hack
+		margin-bottom: 1px;
 	}
 
 	@include mq($from: desktop) {
+		display: flex;
 		@include space-children-h(10px);
 	}
 }

@@ -114,23 +114,21 @@ export default {
 	computed: {
 		intervals() {
 			// Make a list of intervals, each with the list of sequences that contain them
-			const intervals = this.sequences.reduce(function(list, seq) {
-				const index = list.findIndex(item => item.value == seq.interval);
-
+			const intervals = Object.values(this.sequences.reduce((list, seq, index) => {
+				// If the interval is already in the list
+				if (seq.interval in list) {
+					list[seq.interval].sequences.push(seq.index);
 				// If the interval is not in the list
-				if (index === -1) {
-					list.push({
+				} else {
+					list[seq.interval] = {
 						name:      intervalsNames[seq.interval],
 						value:     seq.interval,
-						sequences: [seq.index],
-					});
-				// If the interval is already in the list
-				} else {
-					list[index].sequences.push(seq.index);
+						sequences: [index],
+					};
 				}
 
 				return list;
-			}, []);
+			}, {}));
 
 			// Sort the intervals and their sequences to keep the same visual order
 			intervals.sort((a, b) => a.value - b.value);

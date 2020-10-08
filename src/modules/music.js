@@ -189,8 +189,8 @@ export const models = {
 	'arp-dim9':        { intervals: [3,  6,  9,  2],                             name: 'diminished 9th'                                                                         },
 	'arp-dimmin9':     { intervals: [3,  6,  9,  1],                             name: 'diminished minor 9th'                                                                   },
 	'arp-69':          { intervals: [4,  7,  9,  2],                             name: '6/9'                                                                                    },
-	'arp-minf69':      { intervals: [3,  7,  8,  2],                             name: 'minor ♭6/9'                                                                             },
 	'arp-min69':       { intervals: [3,  7,  9,  2],                             name: 'minor 6/9'                                                                              },
+	'arp-minf69':      { intervals: [3,  7,  8,  2],                             name: 'minor ♭6/9'                                                                             },
 
 	// Eleventh chords
 	'arp-dom11':       { intervals: [4,  7, 10,  5],                             name: 'dominant 11th'                                                                          },
