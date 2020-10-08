@@ -1,10 +1,6 @@
-
-/**
- * test/music.test.js
- */
-
-import 'chai/register-should'
-import { models } from '../src/modules/music.js'
+require          = require('esm')(module);
+const should     = require('chai').should();
+const { models } = require('../src/modules/music.js');
 
 describe("scales", () => {
 
