@@ -215,6 +215,10 @@ export default {
 
 	font-size: 1.6rem;
 
+	.select:focus + .bar.is-contained & {
+		color: var(--color--hover);
+	}
+
 	@include mq($from: desktop) {
 		@include space-children-h(10px);
 	}
@@ -235,6 +239,10 @@ export default {
 .bar__chevron {
 	font-size: 1.4rem;
 	color: var(--color--text--secondary);
+
+	.select:focus + .bar.is-contained & {
+		color: var(--color--hover);
+	}
 
 	@include mq($from: desktop) {
 		font-size: 1.2rem;

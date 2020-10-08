@@ -109,6 +109,10 @@ export default {
 	color: var(--color--text);
 
 	cursor: pointer;
+
+	.VToggleButton:focus & {
+		color: var(--color--hover);
+	}
 }
 
 .toggle {
