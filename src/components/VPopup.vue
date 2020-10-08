@@ -1,8 +1,3 @@
-
-
-<!-- components/VPopup.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

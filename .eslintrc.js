@@ -1,8 +1,3 @@
-
-/**
- * .eslintrc.js
- */
-
 module.exports = {
 	root: true,
 
@@ -40,4 +35,4 @@ module.exports = {
 			mocha: true
 		}
 	}],
-};
+}

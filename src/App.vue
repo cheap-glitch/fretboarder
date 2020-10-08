@@ -1,8 +1,3 @@
-
-
-<!-- src/App.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

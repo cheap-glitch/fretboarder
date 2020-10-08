@@ -1,8 +1,3 @@
-
-/**
- * modules/layout.js
- */
-
 import scssVars              from '@/styles/layout.export.scss'
 import { mapObjectToObject } from '@/modules/object'
 

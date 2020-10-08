@@ -1,8 +1,3 @@
-
-/**
- * vue.config.js
- */
-
 process.env.VUE_APP_TITLE       = 'Fretboarder';
 process.env.VUE_APP_BASE_URL    = 'https://fretboarder.app';
 process.env.VUE_APP_VERSION     = require('./package.json').version;

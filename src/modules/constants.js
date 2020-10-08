@@ -1,8 +1,3 @@
-
-/**
- * modules/constants.js
- */
-
 import { colors } from '@/modules/colorscheme'
 
 export const NB_FRETS         = 24;

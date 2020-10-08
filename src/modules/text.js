@@ -1,8 +1,3 @@
-
-/**
- * modules/text.js
- */
-
 /**
  * Add the proper counter to a fret number
  */

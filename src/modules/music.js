@@ -1,8 +1,3 @@
-
-/**
- * modules/music.js
- */
-
 /**
  * Notes
  */

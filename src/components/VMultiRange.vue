@@ -1,8 +1,3 @@
-
-
-<!-- components/VMultiRange.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

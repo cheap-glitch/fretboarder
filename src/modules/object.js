@@ -1,8 +1,3 @@
-
-/**
- * modules/object.js
- */
-
 /**
  * Create a new object with the same keys and the result of a callback as values
  */

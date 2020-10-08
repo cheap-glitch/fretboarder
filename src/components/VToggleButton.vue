@@ -1,8 +1,3 @@
-
-
-<!-- components/VToggleButton.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

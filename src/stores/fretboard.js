@@ -1,8 +1,3 @@
-
-/**
- * stores/fretboard.js
- */
-
 import { make }                      from 'vuex-pathify'
 import { getVuexState }              from 'vuex-plugin-save-state'
 

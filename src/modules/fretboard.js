@@ -1,8 +1,3 @@
-
-/**
- * modules/fretboard.js
- */
-
 import { notes, models }          from '@/modules/music'
 import { NB_FRETS, MAX_NB_FRETS } from '@/modules/constants'
 

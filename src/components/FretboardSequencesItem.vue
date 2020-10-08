@@ -1,8 +1,3 @@
-
-
-<!-- components/FretboardSequencesItem.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

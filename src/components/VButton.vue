@@ -1,8 +1,3 @@
-
-
-<!-- VButton.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

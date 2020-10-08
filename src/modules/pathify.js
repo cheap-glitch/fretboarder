@@ -1,8 +1,3 @@
-
-/**
- * modules/pathify.js
- */
-
 import pathify from 'vuex-pathify'
 
 /**

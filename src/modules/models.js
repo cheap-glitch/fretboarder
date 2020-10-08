@@ -1,8 +1,3 @@
-
-/**
- * modules/models.js
- */
-
 import { models } from '@/modules/music.js'
 
 export const modelOptions = [

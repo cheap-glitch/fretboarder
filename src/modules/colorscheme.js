@@ -1,8 +1,3 @@
-
-/**
- * modules/colorscheme.js
- */
-
 const colors = {
 	sun:                        '#ffb610',
 	cinnabar:                   '#e54124',

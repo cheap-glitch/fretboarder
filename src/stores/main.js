@@ -1,8 +1,3 @@
-
-/**
- * stores/main.js
- */
-
 import Vue                   from 'vue'
 import Vuex                  from 'vuex'
 import { make }              from 'vuex-pathify'

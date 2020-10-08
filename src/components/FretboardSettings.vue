@@ -1,8 +1,3 @@
-
-
-<!-- components/FretboardSettings.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

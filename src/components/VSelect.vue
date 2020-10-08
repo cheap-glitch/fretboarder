@@ -1,8 +1,3 @@
-
-
-<!-- components/VSelect.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 

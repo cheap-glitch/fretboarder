@@ -1,8 +1,3 @@
-
-/**
- * modules/export.js
- */
-
 import { saveAs }              from 'file-saver'
 
 import { mapObjectToObject }   from '@/modules/object'

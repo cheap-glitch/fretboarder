@@ -1,8 +1,3 @@
-
-/**
- * stores/sequences.js
- */
-
 import Vue                  from 'vue'
 import { getVuexState }     from 'vuex-plugin-save-state'
 
