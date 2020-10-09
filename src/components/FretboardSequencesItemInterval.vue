@@ -99,11 +99,12 @@ export default {
 	appearance: none;
 	background-color: transparent;
 
-	cursor: pointer;
-
 	transition: color 200ms, border-color 200ms, background-color 200ms;
 
-	&.is-selected, &:hover {
+	cursor: pointer;
+
+	&:hover,
+	&.is-selected {
 		background-color: var(--color--bg--highlight);
 	}
 
@@ -128,10 +129,11 @@ export default {
 }
 
 .button__interval {
-	color: var(--color--text--secondary);
-	cursor: pointer;
-
 	font-size: 1.35rem;
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
 
 	.button.is-selected             & { color: var(--color--text); }
 	.button:not(.is-selected):hover & { color: var(--color--text); }
@@ -145,7 +147,7 @@ export default {
 }
 
 .tooltip__text {
-	color: white;
+	color: var(--color--text--inverted);
 }
 
 </style>

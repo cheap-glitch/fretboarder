@@ -76,30 +76,33 @@ export default {
 	padding: 14px 12px;
 
 	// Simulate a border inside a grid
-	box-shadow: 0 0 0 1px var(--color--border);
 	border: none;
+	box-shadow: 0 0 0 1px var(--color--border);
 
+	appearance: none;
 	color: var(--color--text);
 	background-color: transparent;
 
-	appearance: none;
-	cursor: pointer;
-
 	transition: border-color 200ms, background-color 200ms;
+
+	cursor: pointer;
 
 	&.is-disabled {
 		border-color: var(--color--border);
+
 		background-color: var(--color--border);
 
 		cursor: not-allowed;
 	}
 
 	&.is-active {
-		color: var(--color--highlight);
 		border-color: var(--color--highlight);
 
-		&:hover, &:not(.is-dark-mode-on) {
-			color: white;
+		color: var(--color--highlight);
+
+		&:hover,
+		&:not(.is-dark-mode-on) {
+			color: var(--color--text--inverted);
 			background-color: var(--color--highlight);
 		}
 	}
@@ -123,14 +126,17 @@ export default {
 
 		background-color: var(--color--bg--highlight);
 
-		&:not(.is-active):not(.is-disabled):hover {
-			color: white;
-			border-color: var(--color--hover);
-			background-color: var(--color--hover);
-		}
+		&:not(.is-disabled) {
+			&:focus {
+				border-color: var(--color--hover);
+			}
 
-		&:focus {
-			border-color: var(--color--hover);
+			&:not(.is-disabled):hover {
+				border-color: var(--color--hover);
+
+				color: var(--color--text--inverted);
+				background-color: var(--color--hover);
+			}
 		}
 	}
 }

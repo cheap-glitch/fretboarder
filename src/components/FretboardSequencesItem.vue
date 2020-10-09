@@ -257,7 +257,7 @@ export default {
 
 	padding: 16px 16px 16px 14px;
 
-	color: white;
+	color: var(--color--text--inverted);
 }
 
 .mobile-info-bar__chevron {

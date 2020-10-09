@@ -113,32 +113,33 @@ export default {
 	position: absolute;
 	z-index: 1000;
 
-	border-radius: 4px;
-
 	font-size: 1.4rem;
 
+	border-radius: 4px;
 	filter: drop-shadow(0 0 2px var(--color--drop-shadow));
-
-	&[data-popper-placement^="bottom"] > .arrow { top:    -4px; }
-	&[data-popper-placement^="right"]  > .arrow { left:   -4px; }
-	&[data-popper-placement^="left"]   > .arrow { right:  -4px; }
-	&[data-popper-placement^="top"]    > .arrow { bottom: -4px; }
 }
 
 .arrow {
-	&, &::before {
+	&,
+	&::before {
+		@include square(8px);
+
 		position: absolute;
 		z-index: -1;
-
-		@include square(8px);
 	}
 
 	&::before {
 		content: "";
-		background-color: currentcolor;
 
 		transform: rotate(45deg);
+
+		background-color: currentColor;
 	}
+
+	.VPopup[data-popper-placement^="top"]    > & { bottom: -4px; }
+	.VPopup[data-popper-placement^="left"]   > & { right:  -4px; }
+	.VPopup[data-popper-placement^="bottom"] > & { top:    -4px; }
+	.VPopup[data-popper-placement^="right"]  > & { left:   -4px; }
 }
 
 </style>

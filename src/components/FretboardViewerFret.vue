@@ -193,22 +193,12 @@ export default {
 	border-style: solid;
 	border-color: var(--color--border);
 
-	/**
-	 * Size
-	 */
 	&.is-fretboard-vertical {
-		&.is-on-last-string       { width: 0; }
-		&:not(.is-on-last-string) { width: layout.$fret-width; }
-	}
+		// Size
+		&.is-on-last-string            { width: 0; }
+		&:not(.is-on-last-string)      { width: layout.$fret-width; }
 
-	&:not(.is-fretboard-vertical):not(.is-on-last-string) {
-		height: layout.$fret-width;
-	}
-
-	/**
-	 * Borders
-	 */
-	&.is-fretboard-vertical {
+		// Fret bar
 		&.is-fretboard-flipped-vert {
 			&:not(.is-open-string) { border-top-width:    layout.$fretbar-thickness; }
 			&.is-first-fret        { border-bottom-width: layout.$nut-thickness;     }
@@ -220,7 +210,11 @@ export default {
 		}
 	}
 
-	&:not(.is-fretboard-vertical) {
+	&:not(.is-fretboard-vertical):not(.is-on-last-string) {
+		// Size
+		height: layout.$fret-width;
+
+		// Fret bar
 		&.is-fretboard-flipped-hor {
 			&:not(.is-open-string) { border-left-width:   layout.$fretbar-thickness; }
 			&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
@@ -242,11 +236,36 @@ export default {
 
 	@include circle(layout.$note-size);
 
-	color: transparent;
-	opacity: 0;
 	font-weight: bold;
 
+	color: transparent;
+	opacity: 0;
+
 	transition: opacity 200ms, filter 200ms, border-radius 200ms;
+
+	/**
+	 * Display
+	 */
+	&.is-active {
+		opacity: 1;
+
+		&:hover {
+			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+		}
+
+		&.is-highlighted        { border-radius: 0; }
+		&.is-showing-note-infos { color: var(--color--text--inverted); }
+	}
+
+	&:not(.is-active) {
+		border: 2px dashed var(--color--border);
+
+		&:hover,
+		&.is-open-string {
+			color: var(--color--text);
+			opacity: 1;
+		}
+	}
 
 	/**
 	 * Position
@@ -281,43 +300,20 @@ export default {
 		}
 	}
 
+	/* stylelint-disable-next-line no-descending-specificity */
 	&:not(.is-fretboard-vertical) {
 		&.is-open-string {
-			top: 0;
 			transform: translateY(-50%);
 
-			&.is-fretboard-flipped-hor        { right: 0; }
-			&:not(.is-fretboard-flipped-hor)  { left:  0; }
+			&.is-fretboard-flipped-hor       { right: 0; }
+			&:not(.is-fretboard-flipped-hor) { left:  0; }
 		}
 
 		&:not(.is-open-string) {
 			transform: translate(-50%, -50%);
 
-			&.is-fretboard-vertical           { top: 50%; left:   0; }
-			&:not(.is-fretboard-vertical)     { top:   0; left: 50%; }
-		}
-	}
-
-	/**
-	 * Display
-	 */
-	&.is-active {
-		opacity: 1;
-
-		&:hover {
-			filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
-		}
-
-		&.is-highlighted        { border-radius: 0; }
-		&.is-showing-note-infos { color: white;     }
-	}
-
-	&:not(.is-active) {
-		border: 2px dashed var(--color--border);
-
-		&:hover, &.is-open-string {
-			color: var(--color--text);
-			opacity: 1;
+			&.is-fretboard-vertical          { top:  50%; }
+			&:not(.is-fretboard-vertical)    { left: 50%; }
 		}
 	}
 }
@@ -329,9 +325,6 @@ export default {
 	background-color: var(--color--bg--highlight);
 }
 
-/**
- * Intervals tooltip
- */
 .tooltip {
 	padding: 8px;
 
@@ -356,7 +349,7 @@ export default {
 }
 
 .intervals__item__text {
-	color: white;
+	color: var(--color--text--inverted);
 }
 
 </style>

@@ -104,12 +104,14 @@ export default {
 <style lang="scss" scoped>
 
 .VMultiRange {
-	position: relative;
 	display: grid;
+
+	position: relative;
 
 	cursor: pointer;
 
-	&::before, &::after {
+	&::before,
+	&::after {
 		content: "";
 
 		position: absolute;
@@ -122,15 +124,15 @@ export default {
 	}
 
 	&::before {
-		left: 0;
 		right: 0;
+		left: 0;
 
 		background-color: var(--color--border);
 	}
 
 	&::after {
-		left:  var(--fill--start);
 		right: calc(100% - var(--fill--stop));
+		left: var(--fill--start);
 
 		background-color: var(--color--hover);
 	}
@@ -151,13 +153,13 @@ export default {
 
 	border: none;
 	appearance: none;
-	background-color: currentcolor;
+	background-color: currentColor;
+
+	transition: color 200ms;
 
 	// Catch clicks
 	pointer-events: auto;
 	cursor: grab;
-
-	transition: color 200ms;
 
 	@include mq($from: desktop) {
 		@include circle(14px);
@@ -165,8 +167,8 @@ export default {
 }
 
 .slider {
-	grid-area: 1 / 1;
 	z-index: 1;
+	grid-area: 1 / 1;
 
 	color: var(--color--text--secondary);
 

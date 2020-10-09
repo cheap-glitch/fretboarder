@@ -124,9 +124,9 @@ export default {
 	color: var(--color--text);
 
 	@include mq($until: desktop) {
-		padding: 20px;
-
 		line-height: 1.8;
+
+		padding: 20px;
 
 		color: var(--color--text--secondary);
 	}

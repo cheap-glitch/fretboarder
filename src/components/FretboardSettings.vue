@@ -336,8 +336,8 @@ export default {
 
 	max-width: 300px;
 
-	font-size: 1.6rem;
 	text-align: justify;
+	font-size: 1.6rem;
 
 	color: var(--color--text);
 }

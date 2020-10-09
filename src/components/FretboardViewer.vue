@@ -239,7 +239,7 @@ export default {
 	position: relative;
 
 	// Shift the fretboard to keep it horizontally centered when fret numbers are displayed
-	@include mq($until: desktop, $and: '(orientation: portrait)') {
+	@include mq($until: desktop, $and: "(orientation: portrait)") {
 		&.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
 	}
 }
@@ -254,15 +254,15 @@ export default {
 	display: flex;
 
 	&.is-vertical {
-		justify-content: flex-start;
 		align-items: center;
+		justify-content: flex-start;
 
 		width: layout.$fret-number-wrapper-size;
 	}
 
 	&:not(.is-vertical) {
-		justify-content: center;
 		align-items: flex-end;
+		justify-content: center;
 
 		height: layout.$fret-number-wrapper-size;
 	}

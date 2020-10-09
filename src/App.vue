@@ -208,9 +208,9 @@ export default {
 		}
 
 		@media (orientation: landscape) {
-			padding: 40px 20px;
-
 			overflow-x: scroll;
+
+			padding: 40px 20px;
 		}
 	}
 
@@ -218,13 +218,12 @@ export default {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
-
 		overflow-x: auto;
 
 		min-height: 33vh;
 
 		margin-bottom: 60px;
-		padding: 70px 0 40px 0;
+		padding: 70px 0 40px;
 	}
 }
 
@@ -262,7 +261,7 @@ export default {
 
 	border-radius: 6px;
 
-	color: white;
+	color: var(--color--text--inverted);
 
 	@include mq($from: desktop) {
 		@include space-children-h(5px);
@@ -308,8 +307,9 @@ export default {
 
 	font-size: 18px;
 
-	color: white;
-	border: 1px solid white;
+	border: 1px solid var(--color--text--inverted);
+
+	color: var(--color--text--inverted);
 
 	cursor: pointer;
 
@@ -324,7 +324,7 @@ export default {
 	font-size: 18px;
 	font-weight: bold;
 
-	color: white;
+	color: var(--color--text--inverted);
 }
 
 /**

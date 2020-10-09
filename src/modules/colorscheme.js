@@ -32,6 +32,7 @@ const colorscheme = {
 
 	'--color--text':            [colors.black,         colors.nepal],
 	'--color--text--secondary': ['gray',               colors.oxfordBlue2],
+	'--color--text--inverted':  ['white',              'white'],
 
 	'--color--hover':           [colors.azure,         colors.azure],
 	'--color--highlight':       [colors.sun,           colors.sun],

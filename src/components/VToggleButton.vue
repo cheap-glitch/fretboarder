@@ -112,7 +112,6 @@ export default {
 
 .toggle {
 	position: relative;
-
 	width: 22px;
 	height: 10px;
 	@include pill;
@@ -133,11 +132,11 @@ export default {
 
 	@include circle(16px);
 
-	transition: left 200ms ease-in-out;
-
 	transform: translate(-50%, -50%);
 
 	filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+
+	transition: left 200ms ease-in-out;
 
 	&:not(.is-active) {
 		left: 0;

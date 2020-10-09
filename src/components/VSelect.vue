@@ -184,7 +184,7 @@ export default {
 			background-color: var(--color--bg--highlight);
 		}
 
-		.select:focus + & {
+		.select:not(:disabled):focus + & {
 			border-color: var(--color--hover);
 		}
 
@@ -233,6 +233,7 @@ export default {
 
 .bar__chevron {
 	font-size: 1.4rem;
+
 	color: var(--color--text--secondary);
 
 	.select:focus + .bar.is-contained & {
