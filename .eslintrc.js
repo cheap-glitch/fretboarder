@@ -27,12 +27,12 @@ module.exports = {
 		'smarter-tabs/smarter-tabs': 'warn',
 	},
 
-	overrides: [{
-		files: [
-			'test/*.test.js'
-		],
-		env: {
-			mocha: true
+	overrides: [
+		{
+			files: ['test/*.test.js'],
+			env: {
+				mocha: true
+			}
 		}
-	}],
+	],
 }

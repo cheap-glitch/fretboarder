@@ -3,10 +3,38 @@
 
   "extends": [
     "stylelint-config-standard",
-    "stylelint-config-sass-guidelines"
+    "stylelint-config-sass-guidelines",
+    "./.stylelint-config-properties-order"
+  ],
+
+  "plugins": [
+    "stylelint-order",
+    "stylelint-scss",
+    "stylelint-selector-bem-pattern"
   ],
 
   "rules": {
-    "indentation": "tab"
+    "indentation":                                 "tab",
+    "string-quotes":                               "double",
+
+    "max-nesting-depth":                           3,
+    "selector-class-pattern":                      null,
+    "block-opening-brace-space-before":            null,
+    "block-closing-brace-space-before":            null,
+    "selector-combinator-space-before":            null,
+    "selector-descendant-combinator-no-non-space": null,
+
+    "property-disallowed-list":                    ["grid-gap"],
+
+    "declaration-empty-line-before":               null,
+    "declaration-colon-space-after":               null,
+    "at-rule-empty-line-before":                   null,
+
+    "value-list-max-empty-lines":                  1,
+    "declaration-property-value-disallowed-list":  {},
+
+    "scss/dollar-variable-colon-space-after":      "at-least-one-space",
+
+    "plugin/selector-bem-pattern":                 { "preset": "bem" }
   }
 }
