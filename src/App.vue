@@ -41,8 +41,7 @@ div.App#app(:style="colorscheme")
 		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
 
 	//- Scales & arpeggios
-	div.sequences-wrapper
-		FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
+	div: FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
 
 	//----------------------------------------------------------------------
 	//- Footer
@@ -339,7 +338,7 @@ export default {
 
 	flex: 1 1 100%;
 
-	margin-top: 20px;
+	margin-top: 40px;
 }
 
 .nav {
