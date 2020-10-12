@@ -114,7 +114,7 @@ export default {
 	computed: {
 		intervals() {
 			// Make a list of intervals, each with the list of sequences that contain them
-			const intervals = Object.values(this.sequences.reduce((list, seq, index) => {
+			const intervals = Object.values(this.sequences.reduce((list, seq) => {
 				// If the interval is already in the list
 				if (seq.interval in list) {
 					list[seq.interval].sequences.push(seq.index);
@@ -123,7 +123,7 @@ export default {
 					list[seq.interval] = {
 						name:      intervalsNames[seq.interval],
 						value:     seq.interval,
-						sequences: [index],
+						sequences: [seq.index],
 					};
 				}
 
