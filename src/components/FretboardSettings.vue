@@ -193,8 +193,12 @@ export default {
 	},
 
 	computed: {
-		lowestFret()  { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 1 : 0])); },
-		highestFret() { return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 0 : 1])); },
+		lowestFret() {
+			return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 1 : 0]));
+		},
+		highestFret() {
+			return formatOrdinalSuffix(formatFretNb(this.fretRangeDisplay[this.isFlippedHor ? 0 : 1]));
+		},
 		tunings() {
 			return mapObjectToObject(tunings[this.instrument], tuning => tuningsNames[tuning]);
 		},
