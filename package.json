@@ -82,6 +82,7 @@
     "sass-mq": "^5.0.1",
     "stylelint-config-sass-guidelines": "^7.1.0",
     "stylelint-config-standard": "^20.0.0",
+    "stylelint-declaration-block-no-ignored-properties": "^2.3.0",
     "stylelint-order": "^4.1.0",
     "stylelint-scss": "^3.18.0",
     "stylelint-selector-bem-pattern": "^2.1.0",
