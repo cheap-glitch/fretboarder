@@ -146,7 +146,7 @@ export default {
 			return { background: `linear-gradient(-45deg, ${gradient})` };
 		},
 		colors() {
-			return this.$store.state.sequences.sequences.map(seq => seq.color);
+			return this.displayedSequences.map(seq => seq.color);
 		},
 		infos() {
 			if (!this.isActive) return notesNames[this.note];
@@ -174,7 +174,10 @@ export default {
 			return this.displayedInfos != 'none';
 		},
 
-		...get(['isMobileDevice']),
+		...get([
+			'isMobileDevice',
+			'sequences/displayedSequences',
+		]),
 	},
 }
 
