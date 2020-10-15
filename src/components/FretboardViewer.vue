@@ -237,11 +237,6 @@ export default {
 .FretboardViewer {
 	display: grid;
 	position: relative;
-
-	// Shift the fretboard to keep it horizontally centered when fret numbers are displayed
-	@include mq($until: desktop, $and: "(orientation: portrait)") {
-		&.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
-	}
 }
 
 .string {
@@ -270,6 +265,19 @@ export default {
 
 .fret-number__text {
 	color: var(--color--text--secondary);
+}
+
+@include mq($until: desktop) {
+	// Shift the fretboard to keep it horizontally centered when fret numbers are displayed
+	@media (orientation: portrait) {
+		.FretboardViewer.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
+	}
+
+	// Add a margin on the right side
+	@media (orientation: landscape) {
+		.FretboardViewer { padding-right: 20px; }
+		.string          { margin-right:  20px; }
+	}
 }
 
 </style>

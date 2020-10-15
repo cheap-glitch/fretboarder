@@ -86,7 +86,9 @@ export default {
 		@include space-children-v(40px);
 
 		max-width: 1400px;
+
 		margin: auto;
+		padding: 0 10px;
 	}
 }
 

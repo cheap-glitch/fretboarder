@@ -226,12 +226,6 @@ export default {
 	}
 }
 
-.FretboardSequences {
-	@include mq($from: desktop) {
-		padding: 0 10px;
-	}
-}
-
 /**
  * Header
  * -----------------------------------------------------------------------------
