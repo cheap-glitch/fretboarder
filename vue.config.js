@@ -64,6 +64,9 @@ module.exports = {
 
 	pluginOptions: {
 
+		// Stylelint
+		lintStyleOnBuild: true,
+
 		// Font Awesome icons
 		fontawesome: {
 			component: 'fa-icon',
