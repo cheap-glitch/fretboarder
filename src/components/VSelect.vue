@@ -176,16 +176,16 @@ export default {
 		cursor: not-allowed;
 	}
 
-	.select:not(:disabled):focus + & {
-		border-color: var(--color--hover);
-	}
-
 	@include mq($from: desktop) {
 		padding: 8px 10px;
 
 		.select:not(:disabled):hover + & {
 			border-color: var(--color--hover);
 			background-color: var(--color--bg--highlight);
+		}
+
+		.select:not(:disabled):focus + & {
+			border-color: var(--color--hover);
 		}
 
 		&.is-contained {
