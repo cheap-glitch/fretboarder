@@ -204,11 +204,13 @@ export default {
 		// Fret bar
 		&.is-fretboard-flipped-vert {
 			&:not(.is-open-string) { border-top-width:    layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-bottom-width: layout.$fretbar-thickness; }
 			&.is-first-fret        { border-bottom-width: layout.$nut-thickness;     }
 		}
 
 		&:not(.is-fretboard-flipped-vert) {
 			&:not(.is-open-string) { border-bottom-width: layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-top-width:    layout.$fretbar-thickness; }
 			&.is-first-fret        { border-top-width:    layout.$nut-thickness;     }
 		}
 	}
