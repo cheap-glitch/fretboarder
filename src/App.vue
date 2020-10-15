@@ -37,8 +37,14 @@ div.App#app(:style="colorscheme")
 	FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
-	div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
-		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
+	div.fretboard-wrapper#fretboard-wrapper(
+		v-show="!isMobileDevice || subpage == 'fretboard'"
+		v-mods="{ isLargeInstrument }"
+		)
+		FretboardViewer(
+			:is-vertical="isMobileDevice && !isLayoutLandscape"
+			v-mods="{ isLargeInstrument }"
+			)
 
 	//- Scales & arpeggios
 	div: FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
@@ -100,6 +106,7 @@ import { get }               from 'vuex-pathify'
 
 import { colorscheme }       from '@/modules/colorscheme'
 import { mapObjectToObject } from '@/modules/object'
+import { instruments }       from '@/modules/music'
 
 import { mediaQueries }      from '@/stores/main'
 
@@ -135,6 +142,9 @@ export default {
 				case 'mandolin': return 'mandolin';
 				default:         return 'guitar';
 			}
+		},
+		isLargeInstrument() {
+			return instruments[this.instrument].nbStrings > 7;
 		},
 
 		...get('fretboard', [
@@ -200,10 +210,14 @@ export default {
 .fretboard-wrapper {
 	@include mq($until: desktop) {
 		@media (orientation: portrait) {
-			display: flex;
-			justify-content: center;
-
 			margin: 20px 0;
+
+			&.is-large-instrument {
+				overflow-x: scroll;
+
+				margin: 0;
+				padding: 20px;
+			}
 		}
 
 		@media (orientation: landscape) {

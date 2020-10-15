@@ -268,9 +268,19 @@ export default {
 }
 
 @include mq($until: desktop) {
-	// Shift the fretboard to keep it horizontally centered when fret numbers are displayed
 	@media (orientation: portrait) {
-		.FretboardViewer.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
+		.FretboardViewer {
+			margin: auto;
+
+			&.is-large-instrument {
+				margin-bottom: 20px;
+			}
+
+			&:not(.is-large-instrument).is-showing-fret-nbs {
+				// Shift the fretboard to keep it horizontally centered when fret numbers are displayed
+				transform: translateX(layout.$fret-number-wrapper-size / -2);
+			}
+		}
 	}
 
 	// Add a margin on the right side
