@@ -303,12 +303,12 @@ export default {
 	@include space-children-v(20px);
 
 	padding: 28px 20px;
-	padding-bottom: 0;
 
 	@include mq($from: desktop) {
 		@include space-children-v(8px);
 
 		padding: 14px;
+		padding-bottom: 0;
 	}
 }
 
