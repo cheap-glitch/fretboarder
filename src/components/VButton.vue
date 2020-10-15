@@ -107,6 +107,10 @@ export default {
 		}
 	}
 
+	&:not(.is-disabled):focus {
+		border-color: var(--color--hover);
+	}
+
 	@include mq($until: desktop) {
 		justify-content: center;
 		@include space-children-h(12px);
@@ -126,17 +130,11 @@ export default {
 
 		background-color: var(--color--bg--highlight);
 
-		&:not(.is-disabled) {
-			&:focus {
-				border-color: var(--color--hover);
-			}
+		&:not(.is-disabled):hover {
+			border-color: var(--color--hover);
 
-			&:not(.is-disabled):hover {
-				border-color: var(--color--hover);
-
-				color: var(--color--text--inverted);
-				background-color: var(--color--hover);
-			}
+			color: var(--color--text--inverted);
+			background-color: var(--color--hover);
 		}
 	}
 }

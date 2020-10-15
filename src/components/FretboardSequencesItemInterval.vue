@@ -103,9 +103,12 @@ export default {
 
 	cursor: pointer;
 
-	&:hover,
 	&.is-selected {
 		background-color: var(--color--bg--highlight);
+	}
+
+	&:focus {
+		border-color: var(--color--hover);
 	}
 
 	@include mq($from: desktop) {
@@ -114,8 +117,8 @@ export default {
 
 		border: 1px solid var(--color--border);
 
-		&:focus {
-			border-color: var(--color--hover);
+		&:hover {
+			background-color: var(--color--bg--highlight);
 		}
 	}
 }

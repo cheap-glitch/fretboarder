@@ -181,20 +181,20 @@ export default {
 	&::-webkit-slider-thumb          { @include thumb; }
 	&::-webkit-slider-runnable-track { @include track; }
 
+	&:focus {
+		z-index: 2;
+		color: var(--color--hover);
+
+		outline: none;
+		&::-moz-focus-outer { border-style: none; }
+
+		&::-moz-range-thumb     { cursor: grabbing; }
+		&::-webkit-slider-thumb { cursor: grabbing; }
+	}
+
 	@include mq($from: desktop) {
 		&:hover {
 			color: var(--color--hover);
-		}
-
-		&:focus {
-			z-index: 2;
-			color: var(--color--hover);
-
-			outline: none;
-			&::-moz-focus-outer { border-style: none; }
-
-			&::-moz-range-thumb     { cursor: grabbing; }
-			&::-webkit-slider-thumb { cursor: grabbing; }
 		}
 	}
 }
