@@ -17,7 +17,7 @@
     "headers": [
       {
         "key":   "Content-Security-Policy",
-        "value": "default-src 'none'; base-uri 'none'; connect-src 'self'; font-src 'self'; img-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self';"
+        "value": "default-src 'none'; base-uri 'none'; connect-src 'self'; font-src 'self'; img-src 'self' blob:; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self';"
       },
       {
         "key":   "Referrer-Policy",

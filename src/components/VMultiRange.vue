@@ -1,8 +1,3 @@
-
-
-<!-- components/VMultiRange.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -65,8 +60,7 @@ export default {
 	},
 
 	methods: {
-		selectValue(event)
-		{
+		selectValue(event) {
 			// Compute the selected value using the location of the pointer
 			const rect  = this.$el.getBoundingClientRect();
 			const value = Math.max(0, Math.min(this.max, this.min + Math.ceil(Math.max(0, event.clientX - rect.x)*this.max / rect.width)));
@@ -74,25 +68,20 @@ export default {
 			// "Trigger" a fake change event
 			this.updateValue(1, { type: 'change', target: { value } });
 		},
-		updateValue(inputIndex, event)
-		{
+		updateValue(inputIndex, event) {
 			const newValues  = this.values.map((value, index) => index == inputIndex ? parseInt(event.target.value, 10) : value);
 			const missingGap = this.minGap - (newValues[1] - newValues[0]);
 
 			// Prevent the values from being too close or overlapping
-			if (missingGap > 0)
-			{
-				if (inputIndex == 0)
-				{
+			if (missingGap > 0) {
+				if (inputIndex == 0) {
 					// Try "pushing" the second thumb forward
 					const spaceLeft = this.max - newValues[1];
 					newValues[1] += Math.min(spaceLeft, missingGap);
 
 					// Adjust the position of the first thumb accordingly
 					newValues[0] -= Math.max(0, missingGap - spaceLeft);
-				}
-				else if (inputIndex == 1)
-				{
+				} else if (inputIndex == 1) {
 					// Try "pushing" the first thumb backward
 					const spaceLeft = newValues[0] - this.min;
 					newValues[0] -= Math.min(spaceLeft, missingGap);
@@ -115,12 +104,14 @@ export default {
 <style lang="scss" scoped>
 
 .VMultiRange {
-	position: relative;
 	display: grid;
+
+	position: relative;
 
 	cursor: pointer;
 
-	&::before, &::after {
+	&::before,
+	&::after {
 		content: "";
 
 		position: absolute;
@@ -133,17 +124,17 @@ export default {
 	}
 
 	&::before {
-		left: 0;
 		right: 0;
+		left: 0;
 
 		background-color: var(--color--border);
 	}
 
 	&::after {
-		left:  var(--fill--start);
 		right: calc(100% - var(--fill--stop));
+		left: var(--fill--start);
 
-		background-color: var(--color--highlight);
+		background-color: var(--color--hover);
 	}
 
 	&.is-flipped {
@@ -151,31 +142,33 @@ export default {
 	}
 }
 
-@mixin track()
-{
+@mixin track() {
 	border: none;
 	appearance: none;
 	background: none;
 }
 
-@mixin thumb()
-{
-	@include circle(14px);
+@mixin thumb() {
+	@include circle(16px);
 
 	border: none;
 	appearance: none;
-	background-color: currentcolor;
+	background-color: currentColor;
+
+	transition: color 200ms;
 
 	// Catch clicks
 	pointer-events: auto;
 	cursor: grab;
 
-	transition: color 200ms;
+	@include mq($from: desktop) {
+		@include circle(14px);
+	}
 }
 
 .slider {
-	grid-area: 1 / 1;
 	z-index: 1;
+	grid-area: 1 / 1;
 
 	color: var(--color--text--secondary);
 
@@ -188,10 +181,6 @@ export default {
 	&::-webkit-slider-thumb          { @include thumb; }
 	&::-webkit-slider-runnable-track { @include track; }
 
-	&:hover {
-		color: var(--color--hover);
-	}
-
 	&:focus {
 		z-index: 2;
 		color: var(--color--hover);
@@ -201,6 +190,12 @@ export default {
 
 		&::-moz-range-thumb     { cursor: grabbing; }
 		&::-webkit-slider-thumb { cursor: grabbing; }
+	}
+
+	@include mq($from: desktop) {
+		&:hover {
+			color: var(--color--hover);
+		}
 	}
 }
 

@@ -1,8 +1,3 @@
-
-
-<!-- components/VPopup.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -50,27 +45,22 @@ export default {
 	},
 
 	watch: {
-		isOpen()
-		{
+		isOpen() {
 			if (this.isOpen) this.createPopper(); else this.destroyPopper();
 		},
 	},
 
-	created()
-	{
+	created() {
 		this.popper = null;
 	},
 
-	destroyed()
-	{
+	destroyed() {
 		this.destroyPopper();
 	},
 
 	methods: {
-		createPopper()
-		{
-			if (this.isOpen && this.popper === null && this.target !== false && document.body.contains(this.target))
-			{
+		createPopper() {
+			if (this.isOpen && this.popper === null && this.target !== false && document.body.contains(this.target)) {
 				this.popper = createPopper(this.target, this.$refs.tooltip, {
 					placement: this.placement,
 					modifiers: [
@@ -103,10 +93,8 @@ export default {
 				});
 			}
 		},
-		destroyPopper()
-		{
-			if (!this.isOpen && this.popper !== null)
-			{
+		destroyPopper() {
+			if (!this.isOpen && this.popper !== null) {
 				this.popper.destroy();
 				this.popper = null;
 			}
@@ -125,36 +113,33 @@ export default {
 	position: absolute;
 	z-index: 1000;
 
-	padding: 8px;
-	border-radius: 4px;
-
 	font-size: 1.4rem;
 
-	color: var(--color--bg--popup);
-	background-color: var(--color--bg--popup);
-
-	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-
-	&[data-popper-placement^="bottom"] > .arrow { top:    -4px; }
-	&[data-popper-placement^="right"]  > .arrow { left:   -4px; }
-	&[data-popper-placement^="left"]   > .arrow { right:  -4px; }
-	&[data-popper-placement^="top"]    > .arrow { bottom: -4px; }
+	border-radius: 4px;
+	filter: drop-shadow(0 0 2px var(--color--drop-shadow));
 }
 
 .arrow {
-	&, &::before {
+	&,
+	&::before {
+		@include square(8px);
+
 		position: absolute;
 		z-index: -1;
-
-		@include square(8px);
 	}
 
 	&::before {
 		content: "";
-		background-color: currentcolor;
 
 		transform: rotate(45deg);
+
+		background-color: currentColor;
 	}
+
+	.VPopup[data-popper-placement^="top"]    > & { bottom: -4px; }
+	.VPopup[data-popper-placement^="left"]   > & { right:  -4px; }
+	.VPopup[data-popper-placement^="bottom"] > & { top:    -4px; }
+	.VPopup[data-popper-placement^="right"]  > & { left:   -4px; }
 }
 
 </style>

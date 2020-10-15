@@ -1,8 +1,3 @@
-
-
-<!-- components/FretboardViewer.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -14,7 +9,7 @@ div.FretboardViewer(
 	//- Frets
 	FretboardViewerFret(
 		v-for="(fret, index) of displayedFrets"
-		:key="`fret--${fret.string + 1}--${fret.number}`"
+		:key="`fret--${fret.number}--${fret.string + 1}`"
 
 		v-bind="fret"
 		:displayed-infos="displayedInfos"
@@ -23,10 +18,11 @@ div.FretboardViewer(
 		:is-on-last-string="fret.string + 1 == nbStrings"
 		:is-showing-inlay="inlays.includes(`${fret.number}-${fret.string + 1}`)"
 
-		:is-fretboard-flipped="isFlipped"
 		:is-fretboard-vertical="isVertical"
+		:is-fretboard-flipped-hor="isFlippedHor"
+		:is-fretboard-flipped-vert="isFlippedVert"
 
-		:style="(isFlipped && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
+		:style="(isFlippedHor && !isVertical) ? { gridArea: `${fret.string + 1} / -${fret.number + 2 - fretMin} / span 1 / span 1` } : null"
 		)
 
 	//- Strings
@@ -78,25 +74,26 @@ export default {
 	},
 
 	computed: {
-		grid()
-		{
+		grid() {
 			let template = [...(this.fretMin == 0 ? [layout.openStringFretLength.px] : []), ...this.layout.map(track => `${track}fr`)];
 
-			// Invert the grid layout for horizontal fretboards only
-			if (this.isFlipped && !this.isVertical) template.reverse();
+			/**
+			 * Invert the grid layout:
+			 *  - when the fretboard is vertical (portait mode, e.g. on mobile) and "mirrored"
+			 *  - when the fretboard is horizontal (desktop or mobile in landscape mode) and the fretting hand is flipped
+			 */
+			if (this.isVertical ? this.isFlippedVert : this.isFlippedHor) template.reverse();
 
 			return {
 				'grid-auto-flow': this.isVertical ? 'column' : 'row',
 				[`grid-template-${this.isVertical ? 'rows'   : 'columns'}`]: template.join(' '),
 			};
 		},
-		maxWidth()
-		{
+		maxWidth() {
 			// Limit the width of the fretboard in vertical mode
 			return this.isVertical ? { width: `${(this.nbStrings - 1)*layout.fretWidth.int + this.fretNumbersPadding.int}px` } : {};
 		},
-		minLength()
-		{
+		minLength() {
 			/**
 			 * The length of the fretboard must be so that the length
 			 * of the smallest fret is equal or greater than a fixed minimum length
@@ -105,8 +102,7 @@ export default {
 
 			return { [`min-${this.isVertical ? 'height': 'width'}`]: `${Math.ceil(length)}px` };
 		},
-		layout()
-		{
+		layout() {
 			/**
 			 * Compute the size of each fret so that:
 			 *     - size(1) = 3/2
@@ -121,12 +117,11 @@ export default {
 			// Don't include the open string fret in the flexible layout
 			return [...Array(this.fretMin == 0 ? (this.nbFrets - 1) : this.nbFrets).keys()].map(i => c - i/(n - 1));
 		},
-		strings()
-		{
+		strings() {
 			return [...Array(this.nbStrings).keys()].map(index => ({
 				// Start & end
-				[this.isVertical ? 'top'    : this.isFlipped ? 'right' : 'left' ]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
-				[this.isVertical ? 'bottom' : this.isFlipped ? 'left'  : 'right']: 0,
+				[this.isVertical ? (this.isFlippedVert ? 'bottom' : 'top'   ) : (this.isFlippedHor ? 'right' : 'left' )]: this.fretMin == 0 ? layout.openStringFretLength.px : '0',
+				[this.isVertical ? (this.isFlippedVert ? 'top'    : 'bottom') : (this.isFlippedHor ? 'left'  : 'right')]: 0,
 
 				// Position
 				[this.isVertical ? 'left': 'top']: `calc(calc(100% - ${this.fretNumbersPadding.px})*${index / (this.nbStrings - 1)})`,
@@ -136,13 +131,11 @@ export default {
 				[this.isVertical ? 'width' : 'height']: layout.stringThickness.px,
 			}));
 		},
-		inlays()
-		{
+		inlays() {
 			// List the frets which can have an inlay (only the 12th is omitted)
 			let frets = ['3', '5', '7', '9', '15', '17', '19', '21'];
 
-			switch (this.nbStrings)
-			{
+			switch (this.nbStrings) {
 				/**
 				 * Bass, ukulele, guitar
 				 * Single inlay in the middle + double inlay at the 12th fret
@@ -169,48 +162,48 @@ export default {
 
 			return [];
 		},
-		displayedInfos()
-		{
+		displayedInfos() {
 			return (this.displayedSequences.length > 1) ? (this.isShowingNoteNames ? 'name' : 'none') : this.noteInfos;
 		},
-		displayedFrets()
-		{
+		displayedFrets() {
 			return this.frets.filter(fret => this.fretMin <= fret.number && fret.number <= this.fretMax);
 		},
-		frets()
-		{
-			return getFrets(this.displayedSequences, this.tuningNotes, this.capo);
+		frets() {
+			const frets = getFrets(this.displayedSequences, this.tuningNotes, this.capo);
+
+			if (this.isVertical && this.isFlippedVert)
+				frets.reverse();
+
+			return frets;
 		},
-		fretNumbers()
-		{
+		fretNumbers() {
 			return [...Array(this.nbFrets).keys()]
-				.map(index => (this.isFlipped && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
+				.map(index => (this.isFlippedHor && !this.isVertical) ? this.fretMax - index : this.fretMin + index)
 				.map(fret  => fret == 0 ? '' : fret);
 		},
-		fretNumbersPadding()
-		{
+		fretNumbersPadding() {
 			return this.isShowingFretNbs ? layout.fretNumberWrapperSize : { int: 0, px: '0px' };
 		},
-		tuningNotes()
-		{
+		tuningNotes() {
 			const notes = Array.from(tunings[this.instrument][this.tuning] || tunings[this.instrument]['standard']);
 
-			return (!this.isVertical || this.isFlipped) ? notes.reverse() : notes;
+			/**
+			 * Invert the order of the strings (the topmost becomes the bottommost, etc.) when:
+			 *   - the fretboard is vertical + mirrored and the fretting hand is NOT flipped
+			 *   - the fretboard is horizontal and is not "mirrored" (i.e. flipped vertically)
+			 */
+			return (this.isVertical ? (this.isFlippedVert && !this.isFlippedHor) : !this.isFlippedVert) ? notes.reverse() : notes;
 		},
-		nbStrings()
-		{
+		nbStrings() {
 			return instruments[this.instrument].nbStrings;
 		},
-		nbFrets()
-		{
+		nbFrets() {
 			return this.fretMax - this.fretMin + 1;
 		},
-		fretMin()
-		{
+		fretMin() {
 			return this.fretRange[0];
 		},
-		fretMax()
-		{
+		fretMax() {
 			return this.fretRange[1];
 		},
 
@@ -226,7 +219,8 @@ export default {
 
 			'noteInfos',
 
-			'isFlipped',
+			'isFlippedHor',
+			'isFlippedVert',
 			'isShowingFretNbs',
 			'isShowingNoteNames',
 		]),
@@ -243,12 +237,6 @@ export default {
 .FretboardViewer {
 	display: grid;
 	position: relative;
-
-	// Shift fretboard to keep it horizontally centered when fret numbers are displayed
-	@include mq($until: desktop, $and: '(orientation: portrait)')
-	{
-		&.is-showing-fret-nbs { transform: translateX(layout.$fret-number-wrapper-size / -2); }
-	}
 }
 
 .string {
@@ -261,15 +249,15 @@ export default {
 	display: flex;
 
 	&.is-vertical {
-		justify-content: flex-start;
 		align-items: center;
+		justify-content: flex-start;
 
 		width: layout.$fret-number-wrapper-size;
 	}
 
 	&:not(.is-vertical) {
-		justify-content: center;
 		align-items: flex-end;
+		justify-content: center;
 
 		height: layout.$fret-number-wrapper-size;
 	}
@@ -277,6 +265,29 @@ export default {
 
 .fret-number__text {
 	color: var(--color--text--secondary);
+}
+
+@include mq($until: desktop) {
+	@media (orientation: portrait) {
+		.FretboardViewer {
+			margin: auto;
+
+			&.is-large-instrument {
+				margin-bottom: 20px;
+			}
+
+			&:not(.is-large-instrument).is-showing-fret-nbs {
+				// Shift the fretboard to keep it horizontally centered when fret numbers are displayed
+				transform: translateX(layout.$fret-number-wrapper-size / -2);
+			}
+		}
+	}
+
+	// Add a margin on the right side
+	@media (orientation: landscape) {
+		.FretboardViewer { padding-right: 20px; }
+		.string          { margin-right:  20px; }
+	}
 }
 
 </style>

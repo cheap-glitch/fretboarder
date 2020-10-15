@@ -1,4 +1,3 @@
-<p>&nbsp;</p>
 <p align="center">
 	<a href="https://fretboarder.app">
 		<img src="./docs/banner.png" alt="A white icon of a an acoustic guitar and a white text saying Fretboarder over a bright blue background.">
@@ -7,7 +6,7 @@
 
 <p align="center">Ride your fretboard and take your guitar skills to the next level! 🤘</p>
 
-<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/main/docs/screenshot.png" alt="A screenshot of the app in usage.">
+<img src="https://raw.githubusercontent.com/cheap-glitch/fretboarder/develop/docs/screenshot.png" alt="A screenshot of the app in usage.">
 
 > Fretboarder is a web app to visualize  the layout of scales and arpeggios on a
 > variety of fretboards. It  aims to help players get a  better grasp on scales,
@@ -65,14 +64,14 @@ This software is distributed under the [Mozilla Public License 2.0](https://www.
 
 ## Other related tools & resources
 
-  * [All Guitar Chords](http://www.all-guitar-chords.com): a compilation of scales, chords, arpeggios, licks, and more
-  * [ChordMaster 2000](http://chordmaster.tardate.com): a tool to practice and memorize chords
-  * [ChordPic](https://chordpic.com): a chord diagram generator, with lots of options to fine-tune the looks
-  * [Fretmap](https://fretmap.app): a very nice looking fretboard visualizer
-  * [Glorious Voice Leader](https://www.gloriousvoiceleader.com): helps you find chord voicings that lead smoothly from one chord to the next
-  * [Guitar Practice Loop](https://www.guitarpracticeloops.com): practice various scales with accompanying audio
-  * [Guitar Recorder](https://1j01.github.io/guitar): display and compose ASCII tablatures with an interactive fretboard
-  * [Guitar Scientist](https://www.guitarscientist.com/generator): a fretboard diagram generator with tons of options to customize the result
-  * [GuitarStreams](https://guitarstreams.com/tool/fretboard): an interactive fretboard for guitar and ukulele players
-  * [JGuitar](https://jguitar.com): an extensive collection of tools regarding chords and music theory
-  * [Johann](https://scribbletune.github.io/johann/#/guitar): a fretboard visualizer (with an accompanying piano version)
+  * [All Guitar Chords](http://www.all-guitar-chords.com) - A compilation of scales, chords, arpeggios, licks, and more
+  * [ChordMaster 2000](http://chordmaster.tardate.com) - A tool to practice and memorize chords
+  * [ChordPic](https://chordpic.com) - A chord diagram generator, with lots of options to fine-tune the looks
+  * [Fretmap](https://fretmap.app) - A very nice looking fretboard visualizer
+  * [Glorious Voice Leader](https://www.gloriousvoiceleader.com) - Helps you find chord voicings that lead smoothly from one chord to the next
+  * [Guitar Practice Loop](https://www.guitarpracticeloops.com) - Practice various scales with accompanying audio
+  * [Guitar Recorder](https://1j01.github.io/guitar) - Display and compose ASCII tablatures with an interactive fretboard
+  * [Guitar Scientist](https://www.guitarscientist.com/generator) - A fretboard diagram generator with tons of options to customize the result
+  * [GuitarStreams](https://guitarstreams.com/tool/fretboard) - An interactive fretboard for guitar and ukulele players
+  * [JGuitar](https://jguitar.com) - An extensive collection of tools regarding chords and music theory
+  * [Johann](https://scribbletune.github.io/johann/#/guitar) - A fretboard visualizer (with an accompanying piano version)

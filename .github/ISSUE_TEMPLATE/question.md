@@ -1,7 +1,7 @@
 ---
 name: Question
 about: ʅฺ(・ω・💧)ʃฺ
-labels: question
+labels: 🤔 question
 ---
 
 

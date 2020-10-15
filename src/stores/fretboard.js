@@ -1,8 +1,3 @@
-
-/**
- * stores/fretboard.js
- */
-
 import { make }                      from 'vuex-pathify'
 import { getVuexState }              from 'vuex-plugin-save-state'
 
@@ -31,7 +26,7 @@ const model = {
 	},
 	noteInfos: {
 		default: 'name',
-		validator: v => typeof v == 'string' && ['none', 'name', 'interval'].includes(v),
+		validator: v => typeof v == 'string' && ['none', 'name', 'degree', 'interval'].includes(v),
 	},
 	isShowingFretNbs: {
 		default: false,
@@ -41,7 +36,11 @@ const model = {
 		default: true,
 		validator: v => typeof v == 'boolean',
 	},
-	isFlipped: {
+	isFlippedHor: {
+		default: false,
+		validator: v => typeof v == 'boolean',
+	},
+	isFlippedVert: {
 		default: false,
 		validator: v => typeof v == 'boolean',
 	},
@@ -56,8 +55,7 @@ const mutations = {
 	...makeTogglers(state),
 
 	// Reset the tuning to the default when switching between different instruments
-	instrument(state, value)
-	{
+	instrument(state, value) {
 		state.tuning     = 'standard';
 		state.instrument = value;
 	},

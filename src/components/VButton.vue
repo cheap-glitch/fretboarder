@@ -1,8 +1,3 @@
-
-
-<!-- VButton.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -10,15 +5,15 @@ button.VButton(
 	v-mods="{ isActive, isDisabled, isDarkModeOn }"
 	@click.left="clickButton"
 	)
-	//- Icon
+
 	fa-icon.icon(
 		v-if="icon.length"
 
 		:icon="Array.isArray(icon) ? icon : ['far', icon]"
 		:flip="isFlipped ? 'horizontal' : null"
 		)
-	//- Text
-	p.title(v-if="title.length") {{ title }}
+
+	p.text(v-if="text.length") {{ text }}
 
 </template>
 <!--}}}-->
@@ -33,12 +28,12 @@ export default {
 	name: 'VButton',
 
 	props: {
-		icon: {
-			type: [Array, String],
+		text: {
+			type: String,
 			default: '',
 		},
-		title: {
-			type: String,
+		icon: {
+			type: [Array, String],
 			default: '',
 		},
 		isActive: {
@@ -60,8 +55,7 @@ export default {
 	},
 
 	methods: {
-		clickButton()
-		{
+		clickButton() {
 			if (!this.isDisabled)
 				this.$emit('click');
 		}
@@ -78,59 +72,75 @@ export default {
 .VButton {
 	display: flex;
 	align-items: center;
-	@include space-children-h(8px);
 
-	@include pill;
+	padding: 14px 12px;
 
-	padding: 8px 10px;
-
-	border: 1px solid var(--color--bg--highlight);
-
-	color: var(--color--text);
-	background-color: var(--color--bg--highlight);
+	// Simulate a border inside a grid
+	border: none;
+	box-shadow: 0 0 0 1px var(--color--border);
 
 	appearance: none;
-	cursor: pointer;
+	color: var(--color--text);
+	background-color: transparent;
 
 	transition: border-color 200ms, background-color 200ms;
 
-	&:not(.is-active):not(.is-disabled):hover {
-		color: white;
-		border-color: var(--color--hover);
-		background-color: var(--color--hover);
-	}
+	cursor: pointer;
 
 	&.is-disabled {
 		border-color: var(--color--border);
+
 		background-color: var(--color--border);
 
 		cursor: not-allowed;
 	}
 
 	&.is-active {
-		color: var(--color--highlight);
 		border-color: var(--color--highlight);
 
-		&:hover, &:not(.is-dark-mode-on) {
-			color: white;
+		color: var(--color--highlight);
+
+		&:hover,
+		&:not(.is-dark-mode-on) {
+			color: var(--color--text--inverted);
 			background-color: var(--color--highlight);
 		}
 	}
 
-	&:focus {
+	&:not(.is-disabled):focus {
 		border-color: var(--color--hover);
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($until: desktop) {
+		justify-content: center;
+		@include space-children-h(12px);
+	}
+
+	@include mq($from: desktop) {
+		@include space-children-h(8px);
+
+		@include pill;
+
 		padding: 4px 8px;
 
 		font-size: 1.4rem;
+
+		border: 1px solid var(--color--bg--highlight);
+		box-shadow: none;
+
+		background-color: var(--color--bg--highlight);
+
+		&:not(.is-disabled):hover {
+			border-color: var(--color--hover);
+
+			color: var(--color--text--inverted);
+			background-color: var(--color--hover);
+		}
 	}
 }
 
 .icon,
-.title {
+.text {
 	cursor: pointer;
 
 	.VButton.is-disabled & {

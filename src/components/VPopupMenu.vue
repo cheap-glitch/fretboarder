@@ -1,8 +1,3 @@
-
-
-<!-- components/VPopupMenu.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -11,11 +6,11 @@ div.VPopupMenu
 		ref="button"
 
 		:icon="icon"
-		:title="title"
+		:text="text"
 
 		@click="isOpen = !isOpen"
 		)
-	VPopup(
+	VPopup.popup(
 		:target="$refs.button ? ($refs.button.$el || false) : false"
 		placement="bottom"
 
@@ -39,7 +34,7 @@ export default {
 			type: [Array, String],
 			required: true,
 		},
-		title: {
+		text: {
 			type: String,
 			default: '',
 		},
@@ -56,15 +51,13 @@ export default {
 	},
 
 	watch: {
-		forceClosing()
-		{
+		forceClosing() {
 			this.isOpen = false;
 		},
 	},
 
 	methods: {
-		clickOutsideHandler(event)
-		{
+		clickOutsideHandler(event) {
 			if (!this.$refs.button.$el.contains(event.target))
 				this.isOpen = false;
 		},
@@ -78,7 +71,7 @@ export default {
 <!--{{{ SCSS -->
 <style lang="scss" scoped>
 
-.VPopup {
+.popup {
 	z-index: 2000;
 
 	color: var(--color--bg);

@@ -1,15 +1,10 @@
-
-
-<!-- components/FretboardViewerFret.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
 div.FretboardViewerFret
 
 	//- Tooltip to show the intervals of the hovered fret
-	VPopup(
+	VPopup.tooltip(
 		:target="$refs.note || false"
 		:boundary="isMobileDevice ? 'app' : 'fretboard-wrapper'"
 		:is-open="showTooltip"
@@ -17,7 +12,7 @@ div.FretboardViewerFret
 		div.intervals
 			div.intervals__item(
 				v-for="interval of intervals"
-				:key="`interval--${string + 1}--${number}--${interval.value}`"
+				:key="`interval--${number}--${string + 1}--${interval.value}`"
 				)
 				div.intervals__item__dot(
 					v-for="seq of interval.sequences"
@@ -27,14 +22,14 @@ div.FretboardViewerFret
 					)
 				p.intervals__item__text {{ interval.name }}
 
-	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardFlipped, isFretboardVertical }")
+	div.fret(v-mods="{ isOpenString, isStartingFret, isFirstFret, isOnLastString, isFretboardVertical, isFretboardFlippedHor, isFretboardFlippedVert }")
 
-		div.fret__inlay(v-show="isShowingInlay")
+		div.fret__inlay(v-if="isShowingInlay")
 
 		p.fret__note(
 			ref="note"
 
-			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardFlipped, isFretboardVertical }"
+			v-mods="{ isActive, isHighlighted, isShowingNoteInfos, isOpenString, isFretboardVertical, isFretboardFlippedHor, isFretboardFlippedVert }"
 			:style="noteBg"
 
 			@mouseenter="showTooltip = isActive"
@@ -52,7 +47,7 @@ div.FretboardViewerFret
 
 import { get }                                 from 'vuex-pathify'
 
-import { notesNames }                          from '@/modules/music'
+import { notesNames, degrees }                 from '@/modules/music'
 import { intervalsNames, intervalsShorthands } from '@/modules/music'
 
 export default {
@@ -78,7 +73,7 @@ export default {
 		displayedInfos: {
 			type: String,
 			required: true,
-			validator: v => ['none', 'name', 'interval'].includes(v)
+			validator: v => ['none', 'name', 'degree', 'interval'].includes(v)
 		},
 		isHighlighted: {
 			type: Boolean,
@@ -92,11 +87,15 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isFretboardFlipped: {
+		isFretboardVertical: {
 			type: Boolean,
 			default: false,
 		},
-		isFretboardVertical: {
+		isFretboardFlippedHor: {
+			type: Boolean,
+			default: false,
+		},
+		isFretboardFlippedVert: {
 			type: Boolean,
 			default: false,
 		},
@@ -113,30 +112,23 @@ export default {
 	},
 
 	computed: {
-		intervals()
-		{
+		intervals() {
 			// Make a list of intervals, each with the list of sequences that contain them
-			const intervals = this.sequences.reduce(function(list, seq)
-			{
-				const index = list.findIndex(item => item.value == seq.interval);
-
+			const intervals = Object.values(this.sequences.reduce((list, seq) => {
+				// If the interval is already in the list
+				if (seq.interval in list) {
+					list[seq.interval].sequences.push(seq.index);
 				// If the interval is not in the list
-				if (index === -1)
-				{
-					list.push({
+				} else {
+					list[seq.interval] = {
 						name:      intervalsNames[seq.interval],
 						value:     seq.interval,
 						sequences: [seq.index],
-					});
-				}
-				// If the interval is already in the list
-				else
-				{
-					list[index].sequences.push(seq.index);
+					};
 				}
 
 				return list;
-			}, []);
+			}, {}));
 
 			// Sort the intervals and their sequences to keep the same visual order
 			intervals.sort((a, b) => a.value - b.value);
@@ -144,8 +136,7 @@ export default {
 
 			return intervals;
 		},
-		noteBg()
-		{
+		noteBg() {
 			if (!this.isActive) return { 'background-color': 'var(--color--bg--highlight)' };
 
 			// Build a solid gradient with the colors of every sequence the fret note belongs to
@@ -154,38 +145,39 @@ export default {
 
 			return { background: `linear-gradient(-45deg, ${gradient})` };
 		},
-		colors()
-		{
-			return this.$store.state.sequences.sequences.map(seq => seq.color);
+		colors() {
+			return this.displayedSequences.map(seq => seq.color);
 		},
-		infos()
-		{
-			return (this.displayedInfos == 'interval' && this.isActive)
-				? intervalsShorthands[this.sequences[0].interval]
-				: notesNames[this.note];
+		infos() {
+			if (!this.isActive) return notesNames[this.note];
+
+			switch (this.displayedInfos) {
+				case 'name':     return notesNames[this.note];
+				case 'degree':   return degrees[this.sequences[0].interval];
+				case 'interval': return intervalsShorthands[this.sequences[0].interval];
+				default:         return '';
+			}
 		},
-		isActive()
-		{
+		isActive() {
 			return this.sequences.length > 0;
 		},
-		isOpenString()
-		{
+		isOpenString() {
 			return this.number == 0;
 		},
-		isStartingFret()
-		{
+		isStartingFret() {
 			return this.number == this.fretMin && this.number > 0;
 		},
-		isFirstFret()
-		{
+		isFirstFret() {
 			return this.number == 1;
 		},
-		isShowingNoteInfos()
-		{
+		isShowingNoteInfos() {
 			return this.displayedInfos != 'none';
 		},
 
-		...get(['isMobileDevice']),
+		...get([
+			'isMobileDevice',
+			'sequences/displayedSequences',
+		]),
 	},
 }
 
@@ -204,34 +196,37 @@ export default {
 	border-style: solid;
 	border-color: var(--color--border);
 
-	/**
-	 * Size
-	 */
 	&.is-fretboard-vertical {
-		&.is-on-last-string       { width: 0; }
-		&:not(.is-on-last-string) { width: layout.$fret-width; }
+		// Size
+		&.is-on-last-string            { width: 0; }
+		&:not(.is-on-last-string)      { width: layout.$fret-width; }
+
+		// Fret bar
+		&.is-fretboard-flipped-vert {
+			&:not(.is-open-string) { border-top-width:    layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-bottom-width: layout.$fretbar-thickness; }
+			&.is-first-fret        { border-bottom-width: layout.$nut-thickness;     }
+		}
+
+		&:not(.is-fretboard-flipped-vert) {
+			&:not(.is-open-string) { border-bottom-width: layout.$fretbar-thickness; }
+			&.is-starting-fret     { border-top-width:    layout.$fretbar-thickness; }
+			&.is-first-fret        { border-top-width:    layout.$nut-thickness;     }
+		}
 	}
 
 	&:not(.is-fretboard-vertical):not(.is-on-last-string) {
+		// Size
 		height: layout.$fret-width;
-	}
 
-	/**
-	 * Borders
-	 */
-	&.is-fretboard-vertical {
-		&:not(.is-open-string)         { border-bottom-width: layout.$fretbar-thickness; }
-		&.is-first-fret                { border-top-width:    layout.$nut-thickness;     }
-	}
-
-	&:not(.is-fretboard-vertical) {
-		&.is-fretboard-flipped {
+		// Fret bar
+		&.is-fretboard-flipped-hor {
 			&:not(.is-open-string) { border-left-width:   layout.$fretbar-thickness; }
 			&.is-starting-fret     { border-right-width:  layout.$fretbar-thickness; }
 			&.is-first-fret        { border-right-width:  layout.$nut-thickness;     }
 		}
 
-		&:not(.is-fretboard-flipped) {
+		&:not(.is-fretboard-flipped-hor) {
 			&:not(.is-open-string) { border-right-width:  layout.$fretbar-thickness; }
 			&.is-starting-fret     { border-left-width:   layout.$fretbar-thickness; }
 			&.is-first-fret        { border-left-width:   layout.$nut-thickness;     }
@@ -246,45 +241,12 @@ export default {
 
 	@include circle(layout.$note-size);
 
-	color: transparent;
-	opacity: 0;
 	font-weight: bold;
 
+	color: transparent;
+	opacity: 0;
+
 	transition: opacity 200ms, filter 200ms, border-radius 200ms;
-
-	/**
-	 * Placement
-	 */
-	&.is-fretboard-vertical {
-		left: 0;
-
-		&.is-open-string {
-			top: 0;
-			transform: translateX(-50%);
-		}
-
-		&:not(.is-open-string) {
-			top: 50%;
-			transform: translate(-50%, -50%);
-		}
-	}
-
-	&:not(.is-fretboard-vertical) {
-		&.is-open-string {
-			top: 0;
-			transform: translateY(-50%);
-
-			&.is-fretboard-flipped        { right: 0; }
-			&:not(.is-fretboard-flipped)  { left:  0; }
-		}
-
-		&:not(.is-open-string) {
-			transform: translate(-50%, -50%);
-
-			&.is-fretboard-vertical       { top: 50%; left:   0; }
-			&:not(.is-fretboard-vertical) { top:   0; left: 50%; }
-		}
-	}
 
 	/**
 	 * Display
@@ -297,15 +259,66 @@ export default {
 		}
 
 		&.is-highlighted        { border-radius: 0; }
-		&.is-showing-note-infos { color: white;     }
+		&.is-showing-note-infos { color: var(--color--text--inverted); }
 	}
 
 	&:not(.is-active) {
 		border: 2px dashed var(--color--border);
 
-		&:hover, &.is-open-string {
+		&:hover,
+		&.is-open-string {
 			color: var(--color--text);
 			opacity: 1;
+		}
+	}
+
+	/**
+	 * Position
+	 */
+	&.is-fretboard-vertical {
+		&.is-fretboard-flipped-vert {
+			right: 0;
+
+			&.is-open-string {
+				bottom: 0;
+				transform: translateX(50%);
+			}
+
+			&:not(.is-open-string) {
+				top: 50%;
+				transform: translate(50%, -50%);
+			}
+		}
+
+		&:not(.is-fretboard-flipped-vert) {
+			left: 0;
+
+			&.is-open-string {
+				top: 0;
+				transform: translateX(-50%);
+			}
+
+			&:not(.is-open-string) {
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
+		}
+	}
+
+	/* stylelint-disable-next-line no-descending-specificity */
+	&:not(.is-fretboard-vertical) {
+		&.is-open-string {
+			transform: translateY(-50%);
+
+			&.is-fretboard-flipped-hor       { right: 0; }
+			&:not(.is-fretboard-flipped-hor) { left:  0; }
+		}
+
+		&:not(.is-open-string) {
+			transform: translate(-50%, -50%);
+
+			&.is-fretboard-vertical          { top:  50%; }
+			&:not(.is-fretboard-vertical)    { left: 50%; }
 		}
 	}
 }
@@ -315,6 +328,13 @@ export default {
 	@include circle(15px);
 
 	background-color: var(--color--bg--highlight);
+}
+
+.tooltip {
+	padding: 8px;
+
+	color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--tooltip);
 }
 
 .intervals {
@@ -334,7 +354,7 @@ export default {
 }
 
 .intervals__item__text {
-	color: white;
+	color: var(--color--text--inverted);
 }
 
 </style>

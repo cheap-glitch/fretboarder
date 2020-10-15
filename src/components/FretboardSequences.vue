@@ -1,19 +1,14 @@
-
-
-<!-- components/FretboardSequences.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
 div.FretboardSequences
 	div.tools
 		//- Add a new sequence
-		VButton(
-			v-show="!isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
+		VButton.tools__add-sequence(
+			v-show="sequences.length < MAX_NB_SEQUENCES"
 
+			text="Add new scale/arpeggio"
 			icon="plus"
-			title="Add new scale/arpeggio"
 
 			@click="$store.commit('sequences/add')"
 			)
@@ -21,9 +16,9 @@ div.FretboardSequences
 		VButton(
 			v-show="sequences.length >= 2"
 
+			text="Hide all"
 			icon="eye-slash"
 			is-flipped
-			title="Hide all"
 
 			@click="$store.commit('sequences/hideAll')"
 		)
@@ -31,8 +26,8 @@ div.FretboardSequences
 		VButton(
 			v-show="sequences.length >= 2"
 
+			text="Remove all"
 			icon="trash-alt"
-			title="Remove all"
 
 			@click="$store.commit('sequences/removeAll')"
 		)
@@ -41,21 +36,12 @@ div.FretboardSequences
 	p.text-no-scales(v-show="sequences.length == 0") Add a new scale or arpeggio to see it displayed on the fretboard.
 
 	div.sequences: FretboardSequencesItem(
-		v-for="seq of sequences"
-		:key="`sequence--${seq.index}`"
+		v-for="(seq, index) of sequences"
+		:key="`sequence--${seq.id}`"
 
+		:index="index"
 		v-bind="seq"
 		:nb-sequences="sequences.length"
-		)
-
-	//- "New scale" button for mobile
-	VButton.add-button-mobile(
-		v-show="isMobileDevice && sequences.length < MAX_NB_SEQUENCES"
-
-		icon="plus"
-		title="Add new scale/arpeggio"
-
-		@click="$store.commit('sequences/add')"
 		)
 
 </template>
@@ -83,8 +69,7 @@ export default {
 		...get(['isMobileDevice']),
 	},
 
-	created()
-	{
+	created() {
 		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
 	},
 }
@@ -97,37 +82,56 @@ export default {
 <style lang="scss" scoped>
 
 .FretboardSequences {
-	@include space-children-v(40px);
+	@include mq($from: desktop) {
+		@include space-children-v(40px);
 
-	@include mq($from: desktop)
-	{
 		max-width: 1400px;
+
 		margin: auto;
+		padding: 0 10px;
 	}
 }
 
 .sequences {
-	@include space-children-v(20px);
-
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		@include space-children-v(40px);
 	}
 }
 
 .tools {
-	display: flex;
-	justify-content: center;
-	@include space-children-h(10px);
+	@include mq($until: desktop) {
+		display: grid;
+		grid-template: auto / 1fr 1fr;
+		gap: 1px;
+
+		// Fix for the box-shadow border hack
+		margin: 1px 0;
+	}
+
+	@include mq($from: desktop) {
+		display: flex;
+		justify-content: center;
+		@include space-children-h(10px);
+	}
+}
+
+.tools__add-sequence {
+	@include mq($until: desktop) {
+		grid-column: 1 / span 2;
+	}
 }
 
 .text-no-scales {
 	text-align: center;
 	color: var(--color--text);
-}
 
-.add-button-mobile {
-	margin: auto;
+	@include mq($until: desktop) {
+		line-height: 1.8;
+
+		padding: 20px;
+
+		color: var(--color--text--secondary);
+	}
 }
 
 </style>

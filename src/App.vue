@@ -1,8 +1,3 @@
-
-
-<!-- src/App.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -13,7 +8,7 @@ div.App#app(:style="colorscheme")
 	//----------------------------------------------------------------------
 	header.header
 		//- Logo
-		div.header__logo
+		div.header__logo(v-show="!isMobileDevice || subpage == 'fretboard'")
 			fa-icon.logo__icon(
 				:icon="['far', instrumentIcon]"
 				v-mods="{ isUkulele: instrument == 'ukulele' }"
@@ -21,22 +16,17 @@ div.App#app(:style="colorscheme")
 			h1.logo__text Fretboarder
 
 		//- Settings (desktop)
-		FretboardTools(v-if="!isMobileDevice")
-
-			//- Dark mode toggle switch
-			//- button.dark-mode-switch(
-				v-mods="{ isDarkModeOn }"
-				@click="$store.commit('toggle.isDarkModeOn')"
-				)
-				fa-icon.dark-mode-switch__sun(:icon="['fas', 'sun']")
-				div.dark-mode-switch__toggle
-				fa-icon.dark-mode-switch__moon(:icon="['fas', 'moon']")
+		FretboardSettings(v-if="!isMobileDevice")
 
 		//- Sub-pages links (mobile)
 		nav.header__sublinks(v-if="isMobileDevice")
-			div.header__sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
-			div.header__sublinks__item(v-show="subpage == 'fretboard'" @click.left="subpage =     'tools'"): fa-icon(:icon="['far', 'cog']")
-			div.header__sublinks__item(v-show="subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
+			div.sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage = 'sequences'"): fa-icon(:icon="['far', 'list-music']")
+			div.sublinks__item(v-show="isMobileDevice && subpage == 'fretboard'" @click.left="subpage =  'settings'"): fa-icon(:icon="['far', 'cog']")
+			div.sublinks__item(v-show="isMobileDevice && subpage != 'fretboard'" @click.left="subpage = 'fretboard'"): fa-icon(:icon="['far', 'arrow-left']")
+
+		//- Sub-pages headers
+		h1.header__subpage-header(v-show="isMobileDevice && subpage == 'sequences'") Scales & arpeggios
+		h1.header__subpage-header(v-show="isMobileDevice && subpage ==  'settings'") Settings
 
 	//----------------------------------------------------------------------
 	//- Body
@@ -44,15 +34,20 @@ div.App#app(:style="colorscheme")
 	div#canvas-wrapper(v-show="false")
 
 	//- Settings (mobile)
-	transition(name="fade"): FretboardTools(v-if="isMobileDevice && subpage == 'tools'")
+	FretboardSettings(v-if="isMobileDevice && subpage == 'settings'")
 
 	//- Fretboard
-	transition(name="fade"): div.fretboard-wrapper#fretboard-wrapper(v-show="!isMobileDevice || subpage == 'fretboard'")
-		FretboardViewer(:is-vertical="isMobileDevice && !isLayoutLandscape")
+	div.fretboard-wrapper#fretboard-wrapper(
+		v-show="!isMobileDevice || subpage == 'fretboard'"
+		v-mods="{ isLargeInstrument }"
+		)
+		FretboardViewer(
+			:is-vertical="isMobileDevice && !isLayoutLandscape"
+			v-mods="{ isLargeInstrument }"
+			)
 
 	//- Scales & arpeggios
-	transition(name="fade"): div.sequences-wrapper
-		FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
+	div: FretboardSequences(v-show="!isMobileDevice || subpage == 'sequences'")
 
 	//----------------------------------------------------------------------
 	//- Footer
@@ -109,13 +104,13 @@ div.App#app(:style="colorscheme")
 
 import { get }               from 'vuex-pathify'
 
-import { mapObjectToObject } from '@/modules/object'
-import { mapObjectKeys }     from '@/modules/object'
 import { colorscheme }       from '@/modules/colorscheme'
+import { mapObjectToObject } from '@/modules/object'
+import { instruments }       from '@/modules/music'
 
 import { mediaQueries }      from '@/stores/main'
 
-import FretboardTools        from '@/components/FretboardTools'
+import FretboardSettings     from '@/components/FretboardSettings'
 import FretboardViewer       from '@/components/FretboardViewer'
 import FretboardSequences    from '@/components/FretboardSequences'
 
@@ -123,7 +118,7 @@ export default {
 	name: 'App',
 
 	components: {
-		FretboardTools,
+		FretboardSettings,
 		FretboardViewer,
 		FretboardSequences,
 	},
@@ -136,20 +131,20 @@ export default {
 	},
 
 	computed: {
-		colorscheme()
-		{
+		colorscheme() {
 			return mapObjectToObject(colorscheme, (varName, values) => values[this.isDarkModeOn ? 1 : 0]);
 		},
-		instrumentIcon()
-		{
-			switch (this.instrument)
-			{
+		instrumentIcon() {
+			switch (this.instrument) {
 				case 'bass':     return 'guitar-electric';
 				case 'banjo-4':  return 'banjo';
 				case 'banjo-5':  return 'banjo';
 				case 'mandolin': return 'mandolin';
 				default:         return 'guitar';
 			}
+		},
+		isLargeInstrument() {
+			return instruments[this.instrument].nbStrings > 7;
 		},
 
 		...get('fretboard', [
@@ -163,8 +158,7 @@ export default {
 		]),
 	},
 
-	created()
-	{
+	created() {
 		this.feedbackMail = {
 			subject: encodeURIComponent("Feedback on Fretboarder 🎸"),
 			body:    encodeURIComponent("Thank you for providing feedback on Fretboarder!\nIf you wish to report a bug, please specify your OS and browser to help us resolve it faster.\n----------\n\n"),
@@ -175,21 +169,17 @@ export default {
 			this.$store.commit('sequences/add');
 	},
 
-	mounted()
-	{
+	mounted() {
 		// Listen to any changes on the device type and layout orientation
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].addListener(this[`update.${mq}`]));
 	},
 
-	destroyed()
-	{
+	destroyed() {
 		// Clear event listeners
 		Object.keys(mediaQueries).forEach(mq => mediaQueries[mq].removeListener(this[`update.${mq}`]));
 	},
 
-	methods: {
-		...mapObjectKeys(mapObjectToObject(mediaQueries, mq => (function(event) { this.$store.commit(mq, event.matches); })), mq => `update.${mq}`),
-	},
+	methods: Object.fromEntries(Object.keys(mediaQueries).map(mq => [`update.${mq}`, function(event) { return this.$store.commit(mq, event.matches); }])),
 }
 
 </script>
@@ -210,37 +200,43 @@ export default {
 
 	flex: 1 1 auto;
 
-	padding: 12px;
-
 	background-color: var(--color--bg);
+
+	@include mq($from: desktop) {
+		padding: 12px;
+	}
 }
 
 .fretboard-wrapper {
-	@include mq($until: desktop, $and: '(orientation: portrait)')
-	{
-		display: flex;
-		justify-content: center;
+	@include mq($until: desktop) {
+		@media (orientation: portrait) {
+			margin: 20px 0;
+
+			&.is-large-instrument {
+				overflow-x: scroll;
+
+				margin: 0;
+				padding: 20px;
+			}
+		}
+
+		@media (orientation: landscape) {
+			overflow-x: scroll;
+
+			padding: 40px 20px;
+		}
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
-
 		overflow-x: auto;
 
 		min-height: 33vh;
 
 		margin-bottom: 60px;
-		padding: 70px 0 40px 0;
-	}
-}
-
-.FretboardSequences {
-	@include mq($from: desktop)
-	{
-		padding: 0 10px;
+		padding: 70px 0 40px;
 	}
 }
 
@@ -254,37 +250,44 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 
-	margin-bottom: 40px;
+	@include mq($until: desktop) {
+		background-color: var(--color--bg--tooltip);
+	}
+
+	@include mq($from: desktop) {
+		margin-bottom: 40px;
+	}
 }
 
 .header__logo {
 	display: flex;
 	align-items: center;
-	@include space-children-h(5px);
+	@include space-children-h(8px);
 
-	padding: 4px 6px;
+	padding: 10px;
 
 	border-radius: 6px;
 
-	color: var(--color--bg);
-	background-color: var(--color--border);
+	color: var(--color--text--inverted);
 
-	&:hover {
-		background-color: var(--color--hover);
+	@include mq($from: desktop) {
+		@include space-children-h(5px);
+
+		padding: 4px 6px;
+
+		color: var(--color--bg);
+		background-color: var(--color--border);
+
+		&:hover {
+			background-color: var(--color--hover);
+		}
 	}
 }
 
 .logo__icon {
-	font-size: 18px;
+	font-size: 20px;
 
-	&.is-ukulele { font-size: 12px; }
-
-	@include mq($from: desktop)
-	{
-		font-size: 20px;
-
-		&.is-ukulele { font-size: 14px; }
-	}
+	&.is-ukulele { font-size: 14px; }
 }
 
 .logo__text {
@@ -293,76 +296,42 @@ export default {
 
 	transition: color 200ms;
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		font-size: 24px;
-	}
-}
-
-.dark-mode-switch {
-	display: flex;
-	align-items: center;
-	@include space-children-h(5px);
-
-	border: none;
-	appearance: none;
-	background: none;
-
-	color: var(--color--text--secondary);
-
-	cursor: pointer;
-
-	&.is-dark-mode-on       { &:hover, &:focus { & .dark-mode-switch__sun  { color: var(--color--hover); } } }
-	&:not(.is-dark-mode-on) { &:hover, &:focus { & .dark-mode-switch__moon { color: var(--color--hover); } } }
-}
-
-.dark-mode-switch__toggle {
-	position: relative;
-
-	width: 20px;
-	height: 12px;
-	@include pill;
-
-	border: 2px solid var(--color--border);
-
-	&::after {
-		content: "";
-
-		position: absolute;
-		top: 0;
-		left: 0;
-
-		@include circle(8px);
-
-		background-color: var(--color--hover);
-
-		transition: transform 200ms;
-
-		.dark-mode-switch.is-dark-mode-on & {
-			transform: translateX(8px);
-		}
 	}
 }
 
 .header__sublinks {
 	display: flex;
 	justify-content: flex-end;
+
+	padding: 10px;
 }
 
-.header__sublinks__item {
+.sublinks__item {
 	@include center-content;
-	@include circle(42px);
+	@include circle(36px);
 
-	font-size: 20px;
+	font-size: 18px;
 
-	color: white;
-	background-color: var(--color--bg--popup);
+	border: 1px solid var(--color--text--inverted);
+
+	color: var(--color--text--inverted);
 
 	cursor: pointer;
 
 	&:first-child {
 		margin-right: 10px;
 	}
+}
+
+.header__subpage-header {
+	flex: 1 1 100%;
+
+	font-size: 18px;
+	font-weight: bold;
+
+	color: var(--color--text--inverted);
 }
 
 /**
@@ -377,7 +346,7 @@ export default {
 
 	flex: 1 1 100%;
 
-	margin-top: 20px;
+	margin-top: 40px;
 }
 
 .nav {
@@ -408,11 +377,6 @@ export default {
 
 .link-support    { color: var(--color--red);    }
 .link-tgld:hover { color: var(--color--orange); }
-
-/**
- * Settings
- * -----------------------------------------------------------------------------
- */
 
 </style>
 <!--}}}-->

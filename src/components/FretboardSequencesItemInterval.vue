@@ -1,8 +1,3 @@
-
-
-<!-- components/FretboardSequencesItemInterval.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
@@ -22,7 +17,9 @@ div.FretboardSequencesItemInterval
 		p.button__interval(v-html="shortName")
 
 	//- Tooltip
-	VPopup(
+	VPopup.tooltip(
+		v-if="!isMobileDevice"
+
 		:target="$refs.button || false"
 		:is-open="isTootlipOpen"
 		)
@@ -35,7 +32,9 @@ div.FretboardSequencesItemInterval
 <!--{{{ JavaScript -->
 <script>
 
-import { intervalsNames, intervalsShorthands } from '@/modules/music'
+import { get }                     from 'vuex-pathify'
+
+import { intervalsNames, degrees } from '@/modules/music'
 
 export default {
 	name: 'FretboardSequencesItemInterval',
@@ -63,7 +62,11 @@ export default {
 
 	computed: {
 		name()      { return intervalsNames[this.value].toLowerCase(); },
-		shortName() { return intervalsShorthands[this.value];          },
+		shortName() { return degrees[this.value];                      },
+
+		...get([
+			'isMobileDevice',
+		]),
 	},
 }
 
@@ -76,6 +79,11 @@ export default {
 
 .FretboardSequencesItemInterval {
 	display: flex;
+
+	@include mq($until: desktop) {
+		// Simulate a border inside a grid
+		box-shadow: 0 0 0 1px var(--color--border);
+	}
 }
 
 .button {
@@ -85,23 +93,33 @@ export default {
 
 	flex: 1 1 100%;
 
-	@include pill;
-	padding: 2px 8px;
+	padding: 14px;
 
-	border: 1px solid var(--color--border);
-
-	cursor: pointer;
+	border: none;
 	appearance: none;
 	background-color: transparent;
 
 	transition: color 200ms, border-color 200ms, background-color 200ms;
 
-	&.is-selected, &:hover {
+	cursor: pointer;
+
+	&.is-selected {
 		background-color: var(--color--bg--highlight);
 	}
 
 	&:focus {
 		border-color: var(--color--hover);
+	}
+
+	@include mq($from: desktop) {
+		@include pill;
+		padding: 2px 8px;
+
+		border: 1px solid var(--color--border);
+
+		&:hover {
+			background-color: var(--color--bg--highlight);
+		}
 	}
 }
 
@@ -114,17 +132,25 @@ export default {
 }
 
 .button__interval {
-	color: var(--color--text--secondary);
-	cursor: pointer;
-
 	font-size: 1.35rem;
+
+	color: var(--color--text--secondary);
+
+	cursor: pointer;
 
 	.button.is-selected             & { color: var(--color--text); }
 	.button:not(.is-selected):hover & { color: var(--color--text); }
 }
 
+.tooltip {
+	padding: 8px;
+
+	color: var(--color--bg--tooltip);
+	background-color: var(--color--bg--tooltip);
+}
+
 .tooltip__text {
-	color: white;
+	color: var(--color--text--inverted);
 }
 
 </style>

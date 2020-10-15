@@ -1,16 +1,11 @@
-
-
-<!-- components/FretboardSequencesItem.vue -->
-
-
 <!--{{{ Pug -->
 <template lang="pug">
 
 mixin extra-tools
 	//- Focus
 	VButton(
+		text="Focus"
 		icon="bullseye"
-		title="Focus"
 
 		v-show="nbSequences > 1"
 		:is-active="isFocused"
@@ -19,8 +14,8 @@ mixin extra-tools
 		)
 	//- Show intersections only
 	VButton(
+		text="Intersect"
 		:icon="['fas', 'intersection']"
-		title="Intersect"
 
 		v-show="nbSequences > 1"
 		:is-active="isIntersected"
@@ -29,8 +24,8 @@ mixin extra-tools
 		)
 	//- Duplicate
 	VButton(
+		text="Duplicate"
 		icon="copy"
-		title="Duplicate"
 
 		:is-disabled="nbSequences == MAX_NB_SEQUENCES"
 
@@ -38,26 +33,18 @@ mixin extra-tools
 		)
 
 div.FretboardSequencesItem
-	//- Infos (mobile)
-	div.infos(
+	//- Infos bar (mobile only)
+	div.mobile-info-bar(
 		v-if="isMobileDevice"
 
-		:style="{ borderColor: color, backgroundColor: color }"
-		v-mods="{ isOpen }"
-
-		@click.left="isOpenedByUser = !isOpenedByUser"
+		:style="{ backgroundColor: color }"
+		@click.left="isOpen = !isOpen"
 		)
 		p {{ infos }}
-		fa-icon(
-			v-show="nbSequences > 1"
-			:icon="['far', isOpen ? 'minus' : 'ellipsis-v']"
-			)
+		fa-icon.mobile-info-bar__chevron(:icon="['far', isOpen ? 'chevron-up' : 'chevron-down']")
 
 	//- Settings & tools
-	transition(name="fade"): div.settings(
-		v-show="isOpen || !isMobileDevice"
-		:style="{ borderColor: color }"
-		)
+	transition(name="fade"): div.settings(v-show="isOpen || !isMobileDevice")
 
 		//----------------------------------------------------------------------
 		//- Properties
@@ -72,14 +59,16 @@ div.FretboardSequencesItem
 			VSelect(
 				:value="tonality"
 				:options="tonalities"
+				:is-contained="isMobileDevice"
 
 				@change="v => update('tonality', v)"
 				)
 			//- Model
 			VSelect(
 				:value="model"
-				:options="[{ label: 'Scales', options: scales }, { label: 'Arpeggios', options: arpeggios }]"
+				:options="modelOptions"
 				:label-formatter="(value, label) => `${label} ${isArpeggio(value) ? 'arp.' : 'scale'}`"
+				:is-contained="isMobileDevice"
 
 				@change="v => update('model', v)"
 				)
@@ -88,6 +77,7 @@ div.FretboardSequencesItem
 				:value="position"
 				:options="positions"
 				:is-disabled="!hasPositions"
+				:is-contained="isMobileDevice"
 
 				@change="v => update('position', parseInt(v, 10))"
 				)
@@ -112,9 +102,9 @@ div.FretboardSequencesItem
 		div.tools
 			//- Show/Hide
 			VButton(
+				:text="isVisible ? 'Hide' : 'Show'"
 				:icon="isVisible ? 'eye' : 'eye-slash'"
 				is-flipped
-				:title="isVisible ? 'Hide' : 'Show'"
 
 				@click="update('isVisible', !isVisible)"
 				)
@@ -125,8 +115,8 @@ div.FretboardSequencesItem
 
 			//- Remove
 			VButton(
+				text="Remove"
 				icon="times-circle"
-				title="Remove"
 
 				@click="$store.commit('sequences/remove', index)"
 				)
@@ -138,13 +128,13 @@ div.FretboardSequencesItem
 <!--{{{ JavaScript -->
 <script>
 
-import { get }                         from 'vuex-pathify'
+import { get }                        from 'vuex-pathify'
 
-import { MAX_NB_SEQUENCES }            from '@/modules/constants'
-import { filterObject }                from '@/modules/object'
-import { models, notes, notesNames }   from '@/modules/music'
+import { MAX_NB_SEQUENCES }           from '@/modules/constants'
+import { models, notes, notesNames }  from '@/modules/music'
+import { modelOptions }               from '@/modules/models'
 
-import FretboardSequencesItemInterval  from '@/components/FretboardSequencesItemInterval'
+import FretboardSequencesItemInterval from '@/components/FretboardSequencesItemInterval'
 
 export default {
 	name: 'FretboardSequencesItem',
@@ -198,29 +188,22 @@ export default {
 
 	data() {
 		return {
-			isOpenedByUser: false,
+			isOpen: false,
 		}
 	},
 
 	computed: {
-		infos()
-		{
+		infos() {
 			return `${notesNames[this.tonality]} ${models[this.model].name} ${this.isArpeggio(this.model) ? 'arpeggio' : 'scale'}`;
 		},
-		intervals()
-		{
+		intervals() {
 			return [0, ...models[this.model].intervals].map(interval => ({
 				note:  notesNames[notes[(notes.indexOf(this.tonality) + interval) % notes.length]],
 				value: interval,
 			}))
 		},
-		hasPositions()
-		{
+		hasPositions() {
 			return ('positions' in models[this.model]);
-		},
-		isOpen()
-		{
-			return this.isOpenedByUser || this.nbSequences == 1;
 		},
 
 		...get([
@@ -229,14 +212,13 @@ export default {
 		]),
 	},
 
-	created()
-	{
-		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
+	created() {
 		this.tonalities       = notesNames;
-		this.scales           = filterObject(models, key => !this.isArpeggio(key));
-		this.arpeggios        = filterObject(models, key =>  this.isArpeggio(key));
-		this.positions        = {
-			0: 'Whole',
+		this.modelOptions     = modelOptions;
+		this.MAX_NB_SEQUENCES = MAX_NB_SEQUENCES;
+
+		this.positions = {
+			0: 'whole',
 			1: '1st pos.',
 			2: '2nd pos.',
 			3: '3rd pos.',
@@ -246,12 +228,10 @@ export default {
 	},
 
 	methods: {
-		update(prop, value)
-		{
+		update(prop, value) {
 			this.$store.commit('sequences/update', { index: this.index, prop, value });
 		},
-		isArpeggio(model)
-		{
+		isArpeggio(model) {
 			return model.startsWith('arp-');
 		},
 	}
@@ -271,45 +251,21 @@ export default {
 	&.dot.dot { margin-right: 20px; }
 }
 
-.infos {
+.mobile-info-bar {
 	display: flex;
 	justify-content: space-between;
 
-	padding: 10px;
+	padding: 16px 16px 16px 14px;
 
-	border-width: 2px;
-	border-style: solid;
-	border-radius: 10px;
+	color: var(--color--text--inverted);
+}
 
-	border-bottom: none;
-
-	color: white;
-
-	transition: border-radius 200ms;
-
-	&.is-open {
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-	}
+.mobile-info-bar__chevron {
+	font-size: 1.4rem;
 }
 
 .settings {
-	@include mq($until: desktop)
-	{
-		@include space-children-v(30px);
-
-		padding: 20px 20px 10px 20px;
-
-		border-width: 2px;
-		border-style: solid;
-		border-bottom-left-radius: 10px;
-		border-bottom-right-radius: 10px;
-
-		border-top: none;
-	}
-
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
 		display: flex;
 		align-items: flex-start;
 		@include space-children-h(40px);
@@ -319,38 +275,32 @@ export default {
 }
 
 .properties {
-	display: flex;
-	flex-wrap: wrap;
-	@include space-children-h(10px);
-
-	@include mq($until: desktop)
-	{
-		.VSelect { margin-bottom: 10px; }
-	}
-
-	@include mq($from: desktop)
-	{
-		flex: 0 0 auto;
+	@include mq($from: desktop) {
+		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: flex-end;
+		@include space-children-h(10px);
+
+		flex: 0 0 auto;
 	}
 }
 
 .intervals {
 	display: grid;
-
-	gap: 10px;
 	grid-auto-rows: auto;
-	grid-template-columns: repeat(auto-fill, 60px);
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+	gap: 1px;
 
-	@include mq($until: desktop)
-	{
-		&.intervals { margin-bottom: 40px; }
+	@include mq($until: desktop) {
+		// Fix for the box-shadow border hack
+		margin-bottom: 1px;
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
+		grid-template-columns: repeat(auto-fill, 60px);
 		align-content: center;
+		gap: 10px;
 
 		flex: 1 1 100%;
 		align-self: stretch;
@@ -358,16 +308,18 @@ export default {
 }
 
 .tools {
-	display: flex;
+	@include mq($until: desktop) {
+		display: grid;
+		grid-auto-rows: auto;
+		grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+		gap: 1px;
 
-	@include mq($until: desktop)
-	{
-		flex-wrap: wrap;
-		.VButton { margin: 0 10px 10px 0; }
+		// Fix for the box-shadow border hack
+		margin-bottom: 1px;
 	}
 
-	@include mq($from: desktop)
-	{
+	@include mq($from: desktop) {
+		display: flex;
 		@include space-children-h(10px);
 	}
 }

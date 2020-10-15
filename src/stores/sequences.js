@@ -1,8 +1,3 @@
-
-/**
- * stores/sequences.js
- */
-
 import Vue                  from 'vue'
 import { getVuexState }     from 'vuex-plugin-save-state'
 
@@ -32,37 +27,29 @@ const getters = {
  * Mutations
  */
 const mutations = {
-	add(state)
-	{
+	add(state) {
 		addSequence(state);
 	},
-	duplicate(state, index)
-	{
+	duplicate(state, index) {
 		addSequence(state, state.sequences[index]);
 	},
-	update(state, params)
-	{
+	update(state, params) {
 		Vue.set(state.sequences[params.index], params.prop, params.value);
 	},
-	toggleFocus(state, index)
-	{
-		state.sequences.forEach(seq => Vue.set(seq, 'isFocused', (seq.index == index && !seq.isFocused)));
+	toggleFocus(state, index) {
+		state.sequences.forEach((seq, i) => Vue.set(seq, 'isFocused', i == index && !seq.isFocused));
 	},
-	hideAll(state)
-	{
+	hideAll(state) {
 		state.sequences.forEach(seq => Vue.set(seq, 'isVisible', false));
 	},
-	remove(state, index)
-	{
-		// Remove the sequence and update the index of the others
-		state.sequences = state.sequences.filter(seq => seq.index != index).map((seq, index) => ({ ...seq, ...index }));
+	remove(state, index) {
+		state.sequences.splice(index, 1);
 
 		// Disable showing intersections if there is only one sequence left
 		if (state.sequences.length == 1)
 			Vue.set(state.sequences[0], 'isIntersected', false);
 	},
-	removeAll(state)
-	{
+	removeAll(state) {
 		state.sequences = [];
 	},
 };
@@ -70,21 +57,19 @@ const mutations = {
 /**
  * Helpers
  */
-function addSequence(state, params = {})
-{
+function addSequence(state, params = {}) {
 	// Limit the total number of sequences
-	if (state.sequences.length >= MAX_NB_SEQUENCES)
-		return;
+	if (state.sequences.length >= MAX_NB_SEQUENCES) return;
 
 	state.sequences.push({
+		// Give the sequence a "unique" ID
+		id:                  Math.random(),
+
 		// Merge the provided parameters with the defaults
 		model:               'min5',
 		tonality:            'A',
 		position:            0,
 		...params,
-
-		// Store the current index
-		index:               state.sequences.length,
 
 		// Always reset the display parameters
 		isVisible:           true,
