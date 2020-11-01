@@ -308,7 +308,6 @@ export default {
 		@include space-children-v(8px);
 
 		padding: 14px;
-		padding-bottom: 0;
 	}
 }
 
