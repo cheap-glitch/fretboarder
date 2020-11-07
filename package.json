@@ -68,7 +68,7 @@
     "@winner-fed/vue-cli-plugin-stylelint": "^1.0.4",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "eslint": "^7.12.1",
+    "eslint": "^7.13.0",
     "eslint-plugin-smarter-tabs": "^1.1.2",
     "eslint-plugin-vue": "^7.1.0",
     "esm": "^3.2.25",
@@ -79,8 +79,8 @@
     "nyc": "^15.1.0",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
-    "sass": "^1.28.0",
-    "sass-loader": "^10.0.4",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.0.5",
     "sass-mq": "^5.0.1",
     "stylelint-config-sass-guidelines": "^7.1.0",
     "stylelint-config-standard": "^20.0.0",
@@ -90,6 +90,6 @@
     "stylelint-selector-bem-pattern": "^2.1.0",
     "vue-cli-plugin-sitemap": "^2.3.0",
     "vue-template-compiler": "^2.6.12",
-    "webpack-bundle-analyzer": "^3.9.0"
+    "webpack-bundle-analyzer": "^4.1.0"
   }
 }
