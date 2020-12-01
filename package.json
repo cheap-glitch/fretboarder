@@ -40,12 +40,12 @@
     "@fortawesome/pro-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@popperjs/core": "^2.5.4",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.0",
     "file-saver": "^2.0.5",
     "v-click-outside": "^3.1.2",
     "vue": "^2.6.12",
     "vue-css-modifiers": "^1.0.8",
-    "vuex": "^3.5.1",
+    "vuex": "^3.6.0",
     "vuex-pathify": "^1.4.1",
     "vuex-plugin-save-state": "^1.1.0"
   },
@@ -90,6 +90,6 @@
     "stylelint-selector-bem-pattern": "^2.1.0",
     "vue-cli-plugin-sitemap": "^2.3.0",
     "vue-template-compiler": "^2.6.12",
-    "webpack-bundle-analyzer": "^4.1.0"
+    "webpack-bundle-analyzer": "^4.2.0"
   }
 }
