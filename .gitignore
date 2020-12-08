@@ -1,9 +1,11 @@
-# NPM
-/node_modules/
-/.npmrc
+# npm
+.npmrc
+node_modules
+npm-debug.log
 
-# Build
-/dist/
+# Code coverage
+.codecov.yml
+.nyc_output
 
-# Test coverage
-/.nyc_output/
+# Build artifacts
+/dist

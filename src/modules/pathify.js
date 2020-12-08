@@ -1,16 +1,11 @@
 import pathify from 'vuex-pathify'
 
-/**
- * Configure vuex-pathify
- */
+// Configure `vuex-pathify`
 pathify.options.deep    = false;
 pathify.options.mapping = 'simple';
-
 export default pathify;
 
-/**
- * Generate mutations to toggle every property beginning with `is`
- */
+// Helper to generate "toggle mutations" for every boolean property
 export function makeTogglers(stateModel) {
 	const togglePropRegex = /^is[A-Z]/;
 
